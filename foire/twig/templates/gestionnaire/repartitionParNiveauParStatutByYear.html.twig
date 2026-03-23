@@ -1,0 +1,66 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+<div class="w3-cell-row">
+
+{#
+<pre>
+    {{ dump(cursusList) }}
+
+    {{ dump(statutList) }}
+
+    {{ dump(tab) }}
+</pre>
+#}
+
+<h3>{{ title }}</h3>
+
+{% for year, T in tab %}
+    <div class='w3-center w3-gray'>{{year}}</div>
+    
+    <table name='table' class="w3-table-all w3-centered">
+        <thead>
+            <th>Niveau</th>
+            {% for statut in statutList %}
+            <th>{{ statut }}</th>
+            {% endfor %}
+        </thead>
+        <tbody>
+        {% for cursus in cursusList %}
+            <tr>
+                <th>{{ cursus }}</th>
+                {% for statut in statutList %}
+                    <td>
+                    {{ T[cursus][statut]|f2 }}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div> 
+
+
+{% endfor %}
+
+
+<script>
+    $(document).ready(function () {
+        $('[name="table"]').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'portrait'
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock section %}

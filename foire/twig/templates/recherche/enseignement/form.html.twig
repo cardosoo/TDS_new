@@ -1,0 +1,9 @@
+{% extends 'recherche/enseignement/base_form.html.twig' %}
+
+{% block avecPriorité %}    
+    <span data-bind='visible: $root.withSousEffectif' style='padding-left:5em;'>
+        <input type="checkbox" data-bind="checked: $root.nonPrioritaire" id='nonPrioritaire'>
+        <label for='nonPrioritaire'>accessibles sans faire jouer les règles de priorité.</label>
+        <br>
+    </span>
+{% endblock avecPriorité %}

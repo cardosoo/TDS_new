@@ -1,0 +1,21 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+<div class="w3-card-4 w3-white w3-margin">
+    <div class="w3-container w3-light-grey  w3-center">
+        <b>Migration des situations particulières</b>
+    </div>
+    {% apply markdown_to_html %}
+
+    Opération réalisées :
+    - {{ deleted }} stages ont été supprimés
+
+    {% endapply %}
+
+    <div class="w3-container w3-light-grey  w3-center">
+        <b>La migration des situations particulières a été réalisée</b>
+    </div>
+</div>
+
+{% endblock %}

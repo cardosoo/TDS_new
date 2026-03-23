@@ -1,0 +1,58 @@
+<div style='all: revert;'>
+    <div class='w3-container w3-card'>
+        <h3>Informations pour OSE pour : {{ personne.prenom}} {{ personne.nom }}<h3>
+
+<pre>
+</pre>
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                <tr class='w3-light-blue'>
+                    <th>Enseignement</th>
+                    <th>CM</th>
+                    <th>CTD</th>
+                    <th>TD</th>
+                    <th>TP</th>
+                    <th>Extra</th>
+                    <th>Bonus</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in personne.voeuList %}
+                {% set oseList = tab.fromOSEList[v.id] %}
+                {% set vdh = v.voeu_detail_heures %}
+                {% set se = v.enseignement.enseignement_structure %}
+                <tr class='w3-white'>
+                    <th><a href="/{{ App.appName }}/enseignement/{{ v.enseignement.id }}">{{ v.enseignement.code }} - {{ v.enseignement.nom }}</a></th>
+                    <td>{{ vdh.cm != 0?"CM : #{vdh.cm|f2} h":"" }}</td>
+                    <td>{{ vdh.ctd != 0?"CTD : #{vdh.ctd|f2} h":"" }}</td>
+                    <td>{{ vdh.td != 0?"TD : #{vdh.td|f2} h":"" }}</td>
+                    <td>{{ vdh.tp != 0?"TP : #{vdh.tp|f2} h":"" }}</td>
+                    <td>{{ vdh.extra != 0?"Ex : #{vdh.extra|f2} h":"" }}</td>
+                    <td>{{ vdh.bonus != 0?"Bo : #{vdh.bonus|f2} h":"" }}</td>
+                </tr>
+                    {% for key in oseList|keys %}
+                    {% set ose = oseList[key] %}
+                    <tr >
+                        <td class='w3-light-grey'>{{ se.composante}}  - {{ se.periode=='{1}'?'S1':(se.periode=='{2}'?'S2':'') }}- {{ key}}</td>
+                        <td class='w3-light-blue' colspan='6'>{{ose.composante}} -  {{ ose.etape}} - {{ ose.semestre}} - {{ ose.ecue }}</td>
+                    </tr><tr>
+                        <td class='w3-light-grey'>{{se.cursus}} - {{se.etape}}</td>
+                        <td class='w3-light-blue' colspan='6'> {{ ose.cursus}} - <b>{{ ose.intitule}}<b></td>
+                    </tr><tr>
+                        <td class='w3-light-grey'></td>
+                        <td class='w3-light-blue' colspan='6'>
+                            {{ ose.CM != 0?"CM : #{ose.gCM}x#{ose.CM}h":"" }} 
+                            {{ ose.TD != 0?"TD : #{ose.gTD}x#{ose.TD}h":"" }} 
+                            {{ ose.TP != 0?"TP : #{ose.gTP}x#{ose.TP}h":"" }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+            <tfoot>
+            </tfoot>
+        </table>
+
+
+    </div>
+</div>

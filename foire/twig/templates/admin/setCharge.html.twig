@@ -1,0 +1,63 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+<div class="w3-cell-row">
+  <div class="w3-container w3-row">
+    <div class="w3-card" style="max-width:1600px;margin-top:80px">    
+        <h3>Changement du service de référence pour l'UFR</h3>
+
+        <form href="" method='POST'>
+            <label for='charge'>Charge de référence </label>
+            <input type='number' name='charge' min='64' max='192' value = '{{ charge }}'>
+            <button type='submit'>Appliquer</button>
+        </form>
+    </div>
+
+    <div class="w3-card" style="max-width:600px;margin-top:80px">    
+        <h3>Situations particulières mises à jour</h3>
+        <table id="situationList" class="w3-table-all w3-centered">
+            <thead>
+                <th class="w3-right-align">Situation</th>
+                <th>Définition</th>
+                <th>UFR?</th>
+                <th>Réduction effective</th>
+                <th>Charge effective</th>
+            </thead>
+            <tbody>
+            {% for situation in situationList %}
+                <tr>
+                    <td><a href='/{{App.appName}}/CRUD/Situation/{{situation.id}}'>{{situation.nom}}</a></td>
+                    <td>{{situation.reduction_legale}}</td>
+                    <td>{{situation.ufr?"UFR":""}}</td>
+                    <td>{{situation.reduction}}h</td>
+                    <td>{{ App.texte.chargeReference - situation.reduction }}h</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+  </div>
+
+</div> 
+
+    <script>
+        $(document).ready(function () {
+            $('#situationList').DataTable({
+                order: [[0, "asc"], [1, "asc"]],
+                dom: 'Bfrtip',
+                paging: false,
+                buttons: [
+                    'copy',
+                    'excel',
+                    'csv',
+                    {
+                        extend: 'pdf',
+                        orientation: 'portrait'
+                    }
+                ]
+            });
+        });
+    </script>
+
+{% endblock section %}

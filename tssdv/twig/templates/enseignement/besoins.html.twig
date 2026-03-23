@@ -1,0 +1,30 @@
+{% extends "enseignement/base_besoins.html.twig" %}
+
+{% block nbSeances %}
+{% endblock nbSeances %}
+
+
+{% block nbSeancesParSemaine %}
+{% endblock nbSeancesParSemaine %}
+
+{% block dureeSeance %}
+                    <tr>
+                        <th>Heures / Groupe</th>
+                        <td class="w3-center">{{ E.d_cm|f2 }}</td>
+                        <td class="w3-center">{{ E.d_ctd|f2 }}</td>
+                        <td class="w3-center">{{ E.d_td|f2 }}</td>
+                        <td class="w3-center">{{ E.d_tp|f2 }}</td>
+                        <td class="w3-center">{{ E.d_extra|f2 }}</td>
+                    </tr>
+                    <tr>
+                        <th>hEQTD / Groupe</th>
+                        <td class="w3-center">{{ (E.d_cm    * App.hETD.cm   )|f2 }}</td>
+                        <td class="w3-center">{{ (E.d_ctd   * App.hETD.ctd   )|f2 }}</td>
+                        <td class="w3-center">{{ (E.d_td    * App.hETD.td    )|f2 }}</td>
+                        <td class="w3-center">{{ (E.d_tp    * App.hETD.tp    )|f2 }}</td>
+                        <td class="w3-center">{{ (E.d_extra * App.hETD.extra )|f2 }}</td>
+                    </tr>
+{% endblock dureeSeance %}
+
+{% block totaux %}
+{% endblock totaux %}

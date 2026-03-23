@@ -1,0 +1,30 @@
+{% extends "recherche/enseignement/base_results.html.twig" %}
+
+
+{% block extraFilter1 %}
+        self.withDomaine=ko.observable($('#withDomaine').prop('checked'));
+        self.domaineList = {{ f.domaineList|json_encode()|raw }};
+        self.domaine=ko.observable();  
+{% endblock %}
+
+
+{% block extraFilter2 %}
+        self.domaine($($('select')[5]).val().map(x => parseInt(x)));
+{% endblock %}
+
+
+{% block extraFilter3 %}
+            domaine: self.domaine(),
+{% endblock %}
+
+
+{% block extraFilter4 %}
+            if (self.domaine() !== undefined) search += " " + self.domaine().toString();
+
+{% endblock %}
+
+
+{% block extraFilter5 %}
+        domaine: self.domaine(),
+        withDomaine: self.withDomaine(),
+{% endblock %}

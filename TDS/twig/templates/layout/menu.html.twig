@@ -1,0 +1,14 @@
+<div class="w3-dropdown-hover">
+    <button class="w3-button" ><i class="fa fa-bars"></i> {{ App.appName }}{{ App.currentYear }}</button>
+    <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width: 300px">
+        <a href="/{{ App.appName }}/texte/introduction" class="w3-bar-item w3-button">Accueil</a>
+        <hr style='margin: 0px 20px 0px 20px;'>
+        {% for year in App.yearList %}            
+            <a href="/{{ App.appName }}/setCurrentYear/{{ year }}" class="w3-bar-item w3-button">{{ year == App.currentYear?"<b>":""}}{{ App.appName }}{{ year }}{{ year == App.currentYear?"</b>":""}}{{ year == App.officialYear?" - principale":""}} </a>
+        {% endfor %}
+        <hr style='margin: 0px 20px 0px 20px;'>
+        <a id='connect_link' href="/{{ App.appName }}/auth/log{{ App.auth.isAuth?'out':'in' }}" class="w3-bar-item w3-button">{{ App.auth.isAuth?'Déc':'C' }}onnexion...</a>
+    </div>
+</div>
+
+

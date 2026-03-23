@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+    {% set ww = "216px" %}
+    {% set ww2 = "108px" %}
+    {% set hh = "298px" %}
+
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    li {
+        flex-grow: 1;
+        list-style-type: none;
+        break-inside: avoid;
+    }
+
+
+    li:nth-child(3n) {
+    wrap-after: flex; /* New proposed syntax */
+    }
+    img {
+        max-height: 100%;
+        max-width: 100%;
+        object-fit: contain;
+        break-inside: avoid;
+
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-{{ww2}}, -50%);
+        object-position: center;
+    }
+
+    div {
+        padding: 3px;
+        border: thick double LightBlue  ;
+        
+        height: {{hh}};
+        width: {{ww}};
+    /*    display: flex; */
+        align-items: center;
+        break-inside: avoid;
+        margin: 3px;
+        text-align: center;
+        break-inside: avoid;
+    }
+
+    .img {
+        width: {{ww}};
+        height: 200px;
+        margin: 0 auto;
+        padding: 0px;
+        border: none;
+        break-inside: avoid;
+    }
+
+    p {
+        width: {{ww}};
+        font-size:13px;
+        margin: 2px;
+    }
+
+    .center {
+        display: inline-block;
+        line-height: normal;
+        vertical-align: middle;
+        align-items: center;
+    }
+    </style>
+    </head>
+    <body>
+        {% set cols = 6 %}
+        {% set count = 0 %}
+        <table>
+        {% for P in pList %}
+            {% if P.voeuList %}
+            {% if count % cols == 0 %}
+                <tr>
+            {% endif %}
+            <td>
+                <div>
+                    <div  class='img'>
+                        <img src="{{ P.getPhotoUrl() }}" alt="Photo de {{ P.prenom }} {{ P.nom }}" />
+                    </div>
+                    <p class='center'>
+                        {{ P.prenom }} {{ P.nom }}<br>
+                        {{ P.labo.nom }}<br>
+                        {{ P.email}}<br>
+                        {{P.statut.nom}}
+                    </p>
+                
+                </div>
+            </td>
+
+            {% if count % 5 == cols-1 %}
+                </tr>
+            {% endif %}
+            {% set count = count + 1 %}
+            {% endif %}
+
+        {% endfor %}
+        </table>
+    </body>
+</html>

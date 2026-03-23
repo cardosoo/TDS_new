@@ -1,0 +1,107 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+<style>
+
+td, th {
+  vertical-align: middle;
+}
+
+
+.td_centre{
+  text-align: center !important;
+}
+</style>
+
+{% set tauxTab = {true: 3, false: 6, '1': 6*1, '1/2': 6*1/2, '1/3': 6*1/3, '2/3': 6*2/3, '1/6': 6*1/6, '5/6': 6*5/6 } %}
+<pre>
+  {# dump(tauxTab) #}
+
+</pre>
+
+<div class="w3-cell-row">
+
+  <div class="w3-container w3-cell">
+    <div class="w3-card" style="max-width:1600px;margin-top:80px">    
+    
+      <details>
+        <summary>Liste des encadrants de stage et volume</summary>
+        <table class="standardList" class="w3-table-all w3-centered">
+          <thead>
+            <th>Encadrant</th>
+            <th>Volume</th>
+          </thead>
+        {% for S in SL %}
+          {% set P = S.personne %}
+          <tr>
+            <td>{{ P.getGenericWithLink | raw}}</td>
+            <td>{{ S.volume}}</td>
+          </tr>          
+        {% endfor %}
+        </table>
+      </details>
+
+
+
+      <details>
+        <summary>Liste des étudiants stagiaies</summary>
+        <table class="standardList" class="w3-table-all w3-centered">
+          <thead>
+            <th>Encadrant</th>
+            <th>Stagiaire</th>
+            <th>taux</tH>
+            <th>Volume</th>
+            <th>NumEtu</th>
+            <th>Université</th>
+            <th>Niveau</th>
+            <th>Convention</th>
+            <th>Formation</th>
+          </thead>
+        {% for S in SL %}
+          {% set P = S.personne %}
+          {% set C = S.commentaire| json_decode %}
+          {% for St in C %}
+          {% set taux = tauxTab[St.co] %}
+          <tr>
+            <td >{{ P.getGenericWithLink | raw}}</td>
+            <td>{{ St.nom}}</td>
+            <td class='w3-center'>{{ St.co}}</td>
+            <td class='w3-center'>{{ St.withOK ? taux : '-' }}</td>
+            <td class='w3-center'>{{ St.num}}</td>
+            <td>{{ St.univ}}</td>
+            <td class='w3-center'>{{ St.level}}</td>
+            <td class='w3-center'><a href='{{St.url}}' target='_blank'>{{ St.withOK ?"Convention":""}}</a></td>
+            <td>{{ St.formation}}</td>
+          </tr>          
+          {% endfor %}  
+        {% endfor %}
+        </table>
+      </details>
+    </div>
+  </div>
+
+</div> 
+
+<script>
+    $(document).ready(function () {
+        $('.standardList').DataTable({
+            order: [[0, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock section %}
+
+

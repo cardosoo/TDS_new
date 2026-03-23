@@ -1,0 +1,48 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+    <br>
+    <h3>Tous les enseignements avec leurs correspondants</h3>
+        
+    
+    <table id="list" class="display compact">
+        <thead>
+            <tr>
+                <th>Enseignement</th>
+                <th>Correspondant</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for e in list %}
+            <tr>
+                <td><a href='/{{ App.appName }}/enseignement/{{ e.enseignement.id }}'>{{ e.enseignement.code }} - {{ e.enseignement.nom }}</a></td>
+                <td><a href='/{{ App.appName }}/personne/{{ e.personne.id }}'>{{ e.personne.prenom }} {{ e.personne.nom }}</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#list').DataTable({
+                order: [[1, "asc"], [0, "asc"]],
+                dom: 'Bfrtip',
+                paging: false,
+                buttons: [
+                    'copy',
+                    'excel',
+                    'csv',
+                    {
+                        extend: 'pdf',
+                        orientation: 'portrait'
+                    }
+                ]
+            });
+        });
+    </script>
+{% endblock %}
+
+

@@ -1,0 +1,149 @@
+<style>
+
+.aside-tabs {
+    display:block;
+    z-index: 100;
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    bottom:0px;
+    margin-right: 0px;
+
+}
+.aside-tab-names {
+    position:relative;
+    display:block;
+    top:-50%;
+    z-index: 100;
+    transform: translate(0,-50%);
+    right: -2px;
+}
+
+
+.aside-tab-name {
+    display: block;
+    writing-mode: tb-rl;
+    transform: rotate(-180deg);
+    padding: 5px;
+    margin: 5px;
+    background: Grey;
+    color: white;
+    border-radius: 0px 12px 12px 0px;
+}
+
+.aside-tab-name:hover{
+    cursor: default;
+}
+
+.aside-tab-name.actif{
+    background: black;
+}
+
+.aside-tab-contents {
+    position:relative;
+    display: block;
+    height: 100%;
+    margin-left: 40px;
+    background: lightgrey;
+    top: 50%;
+    transform: translate(0,-50%);
+    overflow-y: auto;
+    z-index: 101;
+    border: 2px ridge black;
+    border-radius: 12px 0px 0px 12px;
+}
+.aside-tab-content {
+    display: none;
+    width: 50vw;
+}
+
+.aside-tab-content.actif {
+    display: block;
+}
+</style>
+
+
+<script>
+function switchTab(elm, id){
+    var actif = elm.classList.contains('actif');
+    var tabs = document.querySelectorAll(".aside-tab-name");
+    tabs.forEach(function(tab) {
+        tab.classList.remove('actif');
+    });
+    var contents = document.querySelectorAll(".aside-tab-content");
+    contents.forEach(function(content) {
+        content.classList.remove('actif');
+    });
+    if (!actif){
+        elm.classList.add('actif');
+        var content = document.querySelector("#"+id);
+        content.classList.add('actif');
+    }
+
+}
+
+</script>
+
+
+
+<script>
+
+function switchTab(elm, id){
+    var actif = elm.classList.contains('actif');
+    var tabs = document.querySelectorAll(".aside-tab-name");
+    tabs.forEach(function(tab) {
+        tab.classList.remove('actif');
+    });
+    var contents = document.querySelectorAll(".aside-tab-content");
+    contents.forEach(function(content) {
+        content.classList.remove('actif');
+    });
+    if (!actif){
+        elm.classList.add('actif');
+        var content = document.querySelector("#"+id);
+        content.classList.add('actif');
+    }
+
+}
+
+function doBeforeUnload(event){
+    var allTabChanged = false;
+    {% for tab in asideTabList %}
+    {% if tab.canEdit and tab.hasChangedCall %}
+    var change = {{ tab.hasChangedCall }}();
+    allTabChanged = allTabChanged || change;
+    {% endif %}
+    {% endfor %}
+    if (allTabChanged){
+        event.preventDefault();
+        event.returnValue = '';                    
+    }
+}
+
+$( document ).ready(function() {
+    window.addEventListener('beforeunload', doBeforeUnload);
+});
+
+
+
+
+
+</script>
+
+<div class='aside-tabs' >
+    <div class='aside-tab-contents w3-pale-yellow'>
+    {% for tab in asideTabList %}
+        <div class='aside-tab-content w3-container' id='tab_{{tab.name}}'>
+        {{ include( tab.template, {'O': tab } ) }}
+        </div>
+    {% endfor %}
+    </div>
+    <div class='aside-tab-names'>
+    {% for tab in asideTabList %}
+        <div class='aside-tab-name' onclick="switchTab(this, 'tab_{{tab.name}}')">
+            {{tab.label}}
+        </div>
+    {% endfor %}
+    </div>
+</div>
+

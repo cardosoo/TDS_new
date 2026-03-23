@@ -1,0 +1,261 @@
+<style>
+    input:invalid {
+        border: -2px dashed red;
+    }
+
+    input:valid {
+        border: 1px solid gainsboro;
+    }
+
+    input:required:invalid,
+    input:focus:invalid {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAeVJREFUeNqkU01oE1EQ/mazSTdRmqSxLVSJVKU9RYoHD8WfHr16kh5EFA8eSy6hXrwUPBSKZ6E9V1CU4tGf0DZWDEQrGkhprRDbCvlpavan3ezu+LLSUnADLZnHwHvzmJlvvpkhZkY7IqFNaTuAfPhhP/8Uo87SGSaDsP27hgYM/lUpy6lHdqsAtM+BPfvqKp3ufYKwcgmWCug6oKmrrG3PoaqngWjdd/922hOBs5C/jJA6x7AiUt8VYVUAVQXXShfIqCYRMZO8/N1N+B8H1sOUwivpSUSVCJ2MAjtVwBAIdv+AQkHQqbOgc+fBvorjyQENDcch16/BtkQdAlC4E6jrYHGgGU18Io3gmhzJuwub6/fQJYNi/YBpCifhbDaAPXFvCBVxXbvfbNGFeN8DkjogWAd8DljV3KRutcEAeHMN/HXZ4p9bhncJHCyhNx52R0Kv/XNuQvYBnM+CP7xddXL5KaJw0TMAF8qjnMvegeK/SLHubhpKDKIrJDlvXoMX3y9xcSMZyBQ+tpyk5hzsa2Ns7LGdfWdbL6fZvHn92d7dgROH/730YBLtiZmEdGPkFnhX4kxmjVe2xgPfCtrRd6GHRtEh9zsL8xVe+pwSzj+OtwvletZZ/wLeKD71L+ZeHHWZ/gowABkp7AwwnEjFAAAAAElFTkSuQmCC);
+        background-position: right top;
+        background-repeat: no-repeat;
+        -moz-box-shadow: none;
+    }
+
+    input:required:valid {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAepJREFUeNrEk79PFEEUx9/uDDd7v/AAQQnEQokmJCRGwc7/QeM/YGVxsZJQYI/EhCChICYmUJigNBSGzobQaI5SaYRw6imne0d2D/bYmZ3dGd+YQKEHYiyc5GUyb3Y+77vfeWNpreFfhvXfAWAAJtbKi7dff1rWK9vPHx3mThP2Iaipk5EzTg8Qmru38H7izmkFHAF4WH1R52654PR0Oamzj2dKxYt/Bbg1OPZuY3d9aU82VGem/5LtnJscLxWzfzRxaWNqWJP0XUadIbSzu5DuvUJpzq7sfYBKsP1GJeLB+PWpt8cCXm4+2+zLXx4guKiLXWA2Nc5ChOuacMEPv20FkT+dIawyenVi5VcAbcigWzXLeNiDRCdwId0LFm5IUMBIBgrp8wOEsFlfeCGm23/zoBZWn9a4C314A1nCoM1OAVccuGyCkPs/P+pIdVIOkG9pIh6YlyqCrwhRKD3GygK9PUBImIQQxRi4b2O+JcCLg8+e8NZiLVEygwCrWpYF0jQJziYU/ho2TUuCPTn8hHcQNuZy1/94sAMOzQHDeqaij7Cd8Dt8CatGhX3iWxgtFW/m29pnUjR7TSQcRCIAVW1FSr6KAVYdi+5Pj8yunviYHq7f72po3Y9dbi7CxzDO1+duzCXH9cEPAQYAhJELY/AqBtwAAAAASUVORK5CYII=);
+        background-position: right top;
+        background-repeat: no-repeat;
+    }
+
+
+    #image_preview>img,
+    img {
+        height: 130px;
+    }
+
+    .tool-tip {echo 1 | sudo tee /sys/module/hid_apple/parameters/fnmode
+
+        position: absolute;
+        right: 0;
+        top: 0px
+    }
+
+    .icon {
+        padding: 0em;
+        width: 20px;
+    }
+</style>
+
+<script type="text/javascript" src="/{{App.appName}}/assets/js/ImageTools.js"></script>
+<script>
+    var userForm;
+    var userFormData;
+    var theBlob;
+    
+    function isFormDataUserEditChanged(data) {
+        for (var key of userFormData.keys()) {
+            test = data.get(key);
+            if (test.constructor.name == 'File') {
+                if (test.name != '') {
+                    return true;
+                }
+            } else {
+                if (test.valueOf() != userFormData.get(key).valueOf()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    $(document).ready(function () {
+        userForm = $('#userEditForm')[0];
+        userFormData = new FormData(userForm);
+        theBlob = null;
+        
+        $("#userEditForm").submit(function (e) {
+            //stop submit the form, we will post it manually.
+            event.preventDefault();
+            // Get form
+            var form = $('#userEditForm')[0];
+            // Create an FormData object 
+            var data = new FormData(form);
+            // If you want to add an extra field for the FormData
+
+            if (theBlob){        
+                data.set('upload_file', theBlob);
+            }
+            // disabled the submit button
+            $("#submitBtn").prop("disabled", true);
+
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "/{{ App.appName }}/personne/edit/{{ personne.id }}",
+                data: data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 800000,
+                success: function (data) {
+                    if ('success' == data) {
+                        window.location.reload(true);
+                    } else {
+                        $('#editUserError > p').html(data);
+                        document.getElementById('editUserError').style.display = 'block'
+                        $("#submitBtn").prop("disabled", false);
+                    }
+                },
+                error: function (e) {
+                    $('#editUserError > p').html("Erreur réseau sans doute...");
+                    document.getElementById('editUserError').style.display = 'block'
+                    $("#submitBtn").prop("disabled", false);
+                }
+            });
+        });
+    });
+
+    function preview_image() {
+        var upload_file = document.getElementById("upload_file")
+        ImageTools.resize(upload_file.files[0], {
+            width: 320, // maximum width
+            height: 240 // maximum height
+        }, function(blob, didItResize) {
+            // didItResize will be true if it managed to resize it, otherwise false (and will return the original file as 'blob')
+            document.getElementById('preview').src = window.URL.createObjectURL(blob);
+            // you can also now upload this blob using an XHR.
+            theBlob = blob;
+        });
+    }
+
+
+
+/* ImageTools vient de là : https://gist.github.com/dcollien/312bce1270a5f511bf4a
+   et je l'ai trouvé là : https://stackoverflow.com/questions/2434458/image-resizing-client-side-with-javascript-before-upload-to-the-server
+   
+<input type="file" id="select">
+<img id="preview">
+<script>
+document.getElementById('select').onchange = function(evt) {
+    ImageTools.resize(this.files[0], {
+        width: 320, // maximum width
+        height: 240 // maximum height
+    }, function(blob, didItResize) {
+        // didItResize will be true if it managed to resize it, otherwise false (and will return the original file as 'blob')
+        document.getElementById('preview').src = window.URL.createObjectURL(blob);
+        // you can also now upload this blob using an XHR.
+    });
+};
+*/
+
+    function closeModalUserEditForm() {
+        if (!isFormDataUserEditChanged(new FormData($('#userEditForm')[0]))) {
+            document.getElementById('editUser').style.display = 'none';
+            return;
+        }
+
+        if (confirm("Confirmer l'abandon de l'édition")) {
+            document.getElementById('editUser').style.display = 'none';
+            window.location.reload(false);
+        } else {
+        }
+    }
+
+</script>
+
+<div id="editUser" class="w3-modal">
+
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+        <div class="w3-center"><br>
+            <span onclick="closeModalUserEditForm()" class="w3-button w3-xlarge w3-hover-red w3-display-topright"
+                title="Close Modal">&times;</span>
+        </div>
+
+        {# Pour afficher les éventuelles erreurs #}
+        <header id='editUserError' class="w3-container w3-red " style="display:none">
+            <span onclick="this.parentElement.style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <p class='w3-center'>Red often indicates a dangerous or negative situation.</p>
+        </header>
+
+        {# Le formulaire proprement dit #}
+        <form id="userEditForm" enctype="multipart/form-data" class="w3-container" method='POST'
+            action="/{{ App.appName }}/personne/edit/{{ personne.id }}">
+            <div class="w3-section">
+                {# pour la photo #}
+                <div id="image_preview" class="w3-center">
+                    <img id='preview' src="{{ personne.getPhotoUrl() }}" alt="Photo de {{ personne.prenom }} {{ personne.nom }}" />
+                </div>
+                <div class="w3-center"><label for="upload_file" class='w3-teal w3-tag w3-round w3-margin-bottom'>Changer
+                        la photo</label></div>
+                <input type="file" id="upload_file" name="upload_file[]" onchange="preview_image();" accept="image/*"
+                    style="display:none" />
+
+                {# Pour les informations professionnelles #}
+                <div class="w3-container w3-center w3-teal">
+                    Informations Professionnelles
+                </div>
+
+                <div class='w3-row'>
+                    <div class="w3-half w3-tooltip">
+                        <input class="w3-input" type="text" name='prenom' placeholder="prénom" value='{{ personne.prenom }}'
+                            maxlength='30' required>
+                        <span class="w3-text w3-tag tool-tip">Prénom</span>
+                    </div>
+
+                    <div class="w3-half w3-tooltip">
+                        <input class="w3-input" type="text" name='nom' placeholder="nom" value='{{ personne.nom }}'
+                            maxlength='30' required>
+                        <span class="w3-text w3-tag tool-tip">Nom</span>
+                    </div>
+                </div>
+                <div class="w3-row w3-tooltip">
+                    {#
+                    <input class="w3-input" type="email" name='prof_mail' placeholder="email pro"
+                        value='{{ E.prof_mail }}' maxlength='50' pattern="\A[a-z0-9!#$%&'*+/=?^_‘{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_‘{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\z" required>
+                    #}
+                    <input class="w3-input" type="email" name='email' placeholder="email pro"
+                        value='{{ personne.email }}' maxlength='50'>
+
+                        <span class="w3-text w3-tag  tool-tip">mèl professionnel</span>
+                </div>
+                
+                <div class="w3-row w3-tooltip">
+                    <select name="labo" class="w3-select">
+                        <option value='0'>Laboratoire ?</option>
+                        {% for l in laboList %}
+                        <option value='{{ l.id }}' {{ l.id==personne.labo.id?"selected":"" }}>
+                            {{ l.nom }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <span class="w3-text w3-tag  tool-tip">Laboratoire</span>
+                </div>
+                <div class="w3-row w3-tooltip">
+                    <textarea class='w3-input' name='adresse'
+                        placeholder="Adresse professionnelle en Markdown">{{ personne.adresse }}</textarea>
+                    <span class="w3-text w3-tag  tool-tip">Adresse professionnelle - en Markdown</span>
+                </div>
+                <div class='w3-row'>
+                    <div class="w3-half w3-tooltip">
+                        <input type="tel" name='tel1' class="w3-input" placeholder="téléphone pro"
+                            value='{{ personne.tel1 }}' maxlength='20'>
+                        <span class="w3-text w3-tag  tool-tip">Téléphone</span>
+                    </div>
+                    <div class="w3-half w3-tooltip">
+                        <input type="tel" name='tel2' class="w3-input" placeholder="téléphone pro"
+                            value='{{ personne.tel2 }}' maxlength='20'>
+                        <span class="w3-text w3-tag  tool-tip">Téléphone</span>
+                    </div>
+                </div>
+                {# Pour les informations personnelles #}
+                <div class="w3-container w3-center w3-teal w3-tooltip">
+                    Informations Personnelles
+                    <span class="w3-text w3-tag  tool-tip">Uniqumenent à destination de l'administration de l'UFR et la
+                        foire</span>
+                </div>
+
+                <div class="w3-row w3-tooltip">
+                    <textarea class='w3-input' name='info'
+                        placeholder="Information personnelle en Markdown">{{ personne.info }}</textarea>
+                    <span class="w3-text w3-tag  tool-tip">Informations personnelle - en Markdown</span>
+                </div>
+                <button id='submitBtn' class="w3-button w3-block w3-green w3-section w3-padding"
+                    type="submit">Modifier</button>
+            </div>
+        </form>
+    </div>
+</div>

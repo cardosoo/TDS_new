@@ -1,0 +1,72 @@
+{% extends "layout.html.twig" %}
+
+
+{% block section %}
+
+<form action="{{uid}}" method="POST" class="w3-container w3-light-grey" style="width:500px">
+    <label for="prenom">Prénom : </label>
+    <input type="text" name="prenom" class="w3-input" value='{{P.prenom}}' required />
+
+    <label>Nom : </label>
+    <input type="text" name="nom" class="w3-input" value='{{P.nom}}' required />
+
+    <label for="email">Mail : </label>
+    <input type="email" name="email" class="w3-input" value='{{P.email}}' required />
+
+    <label for="statut">Statut : </label>
+    <select name="statut" class="w3-select" required>
+        <option value=''>---</option>
+        {% for s in statutL %}
+        <option value='{{ s.id }}'>
+            {{ s.nom }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <label for="labo">Laboratoire : </label>
+    <select name="labo" class="w3-select">
+        <option value='0'>---</option>
+        {% for l in laboL %}
+        <option value='{{ l.id }}'>
+            {{ l.nom }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <fieldset>
+        <legend>Choix du ou des domaines</legend>
+        <select name="domaine1" class="w3-select">
+            <option value=''>Domaine 1 ?</option>
+            {% for d in domaineL %}
+            <option value='{{ d.id }}'>
+                {{ d.nom }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <select name="domaine2" class="w3-select">
+            <option value=''>Domaine 2 ?</option>
+            {% for d in domaineL %}
+            <option value='{{ d.id }}'>
+                {{ d.nom }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <select name="domaine3" class="w3-select">
+            <option value=''>Domaine 3 ?</option>
+            {% for d in domaineL %}
+            <option value='{{ d.id }}'>
+                {{ d.nom }}
+            </option>
+            {% endfor %}
+        </select>
+    </fieldset>
+
+    {# <input type="submit" value="Ajouter à TSOnline" class="w3-center"/> #}
+
+    <button class="w3-button w3-block w3-section w3-blue w3-ripple w3-padding">Ajouter à TS Online</button>
+</form>
+
+
+{% endblock %}

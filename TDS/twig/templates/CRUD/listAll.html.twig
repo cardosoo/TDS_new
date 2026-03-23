@@ -1,0 +1,28 @@
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+    <link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+    <div class="wrapper">
+            <form>
+                <fieldset>
+                    <legend>Créer <a href='/{{App.appName}}/CRUD/{{entityName}}'>{{entityName}}</a></legend>
+                    <ul>
+                    {% for elm in list %}
+                        <li>
+                            {% set nom = elm.generic %}
+                            {% if nom == "" %}
+                                {% set nom = "--" %}
+                            {% endif %}
+                            
+                            <a href='/{{App.appName}}/CRUD/{{entityName}}/{{elm.id}}'>{{nom}}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </fieldset>
+            </form>
+    </div>    
+{% endblock %}
+
+{% block aside %}
+{% endblock aside %}

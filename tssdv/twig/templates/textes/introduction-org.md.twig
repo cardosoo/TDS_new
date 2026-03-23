@@ -1,0 +1,90 @@
+
+{% if App.auth.isAuth %}
+    {% if App.auth.inBase %}
+        <div class='w3-card w3-round w3-white w3-xlarge w3-center'>Bienvenue {{ App.auth.user.prenom }} {{ App.auth.user.nom }} !</div>
+    {% else %}
+        <div class='w3-card  w3-round w3-red  w3-xlarge w3-center'>Vous êtes êtes identifié avec l'identifant {{ App.auth.uid }}. 
+        Il n'y a pas de lien entre cet identifiant et un compte de cette application
+        Votre accès est limité.
+        </div>
+    {% endif %}
+{% else %}
+    <div class='w3-card  w3-round w3-red  w3-xlarge w3-center'>Vous êtes ici sans identification - votre accès est limité</div>
+{% endif %}
+
+# Répartition des enseignements {{ App.currentYear }} - {{ App.currentYear + 1 }}
+_UFR Sciences du Vivant_
+
+
+{% set toutVoir =  App.auth.isAdmin or App.auth.isSuperAdmin or App.auth.roleList['bureauRHE'] %}
+
+
+{% if toutVoir or App.phase == 'avant' %}
+   La base de données est en cours de préparation.
+
+   **Merci de repasser plus tard !**
+{% endif %}
+
+{% if toutVoir or App.phase == 'saisie' %}
+## Saisie de vos temps de service prévisionnels
+_du {{ App.texte.debutSaisie }}  au {{ App.texte.finSaisie }}_
+
+
+Merci de bien vouloir saisir vos services d'enseignements prévus pour 
+l'année universitaire 2021-2022.
+En cas de situation particulière, merci de contacter, 
+selon votre situation, vos responsables d'UE, de domaines ou la RHE.
+
+Pour cela, il est recommandé de lire attentivement la 
+[procédure de saisie et de validation](/{{App.appName}}/texte/procedure) des temps de service.
+
+D'autre part, n'hésitez pas à compléter et tenir à jour votre 
+[fiche personnelle](/{{App.appName}}/personne/{{App.auth.user.id}}) 
+(coordonnées et photo) en cliquant sur votre nom, 
+et compléter les syllabus des UE dont vous êtes responsable en cliquant
+sur l'UE concernée.
+
+{% endif %}
+
+{% if toutVoir or App.phase=='validation' %}
+
+## Temps de service en cours de validation
+_du {{ App.texte.debutValidation }}  au {{ App.texte.finValidation }}_
+
+Vos temps de service sont en cours de validation par vos responsables d'UE, 
+de domaines ou la RHE. 
+En cas de changement de situation ou de situation particulière, 
+veuillez contacter la RHE.
+
+En attendant, vous pouvez relire la 
+[procédure de saisie et de validation](/{{App.appName}}/texte/procedure) 
+des temps de service.
+
+D'autre part, n'hésitez pas à compléter et tenir à jour votre 
+[fiche personnelle](/{{App.appName}}/personne/{{App.auth.user.id}}) 
+(coordonnées et photo) en cliquant sur votre nom, 
+et compléter les syllabus des UE dont vous êtes responsable en cliquant
+sur l'UE concernée.
+
+{% endif %}
+
+{% if toutVoir or App.phase=='après' %}
+
+## Vos temps de service ont été validés
+
+Cette validation a été faite sur la base de vos demandes. 
+En cas de situation particulière, merci de contacter, selon votre situation, 
+vos responsables d'UE, de domaines ou la RHE.
+
+D'autre part, n'hésitez pas à compléter et tenir à jour votre 
+[fiche personnelle](/{{App.appName}}/personne/{{App.auth.user.id}}) 
+(coordonnées et photo) en cliquant sur votre nom, 
+et compléter les syllabus des UE dont vous êtes responsable en cliquant
+sur l'UE concernée.
+
+Vous pouvez également relire la 
+[procédure de saisie et de validation](/{{App.appName}}/texte/procedure) 
+des temps de service.
+
+{% endif %}
+

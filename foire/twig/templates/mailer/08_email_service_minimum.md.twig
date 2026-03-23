@@ -1,0 +1,25 @@
+Cher {{ P.getGeneric }}
+
+Le sénat de l'Université a fait circuler un document rappelant que le service minimum d'un enseignant-chercheur est de 64h équivalent-TD (hETD), peu importe le nombre de PCA et PCC. Sans cela, certaines primes ne pourront être accordées (RIPEC, PEDR, etc).
+
+Pour que votre service soit de 64hETD dans le logiciel de gestion des heures d'enseignement des services RH (OSE), nous avons utilisé une partie de votre report de l'année {{ App.currentYear -1}}-{{ App.currentYear}}. Cela apparaît sous l'enseignement "Utilisation report pour service minimum dans OSE" sur votre fiche dans la foire (et ci-dessous).
+
+Après cette opération, votre report en {{ App.currentYear }}-{{ App.currentYear+1 }} est {{ P.getReport() }}hETD.</br>
+Et la somme de vos heures d'enseignement est bien {{P.getCharge()-P.voeu_personne_bilan.heures|f2}}hETD.
+
+Si au cours de l'année {{ App.currentYear}}-{{ App.currentYear+1}}, vous prenez en charge d'autres enseignements, nous les ajouterons à votre fiche et nous rebasculerons les heures "Utilisation report pour service minimum dans OSE" dans votre report {{ App.currentYear }}-{{ App.currentYear+1 }}. 
+
+Bien cordialement,
+
+[https://foire.physique.u-paris.fr/](https://foire.physique.u-paris.fr/)
+
+Olivier Cardoso et Raphaël Galicher, responsables de la répartition des enseignements à l'UFR de Physique.
+
+**Vœux de  {{ P.getGeneric }}**
+
+{{ include('mailer/voeux.md.twig') }}
+
+Les lignes en rouge correspondent aux UE en surcharge.<br>
+Les lignes en vert  correspondent aux UE en sous effectif.<br>
+
+{% include "mailer/signature.md.twig" %}

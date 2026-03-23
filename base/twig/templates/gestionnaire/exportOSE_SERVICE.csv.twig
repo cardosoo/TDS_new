@@ -1,0 +1,19 @@
+annee;nom;prenom;enseignement;code;matricule;cod_elp;code_etab;cod_serv;description
+{%- for Pid in vList|keys -%}
+    {% set P = App.app.getPersonne(Pid) %}
+    {%- for code in vList[Pid]|keys -%}
+        {%- set code_serv =  App.appName ~ App.currentYear ~ "|" ~ vList[Pid][code]["voeuList"]|keys|join('|') %}
+        {%- set code_elp = code %}
+        {%- set EList = [] %}
+        {%- for Vid in vList[Pid][code]["voeuList"]|keys -%} {# pour fabriquer code_serv et enseignement #}
+            {%- set V = App.app.getVoeu(Vid) %}
+            {%- set E = V.enseignement %}
+            {%- set EList = EList|merge([E.nom]) %}
+        {%- endfor -%}
+        {%- set enseignement = EList|join('|') %}
+        
+        {{~ App.currentYear}};{{P.nom|raw}};{{P.prenom|raw}};{{enseignement|raw}};{{code|raw}};{{P.ose|raw}};{{code_elp|raw}};0755976N;{{code_serv}};
+
+    {%- endfor %}
+{%- endfor -%}
+

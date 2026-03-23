@@ -1,0 +1,120 @@
+
+
+{% if App.auth.roleList %}
+    {% set roleList = App.auth.roleList %}
+
+    {% set colorIndex = [
+'w3-red', 'w3-pink', 'w3-purple', 'w3-deep-purple', 'w3-indigo', 'w3-blue', 'w3-light-blue', 'w3-cyan', 'w3-aqua', 'w3-teal', 
+'w3-green', 'w3-light-green', 'w3-lime', 'w3-sand', 'w3-khaki', 'w3-yellow', 'w3-amber', 'w3-orange', 'w3-deep-orange', 
+'w3-blue-gray', 'w3-brown', 'w3-light-gray', 'w3-gray', 'w3-dark-gray', 'w3-black', 'w3-pale-red', 'w3-pale-yellow', 
+'w3-pale-green', 'w3-pale-blue'
+] %}
+
+    <br>
+    <footer class="w3-bar w3-theme-d2 w3-left-align w3-small w3-bottom">
+    {% set target = _self starts with 'CRUD/'?'':'target=\'_blank\'' %}
+    {# pour faire le CRUD #}
+    {% if roleList['CRUD'] %}
+        {% if App.toCRUD is not empty %}
+            <a  href ='{{ App.toCRUD }}' {{target}} class="w3-button w3-black">CRUD</a>
+        {% else %}
+            <a href='/{{ App.appName }}/CRUD/' {{target}} class="w3-button w3-black">CRUD</a>
+        {% endif %}
+        {% set roleList = roleList | filter((v, k) => k != 'CRUD') %}        
+    {% endif %}
+
+    {# pour faire le Debug #}
+    {% if roleList['Debug'] %}
+        {% set roleList = roleList | filter((v, k) => k != 'Debug') %}        
+        <button onclick="document.getElementById('session').style.display='block'" class="w3-button w3-yellow "> Session </button>
+        <button onclick="document.getElementById('routes').style.display='block'" class="w3-button w3-green"> Routes </button>
+        <div id="sqlList" class="w3-modal">
+          <div class="w3-modal-content">
+            <div class="w3-container">
+              <span onclick="document.getElementById('sqlList').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+              <p>{{ dump( App.DB.getSqlList()) }} </p>
+            </div>
+          </div>
+        </div>
+
+        <div id="session" class="w3-modal">
+          <div class="w3-modal-content">
+            <div class="w3-container">
+              <span onclick="document.getElementById('session').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+              <p>{{ dump( App.auth.getSession() ) }} </p>
+            </div>
+          </div>
+        </div>
+
+        <div id="routes" class="w3-modal">
+          <div class="w3-modal-content">
+            <div class="w3-container">
+              <span onclick="document.getElementById('routes').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+              <p>{{ dump( App.debug ) }} </p>
+              <p>{{ dump( App.router.getRoutes() ) }} </p>
+            </div>
+          </div>
+        </div>
+    {% endif %}
+
+    {# pour les autres roles #}
+    {% for role in roleList|keys %}
+        <a href='/{{ App.appName }}/role/{{ role }}'  class="w3-button {{colorIndex[loop.index]}}">{{ role }}</a>
+    {% endfor %}
+
+    
+    </footer>
+
+{% endif %}
+
+
+
+{#
+
+{% if App.auth.isSuperAdmin %}
+      <br>
+      <footer class="w3-bar w3-theme-d2 w3-left-align w3-small w3-bottom">
+      {% if App.auth.isSuperAdmin %}
+        {% set target = _self starts with 'CRUD/'?'':'target=\'_blank\'' %}
+        {% if App.toCRUD is not empty %}
+          <a  href ='{{ App.toCRUD }}' {{target}} class="w3-button w3-black">CRUD</a>
+        {% else %}
+          <a href='/{{ App.appName }}/CRUD/' {{target}} class="w3-button w3-black">CRUD</a>
+        {% endif %}
+        <a href='/{{ App.appName }}/admin'  class="w3-button w3-red">Admin</a>
+      {% endif %}
+      <button onclick="document.getElementById('sqlList').style.display='block'" class="w3-button w3-blue"> requêtes SQL </button>
+      <button onclick="document.getElementById('session').style.display='block'" class="w3-button w3-yellow "> Session </button>
+      <button onclick="document.getElementById('routes').style.display='block'" class="w3-button w3-green"> Routes </button>
+      </footer>
+
+  <div id="sqlList" class="w3-modal">
+    <div class="w3-modal-content">
+      <div class="w3-container">
+        <span onclick="document.getElementById('sqlList').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+        <p>{{ dump( App.DB.getSqlList()) }} </p>
+      </div>
+    </div>
+  </div>
+
+  <div id="session" class="w3-modal">
+    <div class="w3-modal-content">
+      <div class="w3-container">
+        <span onclick="document.getElementById('session').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+        <p>{{ dump( App.auth.getSession() ) }} </p>
+      </div>
+    </div>
+  </div>
+
+  <div id="routes" class="w3-modal">
+    <div class="w3-modal-content">
+      <div class="w3-container">
+        <span onclick="document.getElementById('routes').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+        <p>{{ dump( App.debug ) }} </p>
+        <p>{{ dump( App.router.getRoutes() ) }} </p>
+      </div>
+    </div>
+  </div>
+
+{% endif %}
+#}

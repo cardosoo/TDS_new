@@ -1,0 +1,27 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+    {% block respDomaine %}
+
+    <h3>Responsable de domaine</h3>
+    <ul>
+        <li>tableaux de vos domaines</li>
+        {% for domaine_responsable in App.auth.user.domaine_responsableList %}
+            <ul>
+                <a href='/{{App.appName}}/respDomaine/listePersonnes/{{domaine_responsable.domaine.id}}'>Enseignants</a>,
+                <a href='/{{App.appName}}/respDomaine/listeEnseignements/{{domaine_responsable.domaine.id}}'>Enseignements</a>
+                {{domaine_responsable.domaine.nom}} 
+            </ul>
+        {% endfor %}
+    </ul>
+    {% endblock respDomaine %}
+
+    {% block divers %}
+
+    {% endblock divers %}
+
+</div> 
+{% endblock %}

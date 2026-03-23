@@ -1,0 +1,38 @@
+{% extends "gestionnaire/base_index.html.twig" %}
+
+{% block section %}
+<div class="w3-cell-row">
+
+  <div class="w3-container w3-cell">
+    <div class="w3-card">    
+    {{ parent() }}
+    </div>
+  </div>
+
+  <div class="w3-container w3-cell">
+    <div class="w3-card" style="max-width:1600px;margin-top:80px">    
+        <h2>Gestion des vacataires</h2>
+        <ul>
+            <li><a href="/{{App.appName}}/gestionnaire/vacataires">Liste des vacataires pour l'année en cours</a></li>
+            <li><a href="/{{App.appName}}/vacation/liste">Validation des vacations...</a></li>
+        </ul>
+        
+        <h2>Comparaison données OSE</h2>
+        <ul>
+            <li>Comparaison <a href="/{{App.appName}}/gestionnaire/OSE/listingServices">Voeux</a> OSE - Foire (listingServices)</li>
+            <li>Comparaison <a href="/{{App.appName}}/gestionnaire/OSE/modificationServices">Situations Particulières</a> OSE - Foire (modificationServices)</li>
+        </ul>
+
+        <h2>Présentation de la composante</h2>
+        <h3>Niveau composante</h3>
+        <ul>
+            <li><a href="/{{App.appName}}/gestionnaire/effectifsGlobaux">Effectifs globaux</a> (expérimental)</li>
+            <li><a href="/{{App.appName}}/gestionnaire/ratioHF">Ratio Hommes/Femmes</a> (expérimental)</li>
+            <li><a href="/{{App.appName}}/gestionnaire/repartitionNiveau">Répartition par niveau</a> (expérimental)</li>
+            <li><a href="/{{App.appName}}/gestionnaire/repartitionNiveauStatut">Répartition par niveau et par statut</a> (expérimental)</li>
+        </ul>
+    </div>
+  </div>
+
+</div> 
+{% endblock section %}

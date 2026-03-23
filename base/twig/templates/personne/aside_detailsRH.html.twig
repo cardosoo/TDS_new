@@ -1,0 +1,78 @@
+<style>
+    p {
+        margin: 0px;
+    }
+</style>
+
+<div style='all: revert;'>
+    <div class='w3-container w3-card'>
+        {% if tab.canEdit %}
+            <i onclick="document.getElementById('editDetails').style.display='block'" class="far fa-edit"></i>
+        {% endif %}
+
+        <table>
+            <tr>
+                <td>UID</td>
+                <td>{{ personne.uid }}</td>
+            </tr><tr>
+                <td>OSE</td>
+                <td>{{ personne.ose }}</td>
+            </tr>
+            </tr><tr>
+                <td>Statut</td>
+                <td>{{ personne.statut.getGeneric }}</td>
+            </tr><tr>
+                <td>Situation{{ (personne.personne_situationList|length > 1 ?("s<br>("~ personne.personne_situationList|length ~")"):"")|raw }}</td>
+                <td>
+                    {% if personne.personne_situationList|length == 0 %}
+                        Pas de situation particulière
+                    {% else %}
+                    <ul>
+                    {% for PS in personne.personne_situationList %}
+                        <li>
+                            {{ PS.situation.nom }}<br>
+                            du {{ PS.debut }} au {{ PS.fin }}<br>
+                            réduction de {{ PS.reduction }} HETD<br>
+                            <div>{{ PS.commentaire|markdown_to_html|raw }}</div>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                    {% endif %}
+                    
+                </td>
+            </tr><tr>
+                <td>Referentiel{{ (personne.personne_foncrefList|length > 1 ?("s<br>("~ personne.personne_foncrefList|length ~")"):"")|raw }}</td>
+                <td>
+                    {% if personne.personne_foncrefList|length == 0 %}
+                        Pas de référentiel...
+                    {% else %}
+                    <ul>
+                    {% for FR in personne.personne_foncrefList %}
+                        <li>
+                            {{ FR.foncref.referentiel.code }} {{ FR.foncref.intitule }}<br>
+                            volume de {{ FR.volume }} HETD<br>
+                            {% if FR.foncref.id ==4 %}
+                            {% set stageList = FR.commentaire|json_decode %}
+                            <ul>
+                            {% for stage in stageList %}
+                                <li>{{stage.num}} {{stage.nom}}</li>
+                            {% endfor %}
+                            </ul>
+                            {% else %}
+                            <div>{{ FR.commentaire|markdown_to_html|raw }}</div>                    
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                    {% endif %}
+                    
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+{% if tab.canEdit %}
+    {% include(["personne/editDetailsRH.html.twig", "personne/base_editDetailsRH.html.twig"]) %}
+{% endif %}

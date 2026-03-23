@@ -1,0 +1,86 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _dommaine_responsable_.html.twig
+    created : Thu, 17 Jun 2021 12:00:12 +0000 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "dommaine_responsable", id: "{{ dommaine_responsable.id }}" }}'></i>dommaine_responsable</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "dommaine_responsable", F: "actif", id: "{{dommaine_responsable.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ dommaine_responsable.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block oneToManydommaine_responsable_domaine_full %}
+<p>
+    {% block oneToManydommaine_responsable_domaine_label %}
+    <label class='select' for='domaine'>
+        {{  dommaine_responsable.domaine ? dommaine_responsable.domaine.getCrudEditLink("domaine")|raw : "domaine"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "dommaine_responsable", F: "domaine", id: "{{dommaine_responsable.id}}" }}'></i>
+    </label>
+    {% endblock oneToManydommaine_responsable_domaine_label %}
+    {% block oneToManydommaine_responsable_domaine_active %}    
+    <input class='text {{ ( dommaine_responsable.domaine.id ==0 or  dommaine_responsable.domaine.actif)?"":" passif" }}'  value="{{ dommaine_responsable.domaine.generic() }}" name="domaine" id="domaine"  _id_="{{ dommaine_responsable.domaine.id }}">
+    <script>
+        setAutocomplete("#domaine", "/tssdv/CRUD/L/Domaine");
+    </script>
+    {% endblock oneToManydommaine_responsable_domaine_active %}    
+</p>
+{% endblock oneToManydommaine_responsable_domaine_full %}
+
+{% block oneToManydommaine_responsable_responsable_full %}
+<p>
+    {% block oneToManydommaine_responsable_responsable_label %}
+    <label class='select' for='responsable'>
+        {{  dommaine_responsable.responsable ? dommaine_responsable.responsable.getCrudEditLink("responsable")|raw : "responsable"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "dommaine_responsable", F: "responsable", id: "{{dommaine_responsable.id}}" }}'></i>
+    </label>
+    {% endblock oneToManydommaine_responsable_responsable_label %}
+    {% block oneToManydommaine_responsable_responsable_active %}    
+    <input class='text {{ ( dommaine_responsable.responsable.id ==0 or  dommaine_responsable.responsable.actif)?"":" passif" }}'  value="{{ dommaine_responsable.responsable.generic() }}" name="responsable" id="responsable"  _id_="{{ dommaine_responsable.responsable.id }}">
+    <script>
+        setAutocomplete("#responsable", "/tssdv/CRUD/L/responsable");
+    </script>
+    {% endblock oneToManydommaine_responsable_responsable_active %}    
+</p>
+{% endblock oneToManydommaine_responsable_responsable_full %}
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

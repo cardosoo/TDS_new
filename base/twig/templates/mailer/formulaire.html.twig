@@ -1,0 +1,256 @@
+<style>
+#myProgress {
+  width: 100%;
+  background-color: grey;
+}
+
+#myBar {
+  width: 0%;
+  height: 30px;
+  background-color: #4CAF50;
+  text-align: center; /* To center it horizontally (if you want) */
+  line-height: 30px;  /* To center it vertically */
+  color: white;
+}
+</style>
+
+<script>
+
+    var testDestNum = "{{ App.auth.user.id }}";
+    var personneList = [];
+    
+    $(document).ready(function () {
+        openMessage(true);
+        var ta = $('textarea');
+        autosize(ta);
+    });
+
+    function openMessage(markdown) {
+        var messageHTML = document.getElementById("messageHTML");
+        var messageMarkDown = document.getElementById("messageMarkdown");
+        var markdownTextArea = messageMarkDown.querySelector('textarea');
+        var voirButton = document.getElementById("voirButton");
+        var modifierButton = document.getElementById("modifierButton");
+        if (markdown) {
+            messageMarkDown.style.display = "block";
+            messageHTML.style.display = "none";
+            voirButton.style.display = "block";
+            modifierButton.style.display = "none";
+            autosize.update(markdownTextArea);
+        } else {
+            messageMarkDown.style.display = "none";
+            messageHTML.style.display = "block";
+            voirButton.style.display = "none";
+            modifierButton.style.display = "block";
+            var markdownText = messageMarkDown.querySelector('textarea').value.trim();
+            if (markdownText == "") {
+                markdownText = "Il n'y a pas de message pour le moment...";
+            }
+            var html = marked(markdownText);
+            $("#messageHTML").load("/{{ App.appName }}/admin/mail/"+testDestNum, { message: markdownText });
+        }
+    }
+
+    var mailToSend = 0;
+    var mailSent=0;
+
+
+
+
+    function doSendMessage(id, opt, data){
+        return new Promise(function(resolve) {
+            $.post("/{{ App.appName }}/admin/sendmail/"+id, opt, function( data ) {
+                $( "#compteRendu" ).append( data);
+                 mailSent++;
+                 resolve();
+            });
+        });
+    }
+
+    async function sendMessage(id, opt, data){
+        await doSendMessage(id, opt, data);
+    }
+
+    function sendMessages() {
+        var form = $('#statuts')[0];
+        var data = new FormData(form);
+        var statutList = data.getAll('statut[]');
+        var sujet = data.get('sujet');
+        var ccFoire = data.get('ccFoire');
+        var reply = data.get('reply');
+        $("#compteRendu").html("");
+        var messageMarkDown = document.getElementById("messageMarkdown");
+        var markdownText = messageMarkDown.querySelector('textarea').value.trim();
+        mailToSend = 0;
+        mailSent=0;
+        if (0 == statutList.length){
+            $.post("/{{ App.appName }}/admin/sendmail/"+testDestNum, { message: markdownText, sujet: sujet, ccFoire: ccFoire, reply: reply }, function( data ) {
+                $( "#compteRendu" ).html( data );
+                mailSent++;
+            });
+            mailToSend++; 
+            var elem = document.getElementById("myBar");
+            elem.style.width = width + "%";
+            elem.innerHTML = "Envoi terminé...";
+            clearInterval(id);
+            $("#compteRendu").append("<button onclick='resetSend()'>Reset</button>");
+        } else {
+            for(personne of personneList){
+                if (statutList.includes(personne.statut )){
+                    mailToSend++;
+                }
+            }
+            statusSent();
+            for(personne of personneList){
+                if (statutList.includes(personne.statut )){
+                    sendMessage(personne.id, { message: markdownText, sujet: sujet, ccFoire: ccFoire, reply: reply }, data);
+                }
+            }
+        }
+    }
+    
+    function statusSent() {
+        var elem = document.getElementById("myBar");
+
+        var id = setInterval(frame, 100);
+        function frame() {
+            width = Math.round(100*mailSent / mailToSend);
+            if (mailSent >= mailToSend) {
+                elem.style.width = width + "%";
+                elem.innerHTML = "Envoi terminé...";
+                clearInterval(id);
+                $("#compteRendu").append("<button onclick='resetSend()'>Reset</button>");
+                var form = $('#statuts')[0];
+                var formData = new FormData(form);
+                var messageMarkDown = document.getElementById("messageMarkdown");
+                var markdownText = messageMarkDown.querySelector('textarea').value.trim();
+                var compteRendu = $( "#compteRendu" ).html();
+                var messageHTML = $("#messageHTML").html();
+                formData.append('markdownText', markdownText);
+                formData.append('messageHTML', messageHTML);
+                formData.append('compteRendu', compteRendu);
+
+                var request = new XMLHttpRequest();
+                request.open("POST", "/{{ App.appName }}/admin/sendReport");
+                request.send(formData);
+                
+            } else { 
+                elem.style.width = width + "%";
+                elem.innerHTML = mailSent+"/"+mailToSend;
+            }
+        }
+    }
+    
+    function resetSend(){
+        $("#compteRendu").html("");         
+        elem.style.width = "0%";
+        elem.innerHTML = "";
+    }
+    
+    $( function() {
+        $.widget( "custom.catcomplete", $.ui.autocomplete, {
+        _create: function() {
+            this._super();
+            this.widget().menu( "option", "items", "> :not(.ui-autocomplete-category)" );
+        },
+        _renderMenu: function( ul, items ) {
+            var that = this,
+            currentCategory = "";
+            $.each( items, function( index, item ) {
+            var li;
+            if ( item.category != currentCategory ) {
+                ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+                currentCategory = item.category;
+            }
+            li = that._renderItemData( ul, item );
+            if ( item.category ) {
+                li.attr( "aria-label", item.category + " : " + item.label );
+            }
+            });
+        }
+        });
+
+        personneList = [
+         {% for p in personneList %}    
+        { label: "{{ p.prenom }} {{ p.nom }}", category: "{{ p.statut.nom }}", id: "{{ p.id }}", statut: "{{ p.statut.id }}" },
+        {% endfor %}
+        ];
+    
+        $( "#userForVisu" ).catcomplete({
+        delay: 0,
+        source: personneList,
+        select: function( event, ui ) {
+            testDestNum = ui.item.id;
+            openMessage(false);
+          }
+        });
+    });
+
+          
+</script>
+
+
+<div class="w3-row">
+    <div class="w3-twothird w3-container">
+        <div class="w3-card">
+            <div class="w3-bar w3-black">
+                <span class="w3-bar-item">Message</span>
+                <span id='voirButton'>
+                    <span class="w3-bar-item w3-button" onclick="openMessage(false)">Voir</span>
+                    <span class="w3-bar-item">l'édition se fait en <a
+                            href="https://docs.framasoft.org/fr/grav/markdown.html" target='_blank'>Markdown</a>
+                    </span>
+                </span>
+                <span id='modifierButton' class="w3-bar-item w3-button" onclick="openMessage(true)">Modifier</span>
+            </div>
+
+            <div id="messageHTML" class="w3-container city" style="display: block">
+            </div>
+
+            <div id="messageMarkdown" class="w3-container city" style="display: none">
+                <textarea style='width: 100%' name="commentaire"
+                    placeholder="On place ici le message en markdown avec tout ce qu'il faut là où il faut...">{{ message }}</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="w3-third w3-container">
+        <div class="w3-card">
+            <label>Choisir un destinataire pour la visualisation</label>
+            <input id='userForVisu' >
+            <br>
+            <br>
+        </div>
+
+        <div class="w3-card">
+            <div class="w3-bar w3-black">
+                <span id='sendButton' class="w3-bar-item w3-button" onclick="sendMessages()">Envoyer les messages</span>
+            </div>            
+            <div class="w3-card">
+                <div id="myProgress">
+                    <div id="myBar"></div>
+                </div>
+                <div id="compteRendu" class="w3-container city">
+                </div>
+            </div>
+            <form id="statuts">
+                <p>Sujet du message
+                <input id = 'sujet' name="sujet" value="[{{ foire.app.appName }}]"><br>
+                Adresse de retour <input id = 'reply' type="email" name="reply" value='{{ cmpl.mail }}'><br>
+                <input id = 'ccFoire' type="checkbox" name="ccFoire">
+                <label for='ccFoire'>mettre {{ App.mail }} en copie</label>
+                </p>
+                <p>Sélectionner les destinataires par statuts<br>
+                    Si aucun statut n'est sélectionné, le message est envoyé au destinataire pour la visualisation</p>
+                {% for s in statutList %}
+                <input id = 'statut{{ s.id }}' type="checkbox" name="statut[]" value="{{ s.id }}">
+                <label for='statut{{ s.id }}'>{{ s.nom }}</label><br>
+                {% endfor %}
+            </form>
+        </div>
+    </div>        
+</div>
+
+<br>
+<br>
+<br>
+<br>

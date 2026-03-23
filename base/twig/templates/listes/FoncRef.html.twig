@@ -1,0 +1,77 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+    <br>
+    <h3>Listes des responsables</h3>
+        
+    {% set mailList = [] %}
+    {% set sympaList = [] %}
+    <table id="list" class="display compact">
+        <thead>
+            <tr>
+                <th>Personne</th>
+                <th>Email</th>
+                <th>Commentaire</th>
+                <th>Volume</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for FR in PL %}
+            {% set mailList = mailList|merge(["#{FR.personne.prenom} #{FR.personne.nom} <#{FR.personne.email}>"]) %}
+            {% set sympaList = sympaList|merge(["#{FR.personne.email} #{FR.personne.prenom} #{FR.personne.nom}"]) %}
+            <tr>
+                <td>{{ FR.personne.getGenericWithLink|raw }}</td>
+                <td><a href='mailto:{{ FR.personne.email }}'>{{ FR.personne.email }}</a></td>
+                <td>{{ FR.commentaire }}</td>
+                <td>{{ FR.volume|f2}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div>
+        <p id="mail" hidden>{{ mailList|join('\n') }}</p>
+        <p id="sympa" hidden>{{sympaList|join('\n') }}</p>
+        Copier les mails de l'équipe enseignante dans le presse-papier pour 
+        <button class="w3-button w3-green w3-padding" onclick="copyMailsToClipboard('mail')">Mail</button>
+        <button class="w3-button w3-green w3-padding" onclick="copyMailsToClipboard('sympa')">Sympa</button>
+    </div>
+
+
+<script>
+    function copyMailsToClipboard(id) {
+        const str = document.getElementById(id).innerText
+        const el = document.createElement('textarea')
+        el.value = str
+        el.setAttribute('readonly', '')
+        el.style.position = 'absolute'
+        el.style.left = '-9999px'
+        document.body.appendChild(el)
+        el.select()
+        document.execCommand('copy')
+        document.body.removeChild(el)
+        alert(`Copié ! : \n${str}`)    
+    }
+
+    $(document).ready(function () {
+        $('#list').DataTable({
+            order: [[1, "asc"], [0, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'portrait'
+                }
+            ]
+        });
+    });
+</script>
+{% endblock %}
+
+

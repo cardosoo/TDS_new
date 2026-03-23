@@ -1,0 +1,44 @@
+{% extends "enseignement/base_voeux.html.twig" %}
+
+{% block anciennete_titre %}
+                    <th class="w3-center" title="Validation dans le Tableau de Service">Valid</th> 
+{% endblock anciennete_titre %}
+
+
+{% block anciennete_voeu %}
+                    <td class="w3-center" >
+                    {% if v.etat_ts == 2%}
+                    <i class="far fa-question-circle"></i>
+                    {% elseif v.etat_ts == 3%}
+                    <i class="far fa-check-circle"></i>
+                    {% endif %}
+                    </td>
+{% endblock anciennete_voeu %}
+
+
+{% block correspondant_titre %}
+                    <th class="w3-center" title="Responsable de l'enseignement">Resp</th> 
+{% endblock correspondant_titre %}
+
+
+{% block anciennete_bilan %}
+                    <td class="w3-center"></td>
+{% endblock anciennete_bilan %}
+
+{% block total_heures_titre %}
+    {% if App.auth.isAdmin %}
+        {{ parent() }}
+    {% endif %}
+{% endblock total_heures_titre %}
+
+{% block total_heures_ligne %}
+    {% if App.auth.isAdmin %}
+        {{ parent() }}
+    {% endif %}
+{% endblock total_heures_ligne %}
+
+{% block bilan_heures %}
+    {% if App.auth.isAdmin %}
+        {{ parent() }}
+    {% endif %}
+{% endblock bilan_heures %}

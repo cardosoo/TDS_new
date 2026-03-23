@@ -1,0 +1,34 @@
+  <script>
+    {% if App.setURL %}
+    history.pushState('', '', '{{App.setURL}}');
+    {% endif %} 
+
+
+    function inputKey(e){
+      if (13 ==e.charCode){
+        if ('searchAll'==e.target.id){
+          searchAll();
+        } else if ('searchEnseignement'==e.target.id){
+          searchEnseignement();
+        }
+      }
+    }
+    
+    function searchEnseignement(){
+      var what = document.getElementById('searchEnseignement').value;
+      window.location='/{{ App.appName }}/quoi/'+what
+    }
+    
+    function searchAll(){
+      
+      var search = document.getElementById('searchAll').value;
+      var CRUD = (typeof isCRUD !== 'undefined');
+      if (CRUD){
+        window.location='/{{ App.appName }}/CRUD/search/'+search
+      } else {
+        window.location='/{{ App.appName }}/qui/'+search
+      }
+    }
+
+
+  </script>

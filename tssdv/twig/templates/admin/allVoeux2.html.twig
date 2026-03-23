@@ -1,0 +1,101 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+    {% set etat = ['', '', 'Att.','Val.'] %}
+
+    {% if voeuList is empty %}
+    <h3 style="background-color:LightCoral">Il n'y a pas de voeux pour le moment </h3>
+    {% else %}
+    <h3>tous les voeux...</h3>
+    <table id="listVoeu" class="display compact">
+        <thead>
+            <tr>
+                <th rowspan="2">Nom</th>
+                <th rowspan="2">Prénom</th>
+                <th rowspan="2">NUAC</th>
+                <th rowspan="2">Intitulé</th>
+                <th rowspan="2" class="w3-center" style='width: 4em'>Sem</th>
+                <th rowspan="1" colspan="2" class="w3-center" style='width: 3em'>CM</th>
+{#                
+                <th rowspan="1" colspan="2" class="w3-center" style='width: 3em'>CTD</th>
+#}
+                <th rowspan="1" colspan="2" class="w3-center" style='width: 3em'>TD</th>
+                <th rowspan="1" colspan="2" class="w3-center" style='width: 3em'>TP</th>
+                <th rowspan="2" class="w3-center" style='width: 3em'>Extra</th>
+                <th rowspan="2" class="w3-center" style='width: 3em'>Bonus</th>
+                <th rowspan="2" class="w3-center" style='width: 3em'>Cor.</th>
+                <th rowspan="2" class="w3-center" style='width: 3em'>Valid.</th>
+            </tr>
+            <tr>
+                <th class="w3-centre">CM-gr</th>
+                <th class="w3-centre">CM-h</th>
+{#
+                <th class="w3-centre">gr</th>
+                <th class="w3-centre">h</th>
+#}                
+                <th class="w3-centre">TD-gr</th>
+                <th class="w3-centre">TD-h</th>
+                <th class="w3-centre">TP-gr</th>
+                <th class="w3-centre">TP-h</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for voeu in voeuList %}
+            <tr>
+                <td><a href='/{{App.appName}}/personne/{{ voeu.p.id }}'>{{ voeu.p.nom }}</a></td>
+                <td><a href='/{{App.appName}}/personne/{{ voeu.p.id }}'>{{ voeu.p.prenom }}</a></td>
+                <td><a href='/{{App.appName}}/enseignement/{{ voeu.e.id }}'>{{ voeu.e.code }}</a></td>
+                <td><a href='/{{App.appName}}/enseignement/{{ voeu.e.id }}'>{{ voeu.e.nom }}</a></td>
+                <td class="w3-center">{% if voeu.ep.periode == "{1}" %}
+                    S1
+                    {% elseif voeu.ep.periode == "{2}" %}
+                    S2
+                    {% elseif voeu.ep.periode == "{3}" %}
+                    Ann
+                    {% else %}
+                    ????
+                    {% endif %}
+                </td>
+                <td class="w3-center">{{voeu.v.cm|f2}}</td>
+                <td class="w3-center">{{(voeu.v.cm*voeu.e.s_cm*voeu.e.d_cm)|f2}}</td>
+{#
+                <td class="w3-center">{{voeu.v.ctd|f2}}</td>
+                <td class="w3-center">{{(voeu.v.ctd*voeu.e.s_ctd*voeu.e.d_ctd)|f2}}</td>
+#}
+                <td class="w3-center">{{voeu.v.td|f2}}</td>
+                <td class="w3-center">{{(voeu.v.td*voeu.e.s_td*voeu.e.d_td)|f2}}</td>
+                <td class="w3-center">{{voeu.v.tp|f2}}</td>
+                <td class="w3-center">{{(voeu.v.tp*voeu.e.s_tp*voeu.e.d_tp)|f2}}</td>
+                <td class="w3-center">{{voeu.v.extra|f2}}</td>
+                <td class="w3-center">{{voeu.v.bonus|f2}}</td>
+                <td class="w3-center">{{voeu.v.responsable=='t'?'Corr':''}}</td>
+                <td class="w3-center">{{etat[voeu.v.etat_ts] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <br>
+
+    <script>
+        $(document).ready(function () {
+            $('#listVoeu').DataTable({
+                order: [[0, "asc"], [1, "asc"]],
+                dom: 'Bfrtip',
+                paging: false,
+                buttons: [
+                    'copy',
+                    'excel',
+                    'csv',
+                    {
+                        extend: 'pdf',
+                        orientation: 'portrait'
+                    }
+                ]
+            });
+        });
+    </script>
+    {% endif %}
+
+{% endblock section %}

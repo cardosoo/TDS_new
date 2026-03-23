@@ -1,0 +1,71 @@
+    <!-- Profile -->
+    <div class="w3-card w3-round w3-white">
+        <div class="w3-container">
+            <h4 class="w3-center">{{E.getGenericWithLink|raw }}</h4>
+            {% set ecueList = E.getStructEcueList() %}
+            {% for ecueCode in ecueList|keys %}
+                {% set ecue = ecueList[ecueCode] %}
+                <p class="w3-center">{{ ecueCode }} {{ ecue.nom }}</p>
+                <p class="w3-center">{{ ecue.getCursusName() }} {{ ecue.getPeriodeName() }}</p>
+            {% endfor %}
+{% block domaineCard %}
+{% endblock domaineCard %}            
+            {% if  E.url  %}
+                <hr>
+                <p><i class="fas fa-external-link-alt w3-margin-right w3-text-theme"></i><a target='_blank' href='{{ E.url }}'>{{ E.url }}<a/> </p>
+            {% endif %}
+            {# Ici débute la partie pour l'ajout des voeux #}
+{% block voeuxCard %}            
+            {% include(["enseignement/voeuxCard.html.twig", "enseignement/base_voeuxCard.html.twig"]) %}
+{% endblock voeuxCard %}             
+            {# Ici termine la partie pour l'ajout des voeux #}
+        </div> 
+    </div>
+    <br>
+    <div class="w3-card w3-round">
+        <div class="w3-white">
+            <i class="fa fa fa-arrow-circle-right fa-fw w3-margin-right"></i>Cursus - {{ nbEtu }} étudiants
+        </div>
+        <div id="Cursus" class="w3-show w3-container">
+            {% set structEtapeList = E.getStructEtapeList() %}
+            {% for codeECUE in structEtapeList|keys %}
+                {% set ecue = ecueList[codeECUE] %}
+                {# <p class="w3-center">{{ codeECUE }} {{ ecue.nom }} {{ ecue.periode }}</p> #}
+                {% set etapeList = ecue.getEtapes() %}
+                {{ etapeList|length >0 ? "": "<p>Hors maquettes</p>" }}
+                {% for etape in etapeList %}
+                <details>
+                    <summary>
+                        {{ etape.nom }}
+                    </summary>
+                    <div id="Cursus{{ loop.index }}" class=" w3-container">
+                        <ul class='w3-ul'>
+                            <li>
+                                <div class='w3-cell'>Étape : </div>
+                                    <div class='w3-cell'>
+                                        <div><a href='/{{App.appName}}/structure/etape/{{etape.code}}'>{{ etape.nom }}</a></div>
+                                        {% for personne in etape.responsables %}
+                                        <div>res : <a href='/{{ App.appName }}/personne/{{personne.id}}'>{{ personne.prenom}} {{ personne.nom }}</a></div>
+                                        {% endfor %}
+                                    </div>
+                            </li>
+                            <li><div class='w3-cell'>Cursus : </div><div class='w3-cell'>{{ etape.getCursusName() }}</div></li>
+                            <li><div class='w3-cell'>Type : </div><div class='w3-cell'>{{ etape.getTypeName() }}</div></li>
+                            <li><div class='w3-cell'>Niveau : </div><div class='w3-cell'>{{ etape.niveau }}</div></li>
+                            <li><div class='w3-cell'>Période : </div><div class='w3-cell'>{{ ecue.periodeName() }}</div></li>
+                            <li><div class='w3-cell'>ECUE : </div><div class='w3-cell'>{{ ecue.code }}<br>{{ ecue.nom }}</div></li>
+                            <li><div class='w3-cell'>{{ ecue.ects }} ECTS - {{ ecue.nbetu }} étudiants</div></li>
+                        </ul>
+                    </div>
+                </details>                        
+                {% endfor %}
+            {% endfor %}
+        </div>
+        <br>
+    </div>
+    <br>
+
+
+
+{% block extendBaseCard %}
+{% endblock extendBaseCard %}

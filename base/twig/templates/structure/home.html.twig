@@ -1,0 +1,12 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+
+<h1>Liste des strucutres de l'université</h1>
+<ul>
+{% for structure  in structureList %}
+    <li><a href='/{{App.appName}}/structure/structure/{{structure.nom}}' >{{ structure.nom }}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}

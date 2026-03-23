@@ -1,0 +1,148 @@
+<script>
+    function copyMailsToClipboard(id) {
+        const str = document.getElementById(id).innerText
+        const el = document.createElement('textarea')
+        el.value = str
+        el.setAttribute('readonly', '')
+        el.style.position = 'absolute'
+        el.style.left = '-9999px'
+        document.body.appendChild(el)
+        el.select()
+        document.execCommand('copy')
+        document.body.removeChild(el)
+        alert(`Copié ! : \n${str}`)    }
+</script>
+<style>
+tr.passif td, 
+tr.passif th {
+    text-decoration: line-through blue;
+    color: blue;
+}
+
+tr.passifLink td, 
+tr.passifLink th {
+    text-decoration: line-through darkblue;
+    color: darkblue;
+}
+
+tr.correspondant:nth-child(even) {
+    background-color: PowderBlue!important;
+}
+
+tr.correspondant{
+    background-color: PowderBlue!important;
+}
+</style>
+
+
+<div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+    <div class='w3-responsive'>
+        <div class="w3-left w3-xlarge">
+            <i class="fa fa-arrow-circle-right fa-fw w3-text-theme"></i>
+            {% if Titre %}
+                {{ Titre }}
+            {% else %}
+                {{ App.phaseList[App.phase].voeuxEnseignantLabel }}
+            {% endif %}
+        </div> 
+        <div class="w3-dropdown-click w3-right w3-normal">
+            {% if App.phase in [ 3] %}  {# Ici il faut attention aux phases concernées #}
+            <div class="w3-container w3-card w3-white w3-round">
+                <div class='w3-left'>Correspondant{{ cmpl['oldResp']|length>1?"ss":""}} pour {{ App.currentYear-1 }} - {{ App.currentYear }}&nbsp;:&nbsp;</div>
+                <div class='w3-right'>
+                    {% for oldCorr in cmpl['oldResp'] %}
+                    <div><a href='/{{ App.appName }}/personne/{{ oldCorr.personne.num}}'> {{ oldCorr.personne.prenom }} {{ oldCorr.personne.nom }}</a></div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% if E.voeuList %}
+    {% set Bilan = E.voeu_enseignement_bilan %}
+    <div class='w3-responsive {{ compact?"w3-medium":"w3-large"}}'>
+    <table class='w3-table-all w3-hoverable'>
+            <thead>
+                <tr class='w3-light-blue'>
+                    <th>Enseignant</th>
+                    <th class="w3-center" title='Nb de groupes de Cours Magistral'>CM</th>
+                    <th class="w3-center" title='Nb de groupes de Cours TD'>CTD</th>
+                    <th class="w3-center" title='Nb de groupes de Travaux Dirigés'>TD</th>
+                    <th class="w3-center" title='Nb de groupes de Travaux Pratiques'>TP</th>
+                    <th class="w3-center" title="Nb d'heures en Extra">Ext</th>
+                    <th class="w3-center" title="Nb d'heures en Bonus">Bon</th>
+                    {% block anciennete_titre %}{% endblock anciennete_titre %}
+                    {% block correspondant_titre %}
+                    <th class="w3-center" title="Correspondant pour l'enseignement">Cor</th>
+                    {% endblock correspondant_titre %}
+                    {% block total_heures_titre %}
+                    <th class="w3-center" title='Charge en heure équivalent TD'>hTD</th>
+                    {% if not compact %}
+                    <th class="w3-center w3-small"  title='Heures restant à affecter pour cet enseignement'>reste</th>
+                    {% endif %}
+                    {% endblock total_heures_titre %}
+                </tr>
+            </thead>
+            <tbody>
+                {% set mailList = [] %}
+                {% set sympaList = [] %}
+                {% for v in E.voeuList %}
+                <tr class="{{ v.actif?"":"passif" }} {{ v.personne.actif?"":"passifLink" }} {{v.correspondant?"correspondant":""}}" >
+                    {% set mailList = mailList|merge(["#{v.personne.prenom} #{v.personne.nom} <#{v.personne.email}>"]) %}
+                    {% set sympaList = sympaList|merge(["#{v.personne.email} #{v.personne.prenom} #{v.personne.nom}"]) %}
+                    <th><a href="/{{ App.appName }}/personne/{{ v.personne.id}}">{{ v.personne.prenom }} {{ v.personne.nom }}</a></th>                    
+                    <td class="w3-center">{{ v.cm|f2 }}</td>
+                    <td class="w3-center">{{ v.ctd|f2 }}</td>
+                    <td class="w3-center">{{ v.td|f2 }}</td>
+                    <td class="w3-center">{{ v.tp|f2 }}</td>
+                    <td class="w3-center">{{ v.extra|f2 }}</td>
+                    <td class="w3-center">{{ v.bonus|f2 }}</td>
+                    {% block anciennete_voeu %}{% endblock anciennete_voeu %}
+                    <td class="w3-center">{{ v.correspondant ? 'oui' : '' }}</td>
+                    {% block total_heures_ligne %}
+                    <td class="w3-center">{{ v.voeu_bilan_ligne.heures|f2 }}</td> 
+                    {% if not compact %}
+                    <td class="w3-center w3-small">{{ v.personne.voeu_personne_bilan.heures|number_format }}</td>
+                    {% endif %}
+                    {% endblock total_heures_ligne %}
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% block bilan_heures %}
+             <tfoot>
+                <tr class='w3-light-blue'>
+                    <th>Manque</th>
+                    <td class="w3-center {{Bilan.cm>0.01?'w3-green':''}}{{Bilan.cm<-0.01?'w3-red':''}}">{{ Bilan.cm|f2 }}</td>
+                    <td class="w3-center {{Bilan.ctd>0.01?'w3-green':''}}{{Bilan.ctd<-0.01?'w3-red':''}}">{{ Bilan.ctd|f2 }}</td>
+                    <td class="w3-center {{Bilan.td>0.01?'w3-green':''}}{{Bilan.td<-0.01?'w3-red':''}}">{{ Bilan.td|f2 }}</td>
+                    <td class="w3-center {{Bilan.tp>0.01?'w3-green':''}}{{Bilan.tp<-0.01?'w3-red':''}}">{{ Bilan.tp|f2 }}</td>
+                    <td class="w3-center {{Bilan.extra>0.01?'w3-green':''}}{{Bilan.extra<-0.01?'w3-red':''}}">{{ Bilan.extra|f2 }}</td>
+                    <td class="w3-center {{Bilan.bonus>0.01?'w3-green':''}}{{Bilan.bonus<-0.01?'w3-red':''}}">{{ Bilan.bonus|f2 }}</td>
+                    {% block anciennete_bilan %}{% endblock anciennete_bilan %}
+                    <td class="w3-center"></td>
+                    <td class="w3-center {{Bilan.heures>0.01?'w3-green':''}}{{Bilan.heures<-0.01?'w3-red':''}}">{{ Bilan.heures|f2 }}</td>
+                </tr>
+            </tfoot>
+            {% endblock bilan_heures %}
+        </table>
+        <br>
+    </div>
+
+    {% if noMail %}
+    {% else %}
+    <div>
+        <p id="mail" hidden>{{ mailList|join('\n') }}</p>
+        <p id="sympa" hidden>{{sympaList|join('\n') }}</p>
+        Copier les mails de l'équipe enseignante dans le presse-papier pour 
+        <button class="w3-button w3-green w3-padding" onclick="copyMailsToClipboard('mail')">Mail</button>
+        <button class="w3-button w3-green w3-padding" onclick="copyMailsToClipboard('sympa')">Sympa</button>
+    </div>
+    {% endif %}
+{% else %}
+    <div class='w3-responsive w3-theme-l2 w3-center' style="font-size: large">Pas d'équipe pour l'année {{ App.currentYear }} - {{ App.currentYear+1 }}
+    </div>
+{% endif %}    
+</div> 
+
+

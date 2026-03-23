@@ -1,0 +1,27 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+<div class="w3-card-4 w3-white w3-margin">
+    <div class="w3-container w3-light-grey  w3-center">
+        <b>Calcul des reports</b>
+    </div>
+    {% apply markdown_to_html %}
+
+    Cette opération doit-être un fois après avoir copié la base de données depuis l'année précédente vers cette nouvelle année.
+
+    Ceette opération peut cependant être réalisée n'importe quand et autant de fois qu'on le souhaite
+
+    Opération réalisées :
+    - suppression des reports déjà présents dans la base de données,
+    - création des reports à partir de la base de l'année précédente
+
+    {% endapply %}
+
+    <div class="w3-container w3-light-grey  w3-center">
+        <b><a href='./calculReports/confirm'>Effectuer cette action</a></b>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,476 @@
+{% extends "layout.html.twig" %}
+
+{% block  css %}
+
+{{ parent() }}
+<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/south-street/jquery-ui.css" rel="stylesheet">
+<link href="/{{App.appName}}/assets/jquery.signature/css/jquery.signature.css" rel="stylesheet">
+<link rel="stylesheet" href="/{{App.appName}}/assets/uploader/jquery.dm-uploader.min.css">
+{% endblock  %}
+
+{% block  script %}
+{{ parent() }}
+<script type="text/javascript" src="/{{App.appName}}/assets/jquery.signature/js/jquery.signature.js"></script>
+<script src="/{{App.appName}}/assets/uploader/jquery.dm-uploader.min.js"></script>
+<script type="text/javascript" src="/{{App.appName}}/assets/js/ImageTools.js"></script>
+
+{% endblock  %}
+
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+{% set gestionnaire = App.auth.hasRole('Gestionnaire') %}
+
+<style>
+    .kbw-signature { width: 400px; height: 200px; }
+</style>
+
+<div id="id01" class="w3-modal">
+    <div class="w3-modal-content">
+        <div class="w3-container">
+            <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+
+            <label for="level">Composante : </label>
+            <select data-bind="options: structureList, selectedOptions: structure, optionsText: 'nom', optionsValue: 'id',  optionsCaption: 'Select...',  value: structure" ></select>
+
+            <label for="level">Niveau : </label>
+            <select data-bind="options: cursusList, selectedOptions: cursus, optionsText: 'nom', optionsValue: 'id', optionsCaption: 'Tous les Cursus...', value: cursus "></select>
+            <br>
+            <label for="level">Etape : </label>
+            <select data-bind="options: getEtapeList(structure(), cursus()), selectedOptions: etape, optionsText: 'nom', optionsValue: 'id',  optionsCaption: 'Toutes les étapes...', value: etape "></select>
+            <label for="level">Semestre : </label>
+            <select data-bind="options: semestreList, selectedOptions: semestre, optionsText: 'nom', optionsValue: 'id',  optionsCaption: 'Tous les Semestres...', value: semestre  "></select>
+            <br>
+
+            <input type='hidden' data-bind="text: $root.search">
+
+            <div id='searchResult'  data-bind="style: {'background-color' :'inherit'}">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+    <h3>Fiche de Validation des Vacations pour l'année  {{year}} - {{year + 1}}</h3>
+
+    {% if gestionnaire %}
+        {% if D.etat == 'DELETED' %}
+            <div class='w3-card-4 w3-theme-l4 w3-round-large'>
+                <a href='#' onclick='deleteFichePermanent()'>Supprimer cette fiche de façon permanente</a>
+            </div>
+        {% else %}
+            <div class='w3-card-4 w3-theme-l4 w3-round-large'>
+                <a href='#' onclick='deleteFiche()'>Supprimer cette fiche</a>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    <div class="w3-panel w3-leftbar w3-sand w3-serif">
+        Merci de vérifier et de modifier le cas échéant les informations concernant 
+        la vacation effectuée au cours de l'année universitaire
+        {{year}} - {{year + 1 }} pour un enseignement dont vous êtes le référent  
+        en tant que correspondant de l'enseignement ou responsable de l'étape pour l'UFR de Physique.
+    </div>
+    <form class="w3-container" method='POST'>
+        <div clas='w3-card-4 w3-theme-l4 w3-margin w3-round-large'>
+            <br>
+            <br>
+            <div class='w3-container'>
+                <div class='w3-half'>
+                    <div class='w3-container w3-padding-16 w3-card-4 w3-round-large w3-theme-l4 w3-margin'>
+                        <div class="w3-panel w3-leftbar w3-sand w3-serif">
+                        Merci de vérifier et de modifier le cas échéant le <b>nombre</b> et le <b>type</b> d'heures <b>effectivement</b> réalisées. 
+                        </div>
+                        <label>Nom</label><br/>
+                        <input required class="w3-input" type="text" name='nom' value='{{D.nom}}'>
+                        <label>Prénom</label><br/>
+                        <input required class="w3-input" type="text" name='prenom' value='{{D.prenom}}'>
+                        <br/>
+                        <div class='w3-quarter'>
+                            <label>hCM</label>
+                            <input {{ gestionnaire?"":"required"}} id='hCM' onchange="computeHEQTD();" size='6' class="_w3-input" style='width: 5em;' type="number" step='0.1' min='0' name='hCM' value='{{D.hCM}}'>
+                        </div>
+                        <div class='w3-quarter'>
+                            <label>hCMTD</label>
+                            <input {{ gestionnaire?"":"required"}} id='hCMTD' onchange="computeHEQTD();" size='6' class="_w3-input" style='width: 5em;' type="number"  step='0.1'  min='0'  name='hCMTD' value='{{D.hCMTD}}'>
+                        </div>
+                        <div class='w3-quarter'>
+                            <label>hTD</label>
+                            <input {{ gestionnaire?"":"required"}} id='hTD' onchange="computeHEQTD();" size='6' class="_w3-input" style='width: 5em;' type="number" name='hTD'  step='0.1'  min='0'  value='{{D.hTD}}'>
+                        </div>
+                        <div class='w3-quarter'>
+                            <label>hTP</label>
+                            <input {{ gestionnaire?"":"required"}} id='hTP' onchange="computeHEQTD();" size='6' class="_w3-input" style='width: 5em;' type="number" name='hTP'  step='0.1'  min='0'  value='{{D.hTP}}'>
+                        </div>
+                        <br/>
+                        <h1 class='w3-center'>
+                            Total : <b id='hEQTD'>{{D.hCM*1.5+D.hCMTD*1.25+D.hTD+D.hTP}}</b> hEQTD
+                        </h1>
+                    </div>
+
+                    <div class='w3-container w3-padding-16 w3-card-4 w3-round-large w3-theme-l4 w3-margin'>
+                        <div class="w3-panel w3-leftbar w3-sand w3-serif">
+                        Merci de vérifier et de modifier le cas échéant les informations dans les champs ci-dessous.
+                        </div>
+                        <div>
+                            <label>Type de formation</label>
+                            {% set List = ['initiale', 'continue', 'professionnelle'] %}
+                            <select {{ gestionnaire?"":"required"}} class="w3-select" name="typeFormation">
+                                <option value=""  {{ D.typeFormation == 'XXXX' ? "selected" }}>Choisir</option>
+                                {% for Elm in List %}
+                                <option value="{{Elm}}" {{ D.typeFormation == Elm ? "selected" }}>{{Elm}}</option>
+                                {% endfor %}                    
+                            </select>
+                        </div>
+                        <div>
+                            <label>Gestionnaire de scolarité</label>
+                            {% set List = ['Autre', 'Christine Da Silva', 'Christophe Grémare', 'Stessy Mondongue', 'Souad Namane', 'Albéric Sénecal', 'Clara Warnier'] %}
+
+                            <select required class="w3-select" name="gestionnaireScol">
+                                <option value=""  {{ D.gestionnaireScol == 'XXXX' ? "selected" }}>Choisir</option>
+                                {% for Elm in List %}
+                                <option value="{{Elm}}" {{ D.gestionnaireScol == Elm ? "selected" }}>{{Elm}}</option>
+                                {% endfor %}                    
+                            </select>
+                        </div>
+                        <div class='w3-half'>
+                            <label>Date de début</label><br/>
+                            <input  {{ gestionnaire?"":"required"}} size="30" class="_w3-input" type="date" name='dateDebut' value='{{D.dateDebut}}'>
+                        </div>
+                        <div class='w3-half'>
+                            <label>Date de fin</label><br/>
+                            <input  {{ gestionnaire?"":"required"}} size="30" class="_w3-input" type="date" name='dateFin' value='{{D.dateFin}}'>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class='w3-half'>
+                    <div class='w3-container w3-padding-16 w3-card-4 w3-round-large w3-theme-l4 w3-margin'>
+                        <div class="w3-panel w3-leftbar w3-sand w3-serif">
+                            Les informations reportées ici sont issues du système d'information de l'université.<br>
+                            Elles sont extraites à partir du code ECUE de l'enseignement.<br> 
+                            Si cela ne correspond pas à l'enseignement il faut rechercher le bon code ECUE en utilisant cet <a href='#' onclick="chercheECUE()">outil</a>.
+                        </div>
+                        <div class="w3-padding-16">
+                            <div class='w3-quarter'>code ECUE</div>
+                            <div class='w3-rest'><input  {{ gestionnaire?"":"required"}} class="w3-input" type='text' name ='codeECUE' readonly value='{{D.codeECUE}}'></div>
+                        </div>
+                        <div class="w3-padding-16">
+                            <div class='w3-quarter'>Formation</div>
+                            <div class='w3-rest'><input  {{ gestionnaire?"":"required"}} class="w3-input" type='text' name ='formation' readonly value='{{D.formation}}'></div>
+                        </div>
+                        <div class="w3-padding-16">
+                            <div class='w3-quarter'>Niveau</div>
+                            <div  class='w3-rest'><input {{ gestionnaire?"":"required"}} class="w3-input" type='text' name ='niveau' readonly value='{{D.niveau}}'></div>
+                        </div>
+                        <div class="w3-padding-16">
+                            <div class='w3-quarter'>Semestre</div>
+                            <div class='w3-rest'><input {{ gestionnaire?"":"required"}} class="w3-input" type='text' name ='semestre' readonly value='{{D.semestre}}'></div>
+                        </div>
+                        <div class="w3-padding-16">
+                            <div class='w3-quarter'>Intitulé</div>
+                            <div class='w3-rest'><input {{ gestionnaire?"":"required"}} class="w3-input" type='text' name ='intituleEnseignement' readonly value='{{D.intituleEnseignement}}'></div>
+                        </div>
+                        <div class="w3-padding-16">
+                            <div class='w3-quarter'>code EOTP</div>
+                            <div class='w3-rest'><input class="w3-input" type='text' name ='EOTP' {{ gestionnaire?"":"readonly"}} value='{{D.EOTP}}'></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <div class='w3-container'>
+            <div class='w3-container w3-card-4 w3-theme-l4 w3-round-large w3-padding-16'>
+                <div class='w3-half'>
+                    <div class="w3-panel w3-leftbar w3-sand w3-serif">
+                    Si besoin, vous pouvez laisser un commentaire afin d'ajouter des précisions sur le dossier.
+                    </div>
+                    <div class='w3-center'>
+                        <textarea name='commentaire' rows='10' cols='50'>{{D.commentaire}}</textarea>
+                    </div>
+                </div>
+                <div class='w3-half'>
+                    <div class="w3-panel w3-leftbar w3-sand w3-serif">
+                    Merci d'apposer votre signature en utilisant la souris ou en déposant une image de votre signature et de valider la fiche.<br>
+                    <i class="fa fa-warning" style="color:red">⚠</i>Une fois la fiche validée, vous n'aurez plus la possibilité de la modifier.
+                    </div>
+                    <div class='w3-center'>
+                        <input name='uid' type='hidden' value='{{P.uid}}'>
+                        <div>validé par 
+                        {% if gestionnaire %}
+                            {% if P.uid %}
+                                {% set prenomNom = P.prenom|capitalize ~ ' ' ~ P.nom|upper %}
+                            {% else %}
+                                {% set prenomNom = "" %}
+                            {% endif %}
+                            <input required id='uid' size=30 value='{{prenomNom}}'>
+                        {% else %}
+                            {{P.prenom|capitalize}} {{P.nom|upper}} - {{P.statut.nom}}
+                        {% endif %}
+    
+                        </div>
+                        <div>
+                            <span class="w3-button w3-border" onclick='clearSignature()'>Effacer la signature</span>
+                            <span><label for="upload_file" class='w3-button w3-border'>Téléverser une signature</label></div>
+                                <input type="file" id="upload_file" name="upload_file[]" onchange="preview_image();" accept="image/png, image/jpeg, image/webp, image/bmp, image/gif" style="display:none" />
+                            </span>
+                            {#<span class="w3-button w3-border" onclick='resetSignature()'>Remettre à l'original</span>#}
+                        </div>
+                        <div class='w3-center'>                        
+                            <div id="sig"></div>
+                        </div>
+                            {#
+                            <div class='w3-half'>
+                                <div id="drop-area">
+                                    <p>Déposer une image de votre signature ici</p>
+                                    <input type="file" title="Cliquer pour déposer">
+                                </div>
+                            </div>
+                            #}
+                        </div>    
+                        <div class='w3-center'>
+                            {% if gestionnaire %}
+                            <button name='save' class="w3-button w3-border">Enregistrer</button>
+                                {% if  (App.auth.user.uid == P.uid) or App.auth.hasRole('Admin') %}
+                                    <button name='validate' class="w3-button w3-border">Enregistrer et Valider</button>
+                                {% endif %}
+                            {% else %}
+                            <button name='validate' class="w3-button w3-border">Valider</button>
+                            {% endif %}
+                        </div>
+                    </div>    
+                </div>
+            </div>
+        </div>
+        <textarea cols='80' rows='10' style='display: none;' id='signature' name='signature'>{{D.signature|raw}}</textarea>
+    </form>
+</div>
+
+<script>
+
+var sigPNG = "{{ D.signature == '' ? 'null' : D.signature|raw }}";
+
+{% if gestionnaire %}
+function deleteFiche(){
+    if (window.confirm("Confirmer la suppression de cette fiche")) {
+        window.location = "/{{App.appName}}/vacation/deleteFiche/{{D.id}}";
+    } 
+}
+
+function deleteFichePermanent(){
+    if (window.confirm("Confirmer la suppression de cette fiche :\nCette opération est irréversible")) {
+        window.location = "/{{App.appName}}/vacation/deleteFichePermanent/{{D.id}}";
+    } 
+}
+
+PList = [ 
+{% for P in PList %}
+{ label: "{{P.prenom|capitalize}} {{P.nom|upper}}", value: "{{P.uid}}" },
+{% endfor %}
+];
+
+$("#uid").autocomplete({
+      minLength: 0,
+      source: PList,
+      focus: function( event, ui ) {
+        $( "#uid" ).val( ui.item.label );
+        return false;
+      },
+      select: function( event, ui ) {
+        $( "#uid" ).val( ui.item.label );
+        $( "[name='uid']" ).val( ui.item.value );
+        return false;
+      }
+    }); 
+{% endif %}
+
+
+function preview_image() {
+    // console.log('preview_image:289');
+    var upload_file = document.getElementById("upload_file");
+    ImageTools.resize(upload_file.files[0], {
+        width: 400, // maximum width
+        height: 200 // maximum height
+    }, function(blob, didItResize) {
+        // console.log('preview_image:295');
+        let reader = new FileReader();
+        reader.readAsDataURL(blob)
+        reader.onload = function() {
+            data64 = reader.result;
+            document.getElementById('signature').value = data64;
+            sigPNG = data64;
+            resetSignature();
+        };
+    });
+}
+
+function clearSignature(){
+	$('#sig').signature('clear');
+}
+
+function resetSignature(){
+	$('#sig').signature('draw', sigPNG);
+    document.getElementById('signature').value=sigPNG;
+}
+
+$(function() {
+	$('#sig').signature({syncField: '#signature', syncFormat: 'PNG'});
+	resetSignature();
+    document.getElementById('signature').value=sigPNG;
+    resetSignature();
+});
+
+function chercheECUE(){
+    document.getElementById('id01').style.display='block'
+}
+
+function selectECUE(codeECUE){
+    document.getElementById('id01').style.display='none';
+    document.querySelector("[name='codeECUE']").value = codeECUE;
+
+    $.getJSON('/{{App.appName}}/vacation/infoECUE/'+codeECUE, function(json){
+        document.querySelector("[name='formation']").value = json['etape'];
+        document.querySelector("[name='semestre']").value = json['semestre'];
+        document.querySelector("[name='niveau']").value = json['cursus'];
+        document.querySelector("[name='intituleEnseignement']").value = json['nom'];
+        document.querySelector("[name='EOTP']").value = json['EOTP'];
+    });
+}
+
+
+
+function computeHEQTD(){
+    hCM = parseFloat(document.getElementById('hCM').value);
+    hCMTD = parseFloat(document.getElementById('hCMTD').value);
+    hTD = parseFloat(document.getElementById('hTD').value);
+    hTP = parseFloat(document.getElementById('hTP').value);
+    document.getElementById('hEQTD').innerHTML = hCM*1.5+hCMTD*1.25+hTD+hTP;
+}
+</script>
+
+{# Pour la recherche d'un code ECUE #}
+<script>
+
+    var searchModel = function() {
+        var self = this;
+        self.lastCursus = 0;
+        self.lastStructure = 0;
+        self.oldSearchParams = {};
+
+        self.structureList = {{ structureList|json_encode()|raw }};
+        self.cursusList = {{ cursusList|json_encode()|raw }};
+        self.semestreList = {{ semestreList|json_encode()|raw }};
+        self.etapeList = ko.observableArray([]);
+
+        self.structure=ko.observable(171);  // c'est ce qu'il faut pour que ce soit la physique qui soit sélectionné par défaut !
+        self.cursus=ko.observable();  
+        self.semestre=ko.observable();  
+        self.etape=ko.observable();  
+        self.etapeList=ko.observableArray([]);  
+
+        self.getEtapeList = function(structure, cursus){
+            if ( (cursus == self.lastCursus) && (structure == self.lastStructure)) return self.etapeList;
+            self.lastCursus = cursus;
+            self.lastStructure = structure;
+
+            $.getJSON('/{{ App.appName }}/vacation/getEtapeList/'+structure+'/'+cursus, function(json){
+                self.etapeList = ko.observableArray(json);
+                self.cursus.valueHasMutated();
+                self.structure.valueHasMutated();
+            });
+        }
+        
+        self.search = ko.computed(function() {
+            var search = '';
+
+            searchParams =  {
+                structure: self.structure(),
+                cursus: self.cursus(),
+                etape: self.etape(),
+                semestre: self.semestre(),
+            }
+            // pour ne pas faire la recherche si on a pas chnangé les paramètres
+            if (JSON.stringify(self.oldSearchParams) == JSON.stringify(searchParams)){
+                return;
+            }
+            self.oldSearchParams = searchParams;
+            $('#spinner').css('visibility', 'visible');
+            var posting = $.post('/{{ App.appName }}/vacation/search', searchParams);
+            posting.done(function( data ) {
+                $('#searchResult').empty().append( data );
+//                self.semestre.valueHasMutated();
+                initDataTable();
+                $('#spinner').css('visibility', 'hidden');
+            });
+            //$('#searchResult').empty().append("<b>"+self.cursus()+"</b> - <b>"+self.semestre()+"</b> - <b>"+self.etape()+"</b>" );
+        });
+
+
+    };
+
+
+    var model = new searchModel();
+    ko.applyBindings(model);
+
+
+    function initDataTable(){
+        $('table.display').DataTable({
+            dom: 'lBfrtip' ,
+            order: [[ 0, 'asc' ]],
+            "language": {
+                "sProcessing":     "Traitement en cours...",
+                "sSearch":         "Filtrer&nbsp;:",
+                "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+                "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+                "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                "sInfoPostFix":    "",
+                "sLoadingRecords": "Chargement en cours...",
+                "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
+                "oPaginate": {
+                    "sFirst":      "Premier",
+                    "sPrevious":   "Pr&eacute;c&eacute;dent",
+                    "sNext":       "Suivant",
+                    "sLast":       "Dernier"
+                },
+                "oAria": {
+                    "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+                    "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+                },
+                "select": {
+                    "rows": {
+                        _: "%d lignes séléctionnées",
+                        0: "Aucune ligne séléctionnée",
+                        1: "1 ligne séléctionnée"
+                    } 
+                }
+            },
+            lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "Tous"] ],
+            pageLength: 10,        
+            paging: true,
+            select: true,
+            buttons: [
+                {
+                    extend: 'copy',
+                    text: 'Copier'
+                },
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                },
+            ]
+        });
+    } 
+</script>
+
+
+
+{% endblock %}
+

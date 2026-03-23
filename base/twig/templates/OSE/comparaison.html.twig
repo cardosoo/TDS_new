@@ -1,0 +1,12 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+<div class='w3-container'>
+    <ul>
+        <li>comparaison depuis les <a href='/{{App.appName}}/OSE/comparaisonFromOSE'>données de OSE</a></li>
+        <li>comparaison depuis les <a href='/{{App.appName}}/OSE/comparaisonFromDB'>données de la base de données</a></li>
+    </ul>
+</div>
+
+{% endblock %}

@@ -1,0 +1,148 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _enseignement_structure_.html.twig
+    created : Fri, 13 Mar 2026 08:02:05 +0100 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "enseignement_structure", id: "{{ enseignement_structure.id }}" }}'></i>enseignement_structure</legend>
+
+{% block periode_full %}
+    <p>
+    {% block periode_label %}
+    <label class='text' for="periode"> periode <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "enseignement_structure", F: "periode", id: "{{enseignement_structure.id}}" }}'></i></label>    
+    {% endblock periode_label %}
+    {% block periode_active %}
+    <input class='text'  type="text" value="{{ enseignement_structure.periode }}" name="periode" id="periode" size="50" maxlength="100", placeholder="">
+
+    {% endblock periode_active %}
+    </p>
+{% endblock periode_full %}    
+
+{% block code_full %}
+    <p>
+    {% block code_label %}
+    <label class='text' for="code"> code <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "enseignement_structure", F: "code", id: "{{enseignement_structure.id}}" }}'></i></label>    
+    {% endblock code_label %}
+    {% block code_active %}
+    <input class='text'  type="text" value="{{ enseignement_structure.code }}" name="code" id="code" size="50" maxlength="100", placeholder="">
+
+    {% endblock code_active %}
+    </p>
+{% endblock code_full %}    
+
+{% block ecue_full %}
+    <p>
+    {% block ecue_label %}
+    <label class='text' for="ecue"> ecue <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "enseignement_structure", F: "ecue", id: "{{enseignement_structure.id}}" }}'></i></label>    
+    {% endblock ecue_label %}
+    {% block ecue_active %}
+    <input class='text'  type="text" value="{{ enseignement_structure.ecue }}" name="ecue" id="ecue" size="50" maxlength="100", placeholder="">
+
+    {% endblock ecue_active %}
+    </p>
+{% endblock ecue_full %}    
+
+{% block cursus_full %}
+    <p>
+    {% block cursus_label %}
+    <label class='text' for="cursus"> cursus <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "enseignement_structure", F: "cursus", id: "{{enseignement_structure.id}}" }}'></i></label>    
+    {% endblock cursus_label %}
+    {% block cursus_active %}
+    <input class='text'  type="text" value="{{ enseignement_structure.cursus }}" name="cursus" id="cursus" size="50" maxlength="100", placeholder="">
+
+    {% endblock cursus_active %}
+    </p>
+{% endblock cursus_full %}    
+
+{% block etape_full %}
+    <p>
+    {% block etape_label %}
+    <label class='text' for="etape"> etape <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "enseignement_structure", F: "etape", id: "{{enseignement_structure.id}}" }}'></i></label>    
+    {% endblock etape_label %}
+    {% block etape_active %}
+    <input class='text'  type="text" value="{{ enseignement_structure.etape }}" name="etape" id="etape" size="50" maxlength="100", placeholder="">
+
+    {% endblock etape_active %}
+    </p>
+{% endblock etape_full %}    
+
+{% block maquette_full %}
+    <p>
+    {% block maquette_label %}
+    <label class='text' for="maquette"> maquette <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "enseignement_structure", F: "maquette", id: "{{enseignement_structure.id}}" }}'></i></label>    
+    {% endblock maquette_label %}
+    {% block maquette_active %}
+    <input class='text'  type="text" value="{{ enseignement_structure.maquette }}" name="maquette" id="maquette" size="50" maxlength="100", placeholder="">
+
+    {% endblock maquette_active %}
+    </p>
+{% endblock maquette_full %}    
+
+{% block composante_full %}
+    <p>
+    {% block composante_label %}
+    <label class='text' for="composante"> composante <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "enseignement_structure", F: "composante", id: "{{enseignement_structure.id}}" }}'></i></label>    
+    {% endblock composante_label %}
+    {% block composante_active %}
+    <input class='text'  type="text" value="{{ enseignement_structure.composante }}" name="composante" id="composante" size="50" maxlength="100", placeholder="">
+
+    {% endblock composante_active %}
+    </p>
+{% endblock composante_full %}    
+
+{% block nbetu_full %}
+    <p>
+    {% block nbetu_label %}
+    <label class='text' for="nbetu"> nbetu <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "enseignement_structure", F: "nbetu", id: "{{enseignement_structure.id}}" }}'></i></label>    
+    {% endblock nbetu_label %}
+    {% block nbetu_active %}
+    <input class='text'  type="text" value="{{ enseignement_structure.nbetu }}" name="nbetu" id="nbetu" size="50" maxlength="100", placeholder="">
+
+    {% endblock nbetu_active %}
+    </p>
+{% endblock nbetu_full %}    
+
+{% block netu_full %}
+    <p>
+    {% block netu_label %}
+    <label class='text' for="netu"> netu <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "enseignement_structure", F: "netu", id: "{{enseignement_structure.id}}" }}'></i></label>    
+    {% endblock netu_label %}
+    {% block netu_active %}
+    <input class='text' type="number"  value="{{ enseignement_structure.netu }}" name="netu" id="netu" step="any" placeholder="0">
+
+    {% endblock netu_active %}
+    </p>
+{% endblock netu_full %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

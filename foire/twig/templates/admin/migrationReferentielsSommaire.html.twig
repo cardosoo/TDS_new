@@ -1,0 +1,25 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+<div class="w3-card-4 w3-white w3-margin">
+    <div class="w3-container w3-light-grey  w3-center">
+        <b>Migration des fonctions du référentiel</b>
+    </div>
+    {% apply markdown_to_html %}
+
+    Cette opération doit-être un fois après avoir copié la base de données depuis l'année précédente vers cette nouvelle année.
+    Elle pré-suppose que les fonctions du référentiel de l'année précédente sont présentes.
+
+    Opération réalisées :
+    - suppression des stages depuis les fonctions du référentiel
+
+    {% endapply %}
+
+    <div class="w3-container w3-light-grey  w3-center">
+        <b><a href='./migrationReferentiels/confirm'>Effectuer cette action</a></b>
+    </div>
+</div>
+
+
+{% endblock %}

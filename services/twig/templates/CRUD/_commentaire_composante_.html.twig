@@ -1,0 +1,110 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _commentaire_composante_.html.twig
+    created : Sun, 22 Mar 2026 23:12:16 +0100 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "commentaire_composante", id: "{{ commentaire_composante.id }}" }}'></i>commentaire_composante</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "commentaire_composante", F: "actif", id: "{{commentaire_composante.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ commentaire_composante.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block oneToManycommentaire_composante_composante_full %}
+<p>
+    {% block oneToManycommentaire_composante_composante_label %}
+    <label class='select' for='composante'>
+        {{  commentaire_composante.composante ? commentaire_composante.composante.getCrudEditLink("composante")|raw : "composante"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "commentaire_composante", F: "composante", id: "{{commentaire_composante.id}}" }}'></i>
+    </label>
+    {% endblock oneToManycommentaire_composante_composante_label %}
+    {% block oneToManycommentaire_composante_composante_active %}    
+    <input class='text {{ ( commentaire_composante.composante.id ==0 or  commentaire_composante.composante.actif)?"":" passif" }}'  value="{{ commentaire_composante.composante.generic() }}" name="composante" id="composante"  _id_="{{ commentaire_composante.composante.id }}">
+    <script>
+        setAutocomplete("#composante", "/services/CRUD/L/Composante");
+    </script>
+    {% endblock oneToManycommentaire_composante_composante_active %}    
+</p>
+{% endblock oneToManycommentaire_composante_composante_full %}
+
+{% block oneToManycommentaire_composante_auteur_full %}
+<p>
+    {% block oneToManycommentaire_composante_auteur_label %}
+    <label class='select' for='auteur'>
+        {{  commentaire_composante.auteur ? commentaire_composante.auteur.getCrudEditLink("auteur")|raw : "auteur"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "commentaire_composante", F: "auteur", id: "{{commentaire_composante.id}}" }}'></i>
+    </label>
+    {% endblock oneToManycommentaire_composante_auteur_label %}
+    {% block oneToManycommentaire_composante_auteur_active %}    
+    <input class='text {{ ( commentaire_composante.auteur.id ==0 or  commentaire_composante.auteur.actif)?"":" passif" }}'  value="{{ commentaire_composante.auteur.generic() }}" name="auteur" id="auteur"  _id_="{{ commentaire_composante.auteur.id }}">
+    <script>
+        setAutocomplete("#auteur", "/services/CRUD/L/Personne");
+    </script>
+    {% endblock oneToManycommentaire_composante_auteur_active %}    
+</p>
+{% endblock oneToManycommentaire_composante_auteur_full %}
+
+{% block date_full %}
+    <p>
+    {% block date_label %}
+    <label class='text' for="date"> date <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "commentaire_composante", F: "date", id: "{{commentaire_composante.id}}" }}'></i></label>    
+    {% endblock date_label %}
+    {% block date_active %}
+    <input class='text' type="datetime-local"  value="{{ commentaire_composante.date|date('Y-m-d') }}T{{ commentaire_composante.date|date('H:i') }}" name="date" id="date">
+
+    {% endblock date_active %}
+    </p>
+{% endblock date_full %}    
+
+{% block commentaire_full %}
+    <p>
+    {% block commentaire_label %}
+    <label class='text' for="commentaire"> commentaire <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "commentaire_composante", F: "commentaire", id: "{{commentaire_composante.id}}" }}'></i></label>    
+    {% endblock commentaire_label %}
+    {% block commentaire_active %}
+    <textarea mode='raw' class='textarea' name="commentaire" id="commentaire" size="10"  placeholder="">{{ commentaire_composante.commentaire }}</textarea>
+
+    {% endblock commentaire_active %}
+    </p>
+{% endblock commentaire_full %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

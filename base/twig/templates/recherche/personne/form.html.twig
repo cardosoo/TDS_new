@@ -1,0 +1,15 @@
+<form action="/{{ App.appName }}/qui" method="post">
+    <p>
+        <label for="who">Personne recherchée :</label>
+        <input type="text" id="who" name="who" value="{{ cmpl.who }}" placeholder="nom, prénom">
+
+        <input type="submit" value="Submit"> <br>
+
+        {% if App.auth.isSuperAdmin %}
+    <input type="checkbox" name='onlyInactif' id='onlyInactif'/>
+    <label for='onlyInactif'>Uniquemement les personnes rendus inactives</label>
+    {% endif %}<br>
+
+    </p>
+</form>
+

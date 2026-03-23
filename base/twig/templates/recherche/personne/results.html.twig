@@ -1,0 +1,45 @@
+{% if personneList is empty %}
+<h3 style="background-color:LightCoral">Il n'y aucun résulat pour cette recherche ! </h3>
+{% else %}
+<h3 style="background-color:PaleGreen">Résultat de la recherche</h3>
+<table id="myTable" class="display compact">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Statut</th>
+            <th>Charge</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for personne in personneList %}
+        <tr class="{{ personne.p.actif?"":"passif"}}">
+            <td><a href='/{{ App.appName }}/personne/{{ personne.p.id }}'>{{ personne.p.nom }}</a></td>
+            <td><a href='/{{ App.appName }}/personne/{{ personne.p.id }}'>{{ personne.p.prenom }}</a></td>
+            <td style='text-align: center'>{{ personne.p.statut.nom }}</td>
+            <td style='text-align: center'>{{ personne.p.charge|f2 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'portrait'
+                }
+            ]
+        });
+    });
+</script>
+{% endif %}

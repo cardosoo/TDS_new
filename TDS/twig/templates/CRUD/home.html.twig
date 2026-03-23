@@ -1,0 +1,23 @@
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+    <link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+    <div class="wrapper">
+            <form>
+                <fieldset>
+                    <legend>Liste des entités existantes</legend>
+                    <ul>
+                    {% for entity in entityList %}
+                        <li>
+                            <a href='/{{App.appName}}/CRUD/LI/{{entity.name}}'>{{entity.name}}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </fieldset>
+            </form>
+    </div>    
+{% endblock %}
+
+{% block aside %}
+{% endblock aside %}

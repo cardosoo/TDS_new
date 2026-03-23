@@ -1,0 +1,91 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _Statut_.html.twig
+    created : Sun, 22 Mar 2026 23:12:16 +0100 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "Statut", id: "{{ Statut.id }}" }}'></i>Statut</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Statut", F: "actif", id: "{{Statut.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ Statut.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block nom_full %}
+    <p>
+    {% block nom_label %}
+    <label class='text' for="nom"> nom <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Statut", F: "nom", id: "{{Statut.id}}" }}'></i></label>    
+    {% endblock nom_label %}
+    {% block nom_active %}
+    <input class='text'  type="text" value="{{ Statut.nom }}" name="nom" id="nom" size="50" maxlength="100", placeholder="">
+
+    {% endblock nom_active %}
+    </p>
+{% endblock nom_full %}    
+
+{% block obligation_full %}
+    <p>
+    {% block obligation_label %}
+    <label class='text' for="obligation"> obligation <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Statut", F: "obligation", id: "{{Statut.id}}" }}'></i></label>    
+    {% endblock obligation_label %}
+    {% block obligation_active %}
+    <input class='text' type="number"  value="{{ Statut.obligation }}" name="obligation" id="obligation" placeholder="192">
+
+    {% endblock obligation_active %}
+    </p>
+{% endblock obligation_full %}    
+
+    {% block manyToOne_personneList_personneList %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Statut", id: "{{ Statut.id }}", L: "personneList" }}'></i>personneList - {{ (Statut.personneList)|length }} élément{{(Statut.personneList)|length >1?'s':''}}</legend>
+
+                <ul>
+                {% for L in Statut.personneList %}   {% block manyToOne_Statut_statut %}
+                    <li class='{{ L.actif?"":"passif" }}'>
+                        {{ L.getGeneric(true)|raw }}
+                    </li>
+                    {% endblock manyToOne_Statut_statut %}
+                {% endfor %}
+                </ul>
+    </fieldset>
+    {% endblock manyToOne_personneList_personneList %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

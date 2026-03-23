@@ -1,0 +1,85 @@
+# Quelques vidéos d'aide à l'utilisation de la FOIRE, l'application de gestion des Tableaux de service pour l'UFR de PHYSIQUE.
+
+{#
+    ### Première utilisation
+<details>
+    <summary>Connexion à l'application</summary> 
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/1i7SxtNZmgs" title="Connexion à l'application" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</details>
+
+<details>
+    <summary>Modification de vos informations personnelles</summary> 
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/r5i5n9tq8ak" title="Modification de vos informations personnelles" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</details>
+
+### Recherche dans la base de données
+<details>
+    <summary>Recherche (générale) dans la base de données</summary> 
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/zSpa-ph-wf4" title="Recherche (générale) dans la base de données" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</details>
+
+<details>
+    <summary>Recherche d'un enseignement</summary> 
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/AEaGkjxVcX0" title="Recherche d'un enseignement" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><
+</details>
+
+### Saisie des temps de service
+<details>
+    <summary>Saisie des temps de service</summary> 
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/9NJxg1KEqrg" title="Saisie des temps de service" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</details>
+
+### Pour les responsables d'UE
+<details>
+    <summary>Validation des temps de service par les responsables d'UE</summary> 
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/0cLpn0_Ir2o" title="Validation des temps de service par les responsables d'UE" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</details>
+
+### Divers
+
+- [Tutoriel Markdown](https://documentation-snds.health-data-hub.fr/contribuer/guide_contribution/tutoriel_markdown.html#titres)
+
+{% set roleList = App.auth.roleList %}
+{% set isRHE = roleList['bureauRHE'] is defined %}
+
+{% if isRHE %}
+### Pour les membres du bureau RHE
+<details>
+    <summary>Ajout d'une personne dans TS Online</summary> 
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/A8PXtBXp0rY" title="jout d'une personne" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</details>
+{% endif %}
+
+
+{% if App.auth.isAdmin %}
+### Pour les administrateurs de TS-Online
+<details>
+    <summary>Modification du statut d'une personne - version simple</summary>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/yZ-Andn-gxA" title="Modification du statut d'une personne" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</details>
+
+<details>
+    <summary>Rendre une personne inactive</summary>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/aWGysFcB6T0" title="Rendre une personne inactive" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</details>
+
+<details>
+    <summary>Mise à jour des responsables de domaine</summary>
+    <iframe width="560" height="315" src="https://www.youtube.com/NvVaq3CYMoo" title="Rendre une personne inactive" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</details>
+
+
+{% endif %}
+#}
+
+
+### Pour la préparation des plannings
+<details>
+    <summary>Pour les gestionnaires de scolarité et les responsables de filières : Présentation générale</summary>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/V13DsZQWgdI?si=_EuD1sghegqIO0Hz" title="Présentation générale" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></details>
+<details>
+    <summary>Pour les gestionnaires de scolarité et les responsables de filières : Feuille Full</summary>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/2Lw4NeQpcmc?si=pzskButMKGk3OjlU" title="Feuille Full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></details>
+<details>
+    <summary>Pour les concepteurs des plannings : CM TD CTD TP</summary>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/yc3r6SZmous?si=DZ4LaF-k2l6IiU5W" title="CM TD CTD TP" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></details>

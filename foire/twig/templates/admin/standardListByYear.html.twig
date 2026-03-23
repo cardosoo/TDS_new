@@ -1,0 +1,49 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+<div class="w3-cell-row">
+
+<h3>{{ title }}</h3>
+
+        <table id="standardList" class="w3-table-all w3-centered">
+            <thead>
+                <th>Année</th>
+                {% for name in nameList %}
+                <th>{{ name }}</th>
+                {% endfor %}
+            </thead>
+            <tbody>
+            {% for year, line in data %}
+                <tr>
+                    <td>{{ year }}</td>
+                    {% for name in nameList %}
+                        <td>
+                        {{ attribute(line,name)|f2 }}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+</div> 
+
+<script>
+    $(document).ready(function () {
+        $('#standardList').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'portrait'
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock section %}

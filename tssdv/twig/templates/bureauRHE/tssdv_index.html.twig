@@ -1,0 +1,49 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">
+    {% block bureauRHE %}
+    <h3>Bureau RHE</h3>
+    <ul>
+        <li>liste des <a href='/{{App.appName}}/bureauRHE/listeMaquettes'>Maquettes</a></li>
+        <li>liste des <a href='/{{App.appName}}/bureauRHE/listeDomaines'>Domaines</a></li>
+        <li>liste des enseignements <a href='/{{App.appName}}/bureauRHE/listeDetailsCharges'>avec détails des charges</a></li>
+        <li>liste des enseignements <a href='/{{App.appName}}/bureauRHE/listeSansAttache'>non rattachés à des maquettes</a></li>
+        <li>liste des enseignements <a href='/{{App.appName}}/bureauRHE/listResponsables'>avec leurs Responsables</li>
+        <li><a href='/{{App.appName}}/bureauRHE/servicesEnseignant'>Utilisations des services Enseignant</li>
+        <li>liste des <a href='/{{App.appName}}/bureauRHE/listeStatuts'>Statuts</li>
+        <li>liste de <a href='/{{App.appName}}/bureauRHE/tousVoeux'>tous les voeux</li>
+        <li>Liste des <a href='/{{App.appName}}/bureauRHE/listeSituations'>situations particulières</a></li>
+        <li>Liste des <a href='/{{App.appName}}/bureauRHE/listeReferentiel'>attributaires des fonctions du référentiel</a></li>
+        <li>Liste des <a href='/{{App.appName}}/bureauRHE/listeAssociationsEnseignementDomaines'>associations entre enseignement et domaines</a></li>
+    </ul>
+
+    <h3>fiches ECUE</h3>
+    <ul>
+        <li>Suivre l'ensemble des <a href='/{{App.appName}}/ficheECUE/liste'>fiches ECUE</a> en cours de rédaction</li>
+    </ul>
+
+    <h3>Créations</h3>
+    <ul>
+        <li>Création d'une fiche <a href='/{{App.appName}}/bureauRHE/createPersonne'>Personne</a></li>
+        <li>Création d'une fiche <a href='/{{App.appName}}/bureauRHE/createEnseignement'>Enseignement</a></li>
+    </ul>
+
+
+    <h3>Mise à jour</h3>
+    <ul>
+        <li>Mise à Jour des <a href='/{{App.appName}}/bureauRHE/majResponsables'>responsables d'enseignement</a></li>
+        <li>Mise à Jour des <a href='/{{App.appName}}/bureauRHE/majAttributairesReferentiel'>attributaires des fonctions du référentiel</a></li>
+        <li>Mise à Jour des <a href='/{{App.appName}}/bureauRHE/majAssociationsEnseignementDomaines'>associations entre enseignement et domaines</a></li>
+    </ul>
+
+    {% endblock bureauRHE %}
+
+    {% block divers %}
+
+    {% endblock divers %}
+
+</div>
+{% endblock %}

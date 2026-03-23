@@ -1,0 +1,295 @@
+{% use "enseignement/base_voeuxCard.html.twig" %}
+
+
+{% block boutonsCardVoeux %}
+
+    {% if App.auth.isInBase  and App.phaseList[App.phase].withPanier %}
+        {% if E.attribuable and E.actif %}
+            {% set indicateur = PL|length  %}
+            <hr>
+            <div class="w3-container w3-yellow w3-center">Cet enseignement est présent<br> dans {{ indicateur }} panier{{ indicateur>1?"s":"" }}.
+                <div>
+                {% if P %}
+                    <button onclick="document.getElementById('panierForm').style.display='block';" class="w3-button w3-deep-purple w3-small w3-half w3-padding-small">
+                        Modifier le Panier
+                    </button>
+                    <button onclick="document.getElementById('supprimerPanier').style.display='block';" class="w3-button w3-red w3-small w3-half w3-padding-small">
+                        Enlever du Panier
+                    </button>
+                {% else %}
+                    <button onclick="document.getElementById('panierForm').style.display='block';" class="w3-button w3-green w3-small w3-half w3-padding-small">
+                        <i class="{{ foire.lang['icone Panier'] }} w3-margin-right "></i>Ajouter au Panier
+                    </button> 
+                {% endif %}
+                {% if App.phaseList[App.phase].withAjouterVoeux %}
+                    <br><br>
+                    {% if V %}
+                        <button onclick="window.location='/{{ App.appName }}/enseignement/voeu/{{E.id}}';" class="w3-button w3-deep-purple w3-small w3-half w3-padding-small">
+                            Modifier le voeu
+                        </button>
+                        <button onclick="document.getElementById('supprimerVoeu').style.display='block';" class="w3-button w3-red w3-small w3-half w3-padding-small">
+                            Supprimer le voeu
+                        </button>
+                    {% endif %}
+                    {% if P and not V %}
+                        <button onclick="window.location='/{{ App.appName }}/enseignement/voeu/{{E.id}}';" class="w3-button w3-green w3-small w3-rest w3-padding-small">
+                            Transformer en voeu
+                        </button>
+                    {% endif %}
+                {% endif %}
+                    <br>
+                </div>
+            <br>
+            </div>
+            {% set PL = E.getParentList %}
+            {% if PL|length > 1 %}
+            <hr>
+            <div class="w3-container">
+            Le calcul de l'ancienneté pour cet enseignement
+            prend en compte les enseignements suivants:
+                <ul>
+                {% for id in PL %}
+                    {% if id > 0 %}
+                        {% set Pa = App.app.load('Enseignement',id) %}
+                        {% if Pa %}
+                    <li>{{ Pa.getGenericWithLink|raw }}</li>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                </ul>
+            </div>
+            <br>            
+            {% endif %}
+            
+    {% else %}
+            {% if not E.attribuable %}
+                <hr>
+                <div class="w3-container">
+                    Cet enseignement ne participe pas directement à la foire,
+                    vraisemblbablement parce qu'il s'agit d'un enseignement de M2 ou d'une filière hors foire.<br>
+                    Pour pouvoir en modifier l'équipe enseignante, il faut l'accord du responsable de la 
+                    filière et contacter directement la foire.
+                </div>
+                <br>
+            
+            {% endif %}
+        {% endif %}
+        
+    {% endif %}
+{% endblock boutonsCardVoeux %}
+
+
+{% block supprimerVoeu %}
+     {{ parent() }}
+{% endblock supprimerVoeu %}
+
+{% block htmlPanier %}
+    <div id="panierForm" class="w3-modal">
+        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+            <div class="w3-center"><br>
+            <span onclick="document.getElementById('panierForm').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+            </div>
+            {# Pour afficher les éventuelles erreurs #}
+            <header id='addPanierError' class="w3-container w3-red " style="display:none">
+                <span onclick="this.parentElement.style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                <p class='w3-center'>Problème</p>
+            </header>
+
+            <form id="addPanierForm" class="w3-container" method='POST' action="/{{ App.appName }}/enseignement/addPanier/{{ E.id }}">
+                <div class="w3-section">
+                    {% if  E.cm %}
+                    <div>
+                        <input type="checkbox" id="p_cm" name="cm" {{ P.cm?'checked':"" }}>
+                        <label for="p_cm"><span class='fix5em'>CM</span>Cours Magistral</label>
+                    </div>
+                    {% endif %}
+                    {% if  E.ctd %}
+                    <div>
+                        <input type="checkbox" id="p_ctd" name="ctd"  {{ P.ctd?'checked':"" }}>
+                        <label for="p_ctd"><span class='fix5em'>CTD</span> Cours / Travaux Dirigés</label>
+                    </div>
+                    {% endif %}
+                    {% if  E.td %}
+                    <div>
+                        <input type="checkbox" id="p_td" name="td"  {{ P.td?'checked':"" }}>
+                        <label for="p_td"><span class='fix5em'>TD</span> Travaux Dirigés</label>
+                    </div> 
+                    {% endif %}
+                    {% if  E.tp %}
+                    <div>
+                        <input type="checkbox" id="p_tp" name="tp"  {{ P.tp?'checked':"" }}>
+                        <label for="p_tp"><span class='fix5em'>TP</span> Travaux Pratiques</label>
+                    </div>
+                    {% endif %}
+                    <div class="w3-bar w3-black">
+                        <span class="w3-bar-item">Commentaire</span>
+                        <span id='voirButton' >
+                            <span class="w3-bar-item w3-button" onclick="openCommentaire(false)">Voir</span>
+                            <span class="w3-bar-item">l'édition se fait en <a href="https://docs.framasoft.org/fr/grav/markdown.html" target='_blank'>Markdown</a>
+                            </span>
+                        </span>
+                        
+                        <span id='modifierButton' class="w3-bar-item w3-button" onclick="openCommentaire(true)">Modifier</span>
+                    </div>
+                    
+                    <div id="commentaireHTML"   class="w3-container city" style="display: block">
+                    </div>
+                    
+                    <div id="commentaireMarkdown" class="w3-container city" style="display: none">
+                        <textarea name="commentaire" placeholder="Si besoin, ajouter un commentaire pour vous ou pour la foire...">{{ P.commentaire?P.commentaire:"" }}</textarea>
+                    </div>
+                    <button id ='submitAddBtn' class="w3-button w3-block w3-green w3-section w3-padding" type="submit" >Confirmer - {{ P?"Modifier le Panier":"Ajouter au Panier" }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="supprimerPanier" class="w3-modal">
+        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+            <div class="w3-center"><br>
+            <span onclick="document.getElementById('supprimerPanier').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+            </div>
+            {# Pour afficher les éventuelles erreurs #}
+            <header id='suppPanierError' class="w3-container w3-red " style="display:none">
+                <span onclick="this.parentElement.style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                <p class='w3-center'>Problème</p>
+            </header>
+
+            <form id="suppPanierForm" class="w3-container" method='POST' action="{{ App.appName }}/enseignement/suppPanier/{{ E.id }}">
+                <div class="w3-section">
+                    <button id ='submitSuppBtn' class="w3-button w3-block w3-green w3-section w3-padding" type="submit" >Confirmer - Suppresion du Panier</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock htmlPanier %}
+
+{% block scriptsPanier %}
+    <script>
+        $(document).ready(function () {
+            openCommentaire( {{ P.commentaire?"false":"true"}} );
+            
+            var ta = $('textarea');
+            autosize(ta);
+
+            addPanierForm = $('#addPanierForm')[0];
+            addPanierData = new FormData(addPanierForm);
+
+            suppPanierForm = $('#suppPanierForm')[0];
+            suppPanierData = new FormData(suppPanierForm);
+
+            $("#addPanierForm").submit(function (e) {
+                event.preventDefault();
+                var form = $('#addPanierForm')[0];
+                var data = new FormData(form);
+                $("#submitAddBtn").prop("disabled", true);
+
+                $.ajax({
+                    type: "POST",
+                    enctype: 'multipart/form-data',
+                    url: form.action,
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 800000,
+                    success: function (data) {
+                        if ('success' == data) {
+                            window.location.reload(true);
+                        } else {
+                            $('#addPanierError > p').html(data);
+                            document.getElementById('addPanierError').style.display = 'block'
+                            $("#submitBtn").prop("disabled", false);
+                        }
+                    },
+                    error: function (e) {
+                        $('#addPanierError > p').html("Erreur réseau sans doute...");
+                        document.getElementById('addPanierError').style.display = 'block'
+                        $("#submitAddBtn").prop("disabled", false);
+                    }
+                });
+            });
+            $("#suppPanierForm").submit(function (e) {
+                event.preventDefault();
+                var form = $('#suppPanierForm')[0];
+                var data = new FormData(form);
+            
+                $("#submitSuppBtn").prop("disabled", true);
+                $.ajax({
+                    type: "POST",
+                    enctype: 'multipart/form-data',
+                    url: "/{{ App.appName }}/enseignement/suppPanier/{{ E.id }}",
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 800000,
+                    success: function (data) {
+                        if ('success' == data) {
+                            window.location.reload(true);
+                        } else {
+                            $('#suppPanierError > p').html(data);
+                            document.getElementById('suppPanierError').style.display = 'block'
+                            $("#submitBtn").prop("disabled", false);
+                        }
+                    },
+                    error: function (e) {
+                        $('#suppPanierError > p').html("Erreur réseau sans doute...");
+                        document.getElementById('suppPanierError').style.display = 'block'
+                        $("#submitSuppBtn").prop("disabled", false);
+                    }
+                });
+            });
+        });
+
+        function openCommentaire(markdown) {
+            var commentaireHTML     = document.getElementById("commentaireHTML");
+            var commentaireMarkDown = document.getElementById("commentaireMarkdown");
+            var markdownTextArea = commentaireMarkDown.querySelector('textarea');
+            var voirButton = document.getElementById("voirButton");
+            var modifierButton = document.getElementById("modifierButton");
+            if (markdown){
+                commentaireMarkDown.style.display = "block";
+                commentaireHTML.style.display = "none";
+                voirButton.style.display= "block";
+                modifierButton.style.display= "none";
+                autosize.update(markdownTextArea);
+            } else {
+                commentaireMarkDown.style.display = "none";
+                commentaireHTML.style.display = "block";
+                voirButton.style.display= "none";
+                modifierButton.style.display= "block";
+                var markdownText =commentaireMarkDown.querySelector('textarea').value.trim();
+                if (markdownText =="") {
+                    markdownText = "Si besoin, ajouter un commentaire pour vous ou pour la foire...";
+                } 
+                var html = marked(markdownText);
+                commentaireHTML.innerHTML = html;
+            }
+        }
+    </script>
+{% endblock scriptsPanier %}
+
+{% block stylePanier %}
+    <style>
+        .fix5em {
+            display: inline-block;
+            width : 2em;
+        }
+
+        #commentaireHTML, #commentaireMarkdown {
+            width: 100%;
+            min-height: 5em;
+        }
+
+        #commentaireMarkdown > textarea {
+            width: 100%;
+        }
+
+    </style>
+
+{% endblock stylePanier %}
+
+

@@ -1,0 +1,86 @@
+{% extends "layout.html.twig" %}
+{% block aside %}{% endblock %}
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">
+    <div class="w3-card">
+
+    {% if what is empty %}
+        <h3>Pas de chaîne fournie pour la recherche</h3>
+    {% elseif nbFound == 0 %}    
+        <h3>Pas de résultat pour la recherche pour : « {{ what }} » dans la base de données</h3>
+    {% else %}
+        <h3>{{ nbFound }} résultat pour la recherche sur : « {{ what }} »  dans la base de données</h3>
+        {% for entity,li in list %}
+            {% if not li is empty %}
+                <h4>depuis {{entity}}</h4>
+                <ul>
+                {% for l in li %}
+                    {% set elm = l|first %}
+                    <li>{{ elm.getGenericWithLink()|raw }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    </div>
+    <div class="w3-card" >
+        <h3>Résultat pour la recherche sur : « {{ what }} »  dans la structure des enseignements</h3>
+        {% set sList = structList.sList.data %}
+        {% if  sList|length > 0 %}
+        <h4>Depuis les structures de l'établissement</h4>
+        <ul>
+            {% for s in sList %}
+            <li><a href='/{{App.appName}}/structure/structure/{{s.nom}}' >{{ s.nom }}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        
+        {% set eList = structList.eList.data %}
+        {% if  eList|length > 0 %}
+        <h4>Depuis les étapes de l'établissement</h4>
+        <ul>
+            {% for e in eList %}
+            <li><a href='/{{App.appName}}/structure/etape/{{e.code}}' >{{ e.code }} - {{ e.nom }}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% set IL = structList.ecueInList %}
+        {% set OL = structList.ecueOutList %}
+        <h4>Depuis les ECUE de l'établissement</h4>
+
+        <h5>ECUE présentes dans la base de données</h5>
+        <ul>
+        {% for elm in IL %}
+            {% set ecue = elm.ecue %}
+            {% set E = elm.enseignement %}
+            
+            <li>
+                <a href='/{{App.appName}}/enseignement/{{E.id}}' >{{ ecue.code }}</a> -{{ ecue.nom }} ({{E.intitule }})
+                <ul>
+                {% for etape in ecue.getEtapes() %}
+                    <li><a href='/{{App.appName}}/structure/etape/{{etape.code}}' >{{ etape.code }} - {{ etape.nom }}</a></li>
+                {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+        </ul>
+        
+        <h5>ECUE absentes dans la base de données</h5>
+        <ul>
+        {% for elm in OL %}
+            <li>
+                <a href='/{{App.appName}}/structure/ecue/{{elm.code}}' >{{ elm.code }}</a> -{{ elm.nom }}
+                <ul>
+                {% for etape in elm.getEtapes() %}
+                    <li><a href='/{{App.appName}}/structure/etape/{{etape.code}}' >{{ etape.code }} - {{ etape.nom }}</a></li>
+                {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+        </ul>
+        
+
+    </div>
+</div>
+{% endblock %}

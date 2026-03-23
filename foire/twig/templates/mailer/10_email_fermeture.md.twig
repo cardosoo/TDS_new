@@ -1,0 +1,40 @@
+Bonjour {{ P.getGeneric }}
+
+La répartition pour l'année {{ App.currentYear }} - {{ App.currentYear +1}} est terminée.
+
+Vous trouverez un récapitulatif de vos enseignements ci-dessous.
+
+Si vous ne l'avez pas encore fait, veuillez contacter le responsable des enseignements auxquels vous participerez.
+
+Les noms des enseignants nommés "Fictif" seront connus d'ici la rentrée.
+
+Pendant toute l'année, vous pouvez :
+- compléter et mettre à jour votre fiche personnelle (coordonnées, situation et photo)
+- compléter votre panier avec les enseignements qui a priori vous intéresseraient.<br>
+Cela peut nous être utile si nous avons besoin d'un remplaçant au pied levé.<br>
+De plus, votre panier sera conservé pour la foire {{ App.currentYear +1}}.<br>
+
+Le buffet annuel de la foire aura lieu le {{ App.texte.dateFoire }} entre 11h30 et 14h au 3ème étage du bâtiment Condorcet.<br>
+Nous espérons vous y croiser.
+
+Nous vous souhaitons une belle année {{ App.currentYear }} - {{ App.currentYear +1}} et, avant cela, une heureuse période estivale.
+
+Bien à vous,
+
+[https://foire.physique.u-paris.fr/](https://foire.physique.u-paris.fr/)
+
+Olivier Cardoso et Raphaël Galicher, responsables de la répartition des enseignements à l'UFR de Physique.
+
+*il reste deux ou trois détails à régler ; les personnes concernées ont normalement été contactées.
+
+**Vœux de  {{ P.getGeneric }}**
+
+D'après les informations de la base de données {{ App.appName }}{{ App.currentYear }}, vous devez assurer une charge de 
+{{P.getCharge()}} heures d'enseignement et vos vœux correspondent à une charge de {{P.getCharge() - P.voeu_personne_bilan.heures|f2}} heures.
+
+{{ include('mailer/voeux.md.twig') }}
+
+Les lignes en rouge correspondent aux UE en surcharge.<br>
+Les lignes en vert  correspondent aux UE en sous effectif.<br>
+
+{% include "mailer/signature.md.twig" %}

@@ -1,0 +1,41 @@
+<div class='w3-row' >
+    <input type='hidden' name='referentiel[{{PR.id}}][deleted]' value='no'>
+    <details id='referentiel_{{PR.id}}' >
+        <summary class='w3-light-green'><span>{{ PR.foncref.referentiel.code }} - {{ PR.foncref.intitule }}</span>
+        </summary>
+        <div class='w3-card'>
+            <div class='w3-row'>
+                <div class='w3-twothird'>
+                    <select name="referentiel[{{PR.id}}][referentiel]" class="w3-select">
+                        <option value='0'>Fonction du référentiel ?</option>
+                        {% for r in tab.referentielList %}
+                        <option value='{{ r.id }}' {{ r.id==PR.foncref.id?"selected":"" }}>
+                            {{r.referentiel.code}} - {{ r.intitule }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class='w3-third'>
+                    <span  id ='referentiel_del_{{PR.id}}' onclick="delReferentiel(event, {{PR.id}})" class='w3-padding-small w3-tiny w3-button w3-round-large w3-red w3-right'>Supprimer</span>
+                </div>
+            </div>    
+            <div class='w3-row'>
+                <div><span class='sp12'>réduction :</span> <input name= 'referentiel[{{PR.id}}][volume]' value='{{PR.volume}}' type='number' min='0.0' max='128.0' step='any' style='width: 4em;'/> hETD</div>
+            </div>
+            <div class='w3-row' >
+                <div id='referentiel_commentaire_{{PR.id}}' md=`{{PR.commentaire}}`>{{PR.commentaire|markdown_to_html}}</div>
+                <script>
+                    var referentiel_commentaire_{{PR.id}} = document.querySelector('#referentiel_commentaire_{{PR.id}}');
+                    if ( '{{PR.id}}'.substring(3) != 'to_be_replaced'){
+                        referentiel_editor['{{PR.id}}'] = new Editor({
+                            el: referentiel_commentaire_{{PR.id}},
+                            initialEditType: 'wysiwyg',
+                            usageStatistics: false,
+                            initialValue: referentiel_commentaire_{{PR.id}}.md
+                        });
+                    }
+                </script>
+            </div>
+        </div>
+    </details>
+</div>

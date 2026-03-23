@@ -1,0 +1,90 @@
+{% block boutonsCardVoeux %}
+
+{% if App.auth.isInBase  and App.phaseList[App.phase].withAjouterVoeux %}
+    {% if E.isAttribuable() %}
+        <hr>
+        <div>
+        {% if V %}
+            <button onclick="window.location='/{{ App.appName }}/enseignement/voeu/{{E.id}}';" style='width:100%;' class="w3-button w3-green w3-small w3-padding-small">
+                {{- App.phaseList[App.phase].modifierVoeu -}}
+            </button>
+            <br>
+            <br>                        
+            <button onclick="document.getElementById('supprimerVoeu').style.display='block';" style='width:100%;' class="w3-button w3-red w3-small w3-padding-small">
+                {{- App.phaseList[App.phase].supprimerVoeu -}}
+            </button>
+        {% else %} {# inVoeuList #}
+            <button onclick="window.location='/{{ App.appName }}/enseignement/voeu/{{E.id}}';" style='width:100%;' class="w3-button w3-green w3-small w3-padding-small">
+                {{- App.phaseList[App.phase].ajouterVoeu -}} 
+            </button>
+        {% endif %} {# inVoeuList #}
+            <br>
+        </div>
+        <br>
+    {% endif %}  {# E.attribuable #}             
+{% endif %}  {# App.auth.isInBase  and App.phaseList[App.phase].withAjouterVoeux #}
+
+{% endblock boutonsCardVoeux %}
+
+{% block supprimerVoeu %}
+    <div id="supprimerVoeu" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+        <div class="w3-center"><br>
+        <span onclick="document.getElementById('supprimerVoeu').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+        </div>
+        {# Pour afficher les éventuelles erreurs #}
+        <header id='suppVoeuError' class="w3-container w3-red " style="display:none">
+            <span onclick="this.parentElement.style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <p class='w3-center'>Problème</p>
+        </header>
+
+
+        <form id="suppVoeuForm" class="w3-container" method='POST'>
+            <div class="w3-section">
+                <button id ='submitSuppVoeuBtn' class="w3-button w3-block w3-green w3-section w3-padding" type="submit" >{{ App.phaseList[App.phase].messageSupprimerVoeu }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+$(document).ready(function () {
+    suppVoeuForm = $('#suppVoeuForm')[0];
+    suppVoeuData = new FormData(suppVoeuForm);
+
+    $("#suppVoeuForm").submit(function (e) {
+        event.preventDefault();
+        var form = $('#suppVoeurForm')[0];
+        var data = new FormData(form);
+    
+        $("#submitSuppVoeuBtn").prop("disabled", true);
+        $.ajax({
+            type: "DELETE",
+            enctype: 'multipart/form-data',
+            url: "/{{ App.appName }}/enseignement/voeu/{{ E.id }}",
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 800000,
+            success: function (data) {
+                if ('success' == data) {
+                    window.location="/{{ App.appName }}/enseignement/{{ E.id }}";
+                } else {
+                    $('#suppVoeuError > p').html(data);
+                    document.getElementById('suppVoeuError').style.display = 'block'
+                    $("#submitSuppVoeuBtn").prop("disabled", false);
+                }
+            },
+            error: function (e) {
+                $('#suppVoeuError > p').html("Erreur réseau sans doute...");
+                document.getElementById('suppVoeuError').style.display = 'block'
+                $("#submitSuppVoeuBtn").prop("disabled", false);
+            }
+        });
+    });
+});
+</script>
+{% endblock supprimerVoeu %}

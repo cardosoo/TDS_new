@@ -1,0 +1,62 @@
+{% if V %}
+
+| Enseignement | CM | CTD | TD | TP | Extra | Bonus | Anc. | Corr. | hTD | reste |
+|:-------------|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+{% for v in V %}|<span {{ (0+v.voeu_enseignement_bilan.heures)<-0.01?"style='color: red;'":"" }}>{{ v.enseignement.code }} - {{ v.enseignement.nom }}</span> | {{ v.voeu.cours|f2 }} | {{ v.voeu.ctd|f2 }} | {{ v.voeu.td|f2 }} | {{ v.voeu.tp|f2 }} | {{ v.voeu.colle|f2 }} | {{ v.voeu.bonus|f2 }} | {{ v.voeu.anciennete|f2 }} | {{ 't'==v.voeu.responsable?'oui':'' }} | {{ v.voeu_bilan_ligne.heures|f2 }} | <span {{ (0+v.voeu_enseignement_bilan.heures)<-0.01?"style='color: red;'":"" }}>{{ v.voeu_enseignement_bilan.heures|f2 }}</span> |
+{% endfor %}
+
+
+{% else %}
+    ### Pas de vœux émis pour l'année {{ foire.anneeCourante }} - {{ foire.anneeCourante +1 }}
+{% endif %}
+{#
+<div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+    <p><i class="fa fa-arrow-circle-right fa-fw w3-margin-right w3-text-theme"></i>Enseignements {{ foire.anneeCourante }} - {{ foire.anneeCourante + 1}}</p>
+    <div class='w3-responsive' style="font-size: small">
+        <table class='w3-table-all w3-hoverable'>
+            <thead>
+                <tr class='w3-light-blue'>
+                    <th>Enseignement</th>
+                    <th class="w3-center">CM</th>
+                    <th class="w3-center">CTD</th>
+                    <th class="w3-center">TD</th>
+                    <th class="w3-center">TP</th>
+                    <th class="w3-center">Ext</th>
+                    <th class="w3-center">Bon</th>
+                    <th class="w3-center">Anc</th>
+                    <th class="w3-center">Cor</th>
+                    <th class="w3-center">hTD</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in V %}
+                <tr>
+                    <th><a href="/cours/{{ v.enseignement.num }}">{{ v.enseignement.code }} - {{ v.enseignement.nom }}</a></th>
+                    <td class="w3-center">{{ v.voeu.cours|f2 }}</td>
+                    <td class="w3-center">{{ v.voeu.ctd|f2 }}</td>
+                    <td class="w3-center">{{ v.voeu.td|f2 }}</td>
+                    <td class="w3-center">{{ v.voeu.tp|f2 }}</td>
+                    <td class="w3-center">{{ v.voeu.colle|f2 }}</td>
+                    <td class="w3-center">{{ v.voeu.bonus|f2 }}</td>
+                    <td class="w3-center">{{ v.voeu.anciennete|f2 }}</td>
+                    <td class="w3-center">{{ 't'==v.voeu.responsable?'oui':'' }}</td>
+                    <td class="w3-center">{{ v.voeu_bilan_ligne.heures|f2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% if auth.isInBase %}
+            <tfoot>
+                <tr class='w3-light-blue'>
+                    <th colspan="9">écart à la charge </th>
+                    <td class="w3-center">{{ Bilan.heures|number_format }}</td>
+                </tr>
+            </tfoot>
+            {% endif %}
+        </table>
+        <br>
+    </div>
+</div>
+{% else %}
+<div class='w3-responsive w3-theme-l1 w3-center' style="font-size: large">Pas d'enseignement pour cette année</div>
+{% endif %}
+#}

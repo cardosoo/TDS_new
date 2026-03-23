@@ -1,0 +1,36 @@
+{% use "enseignement/base_voeuxCard.html.twig" %}
+
+{% block boutonsCardVoeux %}
+
+    {% if App.phaseList[App.phase].withAjouterVoeux and E.isAttribuable() %}
+        <hr>
+        <div>
+        {% if V %}
+            {% if V.etat_ts == 3 %}
+                <h3>Ce temps de service a été validé</h3>
+            {% else %}
+                <button onclick="window.location='/{{ App.appName }}/enseignement/voeu/{{E.id}}';" style='width:100%;' class="w3-button w3-green w3-small w3-padding-small">
+                    {{- App.phaseList[App.phase].modifierVoeu -}}
+                </button>
+                <br>
+                <br>                        
+                <button onclick="document.getElementById('supprimerVoeu').style.display='block';" style='width:100%;' class="w3-button w3-red w3-small w3-padding-small">
+                    {{- App.phaseList[App.phase].supprimerVoeu -}}
+                </button>
+            {% endif %}
+        {% else %} {# inVoeuList #}
+            <button onclick="window.location='/{{ App.appName }}/enseignement/voeu/{{E.id}}';" style='width:100%;' class="w3-button w3-green w3-small w3-padding-small">
+                {{- App.phaseList[App.phase].ajouterVoeu -}}
+            </button>
+        {% endif %} {# inVoeuList #}
+            <br>
+        </div>
+        <br>
+    {% endif %}  {# E.attribuable #}             
+{% endblock boutonsCardVoeux %}
+
+
+{% block supprimerVoeu %}
+     {{ parent() }}
+{% endblock supprimerVoeu %}
+

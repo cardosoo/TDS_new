@@ -1,0 +1,119 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _Role_.html.twig
+    created : Fri, 02 May 2025 23:33:41 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "Role", id: "{{ Role.id }}" }}'></i>Role</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Role", F: "actif", id: "{{Role.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ Role.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block nom_full %}
+    <p>
+    {% block nom_label %}
+    <label class='text' for="nom"> nom <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Role", F: "nom", id: "{{Role.id}}" }}'></i></label>    
+    {% endblock nom_label %}
+    {% block nom_active %}
+    <input class='text'  type="text" value="{{ Role.nom }}" name="nom" id="nom" size="50" maxlength="100", placeholder="">
+
+    {% endblock nom_active %}
+    </p>
+{% endblock nom_full %}    
+
+{% block auth_full %}
+    <p>
+    {% block auth_label %}
+    <label class='text' for="auth"> auth <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Role", F: "auth", id: "{{Role.id}}" }}'></i></label>    
+    {% endblock auth_label %}
+    {% block auth_active %}
+    <textarea mode='raw' class='textarea' name="auth" id="auth" size="10"  placeholder="">{{ Role.auth }}</textarea>
+
+    {% endblock auth_active %}
+    </p>
+{% endblock auth_full %}    
+
+    {% block manyToMany_actasList_role %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Role", id: "{{ Role.id }}", L: "actasList" }}'></i>actasList - {{ (Role.actasList)|length }} élément{{(Role.actasList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_actasList_role %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/actAs/role/{{ Role.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_actasList_role_personne %}
+                    <th class='w3-center'>personne</th>
+                    {% endblock header_th_actasList_role_personne %}       
+                    {% block header_endactasList_role %}
+                    {% endblock header_endactasList_role %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_actasList_role %}
+            </thead>
+
+            <tbody>
+            {% for actAs  in Role.actasList %}
+                {% block line_actasList_role %}
+                <tr name='actasList' _id_='{{ actAs.id }}' class='{{ actAs.actif?"":"passif " }}{{ actAs.personne.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "actAs", id: "{{ actAs.id }}" }}'></i>
+                    {{ actAs.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_actAs_personne %}
+                    <th class='w3-left'>{{ actAs.personne.getGeneric( true )|raw }}</th>
+                    {% endblock line_actAs_personne %}
+                    {% block line_endactasList_role %}
+                    {% endblock line_endactasList_role %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_actasList_role %}
+            {% endfor %}
+            {% block footer_endactasList_role %}
+            {% endblock footer_endactasList_role %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_actasList_role %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

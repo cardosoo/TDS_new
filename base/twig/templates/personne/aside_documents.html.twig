@@ -1,0 +1,164 @@
+{% if tab.canEdit %}
+    <link rel="stylesheet" href="/{{App.appName}}/assets/uploader/jquery.dm-uploader.min.css">
+    <script src="/{{App.appName}}/assets/uploader/jquery.dm-uploader.min.js"></script>
+
+    <style>
+    .dm-uploader{
+        margin-top: 1em;
+        margin-bottom: 1em;
+        padding: 1em;
+    }
+
+    .my-btn{
+        background-color: LightGray;
+        border: solid 2px Gray;
+        border-radius: 0.5em;
+        padding: 0.2em 1em 0.2em 1em;
+    }   
+    </style>
+
+
+    <div class="w3-container">
+        <div>
+
+            <div id="drag-and-drop-zone" class="dm-uploader w3-card w3-khaki">
+                <div class="">Glisser-déposer les fichiers dans cette zone.</div>
+
+                <div class="btn btn-primary w3-center " style="height: 3em; padding: 1em;">
+                    <span class="my-btn">Ouvrir le sélecteur de fichier.</span>
+                    <input type="file" title='Cliquer pour ajouter des fichiers'/>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="card h-100">
+                <ul class="l" id="files">
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /file list -->
+
+
+
+<!-- File item template -->
+    <script type="text/html" id="files-template">
+    <li class="media">
+        
+        <div class="media-body mb-1">
+        <p class="mb-2">
+            <strong>%%filename%%</strong> - Status: <span class="text-muted">Waiting</span>
+        </p>
+
+        <div class="w3-light-grey w3-small" style='height: 1em;'>
+            <div class="progress-bar  w3-green w3-center" style='width:0px'></div>
+        </div>     
+        
+        <p class="controls mb-2">
+            <button href="#" class="btn btn-sm btn-primary start" role="button">Start</button>
+            <button href="#" class="btn btn-sm btn-danger cancel" role="button" disabled="disabled">Cancel</button>
+        </p>
+        
+        <hr class="mt-1 mb-1" />
+        </div>
+    </li>
+    </script>
+
+      <div class="row">
+        <div class="col-12">
+           <div class="card h-100">
+            <div class="card-header">
+            </div>
+
+            <ul class="list-group list-group-flush" id="debug">
+              <li class="list-group-item text-muted empty">Loading plugin....</li>
+            </ul>
+          </div>
+        </div>
+      </div> <!-- /debug -->
+
+
+<script>
+
+    function deleteDoc(id, title, url){
+        if (confirm('Confirmer la suppression du document :\n'+title)){
+            $.post(
+                '/{{App.appName}}/deleteDoc/'+(url.split('/').at(-1)),
+                function(data){
+                    if (data!='Done'){
+                        alert(data);
+                    } else {
+                        $("#"+id).remove();
+                    };
+                }
+            ); 
+        }
+
+    }
+
+    function renameDoc(id, title, url){
+        var newTitle = prompt('Renommer le document :', title)
+        if (null != newTitle){
+            $.post(
+                '/{{App.appName}}/renameDoc/'+(url.split('/').at(-1)),
+                { 'title': newTitle },
+                function(data){
+                    if (data=='Pb'){
+                        alert("Il y a eu un problème lors du masquage de ce commentaire.");
+                    } else {
+                        html = buildDocHTML(id, newTitle, data);
+                        $("#"+id).html(html);
+                    };
+                }
+            ); 
+        }
+    }
+
+    function buildDocHTML(id, title, url){
+        return `<li id='${id}'>Maintenant 
+    <button  onclick="deleteDoc('${id}', '${title}', '${url}')" class='w3-padding-small w3-margin-left w3-margin-right w3-tiny w3-button w3-round-large w3-red'><i class='fa fa-trash'></i></button>
+    <a href='${url}' target='_blank'>${title}</a>
+    <button  onclick="renameDoc('${id}', '${title}', '${url}')" class='w3-padding-small  w3-margin-left w3-tiny w3-button w3-round-large w3-grey'><i class='fa fa-edit'></i></button>
+            </li>`
+    }
+
+
+    function tds_doSuccess(id, data){
+        doc = JSON.parse(data);
+        if (doc.error){
+        } else {
+            ul = $('#doc');
+
+            nID = Math.round(Math.random()*32000);
+            html = buildDocHTML(nID, doc.title, doc.url);
+            ul.prepend(html);
+            li = $('#uploaderFile'+id);
+            li.remove();
+        }
+    } 
+
+</script>
+
+{{ include("Documents/document.js.twig", { entity: 'Personne', id : personne.id }  )  }}
+
+
+{% endif %}
+
+
+<ul id='doc'>
+{% for time, doc in tab.docList %}
+    {% set title = doc.getTitle() %}
+    {% set rnd = random() %}
+    {% set id = 'li_' ~ rnd %}
+    {% set url = doc.getDocDownloadURL() %}
+    {% set title = doc.getTitle() %}
+    <li id='{{ id }}'>
+    {{ doc.getDate() }} 
+    <button  onclick="deleteDoc('{{ id }}', '{{ title }}', '{{ url }}')" class='w3-padding-small w3-margin-left w3-margin-right w3-tiny w3-button w3-round-large w3-red'><i class='fa fa-trash'></i></button>
+    <a href='{{ url }}' target='_blank'>{{ doc.getTitle }}</a>
+    <button  onclick="renameDoc('{{ id }}', '{{ title }}', '{{ url }}')" class='w3-padding-small  w3-margin-left w3-tiny w3-button w3-round-large w3-grey'><i class='fa fa-edit'></i></button>
+</li>
+{% endfor %}
+</ul>
+
+

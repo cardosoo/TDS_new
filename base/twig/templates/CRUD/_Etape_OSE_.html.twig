@@ -1,0 +1,174 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _Etape_OSE_.html.twig
+    created : Mon, 07 Apr 2025 15:20:41 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "Etape_OSE", id: "{{ Etape_OSE.id }}" }}'></i>Etape_OSE</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Etape_OSE", F: "actif", id: "{{Etape_OSE.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ Etape_OSE.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block code_full %}
+    <p>
+    {% block code_label %}
+    <label class='text' for="code"> code <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Etape_OSE", F: "code", id: "{{Etape_OSE.id}}" }}'></i></label>    
+    {% endblock code_label %}
+    {% block code_active %}
+    <input class='text'  type="text" value="{{ Etape_OSE.code }}" name="code" id="code" size="50" maxlength="100", placeholder="">
+
+    {% endblock code_active %}
+    </p>
+{% endblock code_full %}    
+
+{% block nom_full %}
+    <p>
+    {% block nom_label %}
+    <label class='text' for="nom"> nom <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Etape_OSE", F: "nom", id: "{{Etape_OSE.id}}" }}'></i></label>    
+    {% endblock nom_label %}
+    {% block nom_active %}
+    <input class='text'  type="text" value="{{ Etape_OSE.nom }}" name="nom" id="nom" size="50" maxlength="100", placeholder="">
+
+    {% endblock nom_active %}
+    </p>
+{% endblock nom_full %}    
+
+{% block nbetu_full %}
+    <p>
+    {% block nbetu_label %}
+    <label class='text' for="nbetu"> nbetu <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Etape_OSE", F: "nbetu", id: "{{Etape_OSE.id}}" }}'></i></label>    
+    {% endblock nbetu_label %}
+    {% block nbetu_active %}
+    <input class='text' type="number"  value="{{ Etape_OSE.nbetu }}" name="nbetu" id="nbetu" placeholder="0">
+
+    {% endblock nbetu_active %}
+    </p>
+{% endblock nbetu_full %}    
+
+    {% block manyToMany_etape_personneList_etape_ose %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Etape_OSE", id: "{{ Etape_OSE.id }}", L: "etape_personneList" }}'></i>etape_personneList - {{ (Etape_OSE.etape_personneList)|length }} élément{{(Etape_OSE.etape_personneList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_etape_personneList_etape_ose %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/etape_personne/etape_ose/{{ Etape_OSE.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_etape_personneList_etape_ose_personne %}
+                    <th class='w3-center'>personne</th>
+                    {% endblock header_th_etape_personneList_etape_ose_personne %}       
+                    {% block header_endetape_personneList_etape_ose %}
+                    {% endblock header_endetape_personneList_etape_ose %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_etape_personneList_etape_ose %}
+            </thead>
+
+            <tbody>
+            {% for etape_personne  in Etape_OSE.etape_personneList %}
+                {% block line_etape_personneList_etape_ose %}
+                <tr name='etape_personneList' _id_='{{ etape_personne.id }}' class='{{ etape_personne.actif?"":"passif " }}{{ etape_personne.personne.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "etape_personne", id: "{{ etape_personne.id }}" }}'></i>
+                    {{ etape_personne.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_etape_personne_personne %}
+                    <th class='w3-left'>{{ etape_personne.personne.getGeneric( true )|raw }}</th>
+                    {% endblock line_etape_personne_personne %}
+                    {% block line_endetape_personneList_etape_ose %}
+                    {% endblock line_endetape_personneList_etape_ose %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_etape_personneList_etape_ose %}
+            {% endfor %}
+            {% block footer_endetape_personneList_etape_ose %}
+            {% endblock footer_endetape_personneList_etape_ose %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_etape_personneList_etape_ose %}    
+
+    {% block manyToMany_etape_enseignementList_etape_ose %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Etape_OSE", id: "{{ Etape_OSE.id }}", L: "etape_enseignementList" }}'></i>etape_enseignementList - {{ (Etape_OSE.etape_enseignementList)|length }} élément{{(Etape_OSE.etape_enseignementList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_etape_enseignementList_etape_ose %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/etape_enseignement/etape_ose/{{ Etape_OSE.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_etape_enseignementList_etape_ose_enseignement %}
+                    <th class='w3-center'>enseignement</th>
+                    {% endblock header_th_etape_enseignementList_etape_ose_enseignement %}       
+                    {% block header_endetape_enseignementList_etape_ose %}
+                    {% endblock header_endetape_enseignementList_etape_ose %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_etape_enseignementList_etape_ose %}
+            </thead>
+
+            <tbody>
+            {% for etape_enseignement  in Etape_OSE.etape_enseignementList %}
+                {% block line_etape_enseignementList_etape_ose %}
+                <tr name='etape_enseignementList' _id_='{{ etape_enseignement.id }}' class='{{ etape_enseignement.actif?"":"passif " }}{{ etape_enseignement.enseignement.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "etape_enseignement", id: "{{ etape_enseignement.id }}" }}'></i>
+                    {{ etape_enseignement.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_etape_enseignement_enseignement %}
+                    <th class='w3-left'>{{ etape_enseignement.enseignement.getGeneric( true )|raw }}</th>
+                    {% endblock line_etape_enseignement_enseignement %}
+                    {% block line_endetape_enseignementList_etape_ose %}
+                    {% endblock line_endetape_enseignementList_etape_ose %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_etape_enseignementList_etape_ose %}
+            {% endfor %}
+            {% block footer_endetape_enseignementList_etape_ose %}
+            {% endblock footer_endetape_enseignementList_etape_ose %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_etape_enseignementList_etape_ose %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

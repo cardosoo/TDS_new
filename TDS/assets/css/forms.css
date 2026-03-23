@@ -1,0 +1,211 @@
+/** La feuille de style pour les formulaires bien alignés...
+  Depuis : http://css4design.com/design-de-formulaire-html-avec-css
+*/
+
+form {
+  float: left;
+  margin-right: 10em;
+  width: 100%;
+  max-width: 80em;
+}
+
+fieldset {
+	margin-bottom: 1em;
+	border:black groove;
+	width: auto;
+	margin: 0.5em;
+	background-color:#E5EECC
+}
+fieldset p {
+/*	padding: 0 0 0.75em 0.5em !important;*/
+	padding: 0 0 0em 0.5em;
+	clear: both;
+
+}
+legend {
+	margin: 0 0 0.5em 0;
+	padding: 0.3em;
+	font: bold 0.9em Verdana, Arial, Helvetica, sans-serif;
+	color: #5d5852;
+	background-color:#E5EECC !important;
+}
+label.text,
+label.select,
+label.textarea
+{
+	display: block;
+	float: left;
+	width: 10em;
+	text-align: right; /* n'hésitez pas pas à aligner à gauche, c'est pas mal aussi */
+	margin: 0 1em 0 0;
+	padding: 0.1em;
+	border-bottom: 1px solid #ABBF3B;
+}
+.radioCheck {
+	margin: 0 1em 0 0.25em;
+}
+
+span.gauche {
+   left:50px;
+   margin-left:50px;
+}
+
+span.droite {
+   float:right;
+   margin-right:50px;
+   right:50px;
+}
+
+input.text,
+textarea.textarea,
+input.select
+{
+    width: calc(100% - 12em);
+    background-color: #6d493a;
+    color:#ffffff;
+    border: 0;
+    margin-right: 0.25em;
+
+}
+.envoy {
+    margin: 1em 0;
+    text-align: left;
+}
+.envoy label {
+    border: 0;
+}
+hr {
+    visibility: hidden;
+    clear: both;
+}
+span.note {
+    font-size: 0.75em;
+}
+span.warning {
+    font-weight: bold;
+    font-size: 1.3em;
+    color: #fff;
+}
+
+tr[del] td,
+tr[del] th {
+  text-decoration: red 1px line-through;
+  color: red;
+}
+
+.NotGood {
+    background-color:lightpink !important;
+    color: black !important;
+}
+
+.Modif {
+    border-style: solid;
+    border-color: yellowgreen;
+}
+.Modif::after {
+    content: "x";
+    color: red;
+    position: absolute;
+}
+
+
+
+
+
+/* cela c'est pour le lien mais comme il est en dehors du wrapper, il faudrait changer le sélecteur */
+#menu a {
+  display: inline-block;
+  text-decoration: none;
+  padding: 0.1em 0.5em 0.1em 0.5em;
+  background-color: #eee;
+  border-radius: 4px;
+  border: 1px solid gray;
+/*    text-transform: uppercase; */
+/*    font-family: 'Roboto', sans-serif; */
+  color: black;
+}
+
+
+
+/* If you like this, be sure to ❤️ it. */
+  .wrapper {
+    height: 100% ;
+    min-height: 100vh;
+    /* This part is important for centering the content */
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    /* End center */
+    
+    background: -webkit-linear-gradient(to right, #834d9b, #d04ed6);
+    background: linear-gradient(to right, #834d9b, #d04ed6);
+    
+  }  
+  
+
+
+  #modal {
+    position: fixed;
+    top: 0; 
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    transition: all .4s;
+    background:rgba(77, 77, 77, .7);
+  }
+
+  #modal_in{
+    position: absolute; 
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+
+  }
+  
+  .hidden{
+    visibility: hidden;
+    opacity: 0;   
+  }
+
+  .visible {
+    visibility: visible;
+    opacity: 1 ;
+  }
+  
+  #modal_content{
+    max-height: 80vh;
+    overflow: scroll;
+  }
+  
+  .modal__content {
+    border-radius: 4px;
+    position: relative;
+    width: 90%;
+    max-width: 50em;
+    background: #fff;
+    padding: 1em 2em;
+  }
+  
+  .modal__footer {
+    text-align: right;
+  }
+  .modal__footer a {
+      color: #585858;
+    }
+   .modal__footer i {
+      color: #d02d2c;
+    }
+
+  .modal__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #585858;
+    text-decoration: none;
+  }

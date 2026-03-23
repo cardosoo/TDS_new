@@ -1,0 +1,60 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+    <div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+        <h3>Liste des Enseignements rattachés au domaine {{ D.getGeneric() }}</h3>
+
+        <table id='list'>
+            <thead>
+                <th>Nuac</th>
+                <th>Intitulé</th>
+                <th>ECUE</th>
+                <th>Besoins</th>
+                <th>Écart aux besoins</th>
+                <th>Actif</th>
+            </thead>
+            <tbody>
+                {% for DP in D.domaine_enseignementList %}
+                {% set E = DP.enseignement %}
+                {% set ES = E.enseignement_structure %}
+                {% set codeList = ES.code|split('|')%}
+                {% set ecue = [] %}
+                {% for code in codeList %}
+                    {% set itemList = code|split('_') %}
+                    {% set ecue = itemList[1] in ecue ? ecue : ecue|merge([itemList[1]])%}
+                {% endfor %}
+                <tr {{ E.actif?"":"class='passif';" }}>
+                    <td><a href='/{{App.appName}}/enseignement/{{E.id}}'>{{ E.nuac }}</a></td>
+                    <td><a href='/{{App.appName}}/enseignement/{{E.id}}'>{{ E.intitule }}</a></td>
+                    <td class='w3-center'>{{ ecue|join(',') }}</td>
+                    <td class='w3-center'>{{ E.enseignement_besoins.besoins |f2 }}</td>
+                    <td class='w3-center'>{{ E.voeu_enseignement_bilan.heures |f2 }}</td>
+                    <td class='w3-center'>{{ E.actif?"":"inactif" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div> 
+
+    <script>
+        $(document).ready(function () {
+            $('#list').DataTable({
+                // order: [[0, "asc"]],
+                dom: 'Bfrtip',
+                paging: false,
+                buttons: [
+                    'copy',
+                    'excel',
+                    'csv',
+                    {
+                        extend: 'pdf',
+                        orientation: 'landscape'
+                    }
+                ]
+            });
+        });
+    </script>
+
+{% endblock %}

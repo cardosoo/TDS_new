@@ -1,0 +1,33 @@
+{% extends "CRUD/CRUD.html.twig" %}
+{% block aside %}{% endblock %}
+
+{% block main %}
+
+    <link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+    <div class="wrapper">
+        <form>
+    {% if what is empty %}
+        <h3>Pas de chaîne fournie pour la recherche</h3>
+    {% elseif nbFound == 0 %}    
+        <h3>Pas de résultat pour la recherche pour : {{ what }}</h3>
+    {% else %}
+        <h3>{{ nbFound }} résultat pour la recherche sur : {{ what }}</h3>
+        {% for entity,li in list %}
+            {% if not li is empty %}
+            <fieldset>
+                <legend>depuis {{entity}}</legend>
+                <ul>
+                {% for l in li %}
+                    {% set elm = l|first %}
+                    <li><a href='/{{App.appName}}/CRUD/{{entity}}/{{elm.id}}'>{{ elm.getGeneric()|raw }}</a></li>
+                {% endfor %}
+                </ul>
+            </fieldset>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+        </form>
+    </div>
+</div>
+{% endblock main %}

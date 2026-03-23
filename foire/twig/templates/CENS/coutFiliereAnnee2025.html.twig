@@ -1,0 +1,97 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+<style>
+
+td, th {
+  vertical-align: middle;
+  text-align: left;
+}
+
+.td_centre{
+  text-align: center !important;
+}
+
+.bold{
+  background: AliceBlue;
+  font-weight: bold;
+}
+
+.cache{
+  display : none;
+}
+</style>
+
+
+
+<div class="w3-cell-row">
+
+  <div class="w3-container w3-cell">
+    <div class="w3-card" style="max-width:1600px;margin-top:80px">    
+
+      <div class="w3-panel w3-red">
+        <h3>Attention !</h3>
+        <p>Cette présentation ne prend pas (encore) en compte la mutualisation des enseignements.</p>
+        <p>Si un enseignement est présent dans plusieurs etapes, Son côut total est présent pour chacune des etapes.</p>
+      </div>  
+      <h3>Coût en HETD par diplôme</h3>
+      {% set ordre = 100 %}
+      <table id='list'>
+        <thead>
+            <tr>
+                <th>Composante</th>
+                <th>code Etape</th>
+                <th>nom Étape</th>
+                <th>cursus</th>
+                <th>Coût en HETD</th>
+                <th>Cout Foire</th>
+                <th>dont vacation</th>
+                <th>vacation hors Foire</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for L in LList %}
+          <tr> 
+              <td><a href='/{{App.appName}}/structure/structure/{{L.composante}}' target='_blank'>{{L.composante}}</a></td>
+              <td><a href='/{{App.appName}}/structure/etape/{{L.code_etape}}' target='_blank'>{{L.code_etape}}</a></td>
+              <td><a href='/{{App.appName}}/structure/etape/{{L.code_etape}}' target='_blank'>{{L.nom_etape }}</a></td>
+              <td>{{L.nom_cursus}}</td>
+              <td class='w3-center'>{{(L.cout + L.cout_vac)|f2 }}</td>
+              <td class='w3-center'>{{(L.cout)|f2 }}</td>
+              <td class='w3-center'>{{(L.cout_vac_in)|f2 }}</td>
+              <td class='w3-center'>{{(L.cout_vac)|f2 }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div> 
+<br>
+<br>
+
+<script>
+    $(document).ready(function () {
+        $('#list').DataTable({
+            // order: [[0, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+
+{% endblock section %}
+
+

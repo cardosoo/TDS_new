@@ -1,0 +1,97 @@
+{% extends "layout.html.twig" %}
+
+
+{% block section %}
+
+<div class="w3-card-4 w3-white w3-margin">
+    <div class="w3-container w3-light-grey  w3-center">
+        <b>Mise à jour des attributaires des fonctions du référentiel</b>
+    </div>
+    {% if data is not null %}
+        <div class="w3-card w3-pale-yellow">
+            <header class="w3-yellow">
+                <h4>Bilan de la mise à jour</h4>
+        </header>
+        <ul>
+        {% if added >0 %}
+            {{ added }} attributaires ajoutés
+        {% endif %}
+        {% if deleted >0 %}
+            {{ deleted }} attributaires supprimés
+        {% endif %}
+        {% if kept >0 %}
+            {{ kept }} attributaires conservés
+        {% endif %}
+        </ul>
+        {% if notECUE|length >0 %}
+            <details>
+                <summary>{{ notECUE|length }} code ECUE n'ont pas été trouvés dans la base de données</summary>
+                <ul>
+                    {% for l in notECUE %}
+                        <pre>{{l|raw}}</pre>
+                    {% endfor %}
+                </ul>
+            </details>
+        {% endif %}
+        {% if notOSE|length >0 %}
+            <details>
+                <summary>{{ notOSE|length }} code UP n'ont pas été trouvés dans la base de données</summary>
+                <ul>
+                    {% for l in notOSE %}
+                        <pre>{{l|raw}}</pre>
+                    {% endfor %}
+                </ul>
+            </details>
+        {% endif %}
+        </div>
+    {% endif %}
+
+    <div class='w3-card w3-pale-blue'>
+        <header class="w3-blue">
+            <h4>Aide : fonctionnement de la mise des responsables d'enseignement</h4>
+        </header>
+    {% apply markdown_to_html %}
+
+    Cette opération peut être réalisée n'importe quand.
+    Elle permet de mettre à jour les responsable des enseignements.
+    Elle est destiné à fonctionner à partir d'un texte copié à partir d'un tableur.
+    Il faut une ligne par enseignement les champs sont séparés par des tabulations.
+    Les colonnes doivent être organisées de la façon suivante :
+
+|UE intitulé|Code UE|Code ECUE|NOM 1|Code UPD 1|NOM 2|Code UPD 2|NOM 3|Code UPD 3|NOM 4|Code UPD 4|NOM 5|Code UPD 5|
+|-----------|-------|---------|-----|----------|-----|----------|-----|----------|-----|----------|-----|----------|
+|Biologie Cellulaire et Moléculaire 1|SV51U010|SV01Y010|Verbeke|UDP000138904|Bernard|UDP000125002|L'Hote|UDP000135840| | | | |
+|Développement animal et végétal|VT02U010|SV02Y010|Benhamed|UDP000133597|Rampon|UDP000137118|Birraux|UDP000138784|Lelandais-Briere|UDP000137696|Filleur|UDP000136405|
+
+    Les seules données véritablement utiles sont les code ECUE et codes UPD. Le reste est optionnel, mais les colonnnes doivent exister dans l'ordre dans lequel elles sont données ici.
+
+Les données déjà présentes dans la base de données (dans un format qui convient ici) peut être importé dans un tableur en utilisante la fonction
+« liste des enseignements [avec leurs Responsables](/{{App.appName}}/bureauRHE/listResponsables) » du menu bureauRHE.
+
+    Opérations réalisées :
+    - les lignes qui commencent par « UE intitué » sont ignorées
+    - recherche des enseignements à partir du code ECUE dans la base de données, si l'enseignement n'existe pas on n'en tient pas compte
+    - Lorsque l'enseignement n'existe pas on ignore la ligne (elle apparaît dans le bilan une fois l'opération effectuée)
+    - Lorsque l'enseignement existe :
+        - on supprime les responsables qui figurent déjà dans la base de données pour cet enseignement,
+        - si le ou les responsables désignés figurent dans la base de données, on les inscrit comme responsable de l'enseignement (éventuellement en y ajoutant un voeu )
+        - si un ou des responsables désignés ne figurent pas dans la base de données on le fait apparaître dans le bilan final
+
+    {% endapply %}
+    </div>
+
+    <form action="./majResponsables" method='POST'>
+    <textarea name='data' cols='200' rows='20' placeholder="UE intitulé	Code UE	Code ECUE 	NOM 1	Code UPD 1	NOM 2	Code UPD 2	NOM 3	Code UPD 3	NOM 4	Code UPD 4	NOM 5	Code UPD 5
+Biologie Cellulaire et Moléculaire 1	SV51U010	SV01Y010	Verbeke	UDP000138904	Bernard	UDP000125002	L'Hote	UDP000135840
+Développement animal et végétal	VT02U010	SV02Y010	Benhamed	UDP000133597	Rampon	UDP000137118	Birraux	UDP000138784	Lelandais-Briere	UDP000137696	Filleur	UDP000136405
+">{{data|join("\n")|raw}}</textarea>
+
+    <div class="w3-container w3-light-grey  w3-center">
+        <input type="submit" value="Mettre à jour les responsables d'UE désignés">
+    </div>
+    </form>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "CRUD/_Voeu_.html.twig" %}
+
+{% block script %}
+
+    {{ parent()}}    
+
+    <script>
+
+        $(document).ready(function() { /* code here */ 
+            var personne = $('#personne');
+            var enseignement = $('#enseignement');
+            
+   
+            function calculAnciennete(){
+                console.log(personne, enseignement);
+                console.log(personne.attr('_id_'), enseignement.attr('_id_'));
+                personneId = personne.attr('_id_');
+                enseignementId = enseignement.attr('_id_');
+                $.get( '/{{App.appName}}/CRUD/voeu/computeAnciennete/'+personneId+'/'+enseignementId, function( data ) {
+                    $('#anciennete')[0].value=data;
+                });
+            }
+
+            personne.change(function() {
+                calculAnciennete();
+            });
+            enseignement.change(function() {
+                calculAnciennete();
+            });          
+        });
+    </script>
+
+{% endblock script %}

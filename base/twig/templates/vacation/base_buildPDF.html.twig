@@ -1,0 +1,103 @@
+<style>
+    .normal-bg { font-size: 2em; background-color: #ddd; }
+    .small-bg { font-size: 1.3em; background-color: #ddd; }
+</style>
+
+
+{% set level = {'PA': 'L1', 'L1': 'L1', 'L2': 'L2', 'L3': 'L3', 'L3Pro': 'L3', 'Agreg': 'M1', 'IG1': 'L3', 'IG2': 'M1', 'IG3': 'M2'} %}
+<p><b>Intervenant :</b> {{D.nom|upper}} {{D.prenom|capitalize}}</p>
+
+<p><b>ECUE :</b> {{D.codeECUE|upper}} - <b>intitulé :</b> {{D.intituleEnseignement}}</p>
+
+<p><b>type de formation :</b> {{D.typeFormation}}</p> 
+<p><b>formation :</b> {{D.formation}}</p>
+
+<p><b>niveau :</b> {{level[D.niveau]}} ({{D.niveau}})- <b>semestre :</b> {{D.semestre}}</p>
+
+<p><b>date début :</b> {{D.dateDebut|date("d/m/Y", "Europe/Paris") }} - <b>date fin :</b> {{D.dateFin|date("d/m/Y", "Europe/Paris") }}</p>
+
+{% set hEQTD = 1.5*D.hCM + 1.25*D.hCMTD + D.hTD + D.hTP %}
+
+{% set h = [] %}
+{% if D.hCM > 0 %}
+    {% set h = h|merge([ ""~D.hCM~" hCM" ]) %}  
+{% endif %}
+{% if D.hCMTD > 0 %}
+    {% set h = h|merge([ ""~D.hCMTD~" hCMTD" ]) %}  
+{% endif %}
+{% if D.hTD > 0 %}
+    {% set h = h|merge([ ""~D.hTD~" hTD" ]) %}  
+{% endif %}
+{% if D.hTP > 0 %}
+    {% set h = h|merge([ ""~D.hTP~" hTP" ]) %}  
+{% endif %}
+
+
+<p><b>heures effectuées :</b> {{h|join(", ")}} ; <b>total :</b>{{ hEQTD }} hEQTD</p>
+
+{% if D.commentaire is not empty %}
+<p><b>Commentaire :</b> {{ D.commentaire}} </p>
+{% endif %}
+
+<p>Validé par {{P.prenom|capitalize}}  {{P.nom|upper}}, {{P.statut.nom}}, le {{now|date("d/m/Y", "Europe/Paris")}}</p>
+<p><img  width='20' src="{{D.signature}}"></p>
+
+<hr />
+
+<h2>Cadre réservé au service financier</h3>
+
+
+
+<table cellspacing='3' cellpadding='3' style='border-spacing: 10px;'>
+    <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td colspan='2'>Date de réception du dossier</td>
+    </tr>
+    <tr>
+        <td colspan="2"><span class="normal-bg">_____________________</span></td>
+    </tr>
+    <tr>
+        <td colspan='2'>&nbsp;</td>
+    </tr>
+    <tr>
+        <td>CF</td>
+        <td>CC</td>
+    </tr>
+    <tr>
+        <td><span class="normal-bg">_____________________</span></td>
+        <td><span class="normal-bg">_____________________</span></td>
+    </tr>
+    <tr>
+        <td>EOTP</td>
+        <td>Domaine fonctionnel</td>
+    </tr>
+    <tr>
+        <td><span class="{{ D.EOTP starts with '__' ? 'normal-bg' : 'small-bg' }}">{{ D.EOTP }}</span></td>
+        <td><span class="normal-bg">_____________________</span></td>
+    </tr>
+    <tr>
+        <td colspan='2'>&nbsp;</td>
+    </tr>
+    <tr>
+        <td>Date de transmission pour saisie dans OSE</td>
+        <td>Fonds</td>
+    </tr>
+    <tr>
+        <td><span class="normal-bg">_____________________</span></td>
+        <td><span class="normal-bg">_____________________</span></td>
+    </tr>
+    <tr>
+        <td>Date de saisie </td>
+        <td>Date de mise en paiement</td>
+    </tr>
+    <tr>
+        <td><span class="normal-bg">_____________________</span></td>
+        <td><span class="normal-bg">_____________________</span></td>
+    </tr>
+
+
+</table>
+

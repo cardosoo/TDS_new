@@ -1,0 +1,81 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+    <br>
+    <h3>tous les enseignements avec leurs correspondants</h3>
+        
+    
+    <table id="list" class="display compact">
+        <thead>
+            <tr>
+                <th>UE intitulé</th>
+                <th>code ECUE</th>
+                <th>variante</th>
+                <th>NOM 1</th>
+                <th>Code UPD 1</th>
+                <th>NOM 2</th>
+                <th>Code UPD 2</th>
+                <th>NOM 3</th>
+                <th>Code UPD 3</th>
+                <th>NOM 4</th>
+                <th>Code UPD 4</th>
+                <th>NOM 5</th>
+                <th>Code UPD 5</th>
+                <th>id</th>
+                <th>Cursus</th>
+                <th>Etape</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for E in EList %}
+            {% set ecue = E.getStructEcueList()|first %}
+            <tr>
+                <td>{{E.getGenericWithLink()|raw }}</td>
+                {% set cList = ES.code|split('|') %}
+                <td>{{E.code}}</td>
+                <td>{{E.variante}}</td>
+                {% set compteur = 0 %}
+                {% for V in E.voeuList %}
+                    {% if V.correspondant %}
+                    {% set compteur = compteur + 1  %}
+                    <td> {{ V.personne.getGenericWithLink()|raw }}</td>
+                    <td> {{ V.personne.ose }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% for i in compteur+1..5 %}
+                    <td></td>
+                    <td></td>
+                {% endfor %}
+                <td>{{E.id}}</td>
+                <td>{{ecue.getCursusName}}</td>
+                <td>{{ecue.getEtape().getNom()}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#list').DataTable({
+                order: [[1, "asc"], [0, "asc"]],
+                dom: 'Bfrtip',
+                paging: false,
+                buttons: [
+                    'copy',
+                    'excel',
+                    'csv',
+                    {
+                        extend: 'pdf',
+                        orientation: 'portrait'
+                    }
+                ]
+            });
+        });
+
+    </script>
+{% endblock %}
+
+

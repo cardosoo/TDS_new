@@ -1,0 +1,59 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+
+    {% block voeux %}
+    <h3>Voeux</h3>
+    <ul>
+        <li>Voir tous les <a href='/{{App.appName}}/admin/allVoeux'>voeux</a></li>
+        <li>Voir tous les <a href='/{{App.appName}}/admin/allVoeux2'>voeux - étendu</a></li>
+        <li>Lister les enseignants qui n'ont <a href='/{{App.appName}}/admin/noVoeu'>pas fait leurs voeux</a></li>
+        <li>Les <a href='/{{App.appName}}/admin/chargesBesoins'>Charges et Besoins</a> restants à répartir</li>
+        <li>Passer les <a href='/{{App.appName}}/admin/inactiveVoeuxBlancs' >voeux blancs en inactifs</a></li>
+        <li>Supprimer les <a href='/{{App.appName}}/admin/deleteVoeuxBlancs' >voeux inactifs</a></li>
+        <li>Supprimer les <a href='/{{App.appName}}/admin/deleteVoeuxInactif' >voeux avec une personne ou un enseingment inactif</a></li>
+    </ul>
+    {% endblock voeux %}
+
+    {% block correspondants %}
+    <h3>Correspondant des enseignements</h3>
+    <ul>
+        <li>Liste des <a href='/{{App.appName}}/admin/listCorrespondants' >enseignements avec leurs correspondants</a> (y compris en cas d'absence de correspondant)</li>
+        <li>Désignation <a href='/{{App.appName}}/admin/autoCorrespondants'>automatique d'un correspondant</a> quand c'est possible</li>
+    </ul>
+    {% endblock correspondants %}
+
+
+    {% block etapes %}
+    <h3>Sur les étapes</h3>
+    <ul>
+        <li>Quelques infos sur les <a href='/{{App.appName}}/admin/infoEtapes' >étapes</a></li>
+    </ul>
+    {% endblock etapes %}
+
+
+    {% block commentaires %}
+    <h3>Commentaires</h3>
+    <ul>
+        <li>Liste des commentaires liées aux <a href='/{{App.appName}}/admin/listComments/Personne' >Personnes</a></li>
+        <li>Liste des commentaires liées aux <a href='/{{App.appName}}/admin/listComments/Enseignement' >Enseignements</a></li>
+    </ul>
+    {% endblock commentaires %}
+
+
+
+    {% block divers %}
+    <h3>Divers</h3>
+    <ul>
+        <li><a href='/{{App.appName}}/admin/trombinoscope' >Trombinoscope</a></li>
+        <li><a href='/{{App.appName}}/admin/vacatairesSansVoeu' >Liste des vactaires actifs sans voeu</a></li>
+        <li>Comparaision des <a href="/{{App.appName}}/admin/verifECUE">ECUE</a> dans la base et dans OSE</li>
+    </ul>
+
+    {% endblock divers %}
+
+</div> 
+{% endblock %}

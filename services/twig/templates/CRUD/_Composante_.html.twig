@@ -1,0 +1,186 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _Composante_.html.twig
+    created : Sun, 22 Mar 2026 23:12:16 +0100 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "Composante", id: "{{ Composante.id }}" }}'></i>Composante</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Composante", F: "actif", id: "{{Composante.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ Composante.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block ordre_full %}
+    <p>
+    {% block ordre_label %}
+    <label class='text' for="ordre"> ordre <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Composante", F: "ordre", id: "{{Composante.id}}" }}'></i></label>    
+    {% endblock ordre_label %}
+    {% block ordre_active %}
+    <input class='text' type="number"  value="{{ Composante.ordre }}" name="ordre" id="ordre" placeholder="0">
+
+    {% endblock ordre_active %}
+    </p>
+{% endblock ordre_full %}    
+
+{% block nom_full %}
+    <p>
+    {% block nom_label %}
+    <label class='text' for="nom"> nom <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Composante", F: "nom", id: "{{Composante.id}}" }}'></i></label>    
+    {% endblock nom_label %}
+    {% block nom_active %}
+    <input class='text'  type="text" value="{{ Composante.nom }}" name="nom" id="nom" size="50" maxlength="100", placeholder="">
+
+    {% endblock nom_active %}
+    </p>
+{% endblock nom_full %}    
+
+{% block intitule_full %}
+    <p>
+    {% block intitule_label %}
+    <label class='text' for="intitule"> intitule <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Composante", F: "intitule", id: "{{Composante.id}}" }}'></i></label>    
+    {% endblock intitule_label %}
+    {% block intitule_active %}
+    <input class='text'  type="text" value="{{ Composante.intitule }}" name="intitule" id="intitule" size="50" maxlength="100", placeholder="">
+
+    {% endblock intitule_active %}
+    </p>
+{% endblock intitule_full %}    
+
+    {% block manyToOne_maquetteList_maquetteList %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Composante", id: "{{ Composante.id }}", L: "maquetteList" }}'></i>maquetteList - {{ (Composante.maquetteList)|length }} élément{{(Composante.maquetteList)|length >1?'s':''}}</legend>
+
+                <ul>
+                {% for L in Composante.maquetteList %}   {% block manyToOne_Composante_composante %}
+                    <li class='{{ L.actif?"":"passif" }}'>
+                        {{ L.getGeneric(true)|raw }}
+                    </li>
+                    {% endblock manyToOne_Composante_composante %}
+                {% endfor %}
+                </ul>
+    </fieldset>
+    {% endblock manyToOne_maquetteList_maquetteList %}    
+
+    {% block manyToMany_commentaire_composanteList_composante %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Composante", id: "{{ Composante.id }}", L: "commentaire_composanteList" }}'></i>commentaire_composanteList - {{ (Composante.commentaire_composanteList)|length }} élément{{(Composante.commentaire_composanteList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_commentaire_composanteList_composante %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/commentaire_composante/composante/{{ Composante.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_commentaire_composanteList_composante_auteur %}
+                    <th class='w3-center'>auteur</th>
+                    {% endblock header_th_commentaire_composanteList_composante_auteur %}
+                    {% block header_th_commentaire_composanteList_composante_date %}
+                    <th class='w3-center'>date</th>
+                    {% endblock header_th_commentaire_composanteList_composante_date %}
+                    {% block header_th_commentaire_composanteList_composante_commentaire %}
+                    <th class='w3-center'>commentaire</th>
+                    {% endblock header_th_commentaire_composanteList_composante_commentaire %}       
+                    {% block header_endcommentaire_composanteList_composante %}
+                    {% endblock header_endcommentaire_composanteList_composante %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_commentaire_composanteList_composante %}
+            </thead>
+
+            <tbody>
+            {% for commentaire_composante  in Composante.commentaire_composanteList %}
+                {% block line_commentaire_composanteList_composante %}
+                <tr name='commentaire_composanteList' _id_='{{ commentaire_composante.id }}' class='{{ commentaire_composante.actif?"":"passif " }}{{ commentaire_composante.auteur.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "commentaire_composante", id: "{{ commentaire_composante.id }}" }}'></i>
+                    {{ commentaire_composante.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_commentaire_composante_auteur %}
+                    <th class='w3-left'>{{ commentaire_composante.auteur.getGeneric( true )|raw }}</th>
+                    {% endblock line_commentaire_composante_auteur %}
+                    {% block line_commentaire_composanteList_composante_date %}
+                    <td class='w3-center'>{{ commentaire_composante.date }}</td>
+                    {% endblock line_commentaire_composanteList_composante_date %}
+                    {% block line_commentaire_composanteList_composante_commentaire %}
+                    <td class='w3-center'>{{ commentaire_composante.commentaire }}</td>
+                    {% endblock line_commentaire_composanteList_composante_commentaire %}
+                    {% block line_endcommentaire_composanteList_composante %}
+                    {% endblock line_endcommentaire_composanteList_composante %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_commentaire_composanteList_composante %}
+            {% endfor %}
+            {% block footer_endcommentaire_composanteList_composante %}
+            {% endblock footer_endcommentaire_composanteList_composante %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_commentaire_composanteList_composante %}    
+
+    {% block oneToOne_structure_enseignement %}  
+    <fieldset>
+        <legend>structure_enseignement</legend>
+        {% if not isCreation %}
+
+    <table class='w3-table-all w3-hoverable w3-small'>
+        <thead>
+            <tr class='w3-light-blue'>    
+                    <th>periode</th>    
+                    <th>nbetu</th>    
+                    <th>code_ue</th>    
+                    <th>code_ecue</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>    
+                        <td>{{ Composante.structure_enseignement.periode }}</td>    
+                        <td>{{ Composante.structure_enseignement.nbetu }}</td>    
+                        <td>{{ Composante.structure_enseignement.code_ue }}</td>    
+                        <td>{{ Composante.structure_enseignement.code_ecue }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        {% endif %}
+    </fieldset>
+    {% endblock oneToOne_structure_enseignement%}
+    
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

@@ -1,0 +1,183 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+    <h3>Fiche ECUE pour l'année {{App.currentYear}} - {{App.currentYear + 1}} par {{App.auth.user.prenom}} {{App.auth.user.nom}}</h3>
+
+    <div class='w3-card-4 w3-theme-l4 w3-round-large'>
+    {% if FL|length > 0 %}
+        <div class='w3-center'>
+            <h5>Vous avez {{FL|length}} fiche{{ FL|length>1?"s":""}} ECUE en cours de rédaction</h5>
+        </div>
+        <table id='table'>
+            <thead>
+                <tr>
+                <th>-</th>
+                <th>Intitulé</th>
+                <th>Diplôme</th>
+                <th>Mention</th>
+                <th>Parcours</th>
+                <th>Semestre</th>
+                <th>code ECUE</th>
+                <th>Notes de version</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for name in FL|keys %}
+                {% set F = FL[name].data %}
+                <tr >
+                    <td>
+                        <i title='Supprimer de façon réversible cette fiche ECUE' onclick="deleteFicheECUE('{{name}}')" class="fa fa-trash" aria-hidden="true"></i>
+                        &nbsp;
+                        <i title='Dupliquer cette fiche ECUE' onclick="duplicateFicheECUE('{{name}}')" class="fa fa-copy" aria-hidden="true"></i>
+                        &nbsp;
+                        <i title='Copier le lien dans le presse-papier' onclick="copyToClipboard('{{F.uid}}/{{name}}')" class="fa fa-clipboard" aria-hidden="true"></i>
+                    </td>
+                    <th class='w3-left'>
+                        <a href='/{{App.appName}}/ficheECUE/fiche/{{F.uid}}/{{name}}'>{{F.intituleECUE}}</a>
+                    </th>
+                    <td>{{ F.diplome }}</td>
+                    <td>{{ F.mention }}</td>
+                    <td>{{ F.parcours }}</td>
+                    <td class="w3-center">{{ F.semestre }}</td>
+                    <td class="w3-center">{{ F.codeECUE }}</td>
+                    <td>{{ F.noteVersion|split("\n")[0] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class='w3-center'>
+            <h5>Vous n'avez aucune aucune fiche ECUE en cours de rédaction</h5>
+        </div>
+    {% endif %}
+        <div class='w3-container w3-center'>
+            <a class='w3-button w3-theme-d3'  href='/{{App.appName}}/ficheECUE/fiche/{{App.auth.uid}}/{{ "now"|date("m_d_Y-h_i_s") }}'>Créer une nouvelle fiche ECUE</a>
+        </div>
+    </div>
+    <br>
+    <div class='w3-card-4 w3-orange w3-round-large'>
+    {% if FDL|length > 0 %}
+        <div class='w3-center'>
+            <h5>Vous avez {{FDL|length}} fiche{{ FDL|length>1?"s":""}} ECUE en attente de suppression définitive</h5>
+        </div>
+
+    <table id='tableDeleted'>
+        <thead>
+            <tr>
+            <th>-</th>
+            <th>Intitulé</th>
+            <th>Diplôme</th>
+            <th>Mention</th>
+            <th>Parcours</th>
+            <th>Semestre</th>
+            <th>code ECUE</th>
+            <th>Notes de version</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for name in FDL|keys %}
+            {% set F = FDL[name].data %}
+            <tr >
+                <td>
+                    <i title='Restaurer cette fiche ECUE' onclick="deleteFicheECUE('{{name}}')" class="fa fa-undo" aria-hidden="true"></i>
+                    &nbsp;
+                    <i title='Supprimer définitvement cette fiche ECUE' onclick="destroyFicheECUE('{{name}}')" class="fas fa-trash" aria-hidden="true"></i>                    
+                </td>
+                <th class='w3-left'><a href='/{{App.appName}}/ficheECUE/fiche/{{F.uid}}/{{name}}'>{{F.intituleECUE}}</a></th>
+                <td>{{ F.diplome }}</td>
+                <td>{{ F.mention }}</td>
+                <td>{{ F.parcours }}</td>
+                <td class="w3-center">{{ F.semestre }}</td>
+                <td class="w3-center">{{ F.codeECUE }}</td>
+                <td>{{ F.noteVersion|split("\n")[0] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+   {% endif %}
+     </div>
+</div>
+
+<script>
+
+    function copyToClipboard(what){
+        var lien = URL.parse(document.URL).origin+"/{{App.appName}}/ficheECUE/fiche/"+what;
+        navigator.clipboard.writeText(lien);
+        window.alert('Lien copié dans le presse papeir \n '+lien);
+    }
+
+    function deleteFicheECUE(name){
+        $.get( "/{{App.appName}}/ficheECUE/delete/"+name, function( data ) {
+            if (data == 'Done'){
+                window.location.reload();
+            } else {
+                alert( "Il y a eu un problème avec la suppression");
+            }
+        });
+    }
+
+    function duplicateFicheECUE(name){
+        $.get( "/{{App.appName}}/ficheECUE/duplicate/"+name, function( data ) {
+            if (data == 'Done'){
+                window.location.reload();
+            } else {
+                alert( "Il y a eu un problème avec la suppression");
+            }
+        });
+    }
+    
+
+    function destroyFicheECUE(name){
+        //var n = name.substr(1);
+        $.get( "/{{App.appName}}/ficheECUE/destroy/"+name, function( data ) {
+            if (data == 'Done'){
+                window.location.reload();
+            } else {
+                alert( "Il y a eu un problème avec la destruction");
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        $('#table').DataTable({
+            order: [[2, "asc"], [3, "asc"]],
+            paging: false,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+
+        $('#tableDeleted').DataTable({
+            order: [[2, "asc"], [3, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+
+
+
+    });
+</script>      
+
+
+{% endblock %}
+

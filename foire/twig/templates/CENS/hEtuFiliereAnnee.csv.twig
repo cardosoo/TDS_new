@@ -1,0 +1,12 @@
+{%- set ordre = 100 %}
+ordre;maquette;Diplome;Étape;Effectif;hTotal;hCM;hCTD;hTD;hTP
+{%~ for p in params %}{# |slice(0,1) #}
+  {%~ set ordre = ordre+1 %}
+{{ordre}};"{{ p.composante.nom}}";=;=;=;=;=;=;=;=
+  {%~ for l in p.list %}
+    {%~ set ordre = ordre+1 %}
+{{ordre}};"{{l.maquette}}";"{{l.diplome}}";"{{l.etape.nom }}";"{{l.etape.nbetu}}";"{{(l.hEtu[0]+l.hEtu[1]+l.hEtu[2]+l.hEtu[3])|f2 }}";"{{l.hEtu[0]|f2 }}";"{{l.hEtu[1]|f2 }}";"{{l.hEtu[2]|f2 }}";"{{l.hEtu[3]|f2 }}"
+  {%~ endfor %}
+{%~ endfor %}
+
+

@@ -1,0 +1,23 @@
+{% embed "enseignement/base_volumeVoeu.html.twig" with {'MAX': E} %}
+
+
+{% block complementVolumeVoeu %}
+            <div>
+                {% set A =  V ? V.anciennete :E.computeAnciennete %}
+                <input type="hidden"  name="anciennete" value="{{ A }}" >
+                {% if A >0  %}
+                    Ancienneté : {{ A }} an{{ A > 1 ? 's' : '' }}
+                    {% if A >= 4 %}
+                    <br>Vous n'êtes plus prioritaire pour cet enseignement
+                    {% elseif A < 4 %}
+                    <b>Vous êtes prioritaire pour cet enseignement
+                    {% endif %}
+                {% else %}
+                Pas d'ancienneté dans cet enseignement
+                {% endif %}
+
+            </div>
+
+{% endblock complementVolumeVoeu %}
+
+{% endembed %}

@@ -1,0 +1,113 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+<style>
+.vertical {
+    writing-mode: sideways-lr;
+    width: 1.5em;
+}
+
+.situ_ref {
+    width: 30em;
+}
+
+.v_intitule {
+    width: 30em;
+}
+
+</style>
+
+
+
+<h3>Historique du tableau de service de {{ P.prenom }} {{ P.nom }}</h3>
+
+<div class='w3-padding'>
+<a class='w3-button w3-red w3-round-large' href="#" onclick="CopyToClipboard('historique');return false;">Copier l'historique dans le presse-papier</a>
+</div>
+
+<table id='historique' class="display compact">
+    <thead>
+        <tr>
+            <th>Année</th>
+            <th>Situation/Réferentiel</th>
+            <th>codeECUE</th>
+            <th>Intitulé</th>
+            <th>Volume hETD</th>
+            <th>Type</th>
+            <th>Niveau</th>
+            <th>Maquette</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% set odd = true %}
+    {% for year, H in HL %}
+       {% set odd = not odd %}
+        {% for V in H.VList %}
+        {% set T = [] %}
+        {% if V.cm > 0 %} {% set T = T|merge(['CM']) %} {% endif %}
+        {% if V.td > 0 %} {% set T = T|merge(['TD']) %} {% endif %}
+        {% if V.ctd > 0 %} {% set T = T|merge(['CMTD']) %} {% endif %}
+        {% if V.tp > 0 %} {% set T = T|merge(['TP']) %} {% endif %}
+        {% if V.extra > 0 %} {% set T = T|merge(['Ex']) %} {% endif %}
+    
+        <tr class='{{ odd?"w3-theme-l5":"w3-theme-l4"}}'>        
+            {% if loop.first %}
+            <td  rowspan='{{ H.VList|length }}' class='vertical' >{{year}}<br>{{ H.statut.nom }}<br>{{ H.statut.obligation }} hETD</td>
+            <td  rowspan='{{ H.VList|length }}' class='situ_ref' >
+            {% if H.situationList|length >0 %}
+                <div>Situations Parcticulières :</div>
+                <ul>
+                    {% for S in H.situationList %}
+                        <li>{{ S.reduction }} hETD  - {{ S.nom }} - {{ S.commentaire }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% if H.referentielList|length >0 %}
+                <div>Référentiels :</div>
+                <ul>
+                    {% for R in H.referentielList %}
+                        {% if R.referentiel == 4 %}
+                        {% set stages = R.commentaire|json_decode %}
+                        {% set SL = [] %}
+                        {% for S in stages %}
+                        {% set SL = SL|merge([S.nom]) %}
+                        {% endfor %}
+                        <li>{{ R.volume }} hETD  - Stages {{ SL|join(", " )}}</li>
+                    {% else %}                    
+                        <li>{{ R.volume }} hETD  - {{ R.commentaire }}</li>
+                    {% endif %}                    
+                    {% endfor %}
+                </ul>
+            {% endif %}       
+            </td>
+            {% else %}
+            {% endif %}
+            <td class='w3-center'>{{ V.code }}</td>
+            <td class='v_intitule'>{{ V.intitule }}</td>
+            <td class='w3-center'>{{ V.hetd|f2 }} hETD</td>
+            <td class='w3-center'>{{ T|join(", ")}}</td>
+            <td class='w3-center'>{{ V.cursus }}</td>
+            <td class='w3-center'>{{  V.maquette|split('|')|join('<br>')|raw }}</td>
+        </tr>
+        {% endfor %}
+    {% endfor %}
+    </tbody>                
+</table>
+<br>
+<br>
+
+
+<script>
+function CopyToClipboard(id){
+    var r = document.createRange();
+    r.selectNode(document.getElementById(id));
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(r);
+    document.execCommand('copy');
+    window.getSelection().removeAllRanges();
+}
+</script>
+
+
+{% endblock %}

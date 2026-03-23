@@ -1,0 +1,24 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+    {% block respEtape %}
+    <h3>Responsable d'étape</h3>
+    <ul>
+        <li>Pour l'instant il n'y a rien à proposer</li>
+
+        {% set etapeList = App.auth.user.getEtapeResponsable() %}
+        <pre>
+            {{ dump(etapeList) }}
+        </pre>
+    </ul>
+    {% endblock respEtape %}
+
+    {% block divers %}
+
+    {% endblock divers %}
+
+</div> 
+{% endblock %}

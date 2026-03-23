@@ -1,0 +1,124 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+
+
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+    <h3>Liste des fiches ECUE pour l'année {{App.currentYear}} - {{App.currentYear + 1}}</h3>
+
+    <div class='w3-card-4 w3-theme-l4 w3-round-large'>
+    {% if FL|length > 0 %}
+        <div class='w3-center'>
+            <h5>Il y a {{FL|length}} personne{{ FL|length>1?"s":""}} qui ont des fiches ECUE en cours de rédaction</h5>
+        </div>
+        <table id='table'>
+            <thead>
+                <tr>
+                <th>Auteur</th>
+                <th>Intitulé</th>
+                <th>Diplôme</th>
+                <th>Mention</th>
+                <th>Parcours</th>
+                <th>Semestre</th>
+                <th>code ECUE</th>
+                <th>Notes de version</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for auteur in FL|keys %}
+                    {% set FL2 = FL[auteur] %}
+                    {% for name in FL2|keys %}
+                        {% set F = FL2[name].data %}
+                <tr >
+                    <td>{{auteur}}</td>
+                    <th class='w3-left'>
+                        <a href='/{{App.appName}}/ficheECUE/fiche/{{F.uid}}/{{name}}'>{{F.intituleECUE}}</a>
+                    </th>
+                    <td>{{ F.diplome }}</td>
+                    <td>{{ F.mention }}</td>
+                    <td>{{ F.parcours }}</td>
+                    <td class="w3-center">{{ F.semestre }}</td>
+                    <td class="w3-center">{{ F.codeECUE }}</td>
+                    <td>{{ F.noteVersion|split("\n")[0] }}</td>
+                </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class='w3-center'>
+            <h5>Vous n'avez aucune aucune fiche ECUE en cours de rédaction</h5>
+        </div>
+    {% endif %}
+    </div>
+</div>
+
+<script>
+
+    function copyToClipboard(what){
+        var lien = URL.parse(document.URL).origin+"/{{App.appName}}/ficheECUE/fiche/"+what;
+        navigator.clipboard.writeText(lien);
+        window.alert('Lien copié dans le presse papeir \n '+lien);
+    }
+
+    function deleteFicheECUE(name){
+        $.get( "/{{App.appName}}/ficheECUE/delete/"+name, function( data ) {
+            if (data == 'Done'){
+                window.location.reload();
+            } else {
+                alert( "Il y a eu un problème avec la suppression");
+            }
+        });
+    }
+
+    function destroyFicheECUE(name){
+        $.get( "/{{App.appName}}/ficheECUE/destroy/"+name, function( data ) {
+            if (data == 'Done'){
+                window.location.reload();
+            } else {
+                alert( "Il y a eu un problème avec la destruction");
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        $('#table').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+
+        $('#tableDeleted').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+
+
+
+    });
+</script>      
+
+
+{% endblock %}
+

@@ -1,0 +1,9 @@
+    {% set loggedUser = App.auth.user %}
+    {% set roleList = App.auth.roleList %}
+    {% set isConcerned = personne.id == loggedUser.id %}
+    {% set isRHE = roleList['bureauRHE'] is defined %}
+    {% set canSeeDetails = isConcerned or App.isRHE %}
+
+    <pre>
+        {{ dump('ou') }}
+    </pre>

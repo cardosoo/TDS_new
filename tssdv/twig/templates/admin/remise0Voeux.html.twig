@@ -1,0 +1,23 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+<div class="w3-card-4 w3-white w3-margin">
+    <div class="w3-container w3-light-grey  w3-center">
+        <b>Remise à zéro des voeux</b>
+    </div>
+    {% apply markdown_to_html %}
+
+    Opération réalisées :
+    - {{ nb }} voeux traités
+    - {{ deleted }} voeux supprimés
+    - {{ kept }} conservés
+
+    {% endapply %}
+
+    <div class="w3-container w3-light-grey  w3-center">
+        <b>La remise à zéro des voeux a été réalisée</b>
+    </div>
+</div>
+
+{% endblock %}

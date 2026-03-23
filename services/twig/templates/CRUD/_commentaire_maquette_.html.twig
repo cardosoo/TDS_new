@@ -1,0 +1,110 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _commentaire_maquette_.html.twig
+    created : Sun, 22 Mar 2026 23:12:16 +0100 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "commentaire_maquette", id: "{{ commentaire_maquette.id }}" }}'></i>commentaire_maquette</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "commentaire_maquette", F: "actif", id: "{{commentaire_maquette.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ commentaire_maquette.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block oneToManycommentaire_maquette_maquette_full %}
+<p>
+    {% block oneToManycommentaire_maquette_maquette_label %}
+    <label class='select' for='maquette'>
+        {{  commentaire_maquette.maquette ? commentaire_maquette.maquette.getCrudEditLink("maquette")|raw : "maquette"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "commentaire_maquette", F: "maquette", id: "{{commentaire_maquette.id}}" }}'></i>
+    </label>
+    {% endblock oneToManycommentaire_maquette_maquette_label %}
+    {% block oneToManycommentaire_maquette_maquette_active %}    
+    <input class='text {{ ( commentaire_maquette.maquette.id ==0 or  commentaire_maquette.maquette.actif)?"":" passif" }}'  value="{{ commentaire_maquette.maquette.generic() }}" name="maquette" id="maquette"  _id_="{{ commentaire_maquette.maquette.id }}">
+    <script>
+        setAutocomplete("#maquette", "/services/CRUD/L/Maquette");
+    </script>
+    {% endblock oneToManycommentaire_maquette_maquette_active %}    
+</p>
+{% endblock oneToManycommentaire_maquette_maquette_full %}
+
+{% block oneToManycommentaire_maquette_auteur_full %}
+<p>
+    {% block oneToManycommentaire_maquette_auteur_label %}
+    <label class='select' for='auteur'>
+        {{  commentaire_maquette.auteur ? commentaire_maquette.auteur.getCrudEditLink("auteur")|raw : "auteur"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "commentaire_maquette", F: "auteur", id: "{{commentaire_maquette.id}}" }}'></i>
+    </label>
+    {% endblock oneToManycommentaire_maquette_auteur_label %}
+    {% block oneToManycommentaire_maquette_auteur_active %}    
+    <input class='text {{ ( commentaire_maquette.auteur.id ==0 or  commentaire_maquette.auteur.actif)?"":" passif" }}'  value="{{ commentaire_maquette.auteur.generic() }}" name="auteur" id="auteur"  _id_="{{ commentaire_maquette.auteur.id }}">
+    <script>
+        setAutocomplete("#auteur", "/services/CRUD/L/Personne");
+    </script>
+    {% endblock oneToManycommentaire_maquette_auteur_active %}    
+</p>
+{% endblock oneToManycommentaire_maquette_auteur_full %}
+
+{% block date_full %}
+    <p>
+    {% block date_label %}
+    <label class='text' for="date"> date <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "commentaire_maquette", F: "date", id: "{{commentaire_maquette.id}}" }}'></i></label>    
+    {% endblock date_label %}
+    {% block date_active %}
+    <input class='text' type="datetime-local"  value="{{ commentaire_maquette.date|date('Y-m-d') }}T{{ commentaire_maquette.date|date('H:i') }}" name="date" id="date">
+
+    {% endblock date_active %}
+    </p>
+{% endblock date_full %}    
+
+{% block commentaire_full %}
+    <p>
+    {% block commentaire_label %}
+    <label class='text' for="commentaire"> commentaire <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "commentaire_maquette", F: "commentaire", id: "{{commentaire_maquette.id}}" }}'></i></label>    
+    {% endblock commentaire_label %}
+    {% block commentaire_active %}
+    <textarea mode='raw' class='textarea' name="commentaire" id="commentaire" size="10"  placeholder="">{{ commentaire_maquette.commentaire }}</textarea>
+
+    {% endblock commentaire_active %}
+    </p>
+{% endblock commentaire_full %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

@@ -1,0 +1,11 @@
+annee;nom;prenom;enseignement;code;matricule;variante;voeu_id;motif
+
+{%- for PB in PBS %}
+    {%- set V = PB.V %}
+    {%- set P = PB.P %}
+    {%- set E = PB.E %}
+    {%- set M = PB.M %}
+
+    {{~ App.currentYear}};{{P.nom|raw}};{{P.prenom|raw}};{{E.nom|raw}};{{E.code|raw}};{{P.ose|raw}};{{E.variante|raw}};{{V.id}};{{M|raw}}   
+
+{%- endfor %}

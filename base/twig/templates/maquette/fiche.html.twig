@@ -1,0 +1,21 @@
+{% extends "layout.html.twig" %}
+
+{% block header %}
+    <p>{{ M.nom }}</p>
+    <div  class="w3-panel w3-theme-l3 w3-center">Maquette : {{ M.nom }}</div>
+    <div  class="w3-panel w3-theme-l3 w3-center">Gestionnaire : {{M.gestionnaire.generic|raw }} Responsables : {{ M.responsable.generic|raw }}, {{M.coersponsable.generic|raw }}</div>
+{% endblock %}
+
+
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1000px;">
+    <div class="w3-row" style="width: 100%">
+        <div class="w3-sidebar" style="width: 350px;">
+            {% include "maquette/card.html.twig" %}
+        </div>
+        <div class="w3-col" style= "margin-left:350px; width:600px;">
+            {% include "maquette/decomposition.html.twig" %}
+        </div>
+    </div>
+</div>    
+{% endblock %}

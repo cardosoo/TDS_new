@@ -1,0 +1,34 @@
+{% extends "CRUD/base_Enseignement.html.twig" %}
+
+{#
+Attention, ici l'héritage se fait directement depuis base et non pas depuis _Enseignenement_.html.twig
+
+mais comme "CRUD/base_Enseignement.html.twig" étend lui-même _Enseignenement_.html.twig 
+alors il n'y a pas de problème au final c'est bien le template générique de l'application locale qui est modifié
+
+#}
+
+
+{# ajout du reste dans les voeux #}
+{% block header_endvoeuList_enseignement %}
+{{ parent() }}
+{% endblock header_endvoeuList_enseignement %}
+
+{% block line_endvoeuList_enseignement %}
+{{ parent() }}
+{% endblock line_endvoeuList_enseignement %}
+
+
+{# ajout du reste dans le panier #}
+{% block header_endpanierList_enseignement %}
+{{ parent() }}
+<th>Anc.</th>
+<th>Reste</th>
+{% endblock header_endpanierList_enseignement %}
+
+{% block line_endpanierList_enseignement %}
+{{ parent() }}
+<td>{{ Panier.getAnciennete()|f2 }}</td>
+<td>{{ Panier.personne.voeu_personne_bilan.heures|f2 }}</td>
+{% endblock line_endpanierList_enseignement %}
+

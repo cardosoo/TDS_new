@@ -1,0 +1,29 @@
+annee;nom;prenom;enseignement;code;type_vol_hor;cod_serv;cod_periode;type_interv;heures;cod_motif_np;id_contrat;cod_vol_hor;horaire_deb;horaire_fin
+{%- set TL = {"cm": 'CM', "td": 'TD', "ctd": 'CMTD', "tp": 'TP', "bonus": 'FORFAIT', "extra": 'FORFAIT'} %}
+{%- set SL = {"1": 'S1', "2": 'S2', "":""} %}
+{%- for Pid in vList|keys -%}
+    {% set P = App.app.getPersonne(Pid) %}
+    {%- for code in vList[Pid]|keys -%}
+        {%- set periode = "NULL" %}
+        {%- set cod_serv = App.appName ~ App.currentYear ~ "|" ~ vList[Pid][code]["voeuList"]|keys|join('|') %}
+        {%- set cod_elp = code %}
+        {%- set EList = [] %}
+        {%- for Vid in vList[Pid][code]["voeuList"]|keys -%} {# pour fabriquer code_serv et enseignement #}
+            {%- set V = App.app.getVoeu(Vid) %}
+            {%- set E = V.enseignement %}
+            {%- set ecueList = E.getStructEcueList() %}
+            {%- for ecueCode in ecueList|keys %}
+                {%- set periode = SL[ecueList[ecueCode].getPeriode()] %}
+            {%- endfor %}
+            {%- set EList = EList|merge([E.nom]) %}
+        {%- endfor -%}
+        {%- set enseignement = EList|join('|') %}
+        {%- for T in vList[Pid][code]["charge"]|keys -%} {# pour fabriquer code_serv et enseignement #}
+            {%- set H = vList[Pid][code]["charge"][T] %}
+            {%- set cod_vol_hor = [cod_serv, T]|join('|') %}
+
+            {{~ App.currentYear}};{{ P.nom|raw}};{{P.prenom|raw}};{{enseignement|raw}};{{code|raw}};PREVU;{{cod_serv}};{{periode}};{{T}};{{H}};;;{{cod_vol_hor}};;
+
+        {%- endfor -%}
+    {%- endfor %}
+{%- endfor -%}

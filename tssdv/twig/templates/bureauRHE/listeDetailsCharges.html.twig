@@ -1,0 +1,91 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px; margin-bottom:80px">    
+    <h3>Liste des enseignements qui ne sont pas rattachés à une maquette</h3>
+
+
+    <table id="tdsList" class="w3-table-all w3-centered">
+        <thead>
+            <th>NUAC</th>
+            <th>Intitule</th>
+            <th>Cursus</th>
+            <th>Composante</th>
+            <th>Maquette</th>
+            <th>g_CM</th>
+            <th>s_CM</th>
+            <th>d_CM</th>
+            <th>i_CM</th>
+            <th>g_CTD</th>
+            <th>s_CTD</th>
+            <th>d_CTD</th>
+            <th>i_CTD</th>
+            <th>g_TD</th>
+            <th>s_TD</th>
+            <th>d_TD</th>
+            <th>i_TD</th>
+            <th>g_TP</th>
+            <th>s_TP</th>
+            <th>d_TP</th>
+            <th>i_TP</th>
+            <th>g_extra</th>
+            <th>s_extra</th>
+            <th>d_extra</th>
+            <th>i_extra</th>
+        </thead>
+        <tbody>
+        {% for E in EL %}
+            <tr>
+                <td><a href='/{{App.appName}}/enseignement/{{E.id}}'>{{E.nuac}}</a></td>
+                <td><a href='/{{App.appName}}/enseignement/{{E.id}}'>{{E.intitule}}</a></td>
+                <th>{{E.enseignement_structure.cursus}}</th>
+                <th>{{E.enseignement_structure.composante}}</th>
+                <th>{{E.enseignement_structure.maquette}}</th>
+                <th>{{E.cm|f2}}</th>
+                <th>{{E.s_cm|f2}}</th>
+                <th>{{E.d_cm|f2}}</th>
+                <th>{{E.i_cm|f2}}</th>
+                <th>{{E.ctd|f2}}</th>
+                <th>{{E.s_ctd|f2}}</th>
+                <th>{{E.d_ctd|f2}}</th>
+                <th>{{E.i_ctd|f2}}</th>
+                <th>{{E.td|f2}}</th>
+                <th>{{E.s_td|f2}}</th>
+                <th>{{E.d_td|f2}}</th>
+                <th>{{E.i_td|f2}}</th>
+                <th>{{E.tp|f2}}</th>
+                <th>{{E.s_tp|f2}}</th>
+                <th>{{E.d_tp|f2}}</th>
+                <th>{{E.i_tp|f2}}</th>
+                <th>{{E.extra|f2}}</th>
+                <th>{{E.s_extra|f2}}</th>
+                <th>{{E.d_extra|f2}}</th>
+                <th>{{E.i_extra|f2}}</th>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div> 
+
+<script>
+    $(document).ready(function () {
+        $('#tdsList').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'portrait'
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock %}

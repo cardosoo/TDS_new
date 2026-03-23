@@ -1,0 +1,174 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _ECUE_.html.twig
+    created : Fri, 13 Mar 2026 08:02:05 +0100 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "ECUE", id: "{{ ECUE.id }}" }}'></i>ECUE</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "ECUE", F: "actif", id: "{{ECUE.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ ECUE.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block ordre_full %}
+    <p>
+    {% block ordre_label %}
+    <label class='text' for="ordre"> ordre <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "ECUE", F: "ordre", id: "{{ECUE.id}}" }}'></i></label>    
+    {% endblock ordre_label %}
+    {% block ordre_active %}
+    <input class='text' type="number"  value="{{ ECUE.ordre }}" name="ordre" id="ordre" placeholder="0">
+
+    {% endblock ordre_active %}
+    </p>
+{% endblock ordre_full %}    
+
+{% block code_full %}
+    <p>
+    {% block code_label %}
+    <label class='text' for="code"> code <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "ECUE", F: "code", id: "{{ECUE.id}}" }}'></i></label>    
+    {% endblock code_label %}
+    {% block code_active %}
+    <input class='text'  type="text" value="{{ ECUE.code }}" name="code" id="code" size="50" maxlength="100", placeholder="">
+
+    {% endblock code_active %}
+    </p>
+{% endblock code_full %}    
+
+{% block nom_full %}
+    <p>
+    {% block nom_label %}
+    <label class='text' for="nom"> nom <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "ECUE", F: "nom", id: "{{ECUE.id}}" }}'></i></label>    
+    {% endblock nom_label %}
+    {% block nom_active %}
+    <input class='text'  type="text" value="{{ ECUE.nom }}" name="nom" id="nom" size="50" maxlength="100", placeholder="">
+
+    {% endblock nom_active %}
+    </p>
+{% endblock nom_full %}    
+
+{% block peretu_full %}
+    <p>
+    {% block peretu_label %}
+    <label class='text' for="peretu"> peretu <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "ECUE", F: "peretu", id: "{{ECUE.id}}" }}'></i></label>    
+    {% endblock peretu_label %}
+    {% block peretu_active %}
+    <input class='text' type="number"  value="{{ ECUE.peretu }}" name="peretu" id="peretu" placeholder="100">
+
+    {% endblock peretu_active %}
+    </p>
+{% endblock peretu_full %}    
+
+{% block ects_full %}
+    <p>
+    {% block ects_label %}
+    <label class='text' for="ects"> ects <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "ECUE", F: "ects", id: "{{ECUE.id}}" }}'></i></label>    
+    {% endblock ects_label %}
+    {% block ects_active %}
+    <input class='text' type="number"  value="{{ ECUE.ects }}" name="ects" id="ects" step="any" placeholder="0">
+
+    {% endblock ects_active %}
+    </p>
+{% endblock ects_full %}    
+
+{% block oneToManyECUE_ue_full %}
+<p>
+    {% block oneToManyECUE_ue_label %}
+    <label class='select' for='ue'>
+        {{  ECUE.ue ? ECUE.ue.getCrudEditLink("ue")|raw : "ue"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "ECUE", F: "ue", id: "{{ECUE.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyECUE_ue_label %}
+    {% block oneToManyECUE_ue_active %}    
+    <input class='text {{ ( ECUE.ue.id ==0 or  ECUE.ue.actif)?"":" passif" }}'  value="{{ ECUE.ue.generic() }}" name="ue" id="ue"  _id_="{{ ECUE.ue.id }}">
+    <script>
+        setAutocomplete("#ue", "/service/CRUD/L/UE");
+    </script>
+    {% endblock oneToManyECUE_ue_active %}    
+</p>
+{% endblock oneToManyECUE_ue_full %}
+
+{% block oneToManyECUE_enseignement_full %}
+<p>
+    {% block oneToManyECUE_enseignement_label %}
+    <label class='select' for='enseignement'>
+        {{  ECUE.enseignement ? ECUE.enseignement.getCrudEditLink("enseignement")|raw : "enseignement"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "ECUE", F: "enseignement", id: "{{ECUE.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyECUE_enseignement_label %}
+    {% block oneToManyECUE_enseignement_active %}    
+    <input class='text {{ ( ECUE.enseignement.id ==0 or  ECUE.enseignement.actif)?"":" passif" }}'  value="{{ ECUE.enseignement.generic() }}" name="enseignement" id="enseignement"  _id_="{{ ECUE.enseignement.id }}">
+    <script>
+        setAutocomplete("#enseignement", "/service/CRUD/L/Enseignement");
+    </script>
+    {% endblock oneToManyECUE_enseignement_active %}    
+</p>
+{% endblock oneToManyECUE_enseignement_full %}
+
+    {% block oneToOne_structure_enseignement %}  
+    <fieldset>
+        <legend>structure_enseignement</legend>
+        {% if not isCreation %}
+
+    <table class='w3-table-all w3-hoverable w3-small'>
+        <thead>
+            <tr class='w3-light-blue'>    
+                    <th>periode</th>    
+                    <th>nbetu</th>    
+                    <th>code_ue</th>    
+                    <th>code_ecue</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>    
+                        <td>{{ ECUE.structure_enseignement.periode }}</td>    
+                        <td>{{ ECUE.structure_enseignement.nbetu }}</td>    
+                        <td>{{ ECUE.structure_enseignement.code_ue }}</td>    
+                        <td>{{ ECUE.structure_enseignement.code_ecue }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        {% endif %}
+    </fieldset>
+    {% endblock oneToOne_structure_enseignement%}
+    
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

@@ -1,0 +1,112 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _enseignement_etudiant_details_.html.twig
+    created : Fri, 02 May 2025 23:33:41 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "enseignement_etudiant_details", id: "{{ enseignement_etudiant_details.id }}" }}'></i>enseignement_etudiant_details</legend>
+
+{% block cm_full %}
+    <p>
+    {% block cm_label %}
+    <label class='text' for="cm"> cm <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "enseignement_etudiant_details", F: "cm", id: "{{enseignement_etudiant_details.id}}" }}'></i></label>    
+    {% endblock cm_label %}
+    {% block cm_active %}
+    <input class='text' type="number"  value="{{ enseignement_etudiant_details.cm }}" name="cm" id="cm" step="any" placeholder="0">
+
+    {% endblock cm_active %}
+    </p>
+{% endblock cm_full %}    
+
+{% block ctd_full %}
+    <p>
+    {% block ctd_label %}
+    <label class='text' for="ctd"> ctd <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "enseignement_etudiant_details", F: "ctd", id: "{{enseignement_etudiant_details.id}}" }}'></i></label>    
+    {% endblock ctd_label %}
+    {% block ctd_active %}
+    <input class='text' type="number"  value="{{ enseignement_etudiant_details.ctd }}" name="ctd" id="ctd" step="any" placeholder="0">
+
+    {% endblock ctd_active %}
+    </p>
+{% endblock ctd_full %}    
+
+{% block td_full %}
+    <p>
+    {% block td_label %}
+    <label class='text' for="td"> td <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "enseignement_etudiant_details", F: "td", id: "{{enseignement_etudiant_details.id}}" }}'></i></label>    
+    {% endblock td_label %}
+    {% block td_active %}
+    <input class='text' type="number"  value="{{ enseignement_etudiant_details.td }}" name="td" id="td" step="any" placeholder="0">
+
+    {% endblock td_active %}
+    </p>
+{% endblock td_full %}    
+
+{% block tp_full %}
+    <p>
+    {% block tp_label %}
+    <label class='text' for="tp"> tp <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "enseignement_etudiant_details", F: "tp", id: "{{enseignement_etudiant_details.id}}" }}'></i></label>    
+    {% endblock tp_label %}
+    {% block tp_active %}
+    <input class='text' type="number"  value="{{ enseignement_etudiant_details.tp }}" name="tp" id="tp" step="any" placeholder="0">
+
+    {% endblock tp_active %}
+    </p>
+{% endblock tp_full %}    
+
+{% block extra_full %}
+    <p>
+    {% block extra_label %}
+    <label class='text' for="extra"> extra <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "enseignement_etudiant_details", F: "extra", id: "{{enseignement_etudiant_details.id}}" }}'></i></label>    
+    {% endblock extra_label %}
+    {% block extra_active %}
+    <input class='text' type="number"  value="{{ enseignement_etudiant_details.extra }}" name="extra" id="extra" step="any" placeholder="0">
+
+    {% endblock extra_active %}
+    </p>
+{% endblock extra_full %}    
+
+{% block bonus_full %}
+    <p>
+    {% block bonus_label %}
+    <label class='text' for="bonus"> bonus <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "enseignement_etudiant_details", F: "bonus", id: "{{enseignement_etudiant_details.id}}" }}'></i></label>    
+    {% endblock bonus_label %}
+    {% block bonus_active %}
+    <input class='text' type="number"  value="{{ enseignement_etudiant_details.bonus }}" name="bonus" id="bonus" step="any" placeholder="0">
+
+    {% endblock bonus_active %}
+    </p>
+{% endblock bonus_full %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

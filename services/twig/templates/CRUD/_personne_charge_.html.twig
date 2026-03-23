@@ -1,0 +1,52 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _personne_charge_.html.twig
+    created : Sun, 22 Mar 2026 23:12:16 +0100 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "personne_charge", id: "{{ personne_charge.id }}" }}'></i>personne_charge</legend>
+
+{% block charge_full %}
+    <p>
+    {% block charge_label %}
+    <label class='text' for="charge"> charge <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "personne_charge", F: "charge", id: "{{personne_charge.id}}" }}'></i></label>    
+    {% endblock charge_label %}
+    {% block charge_active %}
+    <input class='text' type="number"  value="{{ personne_charge.charge }}" name="charge" id="charge" step="any" placeholder="0">
+
+    {% endblock charge_active %}
+    </p>
+{% endblock charge_full %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

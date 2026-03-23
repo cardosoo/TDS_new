@@ -1,0 +1,74 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+    {% block respUE %}
+        <h3>Tableau de service pour les enseignements dont vous êtes responsable </h3>
+
+        <table id="tdsList" class="w3-table-all w3-centered">
+            <thead>
+                <th>Enseignement</th>
+                <th>Personne</th>
+                <th>CM</th>
+                <th>CTD</th>
+                <th>TD</th>
+                <th>TP</th>
+                <th>Extra</th>
+                <th>Bonus</th>
+                <th>Etat</th>
+            </thead>
+            <tbody>
+            {% for elm in eList %}
+                {% set E = elm.E %}
+                {% for V in E.voeuList %}
+                <tr>
+                    <td><a href='/{{App.appName}}/enseignement/{{E.id}}'>{{E.getGeneric() }}</a></td>
+                    <td><a href='/{{App.appName}}/personne/{{V.personne.id }}'>{{V.personne.getGeneric() }}</a></td>
+                    <td>{{V.cm|f2}}</td>
+                    <td>{{V.ctd|f2}}</td>
+                    <td>{{V.td|f2}}</td>
+                    <td>{{V.tp|f2}}</td>
+                    <td>{{V.extra|f2}}</td>
+                    <td>{{V.bonus|f2}}</td>
+                    <td>
+                    {% if V.etat_ts == 2 %}
+                    à Valider
+                    {% elseif V.etat_ts ==3 %}
+                    Validé
+                    {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endblock respUE %}
+
+    {% block divers %}
+
+    {% endblock divers %}
+
+</div> 
+
+    <script>
+        $(document).ready(function () {
+            $('#tdsList').DataTable({
+                order: [[0, "asc"], [1, "asc"]],
+                dom: 'Bfrtip',
+                paging: false,
+                buttons: [
+                    'copy',
+                    'excel',
+                    'csv',
+                    {
+                        extend: 'pdf',
+                        orientation: 'portrait'
+                    }
+                ]
+            });
+        });
+    </script>
+
+{% endblock %}

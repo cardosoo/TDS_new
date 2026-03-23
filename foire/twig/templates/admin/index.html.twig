@@ -1,0 +1,45 @@
+{% extends "admin/base_index.html.twig" %}
+
+{% block section %}
+<div class="w3-cell-row">
+
+  <div class="w3-container w3-cell">
+    <div class="w3-card">
+    {{ parent() }}
+    </div>
+  </div>
+
+  <div class="w3-container w3-cell">
+    <div class="w3-card" style="max-width:1600px;margin-top:80px">
+{#
+        <h3>transition 2020...</h3>
+        <ul>
+            <li><a href="/{{App.appName}}/t2020/migrationVoeux2020">Migration des voeux</a> depuis foire2020</li>
+            <li><a href="/{{App.appName}}/t2020/calculReports2020">Calcul des reports</a> depuis foire2020</li>
+            <li>Importation <a href="/{{App.appName}}/t2020/importCodesLDAP2020">Code LDAP</a> dans foire2020</li>
+        </ul>
+
+#}
+        {% if App.auth.isSuperAdmin %}
+        <h3>Administration de la foire</h3>
+        <ul>
+            <li><a href="/{{App.appName}}/admin/setChargeUFR">Change charge UFR</a> ({{ App.texte.chargeReference }} hETD)</li>
+            <li><a href="/{{App.appName}}/admin/deletePanierInactive">Suppression des paniers avec un enseignement ou une personne inactive</a></li>
+        </ul>
+        {% endif %}
+        {% if App.auth.isSuperAdmin %}
+        <h3>Nouvelle Année</h3>
+        <ul>
+            <li><a href="/{{App.appName}}/admin/migrationSituations">Transfert des situations particulières</a></li>
+            <li><a href="/{{App.appName}}/admin/migrationReferentiels">Transfert des fonctions du référentiel</a></li>
+            <li><a href="/{{App.appName}}/admin/migrationVoeux">Transfert des voeux prioritaires</a></li>
+
+            <li><a href="/{{App.appName}}/admin/calculReports">Calcul des reports pour l'année en cours</a></li>
+
+        </ul>
+        {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock section %}

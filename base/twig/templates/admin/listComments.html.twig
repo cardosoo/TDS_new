@@ -1,0 +1,59 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+    <br>
+    <h3>tous les commentaires pour {{ E }}</h3>
+        
+    
+    <table id="list" class="display compact">
+        <thead>
+            <tr>
+                <th>date</th>
+                <th>auteur</th>
+                <th>{{E}}</th>
+                <th>Commentaire</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in CL %}
+            <tr>
+                <td>{{ c.date }}</td>
+                <td>{{ c.auteur.getGeneric }}</td>
+                {% if entity == 'Personne' %}
+                     <td>{{ c.personne.getGenericWithLink|raw }}</td>
+                {% elseif entity == 'Enseignement' %}
+                    <td>{{ c.enseignement.getGenericWithLink|raw }}</td>
+                {% else %}
+                    <td>{{ c.personne.getGenericWithLink|raw }}</td>
+                    {# <td>? {{ E  }}?</td> #}
+                {% endif %}
+                <td>{{ c.commentaire|markdown_to_html|raw}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#list').DataTable({
+                order: [[1, "asc"], [0, "asc"]],
+                dom: 'Bfrtip',
+                paging: false,
+                buttons: [
+                    'copy',
+                    'excel',
+                    'csv',
+                    {
+                        extend: 'pdf',
+                        orientation: 'portrait'
+                    }
+                ]
+            });
+        });
+    </script>
+{% endblock %}
+
+

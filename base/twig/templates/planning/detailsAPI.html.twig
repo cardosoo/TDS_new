@@ -1,0 +1,14 @@
+"id","code","variante","Enseignement","nbetu","g_cm","s_cm","d_cm","n_cm","g_td","s_td","d_td","n_td","g_tp","s_tp","d_tp","n_tp"
+{%- for E in EL %}
+,"{{E.nom}}"
+{%- endfor %}
+
+{% for D in DL %}
+"{{D.id}}","{{D.code}}","{{D.variante}}","{{D.nom|raw}}","{{D.nbetu}}","{{D.g_cm}}","{{D.s_cm}}","{{D.d_cm}}","{{D.n_cm}}","{{D.g_td}}","{{D.s_td}}","{{D.d_td}}","{{D.n_td}}","{{D.g_tp}}","{{D.s_tp}}","{{D.d_tp}}","{{D.n_tp}}"
+{%- for code in EL|keys %}
+,"{{D.etapeList[code]}}"
+{%- endfor %}
+
+"{{D.id}}","{{D.mail}}"
+{% endfor %}
+

@@ -1,0 +1,9 @@
+{% extends "enseignement/base_card.html.twig" %}
+
+{% block voeuxCard %}            
+            {% include(["enseignement/voeuxCard.html.twig", "enseignement/foire_voeuxCard.html.twig"]) %}
+{% endblock voeuxCard %}             
+
+{% block extendBaseCard %}
+    {% include(["enseignement/panierCard.html.twig", "enseignement/foire_panierCard.html.twig"]) %}
+{% endblock extendBaseCard %}             

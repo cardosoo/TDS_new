@@ -1,0 +1,118 @@
+{% if App.auth.isAuth %}
+    {% if App.auth.inBase %}
+        <div class='w3-card w3-round w3-white w3-xlarge w3-center'>Bienvenue dans la foire {{ App.auth.user.prenom }} {{ App.auth.user.nom }}  !</div>
+    {% else %}
+        <div class='w3-card  w3-round w3-red  w3-xlarge w3-center'>Vous êtes êtes identifié avec l'identifant {{ App.auth.uid }}. 
+        Il n'y a pas de lien entre cet identifiant et un compte de la foire
+        Votre accès est limité.
+        </div>
+    {% endif %}
+{% else %}
+    <div class='w3-card  w3-round w3-red  w3-xlarge w3-center'>Vous êtes ici sans identification - votre accès est limité</div>
+{% endif %}
+
+# Répartition des enseignements {{ App.currentYear }} - {{ App.currentYear + 1 }}
+
+***UFR de Physique de l’Université Paris Cité***
+{% if App.phase == 'avant' %}
+
+## Déroulement des opérations (pré-foire)
+
+- Étape 1 : du {{ App.texte.debutPanier }} au {{ App.texte.debutVoeux }}, vous devez : 
+    - **prendre connaissance** de la [procédure d'attribution des enseignements](/{{App.appName}}/texte/procedure),
+    - compléter et mettre à jour votre [fiche enseignant](/{{App.appName}}/personne/{{App.auth.user.id}}) (coordonnées et photo),
+   - vérifier que les informations sur votre situation personnelle sont à jour (voir sous votre photo, "statut", décharges pour prises de responsabilités PCC/PCA, délagations, IUF, CRCT, autres) ; **contactez la foire pour une mise à jour**,
+    - consulter les enseignements et leur syllabus, et les maquettes correspondantes,
+    - contacter les responsables de filière si besoin,
+    - **remplir votre *Panier*** avec les enseignements qui pourraient vous intéresser. Remarque : soyez exhaustif dans votre panier pour faciliter les phases suivantes.
+
+- Étape 2 : du {{ App.texte.debutVoeux }} au {{ App.texte.limiteVoeux  }} vous pourrez faire vos vœux de manière électronique en vous limitant à votre service prévisionnel.
+
+- Étape 3 : du {{ App.texte.debutDiagonalisation }} au {{ App.texte.finDiagonalisation }}, sur la base de vos vœux et des préférences générales que vous aurez exposées dans votre panier, la foire diagonalisera la base de donnée &mdash; nous proposerons des modifications aux vœux afin que tous les enseignements soient exactement pourvus.
+
+- Étape 4 : fin de la foire {{ App.currentYear }} qui sera fêtée autour d'un buffet le {{ App.texte.dateFoire}} entre 11h30 et 14h00.
+
+{% endif %}
+
+{% if App.phase == 'paniers' %} {# Phase de constitution des paniers #}
+
+## Déroulement des opérations (panier)
+
+- Étape 1 : jusqu'au {{ App.texte.debutVoeux }}, vous devez : 
+    - **prendre connaissance** de la [procédure d'attribution des enseignements](/{{App.appName}}/texte/procedure),
+    - compléter et mettre à jour votre [fiche enseignant](/{{App.appName}}/personne/{{App.auth.user.id}}) (coordonnées et photo),
+    - vérifier que les informations sur votre situation personnelle sont à jour (voir sous votre photo, "statut", décharges pour prises de responsabilités PCC/PCA, délagations, IUF, CRCT, autres) ; **contactez la foire pour une mise à jour**,
+    - consulter les enseignements et leur syllabus, et les maquettes correspondantes,
+    - contacter les responsables de filière si besoin,
+    - **remplir votre *Panier*** avec les enseignements qui pourraient vous intéresser. Remarque : soyez exhaustif dans votre panier pour faciliter les phases suivantes.
+
+- Étape 2 : du {{ App.texte.debutVoeux }} au {{ App.texte.limiteVoeux  }} vous pourrez faire vos vœux de manière électronique en vous limitant à votre service prévisionnel.
+
+- Étape 3 : du {{ App.texte.debutDiagonalisation }} au {{ App.texte.finDiagonalisation }}, sur la base de vos vœux et des préférences générales que vous aurez exposées dans votre panier, la foire diagonalisera la base de donnée &mdash; nous proposerons des modifications aux 
+vœux afin que tous les enseignements soient exactement pourvus.
+
+- Étape 4 : fin de la foire {{ App.currentYear }} qui sera fêtée autour d'un buffet le {{ App.texte.dateFoire}} entre 11h30 et 14h00.
+
+
+{% elseif App.phase ==  'voeux' %} {# Phase des voeux #}
+
+## Déroulement des opérations (vœux)
+
+- Étape 2 : jusqu'au {{ App.texte.limiteVoeux }} vous pouvez faire vos vœux de manière électronique en vous limitant à votre service prévisionnel.
+Pendant cette période des vœux, vous pouvez :
+    - **émettre un vœu** (voir [Comment émettre un vœu](/{{App.appName}}/texte/voeu)),
+    - compléter votre [fiche enseignant](/{{App.appName}}/personne/{{App.auth.user.id}}) (coordonnées et photo),
+   - vérifier que les informations sur votre situation personnelle sont à jour (voir sous votre photo, "statut", décharges pour prises de responsabilités PCC/PCA, délagations, IUF, CRCT, autres) ; **contactez la foire pour une mise à jour**,
+    - consulter les enseignements et leur syllabus, et les maquettes correspondantes,
+    - contacter les responsables de filières si besoin,
+    - modifier votre *Panier*.
+    - relire la [procédure d'attribution des enseignements](/{{App.appName}}/texte/procedure),
+
+- Étape 3 : du {{ App.texte.debutDiagonalisation}} au {{ App.texte.finDiagonalisation}}, sur la base de vos vœux et des préférences générales 
+que vous aurez exposées, la foire diagonalisera la base de donnée &mdash; nous proposerons des modifications aux 
+vœux afin que tous les enseignements soient exactement pourvus.
+
+- Étape 4 : fin de la foire {{ App.currentYear }} qui sera fêtée autour d'un buffet le {{ App.texte.dateFoire}} entre 11h30 et 14h00.
+
+{% elseif  App.phase ==  'diagonalisation' %} {# phase de diagonalisation #}
+
+## La phase des voeux est terminée ##
+
+- Étape 3 : du {{ App.texte.debutDiagonalisation}} au {{ App.texte.finDiagonalisation}}, sur la base de vos vœux et des préférences générales 
+que vous aurez exposées, la foire diagonalisera la base de donnée &mdash; nous proposerons des modifications aux 
+vœux afin que tous les enseignements soient exactement pourvus.
+
+
+## Fin de la foire {{ App.currentYear }} le {{ App.texte.dateFoire }}.
+
+L'UFR de physique vous invite à un buffet le {{ App.texte.dateFoire}} enre 11h30 et 14h00.
+
+En attendant, vous pouvez :
+
+- relire la [procédure d'attribution des enseignements](/{{App.appName}}/texte/procedure),
+- compléter votre [fiche enseignant](/{{App.appName}}/personne/{{App.auth.user.id}}) (coordonnées et photo),
+- consulter les enseignements et leur syllabus, et les maquettes correspondantes,
+- contacter les responsables de filière si besoin.
+
+
+{% elseif  App.phase ==  'après' %} {# la foire est passée #}
+
+## La foire {{ App.currentYear }} a été clôturée le {{ App.texte.dateFoire}}.
+
+Vous pouvez toujours :
+
+- **prendre connaissance** de la [procédure d'attribution des enseignements](/{{App.appName}}/texte/procedure),
+- compléter votre [fiche enseignant](/{{App.appName}}/personne/{{App.auth.user.id}}) (coordonnées et photo),
+- consulter les enseignements et leur syllabus, et les maquettes correspondantes,
+- contacter les responsables de filière si besoin.
+
+{% endif %}
+
+---
+
+### Pour accéder aux foires des autres années, vous pouvez utiliser le menu en haut à gauche de cette page ou utiliser les liens ci-dessous :
+
+<ul>
+{% for year in 0..5 %}
+    <li><a href='/{{App.appName}}/setCurrentYear/{{App.currentYear - year}}'>foire{{App.currentYear - year}}</a></li>
+{% endfor %}

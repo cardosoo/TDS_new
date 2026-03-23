@@ -1,0 +1,40 @@
+{% if V %}
+<div class='w3-responsive'  style="font-size: xx-small">
+    <table class='w3-table-all w3-hoverable'  style='width: 99%;'>
+        <thead>
+            <tr class='w3-theme-l1'>
+                <th>Enseignant</th>
+                <th class="w3-center">CM</th>
+                <th class="w3-center">CTD</th>
+                <th class="w3-center">TD</th>
+                <th class="w3-center">TP</th>
+                <th class="w3-center">Ext</th>
+                <th class="w3-center">Bon</th>
+                <th class="w3-center">Anc</th>
+                <th class="w3-center">Cor</th>
+                <th class="w3-center">hTD</th>
+            </tr>
+        </thead>
+        <tbody class='w3-theme-l2'>
+            {% for v in V%}
+            <tr>
+                <th><a href="/{{ App.appName }}/personne/{{ v.personne.id}}">{{ v.personne.prenom }} {{ v.personne.nom }}</a></th>
+                <td class="w3-center">{{ v.voeu.cm|f2 }}</td>
+                <td class="w3-center">{{ v.voeu.ctd|f2 }}</td>
+                <td class="w3-center">{{ v.voeu.td|f2 }}</td>
+                <td class="w3-center">{{ v.voeu.tp|f2 }}</td>
+                <td class="w3-center">{{ v.voeu.extra|f2 }}</td>
+                <td class="w3-center">{{ v.voeu.bonus|f2 }}</td>
+                <td class="w3-center">{{ v.voeu.anciennete|f2 }}</td>
+                <td class="w3-center">{{ 't'==v.voeu.correspondant?'oui':'' }}</td>                                        
+                <td class="w3-center">{{ v.voeu_bilan_ligne.heures|f2 }}</td>                                        
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+</div>
+{% else %}
+<div class='w3-responsive w3-theme-l1 w3-center' style="font-size: large">Pas d'équipe l'année {{ cmpl.annee }}</div>
+{% endif %}
+

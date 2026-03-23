@@ -1,0 +1,86 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _Heritage_.html.twig
+    created : Fri, 02 May 2025 23:33:41 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "Heritage", id: "{{ Heritage.id }}" }}'></i>Heritage</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Heritage", F: "actif", id: "{{Heritage.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ Heritage.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block oneToManyHeritage_enfants_full %}
+<p>
+    {% block oneToManyHeritage_enfants_label %}
+    <label class='select' for='parent'>
+        {{  Heritage.parent ? Heritage.parent.getCrudEditLink("parent")|raw : "parent"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Heritage", F: "parent", id: "{{Heritage.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyHeritage_enfants_label %}
+    {% block oneToManyHeritage_enfants_active %}    
+    <input class='text {{ ( Heritage.parent.id ==0 or  Heritage.parent.actif)?"":" passif" }}'  value="{{ Heritage.parent.generic() }}" name="parent" id="parent"  _id_="{{ Heritage.parent.id }}">
+    <script>
+        setAutocomplete("#parent", "/foire/CRUD/L/Enseignement");
+    </script>
+    {% endblock oneToManyHeritage_enfants_active %}    
+</p>
+{% endblock oneToManyHeritage_enfants_full %}
+
+{% block oneToManyHeritage_parents_full %}
+<p>
+    {% block oneToManyHeritage_parents_label %}
+    <label class='select' for='enfant'>
+        {{  Heritage.enfant ? Heritage.enfant.getCrudEditLink("enfant")|raw : "enfant"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Heritage", F: "enfant", id: "{{Heritage.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyHeritage_parents_label %}
+    {% block oneToManyHeritage_parents_active %}    
+    <input class='text {{ ( Heritage.enfant.id ==0 or  Heritage.enfant.actif)?"":" passif" }}'  value="{{ Heritage.enfant.generic() }}" name="enfant" id="enfant"  _id_="{{ Heritage.enfant.id }}">
+    <script>
+        setAutocomplete("#enfant", "/foire/CRUD/L/Enseignement");
+    </script>
+    {% endblock oneToManyHeritage_parents_active %}    
+</p>
+{% endblock oneToManyHeritage_parents_full %}
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

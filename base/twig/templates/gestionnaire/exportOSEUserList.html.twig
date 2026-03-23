@@ -1,0 +1,149 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+
+<style>
+#myProgress {
+  width: 100%;
+  background-color: grey;
+}
+
+#myBar {
+  width: 0%;
+  height: 30px;
+  background-color: #4CAF50;
+  text-align: center; /* To center it horizontally (if you want) */
+  line-height: 30px;  /* To center it vertically */
+  color: white;
+}
+</style>
+
+<script>
+
+    var testDestNum = "{{ App.auth.user.id }}";
+    var personneList = [];
+
+    function openMessage() {
+    }
+
+    function download(filename, text) {
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        element.setAttribute('download', filename);
+
+        element.style.display = 'none';
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
+    }
+
+
+    function doExport(){
+        var form = $('#statuts')[0];
+        var data = new FormData(form);
+        var statutList = data.getAll('statut[]');
+        var pList = [];
+        if (0 == statutList.length){
+            pList = [testDestNum];
+        } else {
+            for(personne of personneList){
+                if (statutList.includes(personne.statut )){
+                    pList.push(personne.id);
+                }
+            }
+        }
+        //console.log(pList);
+
+        $.post("exportOSE", {'data[]': pList} )
+        .done(function(json) {
+            data = JSON.parse(json);
+            download("SERVICE_{{App.currentYear}}.csv", data["SERVICE"]);
+            download("VOLUME_HORAIRE_{{App.currentYear}}.csv", data["VOLUME_HORAIRE"]);
+            download("VOLUME_PBS_{{App.currentYear}}.csv", data["PBS"]);
+        });
+    }
+
+    $( function() {
+        $.widget( "custom.catcomplete", $.ui.autocomplete, {
+        _create: function() {
+            this._super();
+            this.widget().menu( "option", "items", "> :not(.ui-autocomplete-category)" );
+        },
+        _renderMenu: function( ul, items ) {
+            var that = this,
+            currentCategory = "";
+            $.each( items, function( index, item ) {
+            var li;
+            if ( item.category != currentCategory ) {
+                ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+                currentCategory = item.category;
+            }
+            li = that._renderItemData( ul, item );
+            if ( item.category ) {
+                li.attr( "aria-label", item.category + " : " + item.label );
+            }
+            });
+        }
+        });
+
+        personneList = [
+         {% for p in personneList %}    
+        { label: "{{ p.prenom }} {{ p.nom }}", category: "{{ p.statut.nom }}", id: "{{ p.id }}", statut: "{{ p.statut.id }}" },
+        {% endfor %}
+        ];
+    
+        $( "#userForVisu" ).catcomplete({
+        delay: 0,
+        source: personneList,
+        select: function( event, ui ) {
+            testDestNum = ui.item.id;
+            openMessage();
+          }
+        });
+    });
+
+          
+</script>
+
+
+<div class="w3-row">
+    <div class="w3-third w3-container">
+        <div class="w3-card">
+            <label>Choisir une personne particulière</label>
+            <input id='userForVisu' >
+            <br>
+            <br>
+        </div>
+
+        <div class="w3-card">
+            <div class="w3-bar w3-black">
+                <span id='sendButton' class="w3-bar-item w3-button" onclick="doExport()">Fabriquer les fichiers d'export</span>
+            </div>            
+            <div class="w3-card">
+                <div id="myProgress">
+                    <div id="myBar"></div>
+                </div>
+                <div id="compteRendu" class="w3-container city">
+                </div>
+            </div>
+            <form id="statuts">
+                <p>Sélectionner les destinataires par statuts<br>
+                    Si aucun statut n'est sélectionné, l'export se fera uniquement pour la personne sélectionnée ci-dessus'</p>
+                {% for s in statutList %}
+                <input id = 'statut{{ s.id }}' type="checkbox" name="statut[]" value="{{ s.id }}">
+                <label for='statut{{ s.id }}'>{{ s.nom }}</label><br>
+                {% endfor %}
+            </form>
+        </div>
+    </div>        
+</div>
+
+<br>
+<br>
+<br>
+<br>
+{% endblock%}

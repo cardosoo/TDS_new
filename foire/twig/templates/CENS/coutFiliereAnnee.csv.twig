@@ -1,0 +1,12 @@
+{%- set ordre = 100 %}
+ordre;maquette;Diplome;Étape;Effectif;Coût en HETD;Coût composante
+{%~ for p in params %}{# |slice(0,1) #}
+  {%~ set ordre = ordre+1 %}
+{{ordre}};"{{ p.composante.nom}}";;;;;"{{ p.coutComposante|f2 }}"
+  {%~ for l in p.list %}
+    {%~ set ordre = ordre+1 %}
+{{ordre}};"{{l.maquette}}";"{{l.diplome}}";"{{l.etape.nom }}";"{{l.etape.nbetu}}";"{{l.cout|f2 }}"
+  {%~ endfor %}
+{%~ endfor %}
+
+

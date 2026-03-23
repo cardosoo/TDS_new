@@ -1,0 +1,63 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+<div class="w3-cell-row">
+
+    <h3>Liste des fonctions du référentiel </h3>
+
+    <table class="standardList" class="w3-table-all w3-centered">
+        <thead>
+                <th>Referentiel</th>
+                <th>Fonction</th>
+                <th>code OSE</th>
+                <th>Personne</th>
+                <th>Réduction</th>
+                <th>commentaire</th>
+        </thead>
+        <tbody>
+            {% for pr in prList %}
+            <tr>
+                <td>{{ pr.foncref.referentiel.code }}</td>
+                <td>{{ pr.foncref.intitule }}</td>
+                <td>{{ pr.personne.ose }}</td>
+                <td>{{ pr.personne.getGenericWithLink()|raw }}</td>
+                <td>{{ pr.volume }}</td>
+               <td>
+                    {% if pr.foncref.id ==4 %}
+                    {% set stageList = pr.commentaire|json_decode %}
+                    <ul>
+                    {% for stage in stageList %}
+                        <li>{{stage.num}} {{stage.nom}}</li>
+                    {% endfor %}
+                    </ul>
+                    {% else %}
+                    <div>{{ pr.commentaire|markdown_to_html|raw }}</div>                    
+                    {% endif %}
+                </td>
+             </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+ 
+
+</div> 
+<script>
+    $(document).ready(function () {
+        $('.standardList').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock %}

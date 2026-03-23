@@ -1,0 +1,98 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+<div class="w3-cell-row">
+
+    <h3>Liste des utilisateurs - LDAP </h3>
+    <table class="standardList" class="w3-table-all w3-centered">
+        <thead>
+            <tr>
+                <th colspan='4'>Base de données</th>
+                <th colspan='5'>LDAP</th>
+            </tr>
+            <tr>
+                <th>uid</th>
+                <th>code OSE</th>
+                <th>Personne</th>
+                <th>Statut</th>
+                <th>mail</th>
+                <th>uid</th>
+                <th>codeOSE</th>
+                <th>Personne </th>
+                <th>mail</th>
+            </tr>    
+        </thead>
+        <tbody>
+            {% for cP in pList %}
+                {% set P = cP.P %}
+            <tr>
+                <td>{{ P.uid }}</td>
+                <td>{{ P.ose }}</td>
+                <td>{{ P.getGenericWithLink()|raw }}</td>
+                <td>{{ P.statut.getGeneric()|raw }}</td>
+                <td>{{ P.email }}</td>
+                {% if (cP.fromUid is not empty) and (cP.fromUid.supannaliaslogin == cP.fromOse.supannaliaslogin) %}
+                    <td>{{ cP.fromUid.uid }}</td>
+                    <td>{{ cP.fromUid.supannempid }}</td>
+                    <td>{{ cP.fromUid.displayname }}</td>
+                    <td>{{ cP.fromUid.mail }}</td>
+
+                {% else %}
+                    {% if (cP.fromOse) is empty%}
+                    <td>---</td>
+                    {% else %}
+                    <td>{{cP.fromOse.uid}}</td>
+                    {% endif %}
+                    {% if (cP.fromUid) is empty %}
+                    <td>---</td>
+                    {% else %}
+                    <td>{{cP.fromUid.supannempid}}</td>
+                    {% endif %}
+
+                    {% set dn = [] %}
+                    {% if (cP.fromOse) is not empty%}
+                    {% set dn = dn|merge([cP.fromOse.displayname]) %}
+                    {% endif %}
+                    {% if (cP.fromUid) is not empty %}
+                    {% set dn = dn|merge([cP.fromUid.displayname]) %}
+                    {% endif %}
+                    <td>{{dn|join(', ')}}
+                    </td>
+                    {% set m = [] %}
+                    {% if (cP.fromOse) is not empty%}
+                    {% set m = m|merge([cP.fromOse.mail]) %}
+                    {% endif %}
+                    {% if (cP.fromUid) is not empty %}
+                    {% set m = m|merge([cP.fromUid.mail]) %}
+                    {% endif %}
+                    <td>{{m|join(', ')}}
+                    </td>
+                
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+ 
+
+</div> 
+<script>
+    $(document).ready(function () {
+        $('.standardList').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock %}

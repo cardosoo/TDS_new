@@ -1,0 +1,97 @@
+<?php
+namespace Model;
+use \TDS\Model\Entity;
+use \TDS\Model\Field;
+
+/*
+* This file is auto-generated and should not be changed by hand.
+* filename : _enseignement_etudiant_details_.php
+* created : Sat, 12 Apr 2025 22:55:31 +0200 UTC
+*/ 
+
+interface _enseignement_etudiant_details_interface_ {
+    const dbName = 'enseignement_etudiant_details';
+    const idName = 'id';
+    const SEARCH = array (
+);
+    const GENERIC = NULL;
+    const ORDER = NULL;
+
+    // les définitions de l'entité enseignement_etudiant_details
+    const entityDef = [
+
+        'cm' => [
+            'dbName' => 'cm',
+            'type' => Field::FLOAT,
+            'size' => 100,
+            'default' => 0,
+            'nullable' => TRUE,
+            'twigName' => 'cm',
+            'mode' => 'raw',
+            ],
+
+        'ctd' => [
+            'dbName' => 'ctd',
+            'type' => Field::FLOAT,
+            'size' => 100,
+            'default' => 0,
+            'nullable' => TRUE,
+            'twigName' => 'ctd',
+            'mode' => 'raw',
+            ],
+
+        'td' => [
+            'dbName' => 'td',
+            'type' => Field::FLOAT,
+            'size' => 100,
+            'default' => 0,
+            'nullable' => TRUE,
+            'twigName' => 'td',
+            'mode' => 'raw',
+            ],
+
+        'tp' => [
+            'dbName' => 'tp',
+            'type' => Field::FLOAT,
+            'size' => 100,
+            'default' => 0,
+            'nullable' => TRUE,
+            'twigName' => 'tp',
+            'mode' => 'raw',
+            ],
+
+        'extra' => [
+            'dbName' => 'extra',
+            'type' => Field::FLOAT,
+            'size' => 100,
+            'default' => 0,
+            'nullable' => TRUE,
+            'twigName' => 'extra',
+            'mode' => 'raw',
+            ],
+
+        'bonus' => [
+            'dbName' => 'bonus',
+            'type' => Field::FLOAT,
+            'size' => 100,
+            'default' => 0,
+            'nullable' => TRUE,
+            'twigName' => 'bonus',
+            'mode' => 'raw',
+            ],
+
+    ]; 
+}
+
+trait _enseignement_etudiant_details_ {
+    protected int $id;            
+    protected float $cm = 0;
+    protected float $ctd = 0;
+    protected float $td = 0;
+    protected float $tp = 0;
+    protected float $extra = 0;
+    protected float $bonus = 0;
+
+    protected int $__status__ = Entity::NEW; 
+    protected array $__org__ = [];
+}

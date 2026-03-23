@@ -1,0 +1,148 @@
+<div class="w3-container w3-theme-l2">
+	<h5>Position de l'ECUE</h5>
+</div>
+
+
+<div class="w3-row">
+	<div class="w3-row-padding">
+		<div class="w3-third {{divClass}}">
+			<label>Diplôme</label>
+			{% set diplomeList = ['Licence', 'Licence Pro', 'Master', 'EIDD'] %}
+			<select  class="w3-select" name="diplome">
+				<option value="" {{ data.diplome is null ? "selected" }}>Choisir</option>
+				{% for diplome in diplomeList %}
+					<option value="{{diplome}}" {{ data.diplome == diplome ? "selected" }}>{{diplome}}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div class="w3-third {{divClass}}">
+			<label>Mention</label>
+			{% set mentionList = ['SDV', 'SVT', 'MIB', 'BMC', 'BIP', 'BI', 'GEN', 'RE', 'TOX', 'NEURO', 'MEEF'] %}
+			<select  class="w3-select" name="mention">
+				<option value="" {{ data.mention is null ? "selected" }}>Choisir</option>
+				{% for mention in mentionList %}
+					<option value="{{mention}}" {{ data.mention == mention ? "selected" }}>{{mention}}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div class="w3-third {{divClass}}">
+			<label>Parcours</label>
+			<input  class="w3-input" name="parcours" type="text" placeholder="parcours" value="{{data.parcours}}">
+		</div>
+	</div>
+</div>
+<div class="w3-row">
+    <div class="w3-row-padding">
+        <div class="w3-quarter {{divClass}}">
+            <label>Semestre</label>
+            {% set semestreList = ['S1', 'S2', 'S3', 'S4', 'S5', 'S6' ] %}
+            <select  class="w3-select" name="semestre">
+                <option value="" {{ data.semestre is null ? "selected" }}>Choisir</option>
+                {% for semestre in semestreList %}
+                    <option value="{{semestre}}" {{ data.semestre == semestre ? "selected" }}>{{semestre}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="w3-threequarter {{divClass}}">
+            <label>Responsables de l'enseignement</label>
+            <input  class="w3-input" name="responsables" type="text" placeholder="responsables" value="{{data.responsables}}">
+        </div>
+    </div>
+    <div class="w3-row-padding">
+        <div class="w3-half {{divClass}}">
+            <label>intitulé ECUE</label>
+            <input  class="w3-input" required name="intituleECUE" type="text" placeholder="intitulé ECUE" value="{{data.intituleECUE}}">
+        </div>
+        <div class="w3-half">
+            <div class='w3-third {{divClass}}'>
+                <label>code UE</label>
+                <input  class="w3-input" style='width:8em;' minlength="8" maxlength="8" size="8" name="codeUE" type="text" placeholder="code UE" value="{{data.codeUE}}">
+            </div>
+            <div class='w3-third {{divClass}}'>
+                <label>code ECUE</label>
+                <input  class="w3-input" style='width:8em;' minlength="8" maxlength="8" size="8" name="codeECUE" type="text" placeholder="code ECUE" value="{{data.codeECUE}}">
+            </div>
+            <div class='w3-third {{divClass}}'>
+                <label>ECTS</label>
+                <input  class="w3-input" style='width:8em;' name="ECTS" type="number" step='3' placeholder="ECTS" value="{{data.ECTS}}">
+            </div>
+        </div>
+    </div>
+    <div class="w3-row-padding">
+        <div class="w3-quarter {{divClass}}">
+            <label>Type d'ECUE</label>
+            {% set typeECUEList = ['obligatoire', 'transverse', 'optionnelle', 'ouverture', 'facultative'] %}
+            <select  class="w3-select" name="typeECUE">
+                <option value="" {{ data.typeECUE is null ? "selected" }}>Choisir</option>
+                {% for typeECUE in typeECUEList %}
+                    <option value="{{typeECUE}}" {{ data.typeECUE == typeECUE ? "selected" }}>{{typeECUE}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="w3-quarter {{divClass}}">
+            <label>Nature des cours</label>
+            {% set natureCoursList = ['présentiel', 'distanciel', 'mixte'] %}
+            <select  class="w3-select" name="natureCours">
+                <option value="" {{ data.natureCours is null ? "selected" }}>Choisir</option>
+                {% for natureCours in natureCoursList %}
+                    <option value="{{natureCours}}" {{ data.natureCours == natureCours ? "selected" }}>{{natureCours}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="w3-quarter {{divClass}}">
+            <label>Langue d'enseignement</label>
+            {% set langueList = ['français', 'anglais', 'autre'] %}
+            <select  class="w3-select" name="langue">
+                <option value="" {{ data.langue is null ? "selected" }}>Choisir</option>
+                {% for langue in langueList %}
+                    <option value="{{langue}}" {{ data.langue == langue ? "selected" }}>{{langue}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="w3-quarter {{divClass}}">
+            <label>Lieu de l'enseignement</label>
+            {% set lieuList = ['PRG', 'autre'] %}
+            <select  class="w3-select" name="lieu">
+                <option value="" {{ data.langue is null ? "selected" }}>Choisir</option>
+                {% for lieu in lieuList %}
+                    <option value="{{lieu}}" {{ data.lieu == lieu ? "selected" }}>{{lieu}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="w3-row-padding  {{divClass}}">
+        <div class="w3-quarter">
+            <label>Domaine 1</label>
+            <select  class="w3-select" name="domaine1">
+                <option value="" {{ data.domaine1 == "" ? "selected" }}>Choisir</option>
+                {% for domaine in domaineList %}
+                    <option value="{{domaine.acronyme}}" {{ data.domaine1 == domaine.acronyme ? "selected" }}>{{domaine.nom}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="w3-half">
+            <datalist id="values">
+                <option value="0" label="100% domaine 2"></option>
+                <option value="25" label="75% domaine 2"></option>
+                <option value="50" label="50%"></option>
+                <option value="75" label="75% domaine 1"></option>
+                <option value="100" label="100% domaine 1"></option>
+            </datalist>
+
+            <div class='w3-center'>
+                <span style='width: 5em' class='w3-left' id='q1'>dd</span>quotité<span style='width: 5em' class='w3-right' id='q2'>cc</span>
+            </div>
+            <input  class="custom-slider custom-slider-bullet w3-input" type="range" id="quotite1" name="quotite1" min="0" max="100" value="{{data.quotite1}}" list='values'/>
+        </div>
+        <div class="w3-quarter">
+            <label>Domaine 2</label>
+            <select  class="w3-select" name="domaine2">
+                <option value="" {{ data.domaine2 == "" ? "selected" }}>Choisir</option>
+                {% for domaine in domaineList %}
+                    <option value="{{domaine.acronyme}}" {{ data.domaine2 == domaine.acronyme ? "selected" }}>{{domaine.nom}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+</div>

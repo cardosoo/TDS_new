@@ -1,0 +1,299 @@
+{% extends "layout.html.twig" %}
+
+{% block header %}
+    <div>
+        <br>
+        <br>
+        <br>
+    </div>
+    <h2>Liste des maquettes actives</h2>
+{% endblock %}
+
+
+{% block js %}
+
+    {{ parent() }}
+
+    <script src="https://rawgit.com/rniemeyer/knockout-jqAutocomplete/master/build/knockout-jqAutocomplete.js"></script>
+    <script src='https://rawgit.com/rniemeyer/knockout-sortable/master/build/knockout-sortable.js'></script>
+
+{% endblock js %}
+
+{% block css %}
+    {{ parent() }}
+
+<style>    
+.table {
+    display: block;
+    text-align: center;
+    margin-right: 5px;
+    width: 94%;
+}
+ 
+.composante {
+    border: solid 3px #777;
+    width: 100%;
+    background-color: #CCC;
+    margin: 5px;
+    padding: 2px;
+    border-radius: 3px;
+    box-shadow: 2px 2px 2px #EEE;
+}
+
+.maquette{
+    background-color: #DDD;
+    color: red; /* #fff; */
+    border-radius: 3px;
+    margin: 2px;
+    padding: 1px;
+    text-align: left;
+    width: 98%;
+    cursor: move;
+}
+
+
+.comp1{
+    border: solid 2px #CCC;
+    width: 98%;
+    background-color: #BBB;    
+}
+
+
+.ko_container {
+    display: inline-block;
+    border: solid 3px #EEE;
+    background-color: #FFF;
+}
+
+#main{
+    position: relative;
+    top: 20px;
+    width:740px;
+}
+
+#se{
+    position: absolute; 
+    left: 0px;
+    width: 500px;
+    padding-bottom: 5em;
+}
+
+#add{
+    position: fixed;
+    left: 750px;
+    top: 120px;
+    width: 350px;
+    height: 100%;
+}
+
+
+#trash{
+    position: fixed;
+    left: 750px;
+    top: 250px;
+    width: 350px;
+    height: 100%;
+}
+
+#res{
+    position: absolute;
+    left: 750px;
+    top: 600px;
+    width: 350px;
+    height: 100%;
+}
+
+
+input.inp{
+    width: 98%;
+}
+
+button.save{
+    position: fixed;
+    left: 750px;
+    top: 60px;
+}
+</style>
+
+{% endblock css %}
+
+
+{% block script %}
+    <script>
+        var Maquette = function(id, name) {
+            this.id = id;
+            this.name = ko.observable(name);
+        };
+
+        var Composante = function(id, name, maquetteList) {
+            this.maquetteList = ko.observableArray(maquetteList);
+            this.id = id;
+            this.name = ko.observable(name)
+        };
+
+        var initialData = [
+            {% for composante in composanteList %}
+                new Composante({{ composante.id }}, '{{ composante.nom }}',  [
+                {% for maquette in composante.maquetteList %}
+                    new Maquette( {{ maquette.id }}, '{{ maquette.nom }}'),
+                {% endfor %}
+                ]),
+            {% endfor %}
+        ];
+
+        var SEModel = function(composanteList, unassociatedComposanteList, addComposante, addMaquette) {
+            var self = this;
+            self.composanteList = ko.observableArray(composanteList);
+            self.initialData = JSON.stringify(ko.toJS(self.composanteList), null, 2);
+
+            self.unassociatedComposanteList = ko.observableArray(unassociatedComposanteList);
+            self.addComposante = ko.observable(addComposante);
+            self.addMaquette = ko.observable(addMaquette);
+        
+            self.selectedObject = ko.observable();
+            
+            self.clearObject = function(data, event) {
+                if (data === self.selectedObject()) {
+                    self.selectedObject(null);
+                }
+            };
+
+            self.isObjectSelected = function(object) {
+                return object === self.selectedObject();
+            };
+
+            self.allowDropMain = function(arg){
+                if (! (arg.item instanceof Composante)) arg.cancelDrop = true;
+            }
+                
+            self.allowDropComposante = function(arg){
+                if (! (arg.item instanceof Maquette)) arg.cancelDrop = true;
+            }
+
+            self.myClone = function(item){
+                if (item instanceof Maquette) {
+                    return  new Maquette(0, 'Nouvelle Maquette');
+                }
+                if (item instanceof Composante) {
+                    return  new Composante(0, 'New Compos.', [new Maquette(0, 'Nouvelle Maquette')]);
+                }
+            }
+            
+            self.getUrlMaquette = function (maquette){
+                return '/{{ App.appName }}/maquette/'+maquette;
+            }
+            
+            self.save = function(){
+                var actual    = JSON.stringify(ko.toJS(self.composanteList), null, 2);
+                var deleted  = JSON.stringify(ko.toJS(self.unassociatedComposanteList), null, 2);
+                var posting = $.post('/{{ App.appName }}/admin/maquette', { actual: actual, deleted: deleted});
+                posting.done(function( data ) {
+                    self.initialData = actual;
+                    window.location.href = '/{{ App.appName }}/admin/maquette';
+                });
+            }
+            
+            self.isChanged = function(){
+                return self.initialData !== JSON.stringify(ko.toJS(self.composanteList), null, 2);
+            }
+
+        };
+
+        $(window).on('beforeunload', function(){
+            var changed = vm.isChanged();
+            if (changed){
+                return "Un message";
+            }
+        });
+    </script>
+{% endblock script %}
+
+{% block section %}
+    <div id='main'>
+
+        <div id='se' data-bind="sortable: { data: composanteList, allowDrop: true, beforeMove: $root.allowDropMain, dragged: $root.myClone}">
+            <div class="table">
+                <div class='composante'>
+                    <div class='dep1' data-bind="visible: $root.isObjectSelected($data)">
+                        <input class='inp' maxlength="15" data-bind="value: name, event: { blur: $root.clearObject }" />
+                    </div>
+                    <div class='dep1' data-bind="visible: !$root.isObjectSelected($data)">
+                            <a href="#" data-bind="text: name, click: $root.selectedObject"></a>
+                    </div>
+                    <div class='dep1' data-bind="sortable: { template: 'maquetteTmpl', data: maquetteList, allowDrop: true, beforeMove: $root.allowDropComposante, dragged: $root.myClone }">
+                    </div>
+                </div>    
+            </div>
+        </div>
+
+        <div id='add'>
+            <div>Création</div>
+            <div id='se' data-bind="draggable: $root.addComposante(), dragged: $root.myClone"> 
+                <div class="table">
+                    <div class='composante'>
+                        <div class='comp1' >
+                            <a href="#" data-bind="text: name"></a>
+                            <div class='comp1' data-bind="draggable: $root.addMaquette(), dragged: $root.myClone">
+                                <div class='maquette'>
+                                    <a href="#" data-bind="text: name"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+            </div>
+        </div>    
+        
+        <div id='trash'>
+            <div>Poubelle</div>
+            <div id='se' data-bind="sortable: {data: unassociatedComposanteList, allowDrop: true, beforeMove: $root.allowDropMain}">
+                <div class="table">
+                    <div class='compostante'>
+                        <div class='comp1' data-bind="visible: $root.isObjectSelected($data)">
+                            <input class='inp' maxlength="15" data-bind="value: name, event: { blur: $root.clearObject }" />
+                        </div>
+                        <div class='comp1' data-bind="visible: !$root.isObjectSelected($data)">
+                                <a href="#" data-bind="text: name, click: $root.selectedObject"></a>
+                        </div>
+                        <div class='comp1' data-bind="sortable: { template: 'maquetteTmpl', data: maquetteList, allowDrop: true, beforeMove: $root.allowDropComposante }">
+                        </div>
+                    </div>    
+                </div>
+            </div>
+        </div>
+
+        <button class='save' data-bind='click: save, visible: $root.isChanged()'>Enregistrer...</button>
+        
+        <script id='maquetteTmpl' type="text/html">
+                        <div class='maquette'>
+                            <!-- ko if: $root.isObjectSelected($data) -->
+                            <input maxlength="100" class='inp' data-bind="value: name, event: { blur: $root.clearObject }" />
+                            <!-- /ko -->
+                            <!-- ko ifnot: $root.isObjectSelected($data) --> 
+                            <a data-bind="attr: { href: $root.getUrlMaquette(id), target: '_blank' }">&gt;&gt;&gt;</a>
+                            <a href="#" data-bind="text: name, click: $root.selectedObject"></a>
+                            <!-- /ko -->
+                        </div>
+
+        </script>
+        <h3>Suivre une maquette</h3>
+
+        <ul>
+            {% for maquette in maquetteList %}
+                <li><a href = '/{{ App.appName }}/admin/maquette/{{ maquette.id }}'>{{ maquette.nom }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script>
+        var vm = new SEModel(initialData, [new Composante(0, 'Maquettes à supprimer',  [])], new Composante(-1, 'New Comp.', []), new Maquette(-1, 'Nouvelle Maquette') );
+        ko.applyBindings(vm);
+    </script>
+
+{% endblock %}
+
+
+
+
+
+

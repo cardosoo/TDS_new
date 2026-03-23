@@ -1,0 +1,78 @@
+{% extends "layout.html.twig" %}
+
+
+{% block section %}
+
+<div class="w3-card-4 w3-white w3-margin">
+    <div class="w3-container w3-light-grey  w3-center">
+        <b>Obtenir les infos sur une liste d'ECUE à partir de son CODE</b>
+    </div>
+    <div class='w3-card w3-pale-blue'>
+        <header class="w3-blue">
+            <h4>Il faut mettre un code ECUE par liste</h4>
+        </header>
+    {% apply markdown_to_html %}
+
+    {% endapply %}
+    </div>
+
+    <form action="./getInfoFromCodeECUEList" method='POST'>
+        <textarea name='data' cols='200' rows='20' placeholder="">{{D|join("\n")|raw}}</textarea>
+
+        <div class="w3-container w3-light-grey  w3-center">
+            <input type="submit" value="Importer les nouvelles fiches de validation des vacations">
+        </div>
+    </form>
+</div>
+
+
+    <table id="list" class="display compact">
+        <thead>
+            <tr>
+                <th>Ordre</th>
+                <th>Code</th>
+                <th>Intitule</th>
+                <th>Structure</th>
+                <th>Etape</th>
+                <th>Cursus</th>
+                <th>Semestre</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for l in L %}
+            <tr>
+                <td>{{loop.index}}</a></td>
+                <td>{{l.code}}</a></td>
+                <td>{{l.nom}}</a></td>
+                <td>{{l.structure}}</a></td>
+                <td>{{l.etape}}</a></td>
+                <td>{{l.cursus}}</a></td>
+                <td>{{l.semestre}}</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#list').DataTable({
+                order: [[1, "asc"], [0, "asc"]],
+                dom: 'Bfrtip',
+                paging: false,
+                buttons: [
+                    'copy',
+                    'excel',
+                    'csv',
+                    {
+                        extend: 'pdf',
+                        orientation: 'portrait'
+                    }
+                ]
+            });
+        });
+    </script>
+
+
+
+{% endblock %}

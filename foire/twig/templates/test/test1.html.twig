@@ -1,0 +1,173 @@
+{% extends "layout.html.twig" %}
+
+
+{% block section %}
+
+
+<label for="level">Composante : </label>
+<select data-bind="options: structureList, selectedOptions: structure, optionsText: 'nom', optionsValue: 'id',  optionsCaption: 'Select...',  value: structure" ></select>
+<br>
+<label for="level">Semestre : </label>
+<select data-bind="options: semestreList, selectedOptions: semestre, optionsText: 'nom', optionsValue: 'id',  optionsCaption: 'Tous les Semestres' "></select>
+<br>
+<label for="level">Niveau : </label>
+<select data-bind="options: cursusList, selectedOptions: cursus, optionsText: 'nom', optionsValue: 'id', optionsCaption: 'Tous les Cursus...', value: cursus "></select>
+<br>
+<label for="level">Etape : </label>
+<select data-bind="options: getEtapeList(structure(), cursus()), selectedOptions: etape, optionsText: 'nom', optionsValue: 'id',  optionsCaption: 'Toutes les étapes...', value: etape "></select>
+<br>
+
+<input type='hidden' data-bind="text: $root.search">
+
+<div id='searchResult'  data-bind="style: {'background-color' :'inherit'}">
+</div>
+
+<div id='spinner' style='visibility: hidden;'><i class="fa fa-spinner fa-spin" style="font-size:128px"></i></div>
+
+<style>
+    #spinner {
+        position: fixed; /* or absolute */
+        top: 50%;
+        left: 50%;
+    }
+</style>
+
+
+<script>
+
+function doBeforeUnload(event){
+    event.preventDefault();
+    event.returnValue = '';                    
+}
+
+$( document ).ready(function() {
+    window.addEventListener('beforeunload', doBeforeUnload);
+});
+
+</script>
+
+
+
+
+<script>
+    var searchModel = function() {
+        var self = this;
+        self.lastCursus = 0;
+        self.lastStructure = 0;
+        self.oldSearchParams = {};
+
+        self.structureList = {{ structureList|json_encode()|raw }};
+        self.cursusList = {{ cursusList|json_encode()|raw }};
+        self.semestreList = {{ semestreList|json_encode()|raw }};
+        self.etapeList = ko.observableArray([]);
+
+        self.structure=ko.observable(113);  
+        self.cursus=ko.observable();  
+        self.semestre=ko.observable();  
+        self.etape=ko.observable();  
+        self.etapeList=ko.observableArray([]);  
+
+        self.getEtapeList = function(structure, cursus){
+            if ( (cursus == self.lastCursus) && (structure == self.lastStructure)) return self.etapeList;
+            self.lastCursus = cursus;
+            self.lastStructure = structure;
+
+            $.getJSON('/{{ App.appName }}/vacation/getEtapeList/'+structure+'/'+cursus, function(json){
+                self.etapeList = ko.observableArray(json);
+                self.cursus.valueHasMutated();
+                self.structure.valueHasMutated();
+            });
+        }
+        
+        self.search = ko.computed(function() {
+            var search = '';
+
+            searchParams =  {
+                structure: self.structure(),
+                cursus: self.cursus(),
+                etape: self.etape(),
+                semestre: self.semestre(),
+            }
+            console.log(searchParams);
+            // pour ne pas faire la recherche si on a pas chnangé les paramètres
+            if (JSON.stringify(self.oldSearchParams) == JSON.stringify(searchParams)){
+                return;
+            }
+            self.oldSearchParams = searchParams;
+            $('#spinner').css('visibility', 'visible');
+            var posting = $.post('/{{ App.appName }}/vacation/search', searchParams);
+            posting.done(function( data ) {
+                $('#searchResult').empty().append( data );
+                self.semestre.valueHasMutated();
+                initDataTable();
+                $('#spinner').css('visibility', 'hidden');
+            });
+            //$('#searchResult').empty().append("<b>"+self.cursus()+"</b> - <b>"+self.semestre()+"</b> - <b>"+self.etape()+"</b>" );
+        });
+
+
+    };
+
+
+    var model = new searchModel();
+    ko.applyBindings(model);
+
+
+    function initDataTable(){
+        $('table.display').DataTable({
+            dom: 'lBfrtip' ,
+            order: [[ 0, 'asc' ]],
+            "language": {
+                "sProcessing":     "Traitement en cours...",
+                "sSearch":         "Filtrer&nbsp;:",
+                "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+                "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+                "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                "sInfoPostFix":    "",
+                "sLoadingRecords": "Chargement en cours...",
+                "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
+                "oPaginate": {
+                    "sFirst":      "Premier",
+                    "sPrevious":   "Pr&eacute;c&eacute;dent",
+                    "sNext":       "Suivant",
+                    "sLast":       "Dernier"
+                },
+                "oAria": {
+                    "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+                    "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+                },
+                "select": {
+                    "rows": {
+                        _: "%d lignes séléctionnées",
+                        0: "Aucune ligne séléctionnée",
+                        1: "1 ligne séléctionnée"
+                    } 
+                }
+            },
+            lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "Tous"] ],
+            pageLength: -1,        
+            paging: true,
+            select: true,
+            buttons: [
+                {
+                    extend: 'copy',
+                    text: 'Copier'
+                },
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                },
+            ]
+        });
+    } 
+
+
+
+</script>
+
+
+{% endblock section %}

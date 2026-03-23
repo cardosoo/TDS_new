@@ -1,0 +1,67 @@
+<table class='display'>
+    <thead>
+        <tr>
+            <th rowspan=2>Enseignement</th>
+            <th rowspan=2>Cursus</th>
+            <th rowspan=2>Semestre</th>
+            <th colspan= 5>
+                {% block detail_recherche %}
+                Besoins / Sous-Éffectifs / Hors-Prioritaire
+                {% endblock detail_recherche %}
+            </th>
+            {% if App.cmpl.withStructure %}<th rowspan=2>Structure</th>{% endif %}
+            {% if App.cmpl.withEquipe or App.cmpl.withCorrespondant %}
+                {% if App.cmpl.withEquipe%}
+                    <th rowspan=2>Enseignant</th>
+                {% else %}
+                   <th rowspan=2>Correspondant</th>
+                {% endif %}
+            {% endif %}
+            {% if App.cmpl.withEtape %}<th rowspan=2>Etapes</th>{% endif %}
+{% block extraWithHeader %}
+{% endblock extraWithHeader %}
+        </tr>
+        <tr>
+            {% block besoinsHeader %}            
+            <th>CM</th>
+            <th>CTD</th>
+            <th>TD</th>
+            <th>TP</th>
+            <th>Bonus</th>
+            {% endblock besoinsHeader %}
+        </tr>
+    </thead>
+    <tbody>
+
+    {% for res in enseignementList %}
+    
+    {% set ens = res['enseignement'] %}
+    {% set ecue = res['ecue'] %}
+    {% set etape = ecue.etape %}
+
+    <tr class="{{ ens.actif=='t'?'':'passif' }}">
+       <td>{{ens.getGenericWithLink|raw }}</a></td>
+       <td style='text-align: center'>{{ ecue.getCursusName() }}</td>
+       <td style='text-align: center'>{{ ecue.getPeriodeName() }}</td>
+    
+       {% block besoins %}
+       <td style='text-align: center'>{{ ens.cm|e2 }}/{{ens.voeu_enseignement_bilan.cm|e2}}/{{ens.voeu_enseignement_bilan_prioritaire.cm|e2}}</td>
+       <td style='text-align: center'>{{ ens.ctd|e2 }}/{{ens.voeu_enseignement_bilan.ctd|e2}}/{{ens.voeu_enseignement_bilan_prioritaire.ctd|e2}}</td>
+       <td style='text-align: center'>{{ ens.td|e2 }}/{{ens.voeu_enseignement_bilan.td|e2}}/{{ens.voeu_enseignement_bilan_prioritaire.td|e2}}</td>
+       <td style='text-align: center'>{{ ens.tp|e2 }}/{{ens.voeu_enseignement_bilan.tp|e2}}/{{ens.voeu_enseignement_bilan_prioritaire.tp|e2}}</td>
+       <td style='text-align: center'>{{ ens.bonus|e2 }}/{{ens.voeu_enseignement_bilan.bonus|e2}}/{{ens.voeu_enseignement_bilan_prioritaire.bonus|e2}}</td>
+       {% endblock  besoins %}
+       {% if App.cmpl.withStructure %}<td>{{ecue.etape.structure.nom }}</td>{% endif %}
+       {% if App.cmpl.withEquipe or App.cmpl.withCorrespondant %}<td><a target= '_blank' href='/{{ App.appName }}/personne/{{ ens.ensid }}'>
+        {{ ens.email }}</a>{% if App.cmpl.withCorrespondant and ens.correspondant=='t' %} (*){% endif %}</td>
+       {% endif %}
+       {% if App.cmpl.withEtape %}
+       <td><a target= '_blank' href='/{{ App.appName }}/structure/etape/{{ ecue.etape.code }}'>{{ ecue.etape.nom }}</a></td>
+       {% endif %}
+{% block extraWithBody %}
+{% endblock extraWithBody %}
+
+    </tr>
+{% endfor %}
+    </tbody>
+</table>

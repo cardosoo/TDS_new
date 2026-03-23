@@ -1,0 +1,94 @@
+{% extends "layout.html.twig" %}
+
+
+{% block section %}
+
+<div class="w3-card-4 w3-white w3-margin">
+    <div class="w3-container w3-light-grey  w3-center">
+        <b>Mise à jour des associations entre enseignements et domaines</b>
+    </div>
+    {% if data is not null %}
+        <div class="w3-card w3-pale-yellow">
+            <header class="w3-yellow">
+                <h4>Bilan de l'importation</h4>
+        </header>
+        <ul>
+        {% if added >0 %}
+            {{ added }} domaines ajoutés
+        {% endif %}
+        {% if deleted >0 %}
+            {{ deleted }} domaines supprimés
+        {% endif %}
+        {% if kept >0 %}
+            {{ kept }} domaines conservés
+        {% endif %}
+        </ul>
+        {% if notDomaine|length >0 %}
+            <details open>
+                <summary>{{ notDomaine|length }} noms de domaines n'ont pas été trouvés dans la base de données</summary>
+                <ul>
+                    {% for l in notDomaine %}
+                        <pre>{{l|raw}}</pre>
+                    {% endfor %}
+                </ul>
+            </details>
+        {% endif %}
+
+        {% if notEns|length >0 %}
+            <details open>
+                <summary>{{ notEns|length }} id Enseignements n'ont  pas été trouvés dans la base de données</summary>
+                <ul>
+                    {% for l in notEns %}
+                        <pre>{{l|raw}}</pre>
+                    {% endfor %}
+                </ul>
+            </details>
+        {% endif %}
+        </div>
+    {% endif %}
+
+    <div class='w3-card w3-pale-blue'>
+        <header class="w3-blue">
+            <h4>Aide : fonctionnement de la mise à jour des associations entre Enseignements et Domaines</h4>
+        </header>
+    {% apply markdown_to_html %}
+
+    Cette opération peut être réalisée n'importe quand.
+    Elle permet de mettre à jour les domaines liés aux enseignements.
+    Elle est destiné à fonctionner à partir d'un texte copié à partir d'un tableur.
+    Il faut une ligne par enseignement les champs sont séparés par des tabulations.
+    Les colonnes doivent être organisées de la façon suivante :
+
+| id Ens | Enseignement | Domaine 1 | Domaine 2 | Domaine 3 | Domaine 4 |
+|--------|--------------|-----------|-----------|-----------|-----------|
+| 1      | BB15E010 Remise à niveau scientifique pout BTS, DUT | BM	| Chimie | | |
+| 2      | BB15E020 Remise à niveau pour L2 | IMVI | | | |			
+
+    Les seules données véritablement utiles sont l'Id ENS. Le reste est optionnel, mais les colonnnes doivent exister dans l'ordre dans lequel elles sont données ici.
+
+Les données déjà présentes dans la base de données (dans un format qui convient ici) peuvent être importées dans un tableur en utilisant la fonction
+« Liste des [associations entre enseignement et domaines](/{{App.appName}}/bureauRHE/listeAssociationsEnseignementDomaines) » du menu bureauRHE.
+
+    Opérations réalisées :
+    - les lignes qui commencent par autre chose qu'un nombre entier sont ignorées
+    - recherche des enseignements à partir de l'id Ens dans la base de données, si l'enseignement n'existe pas on n'en tient pas compte
+    - Lorsque l'enseignement n'existe pas on ignore la ligne (elle apparaît dans le bilan une fois l'opération effectuée)
+    - Lorsque l'enseignement existe :
+        - on supprime les domaines qui sont déjà associés à l'enseignement dans la base de données,
+        - on associe le ou les domaines indiqués.
+    {% endapply %}
+    </div>
+
+    <form action="./majAssociationsEnseignementDomaines" method='POST'>
+    <textarea name='data' cols='200' rows='20' placeholder="id Ens	Enseignement	Domaine 1	Domaine 2	Domaine 3	Domaine 4
+1	BB15E010 Remise à niveau scientifique pout BTS, DUT	BM	Chimie		      
+2	BB15E020 Remise à niveau pour L2	IMVI			
+">{{data|join("\n")|raw}}</textarea>
+
+    <div class="w3-container w3-light-grey  w3-center">
+        <input type="submit" value="Mettre à jour les associations entre les enseignements et les domaines">
+    </div>
+    </form>
+</div>
+
+{% endblock %}

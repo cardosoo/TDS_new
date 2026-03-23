@@ -1,0 +1,14 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+
+<h1>Liste des étapes attachées à la structure : <b title='{{structure.getOseNom()}}'>{{ nom }}</b></h1>
+<p>nom dans APOGEE : {{structure.getOseNom()}}</p>
+<ul>
+{% set etapeList = structure.getEtapes() %}
+{% for etape in etapeList|sort((a, b) => a.code <=> b.code) %}
+    <li><a href='/{{App.appName}}/structure/etape/{{etape.code}}' title="{{etape.getOseNom()}}">{{ etape.code }} - {{ etape.nom }}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}

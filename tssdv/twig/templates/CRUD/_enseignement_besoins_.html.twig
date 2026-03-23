@@ -1,0 +1,52 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _enseignement_besoins_.html.twig
+    created : Wed, 30 Jul 2025 18:30:52 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "enseignement_besoins", id: "{{ enseignement_besoins.id }}" }}'></i>enseignement_besoins</legend>
+
+{% block besoins_full %}
+    <p>
+    {% block besoins_label %}
+    <label class='text' for="besoins"> besoins <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "enseignement_besoins", F: "besoins", id: "{{enseignement_besoins.id}}" }}'></i></label>    
+    {% endblock besoins_label %}
+    {% block besoins_active %}
+    <input class='text' type="number"  value="{{ enseignement_besoins.besoins }}" name="besoins" id="besoins" step="any" placeholder="0">
+
+    {% endblock besoins_active %}
+    </p>
+{% endblock besoins_full %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

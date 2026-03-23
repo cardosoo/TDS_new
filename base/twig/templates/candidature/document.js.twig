@@ -1,0 +1,45 @@
+{% extends "Documents/document.js.twig" %}
+
+
+{% block urlDocUpload %}
+        url: '/{{App.appName}}/candidatureME/DocUpload/{{id}}',
+{% endblock urlDocUpload %}            
+
+{% block More %}
+
+formData = new FormData($('#candidatureForm')[0]);
+
+
+function isFormChanged(data) {
+    for (var key of formData.keys()) {
+        test = data.get(key);
+        if (test.constructor.name == 'File') {
+            if (test.name != '') {
+                return true;
+            }
+        } else {
+            if (test.valueOf() != formData.get(key).valueOf()) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
+function doBeforeUnload(event){
+    if (isFormChanged(new FormData($('#candidatureForm')[0]))){
+        event.preventDefault();
+        event.returnValue = '';                    
+    }
+}
+
+function doItQuandMeme(){
+    window.removeEventListener('beforeunload', doBeforeUnload);
+}
+
+$( document ).ready(function() {    
+    window.addEventListener('beforeunload', doBeforeUnload);
+});
+
+{% endblock More %}

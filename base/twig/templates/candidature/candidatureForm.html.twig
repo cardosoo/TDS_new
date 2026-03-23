@@ -1,0 +1,367 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<div class="w3-container w3-content" style="max-width:900px;margin-top:80px">    
+    <h3>Candidature à une mission d'enseignement pour l'année {{App.currentYear}} - {{App.currentYear + 1}}</h3>
+
+    <div>
+    <p>
+    Vous pouvez télécharger : 
+    <ul>
+        <li>le <a href='https://u-paris.fr/wp-content/uploads/2024/05/Annexe-2_Formulaire-de-candidature-ME-2024-2025.docx'>dossier de candidature</a> officiel.
+        <li>la <a target='_blank' href='https://cloud.u-paris.fr/s/wWKeAAGxdXWyZpH?dir=undefined&path=%2FPhysique&openfile=277883278'>fiche mission</a> pour l'UFR de Physique.
+    </ul>
+    </p>
+    </div>
+    <div>
+        <div class="w3-container w3-theme-l2">
+            <h5>Documents attachés</h5>
+            <div class="w3-panel w3-leftbar w3-sand w3-serif">
+            Déposez ci-dessous les éventuels documents à attacher à votre candidature :
+            Formulaire de candidature, CV, Contrat Doctoral, autorisation à postuler, ...
+                <div id="drag-and-drop-zone" class="dm-uploader w3-card w3-khaki">
+                    <div class="">Glisser-déposer les fichiers dans cette zone.</div>
+
+                    <div class="btn btn-primary w3-center " style="height: 3em; padding: 1em;">
+                        <span class="my-btn">Ouvrir le sélecteur de fichier.</span>
+                        <input type="file" title='Cliquer pour ajouter des fichiers'/>
+                    </div>
+                    <div class="_col-md-6 _col-sm-12">
+                        <div class="card h-100">
+                            <ul class="l" id="files">
+                            </ul>
+                        </div>
+                    </div>
+                    <ul id='doc'>
+                    {% for doc in docList %}
+                        {% set title = doc.getTitle() %}
+                        {% set time = doc.getTimestamp() %}
+                        {% set rnd = random() %}
+                        {% set id = 'li_' ~ rnd %}
+                        {% set url = doc.getDocDownloadURL() %}
+                        {% set title = doc.getTitle() %}
+                        <li id='{{ id }}'>
+                        {{ doc.getDate() }} 
+                        <button  onclick="deleteDoc('{{ id }}', '{{ title }}', '{{ url }}')" class='w3-padding-small w3-margin-left w3-margin-right w3-tiny w3-button w3-round-large w3-red'><i class='fa fa-trash'></i></button>
+                        <a href='{{ url }}' target='_blank'>{{ doc.getTitle }}</a>
+                        <button  onclick="renameDoc('{{ id }}', '{{ title }}', '{{ url }}')" class='w3-padding-small  w3-margin-left w3-tiny w3-button w3-round-large w3-grey'><i class='fa fa-edit'></i></button>
+                    </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+    </div>
+    <br>
+    <form id="candidatureForm" enctype="multipart/form-data" class="w3-container" method="POST" action="/{{App.appName}}/candidatureME/{{uid}}">
+        <div class="w3-container w3-theme-l2">
+            <h5>Informations personnelles</h5>
+        </div>
+        <div class="w3-row-padding">
+            <div class="w3-half">
+                <label>Prénom</label>
+                <input class="w3-input w3-border" required name="prenom" type="text" placeholder="John" value="{{data.prenom}}">
+            </div>
+            <div class="w3-half">
+                <label>Nom</label>
+                <input class="w3-input w3-border" required name="nom" type="text" placeholder="Doe" value="{{data.nom}}">
+            </div>
+            <div class="w3-half">
+                <label>Mèl de contact</label>
+                <input class="w3-input w3-border" required name="email" type="email"  placeholder="John.Doe@domain.com" value="{{data.email}}">
+            </div>
+            <div class="w3-half">
+                <label>Téléphone</label>
+                <input class="w3-input w3-border" required name="tel" type="text"  placeholder="06 01 02 03 04" value="{{data.tel}}">
+            </div>
+        </div>
+        <div class="w3-container w3-theme-l2">
+            <h5>Informations Administratives</h5>
+        </div>
+        <div class="w3-row-padding">
+            <div class="w3-half">
+                <label>Année de doctorat pour l'année {{App.currentYear}}-{{App.currentYear+1}}</label>
+                <select class="w3-select" name="anneeDoctorat">
+                    <option value="" disabled {{ data.anneeDoctorat is null ? "selected" }}>Choisir</option>
+                    <option value="D1" {{ data.anneeDoctorat == "D1" ? "selected" }}>1ère année</option>
+                    <option value="D2" {{ data.anneeDoctorat == "D2" ? "selected" }}>2ème année</option>
+                    <option value="D3" {{ data.anneeDoctorat == "D3" ? "selected" }}>3ème année</option>
+                </select> 
+            </div>
+            <div class="w3-half">
+                <label>École doctorale</label>
+                <select class="w3-select" name="ecoleDoctorale">
+                    <option value="" disabled {{ data.ecoleDoctorale is null ? "selected" }}>Choisir</option>
+                    <option value="ED127" {{ data.ecoleDoctorale == "ED127" ? "selected" }}>ED127 - AAIF</option>
+                    <option value="ED560" {{ data.ecoleDoctorale == "ED560" ? "selected" }}>ED 560 - STEP'UP</option>
+                    <option value="ED564" {{ data.ecoleDoctorale == "ED564" ? "selected" }}>ED564 - PIF</option>
+                    <option value="ED623" {{ data.ecoleDoctorale == "ED623" ? "selected" }}>ED623 - Savoirs, Sciences, Éducation</option>
+                    <option value="Autre" {{ data.ecoleDoctorale == "Autre" ? "selected" }}>Autre (à préciser)</option>
+                </select> 
+                <label>Complément école doctorale</label>
+                <input class="w3-input w3-border" name="EDAutre" type="text"  placeholder="ED??? - XXXX" value="{{data.EDAutre}}">
+            </div>
+            <div class="w3-half">
+                <label>Établissement d'inscription</label>
+                <select class="w3-select" name="etablissement">
+                    <option value="" disabled {{ data.etablissement is null ? "selected" }}>Choisir</option>
+                    <option value="UPCité" {{ data.etablissement == "UPCité" ? "selected" }}>UP Cité - Université Paris Cité</option>
+                    <option value="SU" {{ data.etablissement == "SU" ? "selected" }}>SU - Sorbonne Université</option>
+                    <option value="PSL" {{ data.etablissement == "PSL" ? "selected" }}>PSL - Paris Sciences Lettres</option>
+                    <option value="Saclay" {{ data.etablissement == "Saclay" ? "selected" }}>Université Paris-Saclay</option>
+                    <option value="Autre" {{ data.etablissement == "Autre" ? "selected" }}>Autre (à préciser)</option>
+                </select> 
+                <label>Complément établissement d'inscription</label>
+                <input class="w3-input w3-border" name="EtabAutre" type="text"  placeholder="XXXX" value="{{data.EtabAutre}}">
+            </div>
+        </div>    
+        <div class="w3-panel w3-leftbar w3-sand w3-serif">
+        Si vous êtes inscrit et/ou employé dans un établissement autre qu'Université Paris Cité, 
+        vous devez impérativement remplir l'annexe portant autorisation de votre organisme employeur 
+        à candidater à une mission complémentaire d'enseignement en application de l'arrété du 29 aôut 2016
+        fixant le montant de la rémunération du doctorant contractuel.
+        </div>
+        <div class="w3-container w3-theme-l2">
+            <h5>Informations concernant la nature du financement de la thèse</h5>
+        </div>
+        <div class="w3-row-padding">
+            <div class="w3-half">
+                <label>Orignine du financement</label>
+                <select class="w3-select" name="origineFinancement">
+                    <option value="" disabled {{ data.origineFinancement is null ? "selected" }}>Choisir</option>
+                    <option value="CDC" {{ data.origineFinancement == "CDC" ? "selected" }}>Contrat doctoral sur concours</option>
+                    <option value="AMN" {{ data.origineFinancement == "AMN" ? "selected" }}>Contrat doctoral AMN</option>
+                    <option value="AMX" {{ data.origineFinancement == "AMX" ? "selected" }}>Contrat doctoral AMX</option>
+                    <option value="ANR" {{ data.origineFinancement == "ANR" ? "selected" }}>ANR</option>
+                    <option value="LABEX" {{ data.origineFinancement == "LABEX" ? "selected" }}>LABEX</option>
+                    <option value="IDEX" {{ data.origineFinancement == "IDEX" ? "selected" }}>IDEX</option>
+                    <option value="CNRS" {{ data.origineFinancement == "CNRS" ? "selected" }}>CNRS</option>
+                    <option value="CNES" {{ data.origineFinancement == "CNES" ? "selected" }}>CNES</option>
+                    <option value="Autre" {{ data.origineFinancement == "Autre" ? "selected" }}>Autre (à préciser)</option>
+                </select> 
+                <label>Complément origine du financement</label>
+                <input class="w3-input w3-border" name="OFAutre" type="text"  placeholder="XXXX" value="{{data.OFAutre}}">
+                </select> 
+            </div>
+            <div class="w3-half">
+                Si votre financement dépend d’un concours ou d’un appel à projet, date de publication des résultats :<br>
+                <input type="date" name="pubRes" value="{{data.pubRes}}" /><br>
+                *Le doctorant s’engage à fournir un justificatif d’obtention du financement dès publication.
+            </div>
+        </div>
+        <div class="w3-row-padding">
+            <div class="w3-half">
+                <label>Organisme Financeur</label>
+                <select class="w3-select" name="organismeFinanceur">
+                    <option value="" disabled {{ data.organismeFinanceur is null ? "selected" }}>Choisir</option>
+                    <option value="ED" {{ data.organismeFinanceur == "ED" ? "selected" }}>Ecole doctorale</option>
+                    <option value="ANR" {{ data.organismeFinanceur == "ANR" ? "selected" }}>ANR</option>
+                    <option value="LABEX" {{ data.organismeFinanceur == "LABEX" ? "selected" }}>LABEX</option>
+                    <option value="IDEX" {{ data.organismeFinanceur == "IDEX" ? "selected" }}>IDEX</option>
+                    <option value="CNRS" {{ data.organismeFinanceur == "CNRS" ? "selected" }}>CNRS</option>
+                    <option value="CNES" {{ data.organismeFinanceur == "CNES" ? "selected" }}>CNES</option>
+                    <option value="Autre" {{ data.organismeFinanceur == "Autre" ? "selected" }}>Autre</option>
+                </select> 
+                <label>Complément Organisme Financeur</label>
+                <input class="w3-input w3-border" name="OF2Autre" type="text"  placeholder="XXXX" value="{{data.OF2Autre}}">
+            </div>
+            <div class="w3-half">
+                <label>Établissement employeur</label>
+                <input class="w3-input w3-border" name="etablissementEmployeur" type="text"  placeholder="XXXX" value="{{data.etablissementEmployeur}}">
+            </div>
+        </div>
+        <div class="w3-row-padding">
+            <div class="w3-half">
+                <label>Date de début du contrat doctoral</label>
+                <input type="date" name="debutCD" value="{{data.debutCD}}" />
+            </div>
+        </div>
+        <div class="w3-panel w3-leftbar w3-sand w3-serif">
+            Les doctorants de 2ème et 3ème année doivent obligatoirement joindre une copie de leur contrat doctoral.<br>
+            Les doctorants de première année fournissent une copie de leur contrat doctoral si il est déjà signé.
+            Le cas échéant, ils doivent fournir un justificatif de financement de leur thèse mentionnant les dates de recrutement
+            (ex : lettre d'engagement du laboratoire) ou de candidature à une allocation doctorale.
+        </div>
+        <div class="w3-container w3-theme-l2">
+            <h5>Informations concernant l'activité de recherche</h5>
+        </div>
+        <div class="w3-row-padding">
+            <div class="w3-half">
+                <ul>
+                    <li>Structure de recherche (UMR/URP) : 
+                    <input class="w3-input w3-border" name="SR" type="text"  placeholder="XXXX" value="{{data.SR}}"></li>
+                    <li>Nom du laboratoire : 
+                    <input class="w3-input w3-border" name="nom_lab" type="text"  placeholder="XXXX" value="{{data.nom_lab}}"></li>
+                    <li>Adresse : 
+                    <input class="w3-input w3-border" name="adresse_lab" type="text"  placeholder="XXXX" value="{{data.adresse_lab}}"></li>
+                    <li>Nom du directeur de thèse : 
+                    <input class="w3-input w3-border" name="nom_DT" type="text"  placeholder="XXXX" value="{{data.nom_DT}}"></li>
+                    <li>Email du directeur de thèse : 
+                    <input class="w3-input w3-border" name="mail_DT" type="email"  placeholder="XXXX" value="{{data.mail_DT}}"></li>
+                    <li>Thèse en cotutelle ? : <br>
+                        <input type="radio" id="oui" name="cotutetelle" value="oui" {{data.cotutetelle=="oui"?"checked":""}}>
+                        <label for="oui">oui</label><br>
+                        <input type="radio" id="non" name="cotutetelle" value="non" {{data.cotutetelle=="non"?"checked":""}}>
+                        <label for="non">non</label><br>
+                    <li>Sujet de thèse : 
+                    <textarea class="w3-input w3-border" name="sujet" type="text"  placeholder="sujet de thèse">{{data.sujet}}</textarea></li>
+                </ul>
+            </div>
+        </div>
+        <div class="w3-container w3-theme-l2">
+            <h5>Autres informations</h5>
+        </div>
+        <div class="w3-row-padding">
+            <div class="w3-half">
+                Avez-vous candidaté à d'autres missions d'enseignement au titre de l'année 2024/2025 ? <br>
+                <input type="radio" id="ouiAutre" name="autreMission" value="oui" {{data.autreMission=="oui"?"checked":""}}>
+                <label for="ouiAutre">oui</label><br>
+                <input type="radio" id="nonNautre" name="autreMission" value="non" {{data.autreMission=="non"?"checked":""}}>
+                <label for="nonNautre">non</label><br>
+                Si oui préciser auprès de quel(s) établissement(s) vous avez candidaté <br>
+                <input type="checkbox" id="ouiAutreEtab" name="ouiAutreEtab" value="ouiAutreEtab" {{data.ouiAutreEtab?"checked":""}}>
+                <label for="ouiAutreEtab">oui</label><br>
+                <input type="checkbox" id="nonAutreEtab" name="nonAutreEtab" value="nonAutreEtab" {{data.nonAutreEtab?"checked":""}}>
+                <label for="nonNautreEtab">non</label><br>
+                Si vous avez candidaté auprès d'Université Paris Cité, préciser dans quel UFR/Composante :<br> 
+                <input type="text" name="composante" value="{{data.composante}}" /><br>
+            </div>
+            <div class="w3-half">
+                Commentaires libres : préférences d'enseignement, absences prévues, ...<br>
+                <textarea class="w3-input w3-border" name="comment" type="text"  rows=8 placeholder="préférences d'enseignement, absences prévues, ...">{{data.comment}}</textarea></li>
+            </div>
+        </div>
+    </div>
+    <button id ='sendButton' class="w3-btn w3-round-large w3-padding-small w3-theme-d2" onclick='doItQuandMeme(this)'>Envoyer</button>
+    </form>
+
+{# Ici il faut beaucoup travailler car sinon cela ne va pas fonctionner comme on veut ! #}
+    <link rel="stylesheet" href="/{{App.appName}}/assets/uploader/jquery.dm-uploader.min.css">
+    <script src="/{{App.appName}}/assets/uploader/jquery.dm-uploader.min.js"></script>
+
+    <style>
+    .dm-uploader{
+        margin-top: 1em;
+        margin-bottom: 1em;
+        padding: 1em;
+    }
+
+    .my-btn{
+        background-color: LightGray;
+        border: solid 2px Gray;
+        border-radius: 0.5em;
+        padding: 0.2em 1em 0.2em 1em;
+    }   
+    </style>
+
+
+    <!-- /file list -->
+
+
+
+<!-- File item template -->
+    <script type="text/html" id="files-template">
+    <li class="media">
+        
+        <div class="media-body mb-1">
+        <p class="mb-2">
+            <strong>%%filename%%</strong> - Status: <span class="text-muted">Waiting</span>
+        </p>
+
+        <div class="w3-light-grey w3-small" style='height: 1em;'>
+            <div class="progress-bar  w3-green w3-center" style='width:0px'></div>
+        </div>     
+        
+        <p class="controls mb-2">
+            <button href="#" class="btn btn-sm btn-primary start" role="button">Start</button>
+            <button href="#" class="btn btn-sm btn-danger cancel" role="button" disabled="disabled">Cancel</button>
+        </p>
+        
+        <hr class="mt-1 mb-1" />
+        </div>
+    </li>
+    </script>
+
+      <div class="row">
+        <div class="col-12">
+           <div class="card h-100">
+            <div class="card-header">
+            </div>
+
+            <ul class="list-group list-group-flush" id="debug">
+              <li class="list-group-item text-muted empty">Loading plugin....</li>
+            </ul>
+          </div>
+        </div>
+      </div> <!-- /debug -->
+
+
+<script>
+
+    function deleteDoc(id, title, url){
+        if (confirm('Confirmer la suppression du document :\n'+title)){
+            $.post(
+                '/{{App.appName}}/documentsME/deleteDoc/'+(url.split('/').at(-1)),
+                function(data){
+                    if (data!='Done'){
+                        alert(data);
+                    } else {
+                        $("#"+id).remove();
+                    };
+                }
+            ); 
+        }
+
+    }
+
+    function renameDoc(id, title, url){
+        var newTitle = prompt('Renommer le document :', title)
+        if (null != newTitle){
+            $.post(
+                '/{{App.appName}}/documentsME/renameDoc/'+(url.split('/').at(-1)),
+                { 'title': newTitle },
+                function(data){
+                    if (data=='Pb'){
+                        alert("Il y a eu un problème lors du masquage de ce commentaire.");
+                    } else {
+                        html = buildDocHTML(id, newTitle, data);
+                        $("#"+id).html(html);
+                    };
+                }
+            ); 
+        }
+    }
+
+    function buildDocHTML(id, title, url){
+        return `<li id='${id}'>Maintenant 
+    <button  onclick="deleteDoc('${id}', '${title}', '${url}')" class='w3-padding-small w3-margin-left w3-margin-right w3-tiny w3-button w3-round-large w3-red'><i class='fa fa-trash'></i></button>
+    <a href='${url}' target='_blank'>${title}</a>
+    <button  onclick="renameDoc('${id}', '${title}', '${url}')" class='w3-padding-small  w3-margin-left w3-tiny w3-button w3-round-large w3-grey'><i class='fa fa-edit'></i></button>
+            </li>`
+    }
+
+
+    function tds_doSuccess(id, data){
+        doc = JSON.parse(data);
+        if (doc.error){
+        } else {
+            ul = $('#doc');
+
+            nID = Math.round(Math.random()*32000);
+            html = buildDocHTML(nID, doc.title, doc.url);
+            ul.prepend(html);
+            li = $('#uploaderFile'+id);
+            li.remove();
+        }
+    } 
+
+</script>
+
+{{ include("candidature/document.js.twig", { id : uid } )  }}
+
+
+</div> 
+{% endblock %}
+

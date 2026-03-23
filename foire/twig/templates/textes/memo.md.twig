@@ -1,0 +1,28 @@
+# mémo sur ce qui est accessible dans les templates
+
+
+### App.hETD
+{{ dump(App.hETD) }}
+
+### App.phase
+{{ dump(App.phase) }}
+
+### App.phaseList
+{{ dump(App.phaseList) }}
+
+### App.texte
+{{ dump(App.texte) }}
+
+
+
+### App
+{% set expose = {
+  'hETD': App.hETD,
+  'phase': App.phase,
+  'phaseList': App.phaseList,
+  'auth.roleList': App.auth.roleList,
+  'auth.user': App.auth.user,
+ } %}
+{{ dump(expose) }}
+
+

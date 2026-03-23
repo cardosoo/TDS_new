@@ -1,0 +1,15 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+    <h3>Candidature à une mission d'enseignement pour l'année {{App.currentYear}} - {{App.currentYear + 1}}</h3>
+
+    <p>Un message électronique a été envoyé à l'adresse <b>{{email}}</b> contenant un lien vous permettant 
+    de saisir et/ou de modifier les informations de votre dossier.<b>Conservez-le précieusement !</b></p>
+
+
+</div> 
+{% endblock %}
+

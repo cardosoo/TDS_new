@@ -1,0 +1,125 @@
+
+{% extends "admin/base_index.html.twig" %}
+
+{% block section %}
+
+
+    <ul>
+        {% for statut in statutList %}
+    <script>
+        var idList_{{statut.id}} = [
+            {% for personne in statut.personneList %}
+            "{{ personne.id }}",
+            {% endfor %}
+        ];
+    </script>
+        <li>{{ statut.nom }}  
+        <button onclick='doClickDomaine(idList_{{statut.id}}, false)'>Tout cocher</button> 
+        <button onclick='doClickDomaine(idList_{{statut.id}}, true)'>Tout décocher</button> 
+
+            <ul>
+                {% for personne in statut.personneList %}
+                    <li>
+                        <input type='checkbox' onchange='doClick({{ personne.id }}, {{ personne.etat_ts ? 'true': 'false' }})' id_='{{ personne.id }}' {{ personne.etat_ts ? ' checked ':' ' }}>
+                        <a href='/{{App.appName}}/personne/{{personne.id}}'>{{ personne.prenom }} {{ personne.nom }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+
+        {% endfor %}
+    </ul>
+
+<style>
+
+.toChange {
+    background : yellow;
+}
+
+</style>
+
+
+<script>
+
+function doClick(id, etat ){
+    elm = $("[id_ = "+id+" ]");
+    
+    n_etat = ! etat;
+    elm.attr('disabled','disabled');
+    if (n_etat){
+        elm.attr('checked', 'checked');
+    } else {
+        elm.removeAttr('checked');
+    }
+    elm.parent().addClass('toChange');
+
+    var jqxhr = $.post( "/{{ App.appName}}/admin/setEditionTS/Personne/"+(n_etat?'1':'0'), {id: id}, function(data) {
+        if ('Done' !== data){ // alors cela s'est mal passé
+            alert("Un problème a été détecté dans la mise à jour de l'état des enseignements");
+            if (etat){
+                elm.attr('checked', 'checked');
+            } else {
+                elm.removeAttr('checked');
+            }
+        }
+        elm.parent().removeClass('toChange');
+        elm.removeAttr('disabled');
+    })
+    .done(function() {
+    })
+    .fail(function() {
+        elm.parent().removeClass('toChange');
+        elm.removeAttr('disabled');
+        alert("Un problème résaau semble être apparu lors dela mise à jour de l'état des enseignements");
+    })
+}
+
+
+function doClickDomaine(idList, etat){
+
+    n_etat = ! etat;
+
+    idList.forEach(function(id){
+        elm = $("[id_ = "+id+" ]");
+        if (n_etat){
+            elm.attr('checked', 'checked');
+        } else {
+            elm.removeAttr('checked');
+        }
+        elm.parent().addClass('toChange');
+    });    
+
+    var jqxhr = $.post( "/{{ App.appName}}/admin/setEditionTS/Personne/"+(n_etat?'1':'0'), {idList: idList}, function(data) {
+        if ('Done' !== data){ // alors cela s'est mal passé
+            alert("Un problème a été détecté dans la mise à jour de l'état des enseignements\nLe mieux est de recharger la page...");
+            idList.forEach(function(id){
+                if (etat){
+                    elm.attr('checked', 'checked');
+                } else {
+                    elm.removeAttr('checked');
+                }
+            });    
+        }
+        idList.forEach(function(id){
+            elm = $("[id_ = "+id+" ]");
+            elm.parent().removeClass('toChange');
+            elm.removeAttr('disabled');
+        });    
+    })
+    .done(function() {
+    })
+    .fail(function() {
+        idList.forEach(function(id){
+            if (etat){
+                elm.attr('checked', 'checked');
+            } else {
+                elm.removeAttr('checked');
+            }
+        });    
+        alert("Un problème résaau semble être apparu lors dela mise à jour de l'état des enseignements");
+    })
+}
+</script>
+{% endblock %}
+
+

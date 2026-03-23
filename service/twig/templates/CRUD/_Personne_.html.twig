@@ -1,0 +1,927 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _Personne_.html.twig
+    created : Fri, 13 Mar 2026 08:02:05 +0100 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "Personne", id: "{{ Personne.id }}" }}'></i>Personne</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Personne", F: "actif", id: "{{Personne.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ Personne.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block uid_full %}
+    <p>
+    {% block uid_label %}
+    <label class='text' for="uid"> uid <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Personne", F: "uid", id: "{{Personne.id}}" }}'></i></label>    
+    {% endblock uid_label %}
+    {% block uid_active %}
+    <input class='text'  type="text" value="{{ Personne.uid }}" name="uid" id="uid" size="50" maxlength="100", placeholder="">
+
+    {% endblock uid_active %}
+    </p>
+{% endblock uid_full %}    
+
+{% block ose_full %}
+    <p>
+    {% block ose_label %}
+    <label class='text' for="ose"> ose <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Personne", F: "ose", id: "{{Personne.id}}" }}'></i></label>    
+    {% endblock ose_label %}
+    {% block ose_active %}
+    <input class='text'  type="text" value="{{ Personne.ose }}" name="ose" id="ose" size="50" maxlength="100", placeholder="">
+
+    {% endblock ose_active %}
+    </p>
+{% endblock ose_full %}    
+
+{% block nom_full %}
+    <p>
+    {% block nom_label %}
+    <label class='text' for="nom"> nom <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Personne", F: "nom", id: "{{Personne.id}}" }}'></i></label>    
+    {% endblock nom_label %}
+    {% block nom_active %}
+    <input class='text'  type="text" value="{{ Personne.nom }}" name="nom" id="nom" size="50" maxlength="100", placeholder="">
+
+    {% endblock nom_active %}
+    </p>
+{% endblock nom_full %}    
+
+{% block prenom_full %}
+    <p>
+    {% block prenom_label %}
+    <label class='text' for="prenom"> prenom <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Personne", F: "prenom", id: "{{Personne.id}}" }}'></i></label>    
+    {% endblock prenom_label %}
+    {% block prenom_active %}
+    <input class='text'  type="text" value="{{ Personne.prenom }}" name="prenom" id="prenom" size="50" maxlength="100", placeholder="">
+
+    {% endblock prenom_active %}
+    </p>
+{% endblock prenom_full %}    
+
+{% block adresse_full %}
+    <p>
+    {% block adresse_label %}
+    <label class='text' for="adresse"> adresse <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Personne", F: "adresse", id: "{{Personne.id}}" }}'></i></label>    
+    {% endblock adresse_label %}
+    {% block adresse_active %}
+    <textarea mode='markdown' class='textarea' name="adresse" id="adresse" size="10"  placeholder="">{{ Personne.adresse }}</textarea>
+
+    {% endblock adresse_active %}
+    </p>
+{% endblock adresse_full %}    
+
+{% block tel1_full %}
+    <p>
+    {% block tel1_label %}
+    <label class='text' for="tel1"> tel1 <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Personne", F: "tel1", id: "{{Personne.id}}" }}'></i></label>    
+    {% endblock tel1_label %}
+    {% block tel1_active %}
+    <input class='text'  type="text" value="{{ Personne.tel1 }}" name="tel1" id="tel1" size="50" maxlength="100", placeholder="">
+
+    {% endblock tel1_active %}
+    </p>
+{% endblock tel1_full %}    
+
+{% block tel2_full %}
+    <p>
+    {% block tel2_label %}
+    <label class='text' for="tel2"> tel2 <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Personne", F: "tel2", id: "{{Personne.id}}" }}'></i></label>    
+    {% endblock tel2_label %}
+    {% block tel2_active %}
+    <input class='text'  type="text" value="{{ Personne.tel2 }}" name="tel2" id="tel2" size="50" maxlength="100", placeholder="">
+
+    {% endblock tel2_active %}
+    </p>
+{% endblock tel2_full %}    
+
+{% block email_full %}
+    <p>
+    {% block email_label %}
+    <label class='text' for="email"> email <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Personne", F: "email", id: "{{Personne.id}}" }}'></i></label>    
+    {% endblock email_label %}
+    {% block email_active %}
+    <input class='text'  type="text" value="{{ Personne.email }}" name="email" id="email" size="50" maxlength="100", placeholder="">
+
+    {% endblock email_active %}
+    </p>
+{% endblock email_full %}    
+
+{% block info_full %}
+    <p>
+    {% block info_label %}
+    <label class='text' for="info"> info <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Personne", F: "info", id: "{{Personne.id}}" }}'></i></label>    
+    {% endblock info_label %}
+    {% block info_active %}
+    <textarea mode='markdown' class='textarea' name="info" id="info" size="10"  placeholder="">{{ Personne.info }}</textarea>
+
+    {% endblock info_active %}
+    </p>
+{% endblock info_full %}    
+
+{% block oneToManyPersonne_statut_full %}
+<p>
+    {% block oneToManyPersonne_statut_label %}
+    <label class='select' for='statut'>
+        {{  Personne.statut ? Personne.statut.getCrudEditLink("statut")|raw : "statut"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Personne", F: "statut", id: "{{Personne.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyPersonne_statut_label %}
+    {% block oneToManyPersonne_statut_active %}    
+    <input class='text {{ ( Personne.statut.id ==0 or  Personne.statut.actif)?"":" passif" }}'  value="{{ Personne.statut.generic() }}" name="statut" id="statut"  _id_="{{ Personne.statut.id }}">
+    <script>
+        setAutocomplete("#statut", "/service/CRUD/L/Statut");
+    </script>
+    {% endblock oneToManyPersonne_statut_active %}    
+</p>
+{% endblock oneToManyPersonne_statut_full %}
+
+{% block oneToManyPersonne_situation_full %}
+<p>
+    {% block oneToManyPersonne_situation_label %}
+    <label class='select' for='situation'>
+        {{  Personne.situation ? Personne.situation.getCrudEditLink("situation")|raw : "situation"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Personne", F: "situation", id: "{{Personne.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyPersonne_situation_label %}
+    {% block oneToManyPersonne_situation_active %}    
+    <input class='text {{ ( Personne.situation.id ==0 or  Personne.situation.actif)?"":" passif" }}'  value="{{ Personne.situation.generic() }}" name="situation" id="situation"  _id_="{{ Personne.situation.id }}">
+    <script>
+        setAutocomplete("#situation", "/service/CRUD/L/Situation");
+    </script>
+    {% endblock oneToManyPersonne_situation_active %}    
+</p>
+{% endblock oneToManyPersonne_situation_full %}
+
+{% block oneToManyPersonne_labo_full %}
+<p>
+    {% block oneToManyPersonne_labo_label %}
+    <label class='select' for='labo'>
+        {{  Personne.labo ? Personne.labo.getCrudEditLink("labo")|raw : "labo"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Personne", F: "labo", id: "{{Personne.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyPersonne_labo_label %}
+    {% block oneToManyPersonne_labo_active %}    
+    <input class='text {{ ( Personne.labo.id ==0 or  Personne.labo.actif)?"":" passif" }}'  value="{{ Personne.labo.generic() }}" name="labo" id="labo"  _id_="{{ Personne.labo.id }}">
+    <script>
+        setAutocomplete("#labo", "/service/CRUD/L/Labo");
+    </script>
+    {% endblock oneToManyPersonne_labo_active %}    
+</p>
+{% endblock oneToManyPersonne_labo_full %}
+
+    {% block manyToMany_actasList_personne %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Personne", id: "{{ Personne.id }}", L: "actasList" }}'></i>actasList - {{ (Personne.actasList)|length }} élément{{(Personne.actasList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_actasList_personne %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/actAs/personne/{{ Personne.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_actasList_personne_role %}
+                    <th class='w3-center'>role</th>
+                    {% endblock header_th_actasList_personne_role %}       
+                    {% block header_endactasList_personne %}
+                    {% endblock header_endactasList_personne %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_actasList_personne %}
+            </thead>
+
+            <tbody>
+            {% for actAs  in Personne.actasList %}
+                {% block line_actasList_personne %}
+                <tr name='actasList' _id_='{{ actAs.id }}' class='{{ actAs.actif?"":"passif " }}{{ actAs.role.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "actAs", id: "{{ actAs.id }}" }}'></i>
+                    {{ actAs.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_actAs_role %}
+                    <th class='w3-left'>{{ actAs.role.getGeneric( true )|raw }}</th>
+                    {% endblock line_actAs_role %}
+                    {% block line_endactasList_personne %}
+                    {% endblock line_endactasList_personne %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_actasList_personne %}
+            {% endfor %}
+            {% block footer_endactasList_personne %}
+            {% endblock footer_endactasList_personne %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_actasList_personne %}    
+
+    {% block manyToMany_voeuList_personne %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Personne", id: "{{ Personne.id }}", L: "voeuList" }}'></i>voeuList - {{ (Personne.voeuList)|length }} élément{{(Personne.voeuList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_voeuList_personne %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/Voeu/personne/{{ Personne.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_voeuList_personne_enseignement %}
+                    <th class='w3-center'>enseignement</th>
+                    {% endblock header_th_voeuList_personne_enseignement %}
+                    {% block header_th_voeuList_personne_cm %}
+                    <th class='w3-center'>cm</th>
+                    {% endblock header_th_voeuList_personne_cm %}
+                    {% block header_th_voeuList_personne_ctd %}
+                    <th class='w3-center'>ctd</th>
+                    {% endblock header_th_voeuList_personne_ctd %}
+                    {% block header_th_voeuList_personne_td %}
+                    <th class='w3-center'>td</th>
+                    {% endblock header_th_voeuList_personne_td %}
+                    {% block header_th_voeuList_personne_tp %}
+                    <th class='w3-center'>tp</th>
+                    {% endblock header_th_voeuList_personne_tp %}
+                    {% block header_th_voeuList_personne_bonus %}
+                    <th class='w3-center'>bonus</th>
+                    {% endblock header_th_voeuList_personne_bonus %}
+                    {% block header_th_voeuList_personne_extra %}
+                    <th class='w3-center'>extra</th>
+                    {% endblock header_th_voeuList_personne_extra %}
+                    {% block header_th_voeuList_personne_correspondant %}
+                    <th class='w3-center'>correspondant</th>
+                    {% endblock header_th_voeuList_personne_correspondant %}       
+                    {% block header_endvoeuList_personne %}
+                    {% endblock header_endvoeuList_personne %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_voeuList_personne %}
+            </thead>
+
+            <tbody>
+            {% for Voeu  in Personne.voeuList %}
+                {% block line_voeuList_personne %}
+                <tr name='voeuList' _id_='{{ Voeu.id }}' class='{{ Voeu.actif?"":"passif " }}{{ Voeu.enseignement.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "Voeu", id: "{{ Voeu.id }}" }}'></i>
+                    {{ Voeu.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_Voeu_enseignement %}
+                    <th class='w3-left'>{{ Voeu.enseignement.getGeneric( true )|raw }}</th>
+                    {% endblock line_Voeu_enseignement %}
+                    {% block line_voeuList_personne_cm %}
+                    <td class='w3-center'>{{ Voeu.cm }}</td>
+                    {% endblock line_voeuList_personne_cm %}
+                    {% block line_voeuList_personne_ctd %}
+                    <td class='w3-center'>{{ Voeu.ctd }}</td>
+                    {% endblock line_voeuList_personne_ctd %}
+                    {% block line_voeuList_personne_td %}
+                    <td class='w3-center'>{{ Voeu.td }}</td>
+                    {% endblock line_voeuList_personne_td %}
+                    {% block line_voeuList_personne_tp %}
+                    <td class='w3-center'>{{ Voeu.tp }}</td>
+                    {% endblock line_voeuList_personne_tp %}
+                    {% block line_voeuList_personne_bonus %}
+                    <td class='w3-center'>{{ Voeu.bonus }}</td>
+                    {% endblock line_voeuList_personne_bonus %}
+                    {% block line_voeuList_personne_extra %}
+                    <td class='w3-center'>{{ Voeu.extra }}</td>
+                    {% endblock line_voeuList_personne_extra %}
+                    {% block line_voeuList_personne_correspondant %}
+                    <td class='w3-center'>{{ Voeu.correspondant }}</td>
+                    {% endblock line_voeuList_personne_correspondant %}
+                    {% block line_endvoeuList_personne %}
+                    {% endblock line_endvoeuList_personne %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_voeuList_personne %}
+            {% endfor %}
+            {% block footer_endvoeuList_personne %}
+            {% endblock footer_endvoeuList_personne %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_voeuList_personne %}    
+
+    {% block manyToOne_maquetteList_maquetteList %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Personne", id: "{{ Personne.id }}", L: "maquetteList" }}'></i>maquetteList - {{ (Personne.maquetteList)|length }} élément{{(Personne.maquetteList)|length >1?'s':''}}</legend>
+
+                <ul>
+                {% for L in Personne.maquetteList %}   {% block manyToOne_Personne_gestionnaire %}
+                    <li class='{{ L.actif?"":"passif" }}'>
+                        {{ L.getGeneric(true)|raw }}
+                    </li>
+                    {% endblock manyToOne_Personne_gestionnaire %}
+                {% endfor %}
+                </ul>
+    </fieldset>
+    {% endblock manyToOne_maquetteList_maquetteList %}    
+
+    {% block manyToOne_respMaquetteList_respMaquetteList %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Personne", id: "{{ Personne.id }}", L: "respMaquetteList" }}'></i>respMaquetteList - {{ (Personne.respMaquetteList)|length }} élément{{(Personne.respMaquetteList)|length >1?'s':''}}</legend>
+
+                <ul>
+                {% for L in Personne.respMaquetteList %}   {% block manyToOne_Personne_responsable %}
+                    <li class='{{ L.actif?"":"passif" }}'>
+                        {{ L.getGeneric(true)|raw }}
+                    </li>
+                    {% endblock manyToOne_Personne_responsable %}
+                {% endfor %}
+                </ul>
+    </fieldset>
+    {% endblock manyToOne_respMaquetteList_respMaquetteList %}    
+
+    {% block manyToOne_coRespMaquetteList_coRespMaquetteList %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Personne", id: "{{ Personne.id }}", L: "coRespMaquetteList" }}'></i>coRespMaquetteList - {{ (Personne.coRespMaquetteList)|length }} élément{{(Personne.coRespMaquetteList)|length >1?'s':''}}</legend>
+
+                <ul>
+                {% for L in Personne.coRespMaquetteList %}   {% block manyToOne_Personne_co_responsable %}
+                    <li class='{{ L.actif?"":"passif" }}'>
+                        {{ L.getGeneric(true)|raw }}
+                    </li>
+                    {% endblock manyToOne_Personne_co_responsable %}
+                {% endfor %}
+                </ul>
+    </fieldset>
+    {% endblock manyToOne_coRespMaquetteList_coRespMaquetteList %}    
+
+    {% block manyToMany_responsableList_personne %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Personne", id: "{{ Personne.id }}", L: "responsableList" }}'></i>responsableList - {{ (Personne.responsableList)|length }} élément{{(Personne.responsableList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_responsableList_personne %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/responsable/personne/{{ Personne.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_responsableList_personne_etape %}
+                    <th class='w3-center'>etape</th>
+                    {% endblock header_th_responsableList_personne_etape %}       
+                    {% block header_endresponsableList_personne %}
+                    {% endblock header_endresponsableList_personne %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_responsableList_personne %}
+            </thead>
+
+            <tbody>
+            {% for responsable  in Personne.responsableList %}
+                {% block line_responsableList_personne %}
+                <tr name='responsableList' _id_='{{ responsable.id }}' class='{{ responsable.actif?"":"passif " }}{{ responsable.etape.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "responsable", id: "{{ responsable.id }}" }}'></i>
+                    {{ responsable.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_responsable_etape %}
+                    <th class='w3-left'>{{ responsable.etape.getGeneric( true )|raw }}</th>
+                    {% endblock line_responsable_etape %}
+                    {% block line_endresponsableList_personne %}
+                    {% endblock line_endresponsableList_personne %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_responsableList_personne %}
+            {% endfor %}
+            {% block footer_endresponsableList_personne %}
+            {% endblock footer_endresponsableList_personne %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_responsableList_personne %}    
+
+    {% block manyToOne_personne_etapeList_personne_etapeList %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Personne", id: "{{ Personne.id }}", L: "personne_etapeList" }}'></i>personne_etapeList - {{ (Personne.personne_etapeList)|length }} élément{{(Personne.personne_etapeList)|length >1?'s':''}}</legend>
+
+                <ul>
+                {% for L in Personne.personne_etapeList %}   {% block manyToOne_Personne_personne %}
+                    <li class='{{ L.actif?"":"passif" }}'>
+                        {{ L.getGeneric(true)|raw }}
+                    </li>
+                    {% endblock manyToOne_Personne_personne %}
+                {% endfor %}
+                </ul>
+    </fieldset>
+    {% endblock manyToOne_personne_etapeList_personne_etapeList %}    
+
+    {% block manyToMany_commentaire_personneList_personne %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Personne", id: "{{ Personne.id }}", L: "commentaire_personneList" }}'></i>commentaire_personneList - {{ (Personne.commentaire_personneList)|length }} élément{{(Personne.commentaire_personneList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_commentaire_personneList_personne %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/commentaire_personne/personne/{{ Personne.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_commentaire_personneList_personne_auteur %}
+                    <th class='w3-center'>auteur</th>
+                    {% endblock header_th_commentaire_personneList_personne_auteur %}
+                    {% block header_th_commentaire_personneList_personne_date %}
+                    <th class='w3-center'>date</th>
+                    {% endblock header_th_commentaire_personneList_personne_date %}
+                    {% block header_th_commentaire_personneList_personne_commentaire %}
+                    <th class='w3-center'>commentaire</th>
+                    {% endblock header_th_commentaire_personneList_personne_commentaire %}       
+                    {% block header_endcommentaire_personneList_personne %}
+                    {% endblock header_endcommentaire_personneList_personne %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_commentaire_personneList_personne %}
+            </thead>
+
+            <tbody>
+            {% for commentaire_personne  in Personne.commentaire_personneList %}
+                {% block line_commentaire_personneList_personne %}
+                <tr name='commentaire_personneList' _id_='{{ commentaire_personne.id }}' class='{{ commentaire_personne.actif?"":"passif " }}{{ commentaire_personne.auteur.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "commentaire_personne", id: "{{ commentaire_personne.id }}" }}'></i>
+                    {{ commentaire_personne.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_commentaire_personne_auteur %}
+                    <th class='w3-left'>{{ commentaire_personne.auteur.getGeneric( true )|raw }}</th>
+                    {% endblock line_commentaire_personne_auteur %}
+                    {% block line_commentaire_personneList_personne_date %}
+                    <td class='w3-center'>{{ commentaire_personne.date }}</td>
+                    {% endblock line_commentaire_personneList_personne_date %}
+                    {% block line_commentaire_personneList_personne_commentaire %}
+                    <td class='w3-center'>{{ commentaire_personne.commentaire }}</td>
+                    {% endblock line_commentaire_personneList_personne_commentaire %}
+                    {% block line_endcommentaire_personneList_personne %}
+                    {% endblock line_endcommentaire_personneList_personne %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_commentaire_personneList_personne %}
+            {% endfor %}
+            {% block footer_endcommentaire_personneList_personne %}
+            {% endblock footer_endcommentaire_personneList_personne %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_commentaire_personneList_personne %}    
+
+    {% block manyToMany_auteur_commentaire_personneList_auteur %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Personne", id: "{{ Personne.id }}", L: "auteur_commentaire_personneList" }}'></i>auteur_commentaire_personneList - {{ (Personne.auteur_commentaire_personneList)|length }} élément{{(Personne.auteur_commentaire_personneList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_auteur_commentaire_personneList_auteur %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/commentaire_personne/auteur/{{ Personne.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_auteur_commentaire_personneList_auteur_personne %}
+                    <th class='w3-center'>personne</th>
+                    {% endblock header_th_auteur_commentaire_personneList_auteur_personne %}
+                    {% block header_th_auteur_commentaire_personneList_auteur_date %}
+                    <th class='w3-center'>date</th>
+                    {% endblock header_th_auteur_commentaire_personneList_auteur_date %}
+                    {% block header_th_auteur_commentaire_personneList_auteur_commentaire %}
+                    <th class='w3-center'>commentaire</th>
+                    {% endblock header_th_auteur_commentaire_personneList_auteur_commentaire %}       
+                    {% block header_endauteur_commentaire_personneList_auteur %}
+                    {% endblock header_endauteur_commentaire_personneList_auteur %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_auteur_commentaire_personneList_auteur %}
+            </thead>
+
+            <tbody>
+            {% for commentaire_personne  in Personne.auteur_commentaire_personneList %}
+                {% block line_auteur_commentaire_personneList_auteur %}
+                <tr name='auteur_commentaire_personneList' _id_='{{ commentaire_personne.id }}' class='{{ commentaire_personne.actif?"":"passif " }}{{ commentaire_personne.personne.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "commentaire_personne", id: "{{ commentaire_personne.id }}" }}'></i>
+                    {{ commentaire_personne.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_commentaire_personne_personne %}
+                    <th class='w3-left'>{{ commentaire_personne.personne.getGeneric( true )|raw }}</th>
+                    {% endblock line_commentaire_personne_personne %}
+                    {% block line_auteur_commentaire_personneList_auteur_date %}
+                    <td class='w3-center'>{{ commentaire_personne.date }}</td>
+                    {% endblock line_auteur_commentaire_personneList_auteur_date %}
+                    {% block line_auteur_commentaire_personneList_auteur_commentaire %}
+                    <td class='w3-center'>{{ commentaire_personne.commentaire }}</td>
+                    {% endblock line_auteur_commentaire_personneList_auteur_commentaire %}
+                    {% block line_endauteur_commentaire_personneList_auteur %}
+                    {% endblock line_endauteur_commentaire_personneList_auteur %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_auteur_commentaire_personneList_auteur %}
+            {% endfor %}
+            {% block footer_endauteur_commentaire_personneList_auteur %}
+            {% endblock footer_endauteur_commentaire_personneList_auteur %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_auteur_commentaire_personneList_auteur %}    
+
+    {% block manyToMany_commentaire_enseignementList_auteur %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Personne", id: "{{ Personne.id }}", L: "commentaire_enseignementList" }}'></i>commentaire_enseignementList - {{ (Personne.commentaire_enseignementList)|length }} élément{{(Personne.commentaire_enseignementList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_commentaire_enseignementList_auteur %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/commentaire_enseignement/auteur/{{ Personne.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_commentaire_enseignementList_auteur_enseignement %}
+                    <th class='w3-center'>enseignement</th>
+                    {% endblock header_th_commentaire_enseignementList_auteur_enseignement %}
+                    {% block header_th_commentaire_enseignementList_auteur_date %}
+                    <th class='w3-center'>date</th>
+                    {% endblock header_th_commentaire_enseignementList_auteur_date %}
+                    {% block header_th_commentaire_enseignementList_auteur_commentaire %}
+                    <th class='w3-center'>commentaire</th>
+                    {% endblock header_th_commentaire_enseignementList_auteur_commentaire %}       
+                    {% block header_endcommentaire_enseignementList_auteur %}
+                    {% endblock header_endcommentaire_enseignementList_auteur %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_commentaire_enseignementList_auteur %}
+            </thead>
+
+            <tbody>
+            {% for commentaire_enseignement  in Personne.commentaire_enseignementList %}
+                {% block line_commentaire_enseignementList_auteur %}
+                <tr name='commentaire_enseignementList' _id_='{{ commentaire_enseignement.id }}' class='{{ commentaire_enseignement.actif?"":"passif " }}{{ commentaire_enseignement.enseignement.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "commentaire_enseignement", id: "{{ commentaire_enseignement.id }}" }}'></i>
+                    {{ commentaire_enseignement.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_commentaire_enseignement_enseignement %}
+                    <th class='w3-left'>{{ commentaire_enseignement.enseignement.getGeneric( true )|raw }}</th>
+                    {% endblock line_commentaire_enseignement_enseignement %}
+                    {% block line_commentaire_enseignementList_auteur_date %}
+                    <td class='w3-center'>{{ commentaire_enseignement.date }}</td>
+                    {% endblock line_commentaire_enseignementList_auteur_date %}
+                    {% block line_commentaire_enseignementList_auteur_commentaire %}
+                    <td class='w3-center'>{{ commentaire_enseignement.commentaire }}</td>
+                    {% endblock line_commentaire_enseignementList_auteur_commentaire %}
+                    {% block line_endcommentaire_enseignementList_auteur %}
+                    {% endblock line_endcommentaire_enseignementList_auteur %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_commentaire_enseignementList_auteur %}
+            {% endfor %}
+            {% block footer_endcommentaire_enseignementList_auteur %}
+            {% endblock footer_endcommentaire_enseignementList_auteur %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_commentaire_enseignementList_auteur %}    
+
+    {% block manyToMany_commentaire_maquetteList_auteur %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Personne", id: "{{ Personne.id }}", L: "commentaire_maquetteList" }}'></i>commentaire_maquetteList - {{ (Personne.commentaire_maquetteList)|length }} élément{{(Personne.commentaire_maquetteList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_commentaire_maquetteList_auteur %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/commentaire_maquette/auteur/{{ Personne.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_commentaire_maquetteList_auteur_maquette %}
+                    <th class='w3-center'>maquette</th>
+                    {% endblock header_th_commentaire_maquetteList_auteur_maquette %}
+                    {% block header_th_commentaire_maquetteList_auteur_date %}
+                    <th class='w3-center'>date</th>
+                    {% endblock header_th_commentaire_maquetteList_auteur_date %}
+                    {% block header_th_commentaire_maquetteList_auteur_commentaire %}
+                    <th class='w3-center'>commentaire</th>
+                    {% endblock header_th_commentaire_maquetteList_auteur_commentaire %}       
+                    {% block header_endcommentaire_maquetteList_auteur %}
+                    {% endblock header_endcommentaire_maquetteList_auteur %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_commentaire_maquetteList_auteur %}
+            </thead>
+
+            <tbody>
+            {% for commentaire_maquette  in Personne.commentaire_maquetteList %}
+                {% block line_commentaire_maquetteList_auteur %}
+                <tr name='commentaire_maquetteList' _id_='{{ commentaire_maquette.id }}' class='{{ commentaire_maquette.actif?"":"passif " }}{{ commentaire_maquette.maquette.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "commentaire_maquette", id: "{{ commentaire_maquette.id }}" }}'></i>
+                    {{ commentaire_maquette.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_commentaire_maquette_maquette %}
+                    <th class='w3-left'>{{ commentaire_maquette.maquette.getGeneric( true )|raw }}</th>
+                    {% endblock line_commentaire_maquette_maquette %}
+                    {% block line_commentaire_maquetteList_auteur_date %}
+                    <td class='w3-center'>{{ commentaire_maquette.date }}</td>
+                    {% endblock line_commentaire_maquetteList_auteur_date %}
+                    {% block line_commentaire_maquetteList_auteur_commentaire %}
+                    <td class='w3-center'>{{ commentaire_maquette.commentaire }}</td>
+                    {% endblock line_commentaire_maquetteList_auteur_commentaire %}
+                    {% block line_endcommentaire_maquetteList_auteur %}
+                    {% endblock line_endcommentaire_maquetteList_auteur %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_commentaire_maquetteList_auteur %}
+            {% endfor %}
+            {% block footer_endcommentaire_maquetteList_auteur %}
+            {% endblock footer_endcommentaire_maquetteList_auteur %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_commentaire_maquetteList_auteur %}    
+
+    {% block manyToMany_commentaire_composanteList_auteur %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Personne", id: "{{ Personne.id }}", L: "commentaire_composanteList" }}'></i>commentaire_composanteList - {{ (Personne.commentaire_composanteList)|length }} élément{{(Personne.commentaire_composanteList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_commentaire_composanteList_auteur %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/commentaire_composante/auteur/{{ Personne.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_commentaire_composanteList_auteur_composante %}
+                    <th class='w3-center'>composante</th>
+                    {% endblock header_th_commentaire_composanteList_auteur_composante %}
+                    {% block header_th_commentaire_composanteList_auteur_date %}
+                    <th class='w3-center'>date</th>
+                    {% endblock header_th_commentaire_composanteList_auteur_date %}
+                    {% block header_th_commentaire_composanteList_auteur_commentaire %}
+                    <th class='w3-center'>commentaire</th>
+                    {% endblock header_th_commentaire_composanteList_auteur_commentaire %}       
+                    {% block header_endcommentaire_composanteList_auteur %}
+                    {% endblock header_endcommentaire_composanteList_auteur %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_commentaire_composanteList_auteur %}
+            </thead>
+
+            <tbody>
+            {% for commentaire_composante  in Personne.commentaire_composanteList %}
+                {% block line_commentaire_composanteList_auteur %}
+                <tr name='commentaire_composanteList' _id_='{{ commentaire_composante.id }}' class='{{ commentaire_composante.actif?"":"passif " }}{{ commentaire_composante.composante.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "commentaire_composante", id: "{{ commentaire_composante.id }}" }}'></i>
+                    {{ commentaire_composante.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_commentaire_composante_composante %}
+                    <th class='w3-left'>{{ commentaire_composante.composante.getGeneric( true )|raw }}</th>
+                    {% endblock line_commentaire_composante_composante %}
+                    {% block line_commentaire_composanteList_auteur_date %}
+                    <td class='w3-center'>{{ commentaire_composante.date }}</td>
+                    {% endblock line_commentaire_composanteList_auteur_date %}
+                    {% block line_commentaire_composanteList_auteur_commentaire %}
+                    <td class='w3-center'>{{ commentaire_composante.commentaire }}</td>
+                    {% endblock line_commentaire_composanteList_auteur_commentaire %}
+                    {% block line_endcommentaire_composanteList_auteur %}
+                    {% endblock line_endcommentaire_composanteList_auteur %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_commentaire_composanteList_auteur %}
+            {% endfor %}
+            {% block footer_endcommentaire_composanteList_auteur %}
+            {% endblock footer_endcommentaire_composanteList_auteur %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_commentaire_composanteList_auteur %}    
+
+    {% block manyToMany_personne_situationList_personne %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Personne", id: "{{ Personne.id }}", L: "personne_situationList" }}'></i>personne_situationList - {{ (Personne.personne_situationList)|length }} élément{{(Personne.personne_situationList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_personne_situationList_personne %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/personne_situation/personne/{{ Personne.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_personne_situationList_personne_situation %}
+                    <th class='w3-center'>situation</th>
+                    {% endblock header_th_personne_situationList_personne_situation %}
+                    {% block header_th_personne_situationList_personne_debut %}
+                    <th class='w3-center'>debut</th>
+                    {% endblock header_th_personne_situationList_personne_debut %}
+                    {% block header_th_personne_situationList_personne_fin %}
+                    <th class='w3-center'>fin</th>
+                    {% endblock header_th_personne_situationList_personne_fin %}
+                    {% block header_th_personne_situationList_personne_reduction %}
+                    <th class='w3-center'>reduction</th>
+                    {% endblock header_th_personne_situationList_personne_reduction %}
+                    {% block header_th_personne_situationList_personne_commentaire %}
+                    <th class='w3-center'>commentaire</th>
+                    {% endblock header_th_personne_situationList_personne_commentaire %}       
+                    {% block header_endpersonne_situationList_personne %}
+                    {% endblock header_endpersonne_situationList_personne %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_personne_situationList_personne %}
+            </thead>
+
+            <tbody>
+            {% for personne_situation  in Personne.personne_situationList %}
+                {% block line_personne_situationList_personne %}
+                <tr name='personne_situationList' _id_='{{ personne_situation.id }}' class='{{ personne_situation.actif?"":"passif " }}{{ personne_situation.situation.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "personne_situation", id: "{{ personne_situation.id }}" }}'></i>
+                    {{ personne_situation.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_personne_situation_situation %}
+                    <th class='w3-left'>{{ personne_situation.situation.getGeneric( true )|raw }}</th>
+                    {% endblock line_personne_situation_situation %}
+                    {% block line_personne_situationList_personne_debut %}
+                    <td class='w3-center'>{{ personne_situation.debut }}</td>
+                    {% endblock line_personne_situationList_personne_debut %}
+                    {% block line_personne_situationList_personne_fin %}
+                    <td class='w3-center'>{{ personne_situation.fin }}</td>
+                    {% endblock line_personne_situationList_personne_fin %}
+                    {% block line_personne_situationList_personne_reduction %}
+                    <td class='w3-center'>{{ personne_situation.reduction }}</td>
+                    {% endblock line_personne_situationList_personne_reduction %}
+                    {% block line_personne_situationList_personne_commentaire %}
+                    <td class='w3-center'>{{ personne_situation.commentaire }}</td>
+                    {% endblock line_personne_situationList_personne_commentaire %}
+                    {% block line_endpersonne_situationList_personne %}
+                    {% endblock line_endpersonne_situationList_personne %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_personne_situationList_personne %}
+            {% endfor %}
+            {% block footer_endpersonne_situationList_personne %}
+            {% endblock footer_endpersonne_situationList_personne %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_personne_situationList_personne %}    
+
+    {% block manyToMany_personne_foncrefList_personne %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Personne", id: "{{ Personne.id }}", L: "personne_foncrefList" }}'></i>personne_foncrefList - {{ (Personne.personne_foncrefList)|length }} élément{{(Personne.personne_foncrefList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_personne_foncrefList_personne %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/personne_foncRef/personne/{{ Personne.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_personne_foncrefList_personne_foncref %}
+                    <th class='w3-center'>foncref</th>
+                    {% endblock header_th_personne_foncrefList_personne_foncref %}
+                    {% block header_th_personne_foncrefList_personne_commentaire %}
+                    <th class='w3-center'>commentaire</th>
+                    {% endblock header_th_personne_foncrefList_personne_commentaire %}
+                    {% block header_th_personne_foncrefList_personne_volume %}
+                    <th class='w3-center'>volume</th>
+                    {% endblock header_th_personne_foncrefList_personne_volume %}       
+                    {% block header_endpersonne_foncrefList_personne %}
+                    {% endblock header_endpersonne_foncrefList_personne %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_personne_foncrefList_personne %}
+            </thead>
+
+            <tbody>
+            {% for personne_foncRef  in Personne.personne_foncrefList %}
+                {% block line_personne_foncrefList_personne %}
+                <tr name='personne_foncrefList' _id_='{{ personne_foncRef.id }}' class='{{ personne_foncRef.actif?"":"passif " }}{{ personne_foncRef.foncref.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "personne_foncRef", id: "{{ personne_foncRef.id }}" }}'></i>
+                    {{ personne_foncRef.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_personne_foncRef_foncref %}
+                    <th class='w3-left'>{{ personne_foncRef.foncref.getGeneric( true )|raw }}</th>
+                    {% endblock line_personne_foncRef_foncref %}
+                    {% block line_personne_foncrefList_personne_commentaire %}
+                    <td class='w3-center'>{{ personne_foncRef.commentaire }}</td>
+                    {% endblock line_personne_foncrefList_personne_commentaire %}
+                    {% block line_personne_foncrefList_personne_volume %}
+                    <td class='w3-center'>{{ personne_foncRef.volume }}</td>
+                    {% endblock line_personne_foncrefList_personne_volume %}
+                    {% block line_endpersonne_foncrefList_personne %}
+                    {% endblock line_endpersonne_foncrefList_personne %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_personne_foncrefList_personne %}
+            {% endfor %}
+            {% block footer_endpersonne_foncrefList_personne %}
+            {% endblock footer_endpersonne_foncrefList_personne %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_personne_foncrefList_personne %}    
+
+    {% block oneToOne_voeu_personne_bilan %}  
+    <fieldset>
+        <legend>voeu_personne_bilan</legend>
+        {% if not isCreation %}
+
+    <table class='w3-table-all w3-hoverable w3-small'>
+        <thead>
+            <tr class='w3-light-blue'>    
+                    <th>heures</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>    
+                        <td>{{ Personne.voeu_personne_bilan.heures }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        {% endif %}
+    </fieldset>
+    {% endblock oneToOne_voeu_personne_bilan%}
+    
+    {% block oneToOne_personne_charge %}  
+    <fieldset>
+        <legend>personne_charge</legend>
+        {% if not isCreation %}
+
+    <table class='w3-table-all w3-hoverable w3-small'>
+        <thead>
+            <tr class='w3-light-blue'>    
+                    <th>charge</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>    
+                        <td>{{ Personne.personne_charge.charge }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        {% endif %}
+    </fieldset>
+    {% endblock oneToOne_personne_charge%}
+    
+    {% block oneToOne_personne_situation_reduction %}  
+    <fieldset>
+        <legend>personne_situation_reduction</legend>
+        {% if not isCreation %}
+
+    <table class='w3-table-all w3-hoverable w3-small'>
+        <thead>
+            <tr class='w3-light-blue'>    
+                    <th>reduction</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>    
+                        <td>{{ Personne.personne_situation_reduction.reduction }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        {% endif %}
+    </fieldset>
+    {% endblock oneToOne_personne_situation_reduction%}
+    
+    {% block oneToOne_personne_referentiel_heures %}  
+    <fieldset>
+        <legend>personne_referentiel_heures</legend>
+        {% if not isCreation %}
+
+    <table class='w3-table-all w3-hoverable w3-small'>
+        <thead>
+            <tr class='w3-light-blue'>    
+                    <th>heures</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>    
+                        <td>{{ Personne.personne_referentiel_heures.heures }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        {% endif %}
+    </fieldset>
+    {% endblock oneToOne_personne_referentiel_heures%}
+    
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

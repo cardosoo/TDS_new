@@ -1,0 +1,61 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+<div class="w3-cell-row">
+
+
+<h3>{{ title }}</h3>
+
+        <table id="standardList" class="w3-table-all w3-centered">
+            <thead>
+                {% for name in nameList %}
+                    {% if name starts with 'id_'%}
+                    {% else %}
+                    <th>{{ name }}</th>
+                    {% endif %}
+                {% endfor %}
+            </thead>
+            <tbody>
+                {% for line in data %}
+                <tr>
+                    {% for name in nameList %}
+                        {% set val = attribute(line,name) %}
+                        {% if name starts with 'id_'%}
+                        {% set linkID = val %}
+                        {% set linkPath = name|split('_')|last %}
+                        {% else %}
+                            {% if linkID >0 %}
+                                <td><a href='/{{App.appName}}/{{linkPath}}/{{linkID}}'>{{val}}</a></td>
+                                {% set linkID = 0 %}
+                            {% else %}
+                                <td>{{val|replace({'|': "<br>\n"})|raw}}
+                            {% endif %}
+                        {% endif %}
+                        </td>
+                    {% endfor %}
+                {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+</div> 
+
+<script>
+    $(document).ready(function () {
+        $('#standardList').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock section %}

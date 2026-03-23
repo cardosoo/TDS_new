@@ -1,0 +1,203 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+
+{% macro entete(type, N) %}
+<div class='w3-card-4 w3-theme-l4 w3-round-large'>
+    <div class='w3-center'>
+        <h5>Il y a {{N}} fiche{{ N>1?"s":""}} de validation {{ type }}</h5>
+    </div>
+    <table class='w3-table'>
+        <thead>
+            <tr>
+            <th></th>    
+            <th>Modification</th>
+            <th>Vacataire</th>
+            <th>ECUE</th>
+            <th>hEQTD</th>
+            <th>Etape</th>
+            <th>Cursus</th>
+            <th>Semestre</th>
+            <th>Validateur</th>
+            <th>Validateur</th>
+            <th>Foire</th>    
+            </tr>
+        </thead>
+        <tbody>
+{% endmacro %}
+
+{% macro corps(FL) %}
+    {% for F in FL %} 
+    {% set Fi = F.F.data %}
+    {% set tool = F.tool %}
+    <tr class="{{Fi.inDB=='out'?'horsDB':'inDB'}}">
+        <td>{{tool|raw}}</td>
+        <td>{{Fi.modificationDate}}</td>
+        <td>{{Fi.nom}} {{Fi.prenom}}</td>
+        <td>{{Fi.codeECUE }}</td>
+        <td class='w3-center'>{{ Fi.hCM*1.5+Fi.hCMTD*1.25+Fi.hTD*1+Fi.hTP*1 }}</td>
+        <td>{{Fi.formation }}</td>
+        <td class='w3-center'>{{Fi.niveau }}</td>
+        <td class='w3-center'>{{Fi.semestre }}</td>
+        <td><a href='/{{App.appName}}/personne/{{F.P.id}}'>{{F.P.email}}</a></td>
+        <td>{{Fi.gestionnaireScol }}</td>
+        <td>{{Fi.inDB }}</td>
+    </tr>
+    {% endfor %}
+{% endmacro %}
+
+{% macro pied() %}
+        </tbody>
+    </table>
+    <br />
+</div>
+<br />
+{% endmacro %}
+
+
+{% block section %}
+
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+    <h3>Liste des fiches de validation des Vacations pour l'année  {{D.year}} - {{D.year + 1}}</h3>
+
+    <div class="w3-panel w3-leftbar w3-sand w3-serif">
+    <b>Attention !</b> Cette page présente l'état des validations au moment de son chargement.<br>
+    Elle ne s'actualise pas toute seule, il est nécessaire de la recharger à la main pour que soit pris en compte le nouvel état des validations.
+    </div>
+
+    {% if App.auth.hasRole('Gestionnaire') %}
+    <div class='w3-card-4 w3-theme-l4 w3-round-large'>
+        <a href='/{{App.appName}}/vacation/createFiche'>Créer une fiche</a>
+    </div>
+    {% endif %}
+
+
+{% if App.auth.hasRole('Gestionnaire') %}
+    {% set FL = D.creationList %}
+    {% set N = FL|length %}
+    {% if N > 0 %}
+        {{ _self.entete("en cours de création", N) }}
+        {{ _self.corps(FL) }}
+        {{ _self.pied() }}
+    {% endif %}
+{% endif %}
+
+    {% set FL = D.editionList %}
+    {% set N = FL|length %}
+    {% if N > 0 %}
+        {{ _self.entete("en cours d'édition", N) }}
+        {{ _self.corps(FL) }}
+        {{ _self.pied() }}
+    {% endif %}
+
+    
+    {% set FL = D.validationList %}
+    {% set N = FL|length %}
+    {% if N > 0 %}
+
+    {% if App.auth.hasRole('respAdmin') %}
+    <div class="w3-container">
+        <button class="w3-button"><a href='/{{App.appName}}/vacation/downloadValide'>Télécharger les fiches validées</a></button>
+        <button class="w3-button"><a href='/{{App.appName}}/vacation/downloadValideAndArchive'>Télécharger les fiches validées et archiver</a></button>
+    </div>
+    {% endif %}
+
+        {{ _self.entete("validées", N) }}
+        {{ _self.corps(FL) }}
+        {{ _self.pied() }}
+    {% endif %}
+
+    {% set FL = D.archivedList %}
+    {% set N = FL|length %}
+    {% if N > 0 %}
+        {{ _self.entete("archivées", N) }}
+        {{ _self.corps(FL) }}
+        {{ _self.pied() }}
+    {% endif %}
+
+    {% if App.auth.hasRole('Gestionnaire') %}
+
+    {% set FL = D.deletedList %}
+    {% set N = FL|length %}
+    {% if N > 0 %}
+        {{ _self.entete("effacées", N) }}
+        {{ _self.corps(FL) }}
+        {{ _self.pied() }}
+    {% endif %}
+
+    {% set FL = D.autreList %}
+    {% set N = FL|length %}
+    {% if N > 0 %}
+        {{ _self.entete("dans un état inconnu !?", N) }}
+        {{ _self.corps(FL) }}
+        {{ _self.pied() }}
+    {% endif %}
+{% endif %}
+
+</div>
+
+<script>
+
+    function copyToClipboard(what){
+        var lien = URL.parse(document.URL).origin+"/{{App.appName}}/ficheECUE/fiche/"+what;
+        navigator.clipboard.writeText(lien);
+        window.alert('Lien copié dans le presse papeir \n '+lien);
+    }
+
+    function deleteFicheECUE(name){
+        $.get( "/{{App.appName}}/ficheECUE/delete/"+name, function( data ) {
+            if (data == 'Done'){
+                window.location.reload();
+            } else {
+                alert( "Il y a eu un problème avec la suppression");
+            }
+        });
+    }
+
+    function destroyFicheECUE(name){
+        $.get( "/{{App.appName}}/ficheECUE/destroy/"+name, function( data ) {
+            if (data == 'Done'){
+                window.location.reload();
+            } else {
+                alert( "Il y a eu un problème avec la destruction");
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        $('.w3-table').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+
+        $('#tableDeleted').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>      
+
+
+{% endblock %}
+

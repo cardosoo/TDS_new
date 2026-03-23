@@ -1,0 +1,58 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+   
+    <h3>Liste des associations Enseignement - domaines</h3>
+
+    <table id="tdsList" class="w3-table-all w3-centered">
+        <thead>
+            <th>id Ens</th>
+            <th>Enseignement</th>
+            <th>Domaine 1</th>
+            <th>Domaine 2</th>
+            <th>Domaine 3</th>
+            <th>Domaine 4</th>
+        </thead>
+        <tbody>
+            {% for E in EList %}
+
+            <tr>
+                <td>{{ E.id }}</a></td>
+                <td class='w3-left'>{{ E.getGenericWithLink()|raw }}</a></td>
+                {% for index in 0..3  %}
+                    {% set DEL = E.domaine_enseignementList %}
+                    {% if index <= DEL|length %}
+                        <td>{{DEL[index].domaine.acronyme}}</td>    
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div> 
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#tdsList').DataTable({
+            order: [[0, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv'
+            ]
+        });
+    
+    });
+</script>
+
+{% endblock %}

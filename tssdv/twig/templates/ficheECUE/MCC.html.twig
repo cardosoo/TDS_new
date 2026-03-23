@@ -1,0 +1,87 @@
+<datalist id="values">
+    <option value="0" label="100% CC"></option>
+    <option value="25" label="75% CC"></option>
+    <option value="50" label="50%"></option>
+    <option value="75" label="75% ET"></option>
+    <option value="100" label="100% ET"></option>
+</datalist>
+
+
+<div class="w3-container w3-theme-l2">
+    <h5>Modalités de contrôle des connaissances</h5>
+</div>
+<div>
+    <input id='sessionUniqueCB' type='checkbox'  onchange='changeSession(this);' name='sessionUnique' {{data.sessionUnique?"checked":""}}>
+    <label for="sessionUniqueCB">Contrôle des connaissances en session unique</label>
+</div>
+<div id='sessionUnique' style='display: {{data.sessionUnique?"block":"none"}};' > 
+    <div class="w3-row-padding {{divClass}}">
+        <div class="w3-quarter">
+            <label>Contrôle continu</label>
+        </div>
+        <div class="w3-half">        
+            <div class='w3-center'><span style='width: 5em' class='w3-left' id='CC'>dd</span>ratio en session unique<span style='width: 5em'class='w3-right'id='ET'>cc</span></div>
+            <input  class="custom-slider custom-slider-bullet w3-input" type="range" id="ratioCET" name="ratioCET" min="0" max="100" value="{{data.ratioCET}}" list='values'/>
+        </div>
+        <div class="w3-quarter">
+            <label>Examen terminal</label>
+            {% set typeETList = ['écrit', 'oral'] %}
+            <select  class="w3-select" name="typeET">
+                <option value=""  {{ data.typeET is null ? "selected" }}>Choisir</option>
+                {% for typeET in typeETList %}
+                <option value="{{typeET}}" {{ data.typeET == typeET ? "selected" }}>{{typeET}}</option>
+                {% endfor %}                    
+            </select>
+        </div>
+    </div>
+</div>
+<div id='sessionDouble' style='display: {{data.sessionUnique?"none":"block"}}' > 
+    <div class="w3-row-padding  {{divClass}}">
+        <div class="w3-quarter">
+            <label>Contrôle continu</label>
+        </div>
+        <div class="w3-half">        
+            <div class='w3-center'><span style='width: 5em' class='w3-left' id='CCS1'>dd</span>ratio en session 1<span style='width: 5em'class='w3-right'id='ETS1'>cc</span></div>
+            <input  class="custom-slider custom-slider-bullet w3-input" type="range" id="ratioCETS1" name="ratioCETS1" min="0" max="100" value="{{data.ratioCETS1}}" list='values'/>
+        </div>
+        <div class="w3-quarter">
+            <label>Examen terminal</label>
+            {% set typeETList = ['écrit', 'oral'] %}
+            <select  class="w3-select" name="typeETS1">
+                <option value=""  {{ data.typeETS1 is null ? "selected" }}>Choisir</option>
+                {% for typeET in typeETList %}
+                <option value="{{typeET}}" {{ data.typeETS1 == typeET ? "selected" }}>{{typeET}}</option>
+                {% endfor %}                    
+            </select>
+        </div>
+    </div>
+    <div class="w3-row-padding  {{divClass}}">
+        <div class="w3-quarter">
+            <label>Contrôle continu</label>
+        </div>
+        <div class="w3-half">        
+            <div class='w3-center'><span style='width: 5em' class='w3-left' id='CCS2'>dd</span>ratio en session 2<span style='width: 5em'class='w3-right'id='ETS2'>cc</span></div>
+            <input class="custom-slider custom-slider-bullet w3-input" type="range" id="ratioCETS2" name="ratioCETS2" min="0" max="100" value="{{data.ratioCETS2}}" list='values'/>
+        </div>
+        <div class="w3-quarter">
+            <label>Examen terminal</label>
+            {% set typeETList = ['écrit', 'oral'] %}
+            <select  class="w3-select" name="typeETS2">
+                <option value=""  {{ data.typeETS2 is null ? "selected" }}>Choisir</option>
+                {% for typeET in typeETList %}
+                <option value="{{typeET}}" {{ data.typeETS2 == typeET ? "selected" }}>{{typeET}}</option>
+                {% endfor %}                    
+            </select>
+        </div>
+    </div>
+</div>
+
+<script>
+function changeSession(cb){
+    var on = cb.checked;
+    var elm = document.getElementById('sessionUnique');
+    elm.style.display = on?"block":"none";
+    var elm = document.getElementById('sessionDouble');
+    elm.style.display = on?"none":"block";
+}
+</script>

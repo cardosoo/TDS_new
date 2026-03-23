@@ -1,0 +1,25 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+
+<div class="w3-cell-row">
+
+    <ul>
+        <li><b>Besoins en enseignement </b>: {{ Params.besoins }} hEQTD</li>
+        <li><b>Potentiel enseignant théorique </b>: {{ Params.totals.potentielTheorique }} hEQTD</li>
+        <li><b>Potentiel enseignant réel </b>: {{ Params.totals.potentielReel }} hEQTD</li>
+        <li><b>Situations Particulières </b>: {{ Params.totals.totalSituation }} hEQTD</li>
+        <ul>
+            <li>dont <b>Reports</b> : {{ Params.totals.totalReport }} hEQTD</li>
+        </ul>
+        <li><b>Référentiel (PCC) </b>: {{ Params.totals.totalReferentiel }} hEQTD</li>
+    </ul>
+
+</div> 
+<br>
+<br>
+
+
+
+{% endblock section %}

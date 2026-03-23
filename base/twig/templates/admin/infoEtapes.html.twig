@@ -1,0 +1,103 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+<style>
+
+td, th {
+  vertical-align: middle;
+  text-align: left;
+}
+
+.td_centre{
+  text-align: center !important;
+}
+
+.bold{
+  background: AliceBlue;
+  font-weight: bold;
+}
+
+.cache{
+  display : none;
+}
+</style>
+
+
+
+<div class="w3-cell-row">
+
+  <div class="w3-container w3-cell">
+    <div class="w3-card" style="max-width:1600px;margin-top:80px">    
+
+      <h3>quelques infos sur les étapes</h3>
+      <table id='list'>
+        <thead>
+            <tr>
+                <th class='cache'>ordre</th>
+                <th>code</th>
+                <th>Maquette</th>
+                <th>Étape</th>
+                <th>Responsables</th>
+                <th>Effectif</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for p in params %}{# |slice(0,1) #}
+          {% set ordre = ordre+1 %}
+          <tr>
+            <td class='cache'>{{ordre}}</td>
+            <td class='bold'></td>
+            <td class='bold'>{{ p.composante.nom}}</td>
+            <td class='bold'></td>
+            <td class='bold'></td>
+            <td class='bold'></td>
+          </tr>
+          {% for l in p.list %}
+            {% set ordre = ordre+1 %}
+            {% set RL = [] %}
+            {% for responsable in l.etape.responsableList %}
+                {% set RL = RL|merge([responsable.personne.getGenericWithLink]) %}                
+              {% endfor %}
+              {% set RL = RL|join(', ') %}
+            <tr> 
+              <td class='cache'>{{ ordre }}</td>
+              <td>{{ l.etape.nom }}</td>
+              <td>{{ l.maquette.getGenericWithLink|raw }}</td>
+              <td>{{ l.etape.nom }}</td>
+              <td>{{ RL|raw }}</td>
+              <td>{{ l.etape.nbetu }}</td>
+            </tr>
+          {% endfor %}
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div> 
+<br>
+<br>
+
+<script>
+    $(document).ready(function () {
+        $('#list').DataTable({
+            // order: [[0, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+
+{% endblock section %}
+

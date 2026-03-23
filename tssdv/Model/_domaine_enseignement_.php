@@ -1,0 +1,86 @@
+<?php
+namespace Model;
+use \TDS\Model\Entity;
+use \TDS\Model\Field;
+
+/*
+* This file is auto-generated and should not be changed by hand.
+* filename : _domaine_enseignement_.php
+* created : Wed, 30 Jul 2025 18:30:52 +0200 UTC
+*/ 
+
+interface _domaine_enseignement_interface_ {
+    const dbName = 'domaine_enseignement';
+    const idName = 'id';
+    const SEARCH = array (
+);
+    const GENERIC = NULL;
+    const ORDER = NULL;
+
+    // les définitions de l'entité domaine_enseignement
+    const entityDef = [
+
+        'actif' => [
+            'dbName' => 'actif',
+            'type' => Field::BOOL,
+            'size' => 100,
+            'default' => TRUE,
+            'nullable' => TRUE,
+            'twigName' => 'actif',
+            'mode' => 'raw',
+            ],
+
+        'domaine' => [
+            'type' => Field::ONETOMANY, 
+            'targetEntity' => '\tssdv\Model\Domaine',
+            'mappedBy' => 'domaine',
+            'inversedBy' => 'domaine_enseignementList',
+            'twigName' => 'domaine',
+            'dbName' => 'domaine', 
+        ],    
+
+        'enseignement' => [
+            'type' => Field::ONETOMANY, 
+            'targetEntity' => '\tssdv\Model\Enseignement',
+            'mappedBy' => 'enseignement',
+            'inversedBy' => 'domaine_enseignementList',
+            'twigName' => 'enseignement',
+            'dbName' => 'enseignement', 
+        ],    
+
+        'ordre' => [
+            'dbName' => 'ordre',
+            'type' => Field::INT,
+            'size' => 100,
+            'default' => 0,
+            'nullable' => TRUE,
+            'twigName' => 'ordre',
+            'mode' => 'raw',
+            ],
+
+        'quotite' => [
+            'dbName' => 'quotite',
+            'type' => Field::FLOAT,
+            'size' => 100,
+            'default' => 0,
+            'nullable' => TRUE,
+            'twigName' => 'quotite',
+            'mode' => 'raw',
+            ],
+
+    ]; 
+}
+
+trait _domaine_enseignement_ {
+    protected int $id;            
+    protected bool $actif = TRUE;
+    protected ?\tssdv\Model\Domaine $domaine;
+    protected int $__domaine;
+    protected ?\tssdv\Model\Enseignement $enseignement;
+    protected int $__enseignement;
+    protected int $ordre = 0;
+    protected float $quotite = 0;
+
+    protected int $__status__ = Entity::NEW; 
+    protected array $__org__ = [];
+}

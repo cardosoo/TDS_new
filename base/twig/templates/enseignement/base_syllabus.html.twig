@@ -1,0 +1,159 @@
+<div class="w3-container w3-card w3-theme-l1 w3-round w3-margin">
+    <details>
+        <summary>
+            {% if E.canEdit() %}
+                <i onclick="document.getElementById('editSyllabus').style.display='block'" class="far fa-edit"></i>
+            {% endif %}
+            Syllabus
+        </summary>
+        <div id='syllabus' class='w3-responsive w3-white'  style="font-size: small">{{ E.syllabus|raw }}</div>
+    </details>
+</div>
+
+
+{% if E.canEdit() %}
+
+<div id="editSyllabus" class="w3-modal" >
+
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="min-width: 600px; max-width:1000px; min-height: 500px">
+        <div class="w3-center"><br>
+            <span onclick="closeModalSyllabusEditForm()" class="w3-button w3-xlarge w3-hover-red w3-display-topright"
+                title="Close Modal">&times;</span>
+        </div>
+
+        {# Pour afficher les éventuelles erreurs #}
+        <header id='editSyllabusError' class="w3-container w3-red " style="display:none">
+            <span onclick="this.parentElement.style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <p class='w3-center'>Red often indicates a dangerous or negative situation.</p>
+        </header>
+
+        {# Le formulaire proprement dit #}
+        <form id="syllabusEditForm" enctype="multipart/form-data" class="w3-container" method='POST'
+            action="/{{ App.appName }}/enseignement/saveSyllabus/{{ E.id }}">
+            <div class="w3-section" id='syllabusTextarea' placeholder='Mettre un Syllabus ici...' style='min-height: 400px;'>{{ E.syllabus|raw }}</div>
+            <div class="w3-section">
+                <button id='submitBtn' class="w3-button w3-block w3-green w3-section w3-padding"
+                    type="submit">Modifier</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{#<script src="https://cdn.tiny.cloud/1/tg76fumxy24hg6ig3n1uunbv22zn0m2eldom2f3ikvvksmzi/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>#}
+<script src="/{{App.appName}}/assets/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    var demoBaseConfig = {
+        license_key: 'gpl',
+        selector: '#syllabusTextarea',
+        menubar: false,
+        inline: true,
+        plugins: [
+            'autolink',
+            'codesample',
+            'link',
+            'lists',
+            'media',
+            'powerpaste',
+            'table',
+            'image',
+            'quickbars',
+            'codesample',
+            'help'
+        ],
+        toolbar: false,
+        quickbars_insert_toolbar: 'quicktable image media codesample',
+        quickbars_selection_toolbar: 'bold italic underline | formatselect | blockquote quicklink',
+        contextmenu: 'undo redo | inserttable | cell row column deletetable | help',
+        powerpaste_word_import: 'clean',
+        powerpaste_html_import: 'clean',
+        spellchecker_dialog: true,
+        spellchecker_ignore_list: ['Ephox', 'Moxiecode'],
+        tinydrive_demo_files_url: '/docs/demo/tiny-drive-demo/demo_files.json',
+        tinydrive_token_provider: function (success, failure) {
+            success({ token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huZG9lIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.Ks_BdfH4CWilyzLNk8S2gDARFhuxIauLa8PwhdEQhEo' });
+    },
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+    };
+
+    var syllabusForm;
+    var syllabusFormData;
+    var theBlob;
+
+
+    function isFormDataSyllabusEditChanged(data) {
+        for (var key of syllabusFormData.keys()) {
+            test = data.get(key);
+            if (test.constructor.name == 'File') {
+                if (test.name != '') {
+                    return true;
+                }
+            } else {
+                if (test.valueOf() != syllabusFormData.get(key).valueOf()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    $(document).ready(function () {
+
+        tinymce.init(demoBaseConfig);
+
+        
+        $("#syllabusEditForm").submit(function (e) {
+            //stop submit the form, we will post it manually.
+            event.preventDefault();
+            // Get form
+            var form = $('#syllabusEditForm')[0];
+            // Create an FormData object 
+            var syllabus = $('#syllabusTextarea').html();
+            var data = { 'syllabus' :  syllabus};
+
+            // disabled the submit button
+            $("#submitBtn").prop("disabled", true);
+
+            $.ajax({
+                type: "POST",
+                url: "/{{ App.appName }}/enseignement/saveSyllabus/{{ E.id }}",
+                data: data,
+                cache: false,
+                timeout: 800000,
+                success: function (data) {
+                    if ('success' == data) {
+                        window.location.reload(true);
+                    } else {
+                        $('#editSyllabusError > p').html(data);
+                        document.getElementById('editSyllabusError').style.display = 'block'
+                        $("#submitBtn").prop("disabled", false);
+                    }
+                },
+                error: function (e) {
+                    $('#editSyllabusError > p').html("Erreur réseau sans doute...");
+                    document.getElementById('editSyllabusError').style.display = 'block'
+                    $("#submitBtn").prop("disabled", false);
+                }
+            });
+        });
+    });
+
+
+    function closeModalSyllabusEditForm() {
+        if (!isFormDataSyllabusEditChanged(new FormData($('#syllabusEditForm')[0]))) {
+            document.getElementById('editSyllabus').style.display = 'none';
+            return;
+        }
+
+        if (confirm("Confirmer l'abandon de l'édition")) {
+            document.getElementById('editSyllabus').style.display = 'none';
+            window.location.reload(false);
+        } else {
+        }
+    }
+</script>
+
+
+{% endif %}
+
+

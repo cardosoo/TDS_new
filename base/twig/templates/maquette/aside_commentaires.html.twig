@@ -1,0 +1,187 @@
+<h3 class='comment'>Commentaires associés à  {{ M.generic }}
+{% if  tab.canEdit %}
+    <button  id ='btn_add' onclick="addComment()" class='w3-padding-small w3-tiny w3-button w3-round-large w3-green'>Ajouter</button>
+{% endif %}
+</h3>
+
+<div id='messageList'>
+{% for C in M.commentaire_maquetteList|filter(C => C.actif )|reverse %}
+<details id='det_{{C.id}}' class='details-tab' {{ loop.first ? "open":"" }}>
+    <summary>de {{ C.auteur.generic }} le {{ C.date}}
+    {% if  tab.canEdit %}
+        <button  id ='btn_{{C.id}}' onclick="editComment({{C.id}})" class='w3-padding-small w3-tiny w3-button w3-round-large w3-green'>Modifier</button>
+        <button  id ='btn_del_{{C.id}}' onclick="delComment({{C.id}})" class='w3-padding-small w3-tiny w3-button w3-round-large w3-red w3-right'>Supprimer</button>
+        <button  id ='btn_mask_{{C.id}}' onclick="maskComment({{C.id}})" class='w3-padding-small w3-tiny w3-button w3-round-large w3-grey  w3-right'>Masquer</button>
+    {% endif %}
+    </summary>
+    <div id='div_{{C.id}}' md='{{C.commentaire}}'>{{C.commentaire|markdown_to_html}}</div>
+</details>    
+{% endfor %}
+</div>
+
+<style>
+.details-tab {
+    border: 2px black;
+    border-radius: 15px;
+    background: white;
+    margin: 5px;
+    padding: 5px;
+}
+
+.details-tab summary {
+    background: gold;
+}
+
+ .comment {
+    background: gold;
+    padding: 0px 15px 0px 15px; 
+    margin: 5px;
+ }
+</style>
+
+{% if tab.canEdit %}
+
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+
+    <script>
+        var Editor = toastui.Editor;
+        var commentaireChanged = {};
+
+        function addComment(){
+            $.post(
+                '/{{App.appName}}/addComment/Maquette/{{M.id}}',
+                function(data){
+                    if (data!='Pb'){
+                        $('#messageList').prepend(`
+<details id='det_${data}' class='details-tab' open>
+    <summary>de {{ App.auth.user.getGeneric }} maintenant
+        <button  id ='btn_${data}' onclick="editComment(${data})" class='w3-padding-small w3-tiny w3-button w3-round-large w3-green'>Modifier</button>
+        <button  id ='btn_del_${data}' onclick="delComment(${data})" class='w3-padding-small w3-tiny w3-button w3-round-large w3-red w3-right'>Supprimer</button>
+        <button  id ='btn_mask_${data}' onclick="maskComment(${data})" class='w3-padding-small w3-tiny w3-button w3-round-large w3-grey  w3-right'>Masquer</button>
+    </summary>
+    <div id='div_${data}' md=''><p></p></div>
+</details>    
+`);
+                        editComment(data);
+                    } else {
+                        alert("Il y a eu un problème lors du masquage de ce commentaire.");
+                    };
+                }
+            ); 
+        }
+
+        function maskComment(id){
+            var text = `Merci de confirmer le masquage de ce commentaire.
+Il ne sera plus accesssible que par le CRUD.`;
+
+            details = $('details[id^="det_"]');
+            details.attr('open', false);
+            $("#det_"+id).attr('open',true);
+
+            setTimeout(function(){
+                if (confirm(text)!=true){
+                    return;
+                }
+                $.post(
+                    '/{{App.appName}}/maskComment/Maquette/'+id,
+                    function(data){
+                        if (data=='Done'){
+                            $("#det_"+id).remove();
+                        } else {
+                            alert("Il y a eu un problème lors du masquage de ce commentaire.");
+                        };
+                    }
+                ); 
+            },100);
+        }
+
+        function delComment(id){
+            var text = `Merci de confirmer la suppression de ce commentaire.
+Elle est irrémédiable.`;
+
+            details = $('details[id^="det_"]');
+            details.attr('open', false);
+            $("#det_"+id).attr('open',true);
+
+            setTimeout(function(){
+                if (confirm(text)!=true){
+                    return;
+                }
+                $.post(
+                    '/{{App.appName}}/delComment/Maquette/'+id,
+                    function(data){
+                        if (data=='Done'){
+                            $("#det_"+id).remove();
+                        } else {
+                            alert("Il y a eu un problème lors du masquage de ce commentaire.");
+                        };
+                    }
+                ); 
+            },100);
+        }
+
+        function editComment(id) {
+            
+            commentaireChanged[id]=true;
+
+            var div = document.querySelector('#div_'+id);
+            var btn = document.querySelector('#btn_'+id);
+            var btn_mask = document.querySelector('#btn_mask_'+id);
+            var btn_del = document.querySelector('#btn_del_'+id);
+            $("#det_"+id).attr('open',true);
+            btn.classList.add('w3-hide');
+            btn_mask.classList.add('w3-hide');
+            btn_del.classList.add('w3-hide');
+
+            var editor = new Editor({
+                el: div,
+                initialEditType: 'wysiwyg',
+                usageStatistics: false,
+                initialValue: div.md
+            });
+
+            var saveElm = document.createElement('span');
+            saveElm.textContent = '✔';
+            saveElm.style = 'cursor: pointer; font-size:18px; background: lightgreen; padding: 0.5em;'
+            saveElm.addEventListener('click', () => {
+                md = editor.getMarkdown();
+                $.post(
+                    '/{{App.appName}}/saveComment/Maquette/'+id, 
+                    { 'commentaire': md },
+                    function(data){
+                        if (data=='Done'){
+                            commentaireChanged[id]=false;
+                            var html = editor.getHTML();
+                            editor.destroy();
+                            btn.classList.remove('w3-hide');
+                            btn_mask.classList.remove('w3-hide');
+                            btn_del.classList.remove('w3-hide');
+                            div.innerHTML=html;
+                            div.md = md;
+                            div.style='';
+                        } else {
+                            alert("Il y a eu un problème lors de l'enregistrement du commentaire.");
+                        };
+                    }
+                );   
+            });        
+
+            editor.insertToolbarItem({ groupIndex: 0, itemIndex: 0 }, {
+              name: 'Save',
+              tooltip: 'Save',
+              el: saveElm,
+            });
+        }
+
+    function hasChangedCommentaires(){
+        var hasChanged = false;
+
+        for(id in commentaireChanged){
+            hasChanged = hasChanged || commentaireChanged[id];
+        };
+        return hasChanged;
+    }
+
+    </script>
+{% endif %}

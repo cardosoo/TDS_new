@@ -1,0 +1,7 @@
+{% if P.uid starts with '--' %}
+Pour vous connecter à la foire, en attendant de disposer d'un compte ENT, vous pouvez utiliser [ce lien](https://foire.physique.u-paris.fr/foire/directLink/{{ P.getDirectLink }}) qui est valable 3 mois. Merci de ne le communiquer à personne.
+{% else %}
+Pour vous connecter à la foire, merci de cliquer sur [ce lien](https://foire.physique.u-paris.fr), puis d'utiliser votre compte ENT (uid : {{ P.uid }}  Attention l'uid n'est pas l'identifiant que vous devez utiliser pour vous connecter, votre identifiant ressemble généralement à « prenom.nom »)
+{% endif %}
+
+

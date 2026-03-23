@@ -1,0 +1,139 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+    <h3>Liste des candidatures à une mission d'enseignement pour l'année {{App.currentYear}} - {{App.currentYear + 1}}</h3>
+
+    <table id='table'>
+        <thead>
+            <tr>
+            <th>-</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Mail</th>
+            <th>ED</th>
+            <th>Année</th>
+            <th>Date</th>
+            <th>Labo</th>
+            <th>Inscr</th>
+            <th>origine Finan</th>
+            <th>Organisme Finan</th>
+            <th>Empl</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in liste %}
+            {% if App.auth.isAdmin %}
+                {% set tag = "a" %}
+                {# set href = [ "href='/", App.appName, "/candidatureME/", c.uid, " target='_blanck' "]|join #}
+                {% set href = [ 'href=',c.uid, ' target="_blanck" ']|join %}
+            {% else %}
+                {% set tag = "i" %}
+                {% set href = "" %}
+            {% endif %}
+            <tr >
+                <td class="w3-center"><{{ tag }} id='td-{{c.uid|replace({'.': '_'}) }}' class="fa fa-info-circle" {{ href }} ></{{ tag }}></td>
+                <td>{{ c.prenom }}</td>
+                <td>{{ c.nom }}</td>
+                <td>{{ c.email }}</td>
+                <td class="w3-center">{{ c.ecoleDoctorale }} {{ c.EDAutre }}</td>
+                <td class="w3-center">{{ c.anneeDoctorat }}</td>
+                <td class="w3-center">{{ c.debutCD }}</td>
+                <td class="w3-center">{{ c.nom_lab }}</td>
+                <td class="w3-center">{{ c.etablissement }} {{ c.etablissementAutre }}</td>
+                <td class="w3-center">{{ c.origineFinancement }} {{c.OFAutre}}</td>
+                <td class="w3-center">{{ c.organismeFinanceur }} {{c.OF2Autre}}</td>
+                <td class="w3-center">{{ c.etablissementEmployeur }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div> 
+
+
+    {% for c in liste %}
+        <div id="td-tooltip-{{ c.uid|replace({'.': '_'}) }}" style="display: none;" class="w3-container">
+            <h5>Infos Personnelles et administratives</h5>
+            <ul>
+                <li>{{ c.prenom }} {{ c.nom }}</li>
+                <li>{{ c.email }} - {{ c.tel }}</li>
+                <li>{{ c.anneeDoctorat }} - {{ c.debutCD }} -  {{ c.ecoleDoctorale=="Autre"?c.EDAutre:c.ecoleDoctorale}} </li>
+                <li>Inscription : {{ c.etablissement=="Autre"? c.EtabAutre:c.etablissement }}</li>
+            </ul>
+            <h5>Infos Financement</h5>
+            <ul>
+                <li>Financement (origine) : {{ c.origineFinancement=="Autre"? c.OFAutre:c.origineFinancement }}</li>
+                <li>Financement (organisme) : {{ c.organismeFinanceur=="Autre"? c.OF2Autre:c.organismeFinanceur }}</li>
+                <li>Employeur : {{ c.etablissementEmployeur }}</li>
+            </ul>
+            <h5>Infos Recheche</h5>
+            <ul>
+                <li>Structure : {{ c.SR }}</li>
+                <li>Labo : {{ c.nom_lab }}<br>
+                {{ c.adresse_lab }}</li>
+                <li>Directeur : {{ c.nom_DT }} - {{ c.mail_DT }}</li>
+                <li>cotutelle : {{c.cotutetelle}}</li>
+            </ul>
+            <h5>Autre</h5>
+            <ul>
+                <li>Candidature Autre Mission :  {{ c.autreMission }}</li>
+                <li>Candidature Autre Établissement :  {{ c.ouiAutreEtab?"Oui":"" }}{{ c.nonAutreEtab?"Non":"" }}</li>
+                <li>Candidature Autre Composante :  {{ c.composante }}</li>
+                <li>Commentaires : </br>
+                {{ c.comment}}
+                </li>
+            </ul>
+            <h5>Documents</h5>
+            <ul>
+            {% for doc in c.docList %}
+
+                {% set url = doc.getDocDownloadURL() %}
+                {% set title = doc.getTitle() %}
+                <li><a href='{{ url }}' target='_blank'>{{ title }}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+
+        <script>            
+            $(document).ready(function() {
+            $('#table').DataTable({
+                order: [[0, "asc"], [1, "asc"]],
+                dom: 'Bfrtip',
+                paging: false,
+                buttons: [
+                    'copy',
+                    'excel',
+                    'csv',
+                    {
+                        extend: 'pdf',
+                        orientation: 'landscape'
+                    }
+                ]
+            });
+
+
+                if (window.matchMedia("(max-width: 600px)").matches){
+                    var pos = 'top';
+                } else {
+                    var pos = 'right';
+                }
+                {% for c in liste %}
+                Tipped.create('#td-{{ c.uid|replace({'.': '_'}) }}', {
+                    inline: 'td-tooltip-{{ c.uid|replace({'.': '_'}) }}',
+                    skin: 'lightyellow',
+                    radius: '10px',
+                    padding: '1px',
+                    position: pos,
+                    size: 'medium',
+                    maxWidth: 400
+                });
+                {% endfor %}
+            });
+        </script>      
+
+
+{% endblock %}
+

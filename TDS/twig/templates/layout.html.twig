@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1"> 
+    
+{% block css %}{{ include("layout/css.html.twig") }}{% endblock %}
+    
+{% block js %}{{ include("layout/js.html.twig") }}{% endblock %}
+
+		<title>{% block title %}{{ App.cmpl.TITLE ?? App.appName }} {% endblock %}</title>
+
+{% block  posthead %}{{ include("layout/posthead.html.twig") }}{% endblock %}
+	</head>
+	<body>
+		
+		<span id='body_start'></span>
+		
+		{% block body %}
+
+{% block script %}{{ include("layout/script.html.twig") }}{% endblock %}
+
+{% block nav %}{{ include("layout/nav.html.twig") }}{% endblock %}
+
+{% block aside %}{{ include("layout/aside.html.twig") }}{% endblock %}
+
+{% block header %}{{ include("layout/header.html.twig") }}{% endblock %}
+
+{% block main %}{{ include("layout/main.html.twig") }}{% endblock %}
+
+	<br>
+{% block section %}
+	{{ include("layout/section.html.twig") }}
+{% endblock %}
+	<br>
+	<br>	
+
+{% block footer %}{{ include("layout/footer.html.twig") }}{% endblock %}
+
+{% block message %}{{ include("layout/message.html.twig") }}{% endblock %}
+
+
+		{% endblock %}
+
+	</body>
+</html>

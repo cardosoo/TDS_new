@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1"> 
+    
+{% block css %}{{ include("layout/css.html.twig") }}{% endblock %}
+    
+{% block js %}{{ include("layout/js.html.twig") }}{% endblock %}
+
+{% block script %}{{ include("layout/script.html.twig") }}{% endblock %}
+
+
+
+<style>
+.blockE {
+    break-inside: avoid;
+}
+
+.nomE {
+
+}
+
+.besoinsE {
+
+}
+
+.voeuE {
+
+}
+
+.cursusE {
+    max-width: 20em;
+}
+</style>
+
+{% for E in enseignementList %}
+        {% set ES = E.enseignement_structure %}
+        {% set ecueList = E.getStructEcueList() %}
+
+        {% set C = E.getCharge() %}
+
+
+<div class='blockE  w3-container  w3-card'> 
+    <div class='blockL w3-container w3-threequarter'>
+        
+        <div class='w3-left w3-margin '>
+            <img style='width: 100px;' src='https://api.qrserver.com/v1/create-qr-code/?size=1OOx100&data=https://foire.physique.univ-paris-diderot.fr/{{App.appName}}/enseignement/{{E.id}}'>
+        </div>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        
+        <div class='nomE w3-light-blue'>
+            <span class='w3-xlarge'>{{ E.getGenericWithLink|raw }}</span><br>
+            <span class=''>{{ E.nom }}</span>
+        </div>
+        <div>
+            <a href='/{{App.appName}}/enseignement/{{E.id}}'>https://foire.physique.u-paris.fr/{{App.appName}}/enseignement/<span class='w3-xlarge'>{{E.id}}<span></a>
+        </div>
+
+        <div class='voeuE'>
+            {{ include( "enseignement/foire_voeux.html.twig", {Titres: "Équipe probable", compact: true, noMail: true } )}}    
+        </div>
+        
+    </div>
+
+
+    <div class='blockR w3-quarter'>
+        <diiv class='besoinsE' >
+            {% include(["enseignement/besoins.html.twig", "enseignement/base_besoins.html.twig"]) %}
+        </div>
+
+
+        <div class='cursusE w3-right w3-row'>
+
+            <div class='w3-container w3-half'>
+            </div>
+
+            <div class='w3-container w3-rest '></div>
+            <div class='w3-right-align'>
+                <ul class='w3-ul w3-card-4'>
+                {% for ecueCode in ecueList|keys %}
+                    {% set ecue = ecueList[ecueCode] %}
+                    {% set etapeList = ecue.getEtapes() %}
+                    <li class='w3-light-blue'>{{ ecueCode }} - {{ ecue.getCursusName() }} - {{ ecue.getPeriodeName() }}</li>
+                    {% for etape in  etapeList %}
+                    <li class='w3-small'>{{etape.nom}}</li>
+                    {% endfor %}
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+
+{% endfor %}
+
+
+	</body>
+</html>
+
+

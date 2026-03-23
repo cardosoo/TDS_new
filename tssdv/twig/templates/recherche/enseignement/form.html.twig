@@ -1,0 +1,20 @@
+{% extends 'recherche/enseignement/base_form.html.twig' %}
+
+                
+{% block extraFilterHeader %}
+        <th>Domaine</th>
+{% endblock extraFilterHeader %}
+
+{% block extraFilterBody %}
+                <td>
+                    <select data-bind="options: $root.domaineList, selectedOptions: domaine, optionsText: 'nom', optionsValue: 'id',  optionsCaption: 'Tous les Domaines' " multiple size='10'></select>
+                </td>
+{% endblock extraFilterBody %}
+
+
+{% block avecDomaine %}
+                <td>
+                    <input type="checkbox" data-bind="checked: $root.withDomaine" id='withDomaine'/>
+                    <label for='withDomaine'>Avec les domaines associées</label>
+                </td>
+{% endblock %}

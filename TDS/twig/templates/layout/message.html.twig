@@ -1,0 +1,36 @@
+  {% if App.pub.success|length > 0 %}
+    <div class="w3-panel w3-green w3-display-container w3-bottom">
+      <span onclick="this.parentElement.style.display='none'" class="w3-blue w3-large w3-display-topleft">x</span>
+      {% for msg in App.pub.success %}
+        <p><i class="fa fa-check-square-o"> </i>{{ msg }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}      
+
+  {% if App.pub.info|length > 0 %}
+    <div class="w3-panel w3-blue w3-display-container w3-bottom">
+      <span onclick="this.parentElement.style.display='none'" class="w3-blue w3-large w3-display-topleft">x</span>
+      {% for msg in App.pub.info %}
+        <p><i class="fa fa-info-circle"> </i>{{ msg }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}      
+
+
+  {% if App.pub.warning|length > 0 %}
+    <div class="w3-panel w3-yellow w3-display-container w3-bottom">
+      <span onclick="this.parentElement.style.display='none'" class="w3-blue w3-padding-small w3-large w3-display-topleft">x</span>
+      {% for msg in App.pub.warning %}
+        <p class='w3-margin-left'><i class="fa fa-warning"> </i>{{ msg }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}      
+
+  {% if App.pub.error|length > 0 %}
+    <div class="w3-panel w3-red w3-display-container w3-bottom">
+      <span onclick="this.parentElement.style.display='none'" class="w3-blue w3-large w3-display-topleft">x</span>
+      {% for msg in App.pub.error %}
+        <p><i class="fa fa-warning"> </i>{{ msg }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}      

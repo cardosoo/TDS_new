@@ -1,0 +1,689 @@
+{% extends "layout.html.twig" %}
+
+{% block header %}
+    <div>
+        <br>
+        <br>
+        <br>
+    </div>
+    <h2>Edition de la maquette</h2>
+{% endblock %}
+
+
+{% block js %}
+
+    {{ parent() }}
+
+    <script src="https://rawgit.com/rniemeyer/knockout-jqAutocomplete/master/build/knockout-jqAutocomplete.js"></script>
+    <script src='https://rawgit.com/rniemeyer/knockout-sortable/master/build/knockout-sortable.js'></script>
+
+{% endblock js %}
+
+{% block css %}
+    {{ parent() }}
+
+    <style>
+    body { font-family: arial; font-size: 14px; background-color: lightcyan}
+    .liveExample { padding: 1em; background-color: #EEEEDD; border: 1px solid #CCC; /* max-width: 655px; */ }
+    .liveExample input { font-family: Arial; }
+    .liveExample b { font-weight: bold; }
+    .liveExample p { margin-top: 0.9em; margin-bottom: 0.9em; }
+    .liveExample h2 { margin-top: 0.4em; font-weight: bold; font-size: 1.2em; }
+    .liveExample tr { vertical-align: top; }
+    .liveExample table, .liveExample td, .liveExample th { padding: 0.2em; border-width: 0; margin: 0; }
+
+    ul {list-style-position: outside;}
+    ul.diplomeList{ background-color:  aliceblue; list-style-type: disc; padding: 2em; border-radius: 2em;}
+    ul.etapeList{ background-color:  lightsteelblue; list-style-type: circle; padding: 1em; border-radius: 1em;}
+    ul.semestreList{ background-color: lightcyan; list-style-type: square; margin: 1em; padding: 1em; border-radius: 1em;}
+    ul.ueList li{ background-color: lightskyblue;  border: solid green 2px; margin: 0em; padding: 0em; border-radius: 0.5em;}
+    ul.ecueList li { background-color:LightGreen; list-style-type: circle;  border: solid lightseagreen 2px; margin-left: 20px}
+    /* ul.ecueList li:nth-child(1) { background-color:LightGreen; list-style-type: circle; margin-left: 0px;} */
+    A { font-size: 0.8em; text-decoration: none; }
+    ul.etapeList > lr { border-bottom: 1px solid silver; }
+    li input { /* width: 8em; */}
+    li.semestre{background-color: lightcyan; list-style-type: square; border: solid lightseagreen 2px; margin: 1em; padding: 1em; border-radius: 1em;}
+    input.code {width: 6em;}
+    input.nom_court {width: 6em;}
+    input.nom {width: 20em;}
+    input.ects {width: 3em;}
+    input.enseignement {width: 20em;}
+    input.cursus {width: 20em;}
+    input.peretu {width: 2em;}
+    input.nbetu {width: 2em;}
+
+    span.nbetu {
+        background-color: lightcoral;
+        font-size:inherit;
+    }
+    #message {
+        font-size: .75em;
+        margin-top: 10px;
+        background-color: orange;
+        color: #444;
+        padding: 2px;
+        width: 500px;
+        text-align: center;
+        border-radius: 5px;
+        box-shadow: 2px 2px 2px #999;
+        position: absolute;
+    }
+    #diplomeList {
+        width: 80em;
+    }
+
+    .BarreEnBas {
+        position: fixed;
+        top : 40px;
+        right : 1em;
+        /*height : 1.2em;*/
+        width : 200px;
+        border : 2px solid aliceblue; 
+        margin : 2px;
+        padding : 2px;
+        background : white;    
+    }
+
+
+
+    ul { list-style-type: disc; margin-left: 10px; padding-left: 10px;}
+    .liecue {}
+    </style>
+{% endblock css %}
+
+{% block section %}
+    <script id="itemTmpl" type="text/html">
+        <a>
+            <strong data-bind="text: id"></strong>
+            <em data-bind="text: name">console.log('After',rawData, dataD);
+    </em>
+        </a>
+    </script>
+
+    <script>
+        
+    var initialData = {{ maquetteObj|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+    var defaultData = {{ maquetteDefault|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}
+
+
+    // Cela c'est pour remplacer la virgule par un point dans les ects
+    ko.extenders.numeric = function(target, precision) {
+        //create a writable computed observable to intercept writes to our observable
+        var result = ko.pureComputed({
+            read: target,  //always return the original observables value
+            write: function(newValue) {
+                newValue = String(newValue).replace(',','.');  
+                var current = target(),
+                    roundingMultiplier = Math.pow(10, precision),
+                    newValueAsNum = isNaN(newValue) ? 0 : +newValue,
+                    valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;    
+                //only write if it changed
+                if (valueToWrite !== current) {
+                    target(valueToWrite);
+                } else {
+                    //if the rounded value is the same, but a different value was written, force a notification for the current field
+                    if (newValue !== current) {
+                        target.notifySubscribers(valueToWrite);
+                    }
+                }
+            }
+        }).extend({ notify: 'always' });
+    
+        //initialize with current value to make sure it is rounded appropriately
+        result(target());
+        //return the new computed observable
+        return result;
+    };
+    
+
+
+    ko.options.useOnlyNativeEvents = true;
+
+    ko.bindingHandlers.flash = {
+        init: function(element) {
+            $(element).hide();
+        },
+        update: function(element, valueAccessor) {
+            var value = ko.utils.unwrapObservable(valueAccessor());
+            if (value) {
+                $(element).stop().hide().text(value).fadeIn(function() {
+                    clearTimeout($(element).data("timeout"));
+                    $(element).data("timeout", setTimeout(function() {
+                        $(element).fadeOut();
+                        valueAccessor()(null);
+                    }, 3000));
+                });
+            }
+        },
+        timeout: null
+    };
+
+    var DiplomeListModel = function(diplomeList) {
+        var self = this; 
+        self.deleted = [];
+        self.lastAction = ko.observable();
+        
+        self.maquetteName = ko.observable('{{ maquetteObj.nom}}');
+        self.maquetteCode = ko.observable('{{ maquetteObj.code}}');
+        
+        self.composante = ko.observable('{{ maquetteObj.composante}}');
+        self.gestionnaire = ko.observable('{{ maquetteObj.gestionnaire}}');
+        self.responsable = ko.observable('{{ maquetteObj.responsable}}');;
+        self.co_responsable = ko.observable('{{ maquetteObj.co_responsable}}');
+
+        
+        self.enseignementList = [
+            {% for enseignement in enseignementList %}
+            { "id" : "{{enseignement.id}}" , "name" : "{{enseignement.intitule}}"},
+            {% endfor %}
+        ];
+        
+        self.cursusList = [
+            {% for cursus in cursusList %}
+            { "id" : "{{cursus.id}}" , "name" : "{{cursus.nom}}"},
+            {% endfor %}
+        ];
+        
+        self.personneList = [
+            {% for personne in personneList %}
+            { "id" : "{{personne.id}}" , "name" : "{{personne.prenom}} {{personne.nom}}"},
+            {% endfor %}
+        ];
+
+        self.composanteList = [
+            {% for composante in composanteList %}
+            { "id" : "{{composante.id}}" , "name" : "{{composante.nom}}"},
+            {% endfor %}
+        ];
+
+
+        self.formatEtu = function(nb){
+            if (typeof(nb) === 'function'){
+                return Math.round(nb());
+            } else {
+                return '--';
+            }
+        }
+
+        self.semestreList = [
+            { semestreName: "1er Semestre", semestreId: 1 },
+            { semestreName: "2ème Semestre", semestreId: 2 },
+            { semestreName: "Annuel", semestreId: 3 },
+        ];    
+
+
+        self.beforeMove = function (property, data){
+            var cont = data.item.hasOwnProperty(property);
+            if (!cont){
+                data.cancelDrop = true;
+            };
+        }
+        
+
+        self.getUrlEnseignement = function (enseignement){
+            return '/{{ App.appName }}/enseignement/'+enseignement();
+        }
+
+        self.countEtu  = function(parent){
+            var nb, tt; 
+            
+            if (typeof(parent) === 'function'){
+                nb = parent().nbetu;
+            } else {
+                nb = parent.nbetu();
+            }
+            if (typeof(this.peretu) === 'function'){
+                tt = this.peretu();
+            } else {
+                tt = this.peretu;
+            }
+            return tt/100 * nb;
+        }
+
+        self.arrayToKo = function (array, parent) {
+            
+            tmp = ko.observableArray(
+                ko.utils.arrayMap(array, function(_data_){
+                    var obj = {};
+                    for (var pro in _data_) {
+                        if (Array.isArray(_data_[pro])){
+                            obj[pro]= self.arrayToKo(_data_[pro], obj);
+                        } else {
+                            obj[pro+'__']= _data_[pro];
+                            if (pro === 'enseignement'){         // Ici on prend en compte une particularité de la construction en question 'ECUE/enseignement' 
+                                obj[pro]= ko.observable(_data_[pro]);
+                            } else if (pro === 'cursus'){
+                                obj[pro]= ko.observable(_data_[pro]);
+                            } else if (pro === 'nbetu'){
+                                obj[pro]= ko.observable(_data_[pro]);                        
+                            } else if (pro === 'peretu') {
+                                obj[pro]= ko.observable(_data_[pro]);
+                                obj['nbetu']=ko.computed(self.countEtu.bind(obj, parent ));
+                            } else if (pro === 'ects'){
+                                obj[pro]= ko.observable(_data_[pro]).extend({ numeric: 3 });
+                            } else {
+                                obj[pro]= _data_[pro];
+                            }
+                        }
+                    }
+                    return obj;
+                })
+            );
+            return tmp;
+        };
+
+
+        self.removeKoElm = function(obj, elm, list){
+            var tab = obj.remove(elm);
+            if (tab.length > 0){
+                self.deleted.push({list: list, elm: tab[0]});
+                return true;
+            }
+
+            $.each(obj(), function() {
+                for(var pro in this){
+                    if (ko.isObservableArray(this[pro])){
+                        self.removeKoElm(this[pro],elm, pro); 
+                    }
+                }
+            });
+
+        };
+    
+        self.removeKo = function(elm){
+            self.removeKoElm(self.diplomeList, elm, 'diplomeList');
+        };
+    
+    
+    // TODO : Cette méthode est optionnelle non ?
+        self.addDiplome = function() {
+            self.diplomeList.push({
+                id: 0,
+                code: "Code Diplome",
+                nom_: "Nom Diplome",
+                etapeList: ko.observableArray()
+            });
+        };
+
+    // TODO: Il faut faire en sorte que soit pris en compte le peretu au moment de la création...
+    // il y a aussi les champs qui de select qui ne sont pas opérationnels au moment de l'ajout :
+    // Semestre::semestre, Etape::cursus, 
+        self.add = function(className,rawData, parent){
+            var addNbetu = false;
+            var dataD = $.extend(true, {}, defaultData[className]); // Cela c'est pour faire une copie...
+            for(var pro in dataD){
+                if ('__LIST__' === dataD[pro]){
+                    if (className === '---UE---'){  // cas particulier (ancien...)de l'ajout d'une UE ou il faut aussi ajouter tout de suite une ECUE
+                        var ecue = $.extend(true, {}, defaultData['ECUE']);
+                        ecue['enseignement']=ko.observable(ecue['enseignement']);
+                        dataD[pro]=ko.observableArray([ecue]);
+                    } else {
+                        dataD[pro]=ko.observableArray();
+                    }    
+                } else if (pro === 'peretu'){
+                    dataD['peretu'] = ko.observable(dataD['peretu']); // 0
+                    addNbetu = true;
+                } else if (pro === 'ects'){ // c'est un nombre flottant il faut forcer les , en .
+                    dataD['ects']=ko.observable(dataD['ects']).extend({ numeric: 3 });
+                }
+            }
+            if (className==='ECUE'){    // Ici on prend en compte une particularité de la construction en question 'ECUE/enseignement'
+                dataD['enseignement']=ko.observable();
+            }
+            if (className=='Etape'){
+                dataD['cursus']=ko.observable();
+            }
+            if (className=='Semestre'){
+                dataD['periode']=ko.observable();
+            }
+            if (addNbetu){
+                dataD['nbetu'] = ko.computed(self.countEtu.bind(dataD, parent));
+            }        
+            rawData.push(dataD);
+        };
+
+
+        self.eod = function(){
+            return self.lineClipboard >= self.dataLength;
+        };
+
+        self.dataClipboard = [];
+        self.lineClipboard = 0; 
+        self.dataLength = 0;
+
+
+    /***
+     * on parse les différentes lignes en cherchant les indications de :
+     * - VDI -> une ligne   -> que l'on ignore pour l'instant
+     * - VET -> une ligne   -> qui est requis
+     * - SEM -> une ligne   -> qui est requis
+     * 
+     * - puis on a les trucs avec les UE/ECUE et les Blocs.
+     * qui commence par ue/ecue
+     * avec des UE et des ECUE au milieu et éventuellement des blocs
+     * qui fini par total
+     * 
+     */ 
+        self.motifList = ['vdi', 'vet', 'sem', 'ueecue', 'ue', 'ecue', 'bloc', 'total'];
+    
+        // Je crois que tout cela est obsolète
+        self.actualElmList = {}; 
+
+        self.initActualElmList = function(){
+            for(let motif of self.motifList){
+                self.actualElmList[motif]= null;
+            }
+        }
+        // din de ce qui est obsolete
+        
+        self.isType = function(motif){
+            var cell2 = (self.dataClipboard[self.lineClipboard][0] + self.dataClipboard[self.lineClipboard][1]);
+            var testString = cell2.trim().toLowerCase().substr(0, motif.length);
+            return testString === motif;
+        }
+
+        self.getNextClipUnempty = function(){
+        
+            while (!self.eod()){
+                for(let motif of self.motifList){
+                    if (self.isType(motif)) return motif;
+                }    
+                self.lineClipboard = self.lineClipboard+1;
+            } 
+            return false;
+        }
+
+        self.doClipVDI = function(){
+            var diplome = $.extend(true, {}, defaultData['Diplome']);
+            diplome.etapeList = [];
+            diplome.code = self.dataClipboard[self.lineClipboard][3].trim()
+            self.importedList.push(diplome);
+            self.actualDiplome = diplome;
+            self.lineClipboard = self.lineClipboard+1;
+        }
+
+        self.doClipVET = function(){
+            var vet = $.extend(true, {}, defaultData['Etape']);
+            vet.semestreList = [];
+            vet.code = self.dataClipboard[self.lineClipboard][3].trim()
+            self.actualDiplome.etapeList.push(vet);
+            self.actualVET = vet;
+            self.lineClipboard = self.lineClipboard+1;
+        }
+        
+        self.doClipSEM = function(){
+            var sem = $.extend(true, {}, defaultData['Semestre']);
+            sem.ueList = [];
+            sem.nom = self.dataClipboard[self.lineClipboard][0].trim();
+            // TODO : Il faut ajouter un truc pour récupérer le semestre à partir du nom...
+            self.actualVET.semestreList.push(sem);
+            self.actualSEM = self.actualVET.semestreList[self.actualVET.semestreList.length-1];
+            self.lineClipboard = self.lineClipboard+1;
+        }
+        
+        self.doClipUEECUE = function(){
+            // on ne fait rien...
+            self.lineClipboard = self.lineClipboard+1;
+        }
+        
+        self.doClipUE = function(){
+            
+            var ue = $.extend(true, {}, defaultData['UE']);
+            var ecue = $.extend(true, {}, defaultData['ECUE']);
+
+            ecue.nom_court = self.dataClipboard[self.lineClipboard][0].trim()+self.dataClipboard[self.lineClipboard][1].trim();
+            ecue.code = self.dataClipboard[self.lineClipboard][2].trim();
+            ecue.nom = self.dataClipboard[self.lineClipboard][3].trim();
+            ecue.ects = self.dataClipboard[self.lineClipboard][4].trim();
+
+            ue.ecueList = [];
+                
+            self.actualSEM.ueList.push(ue);
+            self.actualUE = self.actualSEM.ueList[self.actualSEM.ueList.length-1];
+
+            self.actualUE.ecueList.push(ecue);
+            self.actualECUE = self.actualUE.ecueList[self.actualUE.ecueList.length-1];
+
+            self.lineClipboard = self.lineClipboard+1;
+        }
+        
+        self.doClipECUE = function(){
+            var ecue = $.extend(true, {}, defaultData['ECUE']);
+
+            ecue.nom_court = self.dataClipboard[self.lineClipboard][0].trim()+self.dataClipboard[self.lineClipboard][1].trim();
+            ecue.code = self.dataClipboard[self.lineClipboard][2].trim();
+            ecue.nom = self.dataClipboard[self.lineClipboard][3].trim();
+            ecue.ects = self.dataClipboard[self.lineClipboard][4].trim();
+
+            self.actualUE.ecueList.push(ecue);
+            self.actualECUE = self.actualUE.ecueList[self.actualUE.ecueList.length-1];
+
+            self.lineClipboard = self.lineClipboard+1;
+        }
+        
+        self.doClipBloc = function(){
+            // pour le moment on ne fait rien du tout...
+                self.lineClipboard = self.lineClipboard+1;
+        }
+        
+        self.doClipTotal = function(){
+            // pour le moment on ne fait rien du tout...
+                self.lineClipboard = self.lineClipboard+1;
+        }
+        
+        self.doClipDispatcher = function(motif){
+            switch(motif){
+                case 'vdi':
+                    self.doClipVDI();
+                    break;
+                case 'vet':
+                    self.doClipVET();
+                    break;
+                case 'sem':
+                    self.doClipSEM();
+                    break;
+                case 'ueecue':  // doit être placé avant ue sinon c'est ue qui sera traité
+                    self.doClipUEECUE();
+                    break;
+                case 'ue':
+                    self.doClipUE();
+                    break;
+                case 'ecue':
+                    self.doClipECUE();
+                    break;
+                case 'bloc':
+                    self.doClipBloc();
+                    break;
+                case 'total':
+                    self.doClipTotal();
+                    break;
+            }
+        }
+
+        self.doClipboard = function(clip){
+            // parse le clipboard en ne gardant que les lignes non vides
+            self.dataClipboard = Papa.parse(clip, {skipEmptyLines: 'greedy'}).data;
+            self.dataLength = self.dataClipboard.length;
+            self.lineClipboard= 0;
+
+            self.importedList = [];
+                    
+            var finished = false;
+            while (!finished){
+                var find = self.getNextClipUnempty();
+                if (find === false){ 
+                    finished = true; 
+                } else {
+                    self.doClipDispatcher(find);
+                }    
+            }
+            
+            var diplomeList = self.arrayToKo(self.importedList);
+            $.each(diplomeList(), function() {
+                self.diplomeList.push(this);
+            });
+        };
+        
+    /***
+     * permet de traiter l'import via le clipboard 
+     */
+        self.addFromClipboard = function(){
+            navigator.clipboard.readText().then(
+                clipText => self.doClipboard(clipText) ); 
+        };
+
+        self.save = function() {
+            var actual  = JSON.stringify(ko.toJS(self.diplomeList), null, 2);
+            var deleted = JSON.stringify(ko.toJS(self.deleted), null, 2);
+            var posting = $.post('/{{App.appName}}/admin/maquette/{{maquetteObj.id}}'
+                                , { maquetteId: {{maquetteObj.id}}
+                                , maquetteName: ko.toJS(self.maquetteName)
+                                , maquetteCode: ko.toJS(self.maquetteCode)
+                                , composante: self.composante
+                                , gestionnaire: self.gestionnaire
+                                , responsable: self.responsable
+                                , co_responsable: self.co_responsable
+                                , actual: actual, deleted: deleted});
+            posting.done(function( data ) {
+                self.deleted = [];
+                self.actual = actual;
+                self.lastAction("L'enregistrement s'est correctement déroulé...");
+                $( "#outbox" ).empty().append( data );
+                //window.location.reload();
+                window.location.href = '/{{App.appName}}/admin/maquette/{{maquetteObj.id}}';
+            });
+        };
+
+        self.hasChanged = function(){
+            var actual  = JSON.stringify(ko.toJS(self.diplomeList), null, 2);
+            return (actual !== self.actual);
+        }
+        
+        self.diplomeList = self.arrayToKo(diplomeList);    
+        self.actual = JSON.stringify(ko.toJS(self.diplomeList), null, 2);
+    };
+
+    </script>
+
+
+    <div class='liveExample'>     
+        <select data-bind="options: $root.composanteList, value: composante, optionsText: 'name', optionsValue: 'id',  optionsCaption: 'Département ?'"></select>
+        <input data-bind='value: maquetteName' />
+        <input data-bind='value: maquetteCode' />
+        <ul>
+            <li>Gestionnaire :
+                <input class='enseignement' data-bind="jqAuto: { source: $root.personneList, value: gestionnaire, inputProp: 'name', valueProp: 'id', labelProp: 'name', dataValue: 'gestionnaire' }" size='50'/>
+            </li><li>Responsable :
+                <input class='enseignement' data-bind="jqAuto: { source: $root.personneList, value: responsable, inputProp: 'name', valueProp: 'id', labelProp: 'name', dataValue: 'responsable' }" size='50'/>
+            </li><li>co-Responsable :
+                <input class='enseignement' data-bind="jqAuto: { source: $root.personneList, value: co_responsable, inputProp: 'name', valueProp: 'id', labelProp: 'name', dataValue: 'co_responsable' }" size='50'/>
+            </li>
+        </ul>   
+        
+        <div id='diplomeList'>
+            
+            <ul data-bind="sortable: { data: diplomeList, allowDrop: true, beforeMove: $root.beforeMove.bind($rawData, 'etapeList') }" class='diplomeList'>
+                <li>
+                    <a href='#' data-bind='click: $root.removeKo'>Supprimer Diplôme</a>
+                    <input type='hidden' data-bind='value: ordre = $index' />
+                    <input type='hidden' data-bind='value: id' />
+                    <input data-bind='value: nom' placeholder='nom diplôme'/>
+                    <input data-bind='value: code' placeholder='DIP / VDI'/>
+                    <ul data-bind="sortable: { data: etapeList, allowDrop: true, beforeMove: $root.beforeMove.bind($rawData, 'semestreList')}" class='etapeList'>
+                        <li>
+                            <a href='#' data-bind='click: $root.removeKo'>Supprimer Étape</a>
+                            <input type='hidden' data-bind='value: ordre = $index' />
+                            <input type='hidden' data-bind='value: id' />
+                            <input data-bind='value: nom' placeholder='nom Étape'/>
+                            <input data-bind='value: code' placeholder='ETP / VET'/>
+                            <input type='hidden' data-bind='value: cursus' />
+                            <input class='cursus' data-bind="jqAuto: { source: $root.cursusList, value: cursus, inputProp: 'name', valueProp: 'id', labelProp: 'name', dataValue: 'cursus' }" size='30'/>
+                            <br>Nombre d'étudiant à l'étape : <input class='nbetu' data-bind='value: nbetu' size='3'>
+                            <ul data-bind="sortable: { data: semestreList, allowDrop: true, beforeMove: $root.beforeMove.bind($rawData, 'ueList')}" class='semestreList'>
+                                <li class="semestre">
+                                    <a href='#' data-bind='click: $root.removeKo'>Supprimer Semestre</a>
+                                    <input type='hidden' data-bind='value: ordre = $index' />
+                                    <input type='hidden' data-bind='value: id' />
+                                    <input data-bind='value: code' size='8' placeholder='Code Semestre'/>
+                                    <input data-bind='value: nom'  placeholder='Nom Semestre'/>
+                                    <select data-bind="options: $root.semestreList, value: periode, optionsText: 'semestreName', optionsValue: 'semestreId',  optionsCaption: 'Semestre ?'"></select>
+                                    Etudiants <input class='peretu' data-bind='value: peretu' size='3'>% 
+                                    &rarr; Effectif : <span class='nbetu' data-bind="text: $root.formatEtu(nbetu)"></span>
+                                    <ul data-bind="sortable: { data: ueList, allowDrop: true, beforeMove: $root.beforeMove.bind($rawData, 'ecueList') }" class='ueList'>
+                                        <li>
+                                            <input type='hidden' data-bind='value: ordre = $index' />
+                                            <input type='hidden' data-bind='value: id' />
+                                            <a href='#' data-bind='click: $root.removeKo'>Supprimer UE</a>
+                                            Etudiants <input class='peretu' data-bind='value: peretu' size='3'>% 
+                                            &rarr; Effectif : <span class='nbetu' data-bind="text: $root.formatEtu(nbetu)"></span>
+                                            <input class='code' data-bind='value: code' size='8' placeholder='code UE'/>
+                                            <input class='ects' data-bind='value: ects' size='3'/> ECTS
+                                            <input class='nom' data-bind='value: nom' size='30' placeholder='nom UE'/>
+                                            <ul data-bind="sortable: { data: ecueList, allowDrop: true, beforeMove: $root.beforeMove.bind($rawData, 'enseignement')}" class='ecueList'>
+                                                <li class='liecue'>
+                                                    <span>
+                                                        Etudiants <input class='peretu' data-bind='value: peretu' size='3'>% 
+                                                        &rarr; Effectif : <span class='nbetu' data-bind="text: $root.formatEtu(nbetu)"></span>
+                                                        <a href='#' data-bind='click: $root.removeKo'>Supprimer ECUE</a>
+                                                        <br>
+                                                    </span>  
+                                                    <input type='hidden' data-bind='value: id' />
+                                                    <input type='hidden' data-bind='value: ordre = $index' />
+                                                    <!-- <input class='nom_court' data-bind='value: nom_court' size='8'/>  -->
+                                                    <input class='code' data-bind='value: code' size='8' placeholder='code ECUE'/>
+                                                    <input class='ects' data-bind='value: ects' size='3'/> ECTS
+                                                    <input class='nom' data-bind='value: nom' size='30' placeholder='nom ECUE'/>
+                                                    <input type='hidden' data-bind='value: enseignement' />
+                                                    <input class='enseignement' data-bind="jqAuto: { source: $root.enseignementList, value: enseignement, inputProp: 'name', valueProp: 'id', labelProp: 'name', dataValue: 'enseignement' }" size='50'/>
+                                                    <span data-bind= 'if: enseignement() >0'>
+                                                        <a data-bind="attr: { href: $root.getUrlEnseignement(enseignement), target: '_blank' }">Voir</a>
+                                                    </span> 
+                                                </li>
+                                            </ul>
+                                            <!-- ko with: ecueList --><a href='#' data-bind='click: $root.add.bind($rawData, "ECUE", $rawData, $parent )'>Ajouter ECUE</a><!-- /ko -->
+                                        </li>
+                                    </ul>
+                                    <!-- ko with: ueList --><a href='#' data-bind='click: $root.add.bind($rawData, "UE", $rawData, $parent )'>Ajouter UE</a><!-- /ko -->
+                                </li>
+                            </ul>    
+                        <!-- ko with: semestreList --><a href='#' data-bind='click: $root.add.bind($rawData, "Semestre", $rawData, $parent )'>Ajouter Semestre</a><!-- /ko -->
+                        </li>
+                    </ul>
+                <!-- ko with: etapeList --><a href='#' data-bind='click: $root.add.bind($rawData, "Etape", $rawData, $parent )'>Ajoute Étape</a><!-- /ko -->
+                </li>
+            </ul>
+            
+            
+            <div id="message" data-bind="flash: lastAction"></div>
+            <div class='BarreEnBas' > 
+                {{ maquetteObj.nom }}
+                <br> 
+                <button data-bind='click: $root.add.bind($data,"Diplome",$rawData.diplomeList)'>Ajouter Diplôme</button>
+                <br>
+                <button data-bind='click: $root.addFromClipboard'>Ajouter Diplôme depuis Presse-Papier </button>
+                <br>
+                <button class='boutonFixe' data-bind='click: save'>Enregistrer...</button>
+            </div>
+        </div>
+        
+        <span id='outbox'></span>
+    </div>
+
+    <script>
+        var model = new DiplomeListModel(initialData.diplomeList);
+        ko.applyBindings(model);
+
+
+        $(window).on('beforeunload', function(){
+            var changed = model.hasChanged();
+            if (changed){
+                return "Un message";
+            }
+        });
+    </script>
+
+    {% endblock section %}
+
+    {% block script %}
+
+{% endblock script %}

@@ -1,0 +1,15 @@
+
+{% if App.auth.isAuth %}
+    {% if App.auth.inBase %}
+        <div class='w3-card w3-round w3-white w3-xlarge w3-center'>Bienvenue dans {{App.appName}} {{ App.auth.user.name }} !</div>
+    {% else %}
+        <div class='w3-card  w3-round w3-red  w3-xlarge w3-center'>Vous êtes êtes identifié avec l'identifant {{ App.auth.user.uid }}. 
+        Il n'y a pas de lien entre cet identifiant et un compte de {{App.appName}}
+        Votre accès est limité.
+        </div>
+    {% endif %}
+{% else %}
+    <div class='w3-card  w3-round w3-red  w3-xlarge w3-center'>Vous êtes ici sans identification - votre accès est limité</div>
+{% endif %}
+
+# {{appName}} {{ App.baseName }}

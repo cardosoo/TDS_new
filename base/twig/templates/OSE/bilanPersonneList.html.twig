@@ -1,0 +1,109 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+    <br>
+    <h3>tous les enseignements avec leurs correspondants</h3>
+        
+    
+    <table id="list" class="display compact">
+        <thead>
+            <tr>
+                <th>Personne</th>
+                <th>Statut</th>
+                <th>CM</th>
+                <th>CTD</th>
+                <th>TD</th>
+                <th>TP</th>
+                <th>EXTRA</th>
+                <th>Bonus</th>
+                <th>hETD</th>
+                <th>Charge</th>
+                <th>Situation</th>
+                <th>Référentiel</th>
+                <th>Service dû</th>
+                <th>Solde hETD</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for P in PList %}
+
+                {% if P.statut.obligation >0 %}
+                
+                {% set bCM = 0 %}
+                {% set bCTD = 0 %}
+                {% set bTD = 0 %}
+                {% set bTP = 0 %}
+                {% set bEXTRA = 0 %}
+                {% set bBONUS = 0 %}
+                {% set bHETD = 0 %}
+                {% set bSituation = 0 %}
+                {% set bReferentiel = 0 %}
+
+                {% for V in P.voeuList %}
+                    {% set bCM = bCM + V.voeu_detail_heures.cm %}
+                    {% set bCTD = bCTD + V.voeu_detail_heures.ctd %}
+                    {% set bTD = bTD + V.voeu_detail_heures.td %}
+                    {% set bTP = bTP + V.voeu_detail_heures.tp %}
+                    {% set bEXTRA = bEXTRA + V.voeu_detail_heures.extra %}
+                    {% set bBONUS = bBONUS + V.voeu_detail_heures.bonus %}
+                    {% set bHETD = bHETD + V.voeu_bilan_ligne.heures %}
+                {% endfor %}
+{#                    
+                {% for PS in P.personne_situationList %}
+                    {% set bSituation = bSituation + PS.reduction %}
+                {% endfor %}
+
+                {% for PR in P.personne_funcrefList %}
+                    {% set bReferentiel = bReferentiel + PR.volume %}
+                {% endfor %}
+#}
+                <tr>
+                    <td><a href="/{{App.appName}}/personne/{{P.id}}">{{P.nom}} {{P.prenom}}</a></td>
+                    <td>{{P.statut.nom}}</td>
+                    <td>{{ bCM| f2 }}</td>
+                    <td>{{ bCTD| f2 }}</td>
+                    <td>{{ bTD| f2 }}</td>
+                    <td>{{ bTP| f2 }}</td>
+                    <td>{{ bEXTRA| f2 }}</td>
+                    <td>{{ bBONUS| f2 }}</td>
+                    <td>{{ bHETD| f2 }}</td>
+                    <td>{{ P.statut.obligation | f2 }}</td>
+{#                   <td>{{ bSituation| f2 }}</td>
+                    <td>{{ bReferentiel| f2 }}</td>
+                    <td>{{ (P.statut.obligation - bSituation - bReferentiel) | f2 }}</td> #}
+                    <td>{{ P.personne_situation_reduction.reduction| f2 }}</td>
+                    <td>{{ P.personne_referentiel_heures.heures| f2 }}</td>
+                    <td>{{ P.personne_charge.charge | f2 }}  </td>
+                    <td>{{ (-P.voeu_personne_bilan.heures) | f2 }}</td>
+                </tr>
+                {% endif %}
+
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#list').DataTable({
+                order: [[0, "asc"]],
+                dom: 'Bfrtip',
+                paging: false,
+                buttons: [
+                    'copy',
+                    'excel',
+                    'csv',
+                    {
+                        extend: 'pdf',
+                        orientation: 'portrait'
+                    }
+                ]
+            });
+        });
+
+    </script>
+{% endblock %}
+
+

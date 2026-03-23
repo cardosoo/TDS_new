@@ -1,0 +1,143 @@
+<!-- Profile -->
+
+<div class="w3-card w3-round w3-white">
+  <div class="w3-container">
+    {# pour pouvoir modifier #}
+    {% if canEdit %}
+    <i onclick="document.getElementById('editUser').style.display='block'" class="far fa-edit"></i>
+    {% endif %}
+
+    {% if App.auth.isAdmin %}
+    <a href="/{{ App.appName }}/directLink/{{ personne.getDirectLink() }}"><i class="fas fa-link w3-right"></i></a>
+    {% endif %}   
+
+    {# La photo avec le nom #}
+    <p class='w3-center'><img src="{{ personne.getPhotoUrl() }}" alt="Photo de {{ personne.prenom }} {{ personne.nom }}" />
+    </p>
+    <h4 class="w3-center"><a href="/{{ App.appName }}/personne/{{personne.id}}">{{ personne.prenom }} {{ personne.nom }}</a></h4>
+    <hr>
+
+    {# Le labo   #}
+
+    {% if personne.labo is not empty %}
+    <div class="w3-cell-row">
+      <div class="w3-container w3-cell w3-cell-middle icon">
+        <i class="fas fa-university  w3-text-theme"></i>
+      </div>
+      <div class="w3-rest w3-padding-small"><a href='{{ personne.labo.url }}' target='_blank'>{{ personne.labo.nom }}</a></div>
+    </div>
+    {% endif %}
+  
+    {% if  personne.adresse is not empty %}
+    <div class="w3-cell-row">
+      <div class="w3-container w3-cell w3-cell-middle icon">
+        <i class="far fa-address-card  w3-text-theme"></i>
+      </div>
+      <div class="w3-rest w3-padding-small">{{ personne.adresse|markdown_to_html|raw }}</div>
+    </div>
+    {% endif %}
+
+    {% if personne.tel1 is not empty %}
+    <div class="w3-cell-row">
+      <div class="w3-cell w3-cell-middle icon">
+        <i class="fa fa-phone fa-fw w3-text-theme"></i>
+      </div>
+      <div class="w3-rest w3-padding-small">{{ personne.tel1 }}</div>
+    </div>
+    {% endif %}
+    {% if personne.tel2 is not empty %}
+    <div class="w3-cell-row">
+      <div class="w3-container w3-cell w3-cell-middle icon">
+        <i class="fa fa-phone fa-fw w3-text-theme"></i>
+      </div>
+      <div class="w3-rest w3-padding-small">{{ personne.tel2 }}</div>
+    </div>
+    {% endif %}
+
+    {% if personne.email is not empty %}
+    <div class="w3-cell-row">
+      <div class="w3-container w3-cell w3-cell-middle icon">
+        <i class="fas fa-at w3-text-theme"></i>
+      </div>
+      <div class="w3-rest w3-padding-small">
+        <a href='mailto:{{ personne.email }}'>{{ personne.email }}</a>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if App.auth.inBase %}
+    <div class="w3-cell-row">
+      <div class="w3-container w3-cell w3-cell-middle icon" >
+        <i class="fa fa-cogs fa-fw w3-text-theme"></i>
+      </div>
+      {% block charge %}
+      <div class='w3-border-left'>
+        <div class="w3-rest w3-padding-small">Statut : {{ personne.statut.nom }}</div>
+        
+        {#  Les situations particulières #}
+        {% set first = true %}
+        {% for PS in personne.personne_situationList %}
+            {% if App.auth.isAdmin or canEdit or PS.situation.public %}
+                {% if first %}
+                  <div class='w3-container w3-light-gray'>Situations Particulières</div>
+                 <ul >
+                 {% set first = false %}
+                {% endif %}
+                
+
+            <li>
+                {{ PS.situation.nom }}<br>
+                du {{ PS.debut }} au {{ PS.fin }}<br>
+                réduction de {{ PS.reduction }} HETD<br>
+                <div>{{ PS.commentaire|markdown_to_html|raw }}</div>
+            </li>
+            {% endif %}
+        {% endfor %}
+        {% if not first %}
+        </ul>
+        {% endif %}
+        
+
+
+        {#  Les fonctions du référentiel #}
+
+        {% if personne.personne_foncrefList|length >0  %}
+          <div class='w3-container w3-light-gray'>Fonctions du référentiel</div>
+          <ul>
+          {% for FR in personne.personne_foncrefList %}
+              <li>
+                  {{ FR.foncref.referentiel.code }} {{ FR.foncref.intitule }}<br>
+                  volume de {{ FR.volume }} HETD<br>
+                  {% if FR.foncref.id ==4 %}
+                  {% set stageList = FR.commentaire|json_decode %}
+                  <ul>
+                  {% for stage in stageList %}
+                    <li>{{stage.num}} {{stage.nom}}</li>
+                  {% endfor %}
+                  </ul>
+                  {% else %}
+                  <div>{{ FR.commentaire|markdown_to_html|raw }}</div>                    
+                  {% endif %}
+                  
+              </li>
+          {% endfor %}
+          </ul>
+        {% endif %}
+          
+        {#  Les situations particulières à l'ancienne mode#}
+        {% if personne.situation  %}
+          <div class="w3-rest w3-padding-small">{{ personne.situation.nom }} ⇒  {{ personne.situation.reduction }}h</div>
+        {% endif %}
+          <div class="w3-rest w3-padding-small">Charge : {{ personne.getCharge() }} hTD</div>
+      </div>
+      {% endblock charge %}
+    </div>
+    {% endif %}
+    
+  </div>
+</div>
+
+{% block extendBaseCard %}
+{% endblock extendBaseCard %}
+
+

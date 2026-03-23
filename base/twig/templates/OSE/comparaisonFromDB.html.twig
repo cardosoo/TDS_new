@@ -1,0 +1,177 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+<style>
+
+</style>
+
+
+<details>
+    <summary>Pas de correspondance dans OSE</summary>
+    <table class='standardList w3-table-all'>
+        <thead>
+            <tr>
+                <th>Personne</th>
+                <th>Enseignement</th>
+                <th>CM</th>
+                <th>CTD</th>
+                <th>TD</th>
+                <th>TP</th>
+                <th>Extra</th>
+                <th>Bonus</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for V in r0 %}
+            <tr>
+                <td>{{ V.personne.getGenericWithLink()|raw }}</td>
+                <td>{{ V.enseignement.getGenericWithLink()|raw }}</td>
+                <td class='w3-centered'>{{ V.voeu_detail_heures.cm|f2 }}</td>
+                <td class='w3-centered'>{{ V.voeu_detail_heures.ctd|f2 }}</td>
+                <td class='w3-centered'>{{ V.voeu_detail_heures.td|f2 }}</td>
+                <td class='w3-centered'>{{ V.voeu_detail_heures.tp|f2 }}</td>
+                <td class='w3-centered'>{{ V.voeu_detail_heures.extra|f2 }}</td>
+                <td class='w3-centered'>{{ V.voeu_detail_heures.bonus|f2 }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</details>
+
+
+
+<details>
+    <summary>Une correspondance dans OSE</summary>
+    <table class='standardList w3-table-all'>
+        <thead>
+            
+            <tr>
+                <th>Personne</th>
+                <th>Enseignement</th>
+                <th>CM</th>
+                <th>CTD(7)</th>
+                <th>TD</th>
+                <th>TP(7)</th>
+                <th>MD/Extra</th>
+                <th>REF/Bonus</th>        
+            </tr>
+        </thead>
+        <tbody>
+        {% for L in r1 %}
+        {% set V = L.DB %}
+        {% set O = L.OSE %}
+        
+            <tr>
+                <td>{{ V.personne.getGenericWithLink()|raw }}</td>
+                <td>{{ V.enseignement.getGenericWithLink()|raw }}</td>
+                <td class='w3-centered {{ (V.voeu_detail_heures.cm - O.CM)|abs >0.1?'w3-red':''}}'>{{ V.voeu_detail_heures.cm|f2 }} | {{ O.CM|f2 }}</td>
+                <td class='w3-centered {{ (V.voeu_detail_heures.ctd - O.CMTD - O.CMTD7)|abs >0.1?'w3-red':''}}'>{{ V.voeu_detail_heures.ctd|f2 }} | {{ O.CMTD|f2 }}{{ O.CMTD7|f2 }}{{ O.CMTD7>0.1?"(7)":""}}</td>
+                <td class='w3-centered {{ (V.voeu_detail_heures.td - O.TD)|abs >0.1?'w3-red':''}}' >{{ V.voeu_detail_heures.td|f2 }} | {{ O.TD|f2 }}</td>
+                <td class='w3-centered {{(V.voeu_detail_heures.tp - O.TP - O.TP7)|abs >0.1?'w3-red':''}}'>{{ V.voeu_detail_heures.tp|f2 }} | {{ O.TP|f2 }}{{ O.TP7|f2 }}{{ O.TP7>0.1?"(7)":""}}</td>
+                <td class='w3-centered {{(V.voeu_detail_heures.extra - O.MD)|abs >0.1?'w3-red':''}}'>{{ V.voeu_detail_heures.extra|f2 }} | {{ O.MD|f2 }}</td>
+                <td class='w3-centered {{(V.voeu_detail_heures.bonus - O.référentiel)|abs >0.1?'w3-red':''}}'>{{ V.voeu_detail_heures.bonus|f2 }} | {{ O.réferentiel|f2 }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</details>
+
+<details>
+    <summary>Plus d'une correspondance dans OSE</summary>
+    <table class='standardList w3-table-all'>
+        <thead>
+            
+            <tr>
+                <th>Personne</th>
+                <th>Enseignement</th>
+                <th>CM</th>
+                <th>CTD(7)</th>
+                <th>TD</th>
+                <th>TP(7)</th>
+                <th>MD/Extra</th>
+                <th>REF/Bonus</th>        
+            </tr>
+        </thead>
+        <tbody>
+        {% for L in r2 %}
+        {% set V = L.DB %}
+            {% for OL in L.OSE %}
+                {% for O in OL %}
+            <tr>
+                <td>{{ V.personne.getGenericWithLink()|raw }}</td>
+                <td>{{ V.enseignement.getGenericWithLink()|raw }}</td>
+                <td class='w3-centered {{ (V.voeu_detail_heures.cm - O.CM)|abs >0.1?'w3-red':''}}'>{{ V.voeu_detail_heures.cm|f2 }} | {{ O.CM|f2 }}</td>
+                <td class='w3-centered {{ (V.voeu_detail_heures.ctd - O.CMTD - O.CMTD7)|abs >0.1?'w3-red':''}}'>{{ V.voeu_detail_heures.ctd|f2 }} | {{ O.CMTD|f2 }}{{ O.CMTD7|f2 }}{{ O.CMTD7>0.1?"(7)":""}}</td>
+                <td class='w3-centered {{ (V.voeu_detail_heures.td - O.TD)|abs >0.1?'w3-red':''}}' >{{ V.voeu_detail_heures.td|f2 }} | {{ O.TD|f2 }}</td>
+                <td class='w3-centered {{(V.voeu_detail_heures.tp - O.TP - O.TP7)|abs >0.1?'w3-red':''}}'>{{ V.voeu_detail_heures.tp|f2 }} | {{ O.TP|f2 }}{{ O.TP7|f2 }}{{ O.TP7>0.1?"(7)":""}}</td>
+                <td class='w3-centered {{(V.voeu_detail_heures.extra - O.MD)|abs >0.1?'w3-red':''}}'>{{ V.voeu_detail_heures.extra|f2 }} | {{ O.MD|f2 }}</td>
+                <td class='w3-centered {{(V.voeu_detail_heures.bonus - O.référentiel)|abs >0.1?'w3-red':''}}'>{{ V.voeu_detail_heures.bonus|f2 }} | {{ O.réferentiel|f2 }}</td>
+            </tr>
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+</details>
+
+<details>
+    <summary>Plus entrée de OSE ?</summary>
+    <table class='standardList w3-table-all'>
+        <thead>
+            
+            <tr>
+                <th>Personne</th>
+                <th>Enseignement</th>
+                <th>CM</th>
+                <th>CTD(7)</th>
+                <th>TD</th>
+                <th>TP(7)</th>
+                <th>MD/Extra</th>
+                <th>REF/Bonus</th>        
+            </tr>
+        </thead>
+        <tbody>
+        {% for L in rn %}
+        {% set V = L.DB %}
+
+            {% for OL in L.OSE %}
+                {% for O in OL %}
+            <tr>
+                <td>{{ V.personne.getGenericWithLink()|raw }}</td>
+                <td>{{ V.enseignement.getGenericWithLink()|raw }}</td>
+                <td class='w3-centered {{ (V.voeu_detail_heures.cm - O.CM)|abs >0.1?'w3-red':''}}'>{{ V.voeu_detail_heures.cm|f2 }} | {{ O.CM|f2 }}</td>
+                <td class='w3-centered {{ (V.voeu_detail_heures.ctd - O.CMTD - O.CMTD7)|abs >0.1?'w3-red':''}}'>{{ V.voeu_detail_heures.ctd|f2 }} | {{ O.CMTD|f2 }}{{ O.CMTD7|f2 }}{{ O.CMTD7>0.1?"(7)":""}}</td>
+                <td class='w3-centered {{ (V.voeu_detail_heures.td - O.TD)|abs >0.1?'w3-red':''}}' >{{ V.voeu_detail_heures.td|f2 }} | {{ O.TD|f2 }}</td>
+                <td class='w3-centered {{(V.voeu_detail_heures.tp - O.TP - O.TP7)|abs >0.1?'w3-red':''}}'>{{ V.voeu_detail_heures.tp|f2 }} | {{ O.TP|f2 }}{{ O.TP7|f2 }}{{ O.TP7>0.1?"(7)":""}}</td>
+                <td class='w3-centered {{(V.voeu_detail_heures.extra - O.MD)|abs >0.1?'w3-red':''}}'>{{ V.voeu_detail_heures.extra|f2 }} | {{ O.MD|f2 }}</td>
+                <td class='w3-centered {{(V.voeu_detail_heures.bonus - O.référentiel)|abs >0.1?'w3-red':''}}'>{{ V.voeu_detail_heures.bonus|f2 }} | {{ O.réferentiel|f2 }}</td>
+            </tr>
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+</details>
+
+
+<script>
+    $(document).ready(function () {
+        $('.standardList').DataTable({
+            order: [],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock %}

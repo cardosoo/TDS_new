@@ -1,0 +1,40 @@
+
+labo: num,nom_long [varchar(100) DEFAULT ''],nom_court [varchar(100) DEFAULT ''],url [varchar(30) DEFAULT '']
+
+statut: num,nom_court [varchar(100) DEFAULT ''],obligation [integer DEFAULT 192]
+
+situation: num,nom_court [varchar(100) DEFAULT ''],reduction [integer DEFAULT 0]
+
+enseignant: num,harpege [varchar(100) DEFAULT ''],nom [varchar(100) DEFAULT ''],prenom [varchar(100) DEFAULT ''],prof_adr1 [text DEFAULT ''],prof_tel1 [varchar(20) DEFAULT ''],prof_tel2 [varchar(20) DEFAULT ''],prof_mail [varchar(50) DEFAULT ''],pers_adr1 [text DEFAULT ''],#statut->statut->num,#situation->situation->num,#labo->labo->num
+
+enseignement: num,nuac [varchar(100) DEFAULT ''],intitule [varchar(30) DEFAULT ''],intitulelong [varchar(30) DEFAULT ''],cours [real DEFAULT 0],td [real DEFAULT 0],ctd [real DEFAULT 0],tp [real DEFAULT 0],colle [real DEFAULT 0],s_cours [real DEFAULT 0],s_td [real DEFAULT 0],s_ctd [real DEFAULT 0],s_tp [real DEFAULT 0],s_colle [real DEFAULT 0],i_cours [real DEFAULT 0],i_td [real DEFAULT 0],i_ctd [real DEFAULT 0],i_tp [real DEFAULT 0],i_colle [real DEFAULT 0],d_cours [real DEFAULT 0],d_td [real DEFAULT 0],d_ctd [real DEFAULT 0],d_tp [real DEFAULT 0],d_colle [real DEFAULT 0],n_cours [real DEFAULT 0],n_td [real DEFAULT 0],n_ctd [real DEFAULT 0],n_tp [real DEFAULT 0],n_colle [real DEFAULT 0],m_cours [real DEFAULT 0],m_td [real DEFAULT 0],m_ctd [real DEFAULT 0],m_tp [real DEFAULT 0],m_colle [real DEFAULT 0],bonus [real DEFAULT 0],information [text DEFAULT ''],url [text DEFAULT '']
+
+role: num,nom [varchar(30) DEFAULT '']
+
+actas: num,#enseignant->enseignant->num,#role->role->num
+
+voeu: num,#enseignant->enseignant->num,#enseignement->enseignement->num,cours [real DEFAULT 0],ctd [real DEFAULT 0],td [real DEFAULT 0],tp [real DEFAULT 0],bonus [real DEFAULT 0],colle [real DEFAULT 0],responsable [boolean DEFAULT FALSE]
+
+departement: num,ordre [integer DEFAULT 0],nom_court [varchar(15) DEFAULT 'Nom du cursus'],nom_long [varchar(100) DEFAULT 'intitulé du cursus']
+
+cursus: num,nom_court [varchar(15) DEFAULT 'Nom du cursus'],nom_long [varchar(100) DEFAULT 'intitulé du cursus']
+
+maquette: num,ordre [integer DEFAULT 0],code [varchar(15) DEFAULT 'Code'],version [varchar(15) DEFAULT 'Version'],nom [varchar(100) DEFAULT 'Nom de la maquette'],#gestionnaire->enseignant->num,#responsable1->enseignant->num,#responsable2->enseignant->num,#departement->departement->num
+
+diplome: num,ordre [integer DEFAULT 0],code [varchar(15) DEFAULT 'Code'],nom [varchar(100) DEFAULT 'Nom du diplome'],#maquette->maquette->num
+
+etape: num,ordre [integer DEFAULT 0],code [varchar(15) DEFAULT 'Code'],nom [varchar(100) DEFAULT 'Nom del ''étape'],nbetu [integer DEFAULT 0],#diplome->diplome->num,#cursus->cursus->num
+
+responsable: num,#etape->etape->num,#enseignant->enseignant->num
+
+semestre: num,ordre [integer DEFAULT 0],code [varchar(15) DEFAULT 'Code'],nom [varchar(100) DEFAULT 'Nom du semestre'],peretu [integer DEFAULT 100],periode [integer DEFAULT 0],#etape->etape->num
+
+ue: num,ordre [integer DEFAULT 0],code [varchar(15) DEFAULT 'Code'],nom [varchar(100) DEFAULT 'Nom de l''UE'],peretu [integer DEFAULT 100],ects [real DEFAULT 0],#semestre->semestre->num
+
+ecue: num,ordre [integer DEFAULT 0],code [varchar(15) DEFAULT 'Code'],nom [varchar(100) DEFAULT 'Nom de l''ECUE'],peretu [integer DEFAULT 100],ects [real DEFAULT 0],#ue->ue->num,#enseignement->enseignement->num
+
+voeu_bilan_ligne: num,heures [real DEFAULT 0]
+
+voeu_enseignant_bilan: num,heures [real DEFAULT 0]
+
+voeu_enseignement_bilan: num,cours [real DEFAULT 0],ctd [real DEFAULT 0],td [real DEFAULT 0],tp [real DEFAULT 0],bonus [real DEFAULT 0],colle [real DEFAULT 0],responsable [boolean DEFAULT FALSE],heures [real DEFAULT 0]

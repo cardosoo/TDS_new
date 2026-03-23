@@ -1,0 +1,134 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _personne_situation_.html.twig
+    created : Fri, 02 May 2025 23:33:41 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "personne_situation", id: "{{ personne_situation.id }}" }}'></i>personne_situation</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "personne_situation", F: "actif", id: "{{personne_situation.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ personne_situation.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block oneToManypersonne_situation_personne_full %}
+<p>
+    {% block oneToManypersonne_situation_personne_label %}
+    <label class='select' for='personne'>
+        {{  personne_situation.personne ? personne_situation.personne.getCrudEditLink("personne")|raw : "personne"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "personne_situation", F: "personne", id: "{{personne_situation.id}}" }}'></i>
+    </label>
+    {% endblock oneToManypersonne_situation_personne_label %}
+    {% block oneToManypersonne_situation_personne_active %}    
+    <input class='text {{ ( personne_situation.personne.id ==0 or  personne_situation.personne.actif)?"":" passif" }}'  value="{{ personne_situation.personne.generic() }}" name="personne" id="personne"  _id_="{{ personne_situation.personne.id }}">
+    <script>
+        setAutocomplete("#personne", "/foire/CRUD/L/Personne");
+    </script>
+    {% endblock oneToManypersonne_situation_personne_active %}    
+</p>
+{% endblock oneToManypersonne_situation_personne_full %}
+
+{% block oneToManypersonne_situation_situation_full %}
+<p>
+    {% block oneToManypersonne_situation_situation_label %}
+    <label class='select' for='situation'>
+        {{  personne_situation.situation ? personne_situation.situation.getCrudEditLink("situation")|raw : "situation"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "personne_situation", F: "situation", id: "{{personne_situation.id}}" }}'></i>
+    </label>
+    {% endblock oneToManypersonne_situation_situation_label %}
+    {% block oneToManypersonne_situation_situation_active %}    
+    <input class='text {{ ( personne_situation.situation.id ==0 or  personne_situation.situation.actif)?"":" passif" }}'  value="{{ personne_situation.situation.generic() }}" name="situation" id="situation"  _id_="{{ personne_situation.situation.id }}">
+    <script>
+        setAutocomplete("#situation", "/foire/CRUD/L/Situation");
+    </script>
+    {% endblock oneToManypersonne_situation_situation_active %}    
+</p>
+{% endblock oneToManypersonne_situation_situation_full %}
+
+{% block debut_full %}
+    <p>
+    {% block debut_label %}
+    <label class='text' for="debut"> debut <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "personne_situation", F: "debut", id: "{{personne_situation.id}}" }}'></i></label>    
+    {% endblock debut_label %}
+    {% block debut_active %}
+    <input class='text' type="datetime-local"  value="{{ personne_situation.debut|date('Y-m-d') }}T{{ personne_situation.debut|date('H:i') }}" name="debut" id="debut">
+
+    {% endblock debut_active %}
+    </p>
+{% endblock debut_full %}    
+
+{% block fin_full %}
+    <p>
+    {% block fin_label %}
+    <label class='text' for="fin"> fin <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "personne_situation", F: "fin", id: "{{personne_situation.id}}" }}'></i></label>    
+    {% endblock fin_label %}
+    {% block fin_active %}
+    <input class='text' type="datetime-local"  value="{{ personne_situation.fin|date('Y-m-d') }}T{{ personne_situation.fin|date('H:i') }}" name="fin" id="fin">
+
+    {% endblock fin_active %}
+    </p>
+{% endblock fin_full %}    
+
+{% block reduction_full %}
+    <p>
+    {% block reduction_label %}
+    <label class='text' for="reduction"> reduction <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "personne_situation", F: "reduction", id: "{{personne_situation.id}}" }}'></i></label>    
+    {% endblock reduction_label %}
+    {% block reduction_active %}
+    <input class='text' type="number"  value="{{ personne_situation.reduction }}" name="reduction" id="reduction" placeholder="0">
+
+    {% endblock reduction_active %}
+    </p>
+{% endblock reduction_full %}    
+
+{% block commentaire_full %}
+    <p>
+    {% block commentaire_label %}
+    <label class='text' for="commentaire"> commentaire <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "personne_situation", F: "commentaire", id: "{{personne_situation.id}}" }}'></i></label>    
+    {% endblock commentaire_label %}
+    {% block commentaire_active %}
+    <textarea mode='raw' class='textarea' name="commentaire" id="commentaire" size="10"  placeholder="">{{ personne_situation.commentaire }}</textarea>
+
+    {% endblock commentaire_active %}
+    </p>
+{% endblock commentaire_full %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

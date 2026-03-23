@@ -1,0 +1,25 @@
+{% extends "layout.html.twig" %}
+
+
+{% block section %}
+
+
+
+<div class="w3-card-4 w3-white w3-margin">
+    <div class="w3-container w3-light-grey  w3-large">
+        <h3>La fiche pour {{ P.getGenericWithLink()|raw }} a été créée en dehors du LDAP.</h3>
+    </div>
+
+
+    <div class="w3-panel w3-pale-blue w3-leftbar w3-rightbar w3-border-blue">
+    <p>Vous pouvez communiquer <a href="/{{ App.appName }}/directLink/{{ P.getDirectLink() }}">ce lien<i class="fas fa-link"></i></a>
+    à la personne concernée afin de lui permettre d'accéder à TS Online de façon temporaire.
+    </p>
+    </div> 
+
+    <div class="w3-panel w3-pale-red w3-leftbar w3-border-red">
+        <p>Attention ! Seul un Admin de TS online pourra créer un nouveau lien de ce type</p>
+    </div> 
+
+</div>
+{% endblock %}

@@ -1,0 +1,266 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _Maquette_.html.twig
+    created : Fri, 02 May 2025 23:33:41 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "Maquette", id: "{{ Maquette.id }}" }}'></i>Maquette</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Maquette", F: "actif", id: "{{Maquette.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ Maquette.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block ordre_full %}
+    <p>
+    {% block ordre_label %}
+    <label class='text' for="ordre"> ordre <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Maquette", F: "ordre", id: "{{Maquette.id}}" }}'></i></label>    
+    {% endblock ordre_label %}
+    {% block ordre_active %}
+    <input class='text' type="number"  value="{{ Maquette.ordre }}" name="ordre" id="ordre" placeholder="0">
+
+    {% endblock ordre_active %}
+    </p>
+{% endblock ordre_full %}    
+
+{% block code_full %}
+    <p>
+    {% block code_label %}
+    <label class='text' for="code"> code <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Maquette", F: "code", id: "{{Maquette.id}}" }}'></i></label>    
+    {% endblock code_label %}
+    {% block code_active %}
+    <input class='text'  type="text" value="{{ Maquette.code }}" name="code" id="code" size="50" maxlength="100", placeholder="">
+
+    {% endblock code_active %}
+    </p>
+{% endblock code_full %}    
+
+{% block version_full %}
+    <p>
+    {% block version_label %}
+    <label class='text' for="version"> version <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Maquette", F: "version", id: "{{Maquette.id}}" }}'></i></label>    
+    {% endblock version_label %}
+    {% block version_active %}
+    <input class='text'  type="text" value="{{ Maquette.version }}" name="version" id="version" size="50" maxlength="100", placeholder="">
+
+    {% endblock version_active %}
+    </p>
+{% endblock version_full %}    
+
+{% block nom_full %}
+    <p>
+    {% block nom_label %}
+    <label class='text' for="nom"> nom <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Maquette", F: "nom", id: "{{Maquette.id}}" }}'></i></label>    
+    {% endblock nom_label %}
+    {% block nom_active %}
+    <input class='text'  type="text" value="{{ Maquette.nom }}" name="nom" id="nom" size="50" maxlength="100", placeholder="">
+
+    {% endblock nom_active %}
+    </p>
+{% endblock nom_full %}    
+
+{% block oneToManyMaquette_gestionnaire_full %}
+<p>
+    {% block oneToManyMaquette_gestionnaire_label %}
+    <label class='select' for='gestionnaire'>
+        {{  Maquette.gestionnaire ? Maquette.gestionnaire.getCrudEditLink("gestionnaire")|raw : "gestionnaire"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Maquette", F: "gestionnaire", id: "{{Maquette.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyMaquette_gestionnaire_label %}
+    {% block oneToManyMaquette_gestionnaire_active %}    
+    <input class='text {{ ( Maquette.gestionnaire.id ==0 or  Maquette.gestionnaire.actif)?"":" passif" }}'  value="{{ Maquette.gestionnaire.generic() }}" name="gestionnaire" id="gestionnaire"  _id_="{{ Maquette.gestionnaire.id }}">
+    <script>
+        setAutocomplete("#gestionnaire", "/foire/CRUD/L/Personne");
+    </script>
+    {% endblock oneToManyMaquette_gestionnaire_active %}    
+</p>
+{% endblock oneToManyMaquette_gestionnaire_full %}
+
+{% block oneToManyMaquette_responsable_full %}
+<p>
+    {% block oneToManyMaquette_responsable_label %}
+    <label class='select' for='responsable'>
+        {{  Maquette.responsable ? Maquette.responsable.getCrudEditLink("responsable")|raw : "responsable"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Maquette", F: "responsable", id: "{{Maquette.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyMaquette_responsable_label %}
+    {% block oneToManyMaquette_responsable_active %}    
+    <input class='text {{ ( Maquette.responsable.id ==0 or  Maquette.responsable.actif)?"":" passif" }}'  value="{{ Maquette.responsable.generic() }}" name="responsable" id="responsable"  _id_="{{ Maquette.responsable.id }}">
+    <script>
+        setAutocomplete("#responsable", "/foire/CRUD/L/Personne");
+    </script>
+    {% endblock oneToManyMaquette_responsable_active %}    
+</p>
+{% endblock oneToManyMaquette_responsable_full %}
+
+{% block oneToManyMaquette_co_responsable_full %}
+<p>
+    {% block oneToManyMaquette_co_responsable_label %}
+    <label class='select' for='co_responsable'>
+        {{  Maquette.co_responsable ? Maquette.co_responsable.getCrudEditLink("co_responsable")|raw : "co_responsable"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Maquette", F: "co_responsable", id: "{{Maquette.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyMaquette_co_responsable_label %}
+    {% block oneToManyMaquette_co_responsable_active %}    
+    <input class='text {{ ( Maquette.co_responsable.id ==0 or  Maquette.co_responsable.actif)?"":" passif" }}'  value="{{ Maquette.co_responsable.generic() }}" name="co_responsable" id="co_responsable"  _id_="{{ Maquette.co_responsable.id }}">
+    <script>
+        setAutocomplete("#co_responsable", "/foire/CRUD/L/Personne");
+    </script>
+    {% endblock oneToManyMaquette_co_responsable_active %}    
+</p>
+{% endblock oneToManyMaquette_co_responsable_full %}
+
+{% block oneToManyMaquette_composante_full %}
+<p>
+    {% block oneToManyMaquette_composante_label %}
+    <label class='select' for='composante'>
+        {{  Maquette.composante ? Maquette.composante.getCrudEditLink("composante")|raw : "composante"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Maquette", F: "composante", id: "{{Maquette.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyMaquette_composante_label %}
+    {% block oneToManyMaquette_composante_active %}    
+    <input class='text {{ ( Maquette.composante.id ==0 or  Maquette.composante.actif)?"":" passif" }}'  value="{{ Maquette.composante.generic() }}" name="composante" id="composante"  _id_="{{ Maquette.composante.id }}">
+    <script>
+        setAutocomplete("#composante", "/foire/CRUD/L/Composante");
+    </script>
+    {% endblock oneToManyMaquette_composante_active %}    
+</p>
+{% endblock oneToManyMaquette_composante_full %}
+
+    {% block manyToOne_diplomeList_diplomeList %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Maquette", id: "{{ Maquette.id }}", L: "diplomeList" }}'></i>diplomeList - {{ (Maquette.diplomeList)|length }} élément{{(Maquette.diplomeList)|length >1?'s':''}}</legend>
+
+                <ul>
+                {% for L in Maquette.diplomeList %}   {% block manyToOne_Maquette_maquette %}
+                    <li class='{{ L.actif?"":"passif" }}'>
+                        {{ L.getGeneric(true)|raw }}
+                    </li>
+                    {% endblock manyToOne_Maquette_maquette %}
+                {% endfor %}
+                </ul>
+    </fieldset>
+    {% endblock manyToOne_diplomeList_diplomeList %}    
+
+    {% block manyToMany_commentaire_maquetteList_maquette %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Maquette", id: "{{ Maquette.id }}", L: "commentaire_maquetteList" }}'></i>commentaire_maquetteList - {{ (Maquette.commentaire_maquetteList)|length }} élément{{(Maquette.commentaire_maquetteList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_commentaire_maquetteList_maquette %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/commentaire_maquette/maquette/{{ Maquette.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_commentaire_maquetteList_maquette_auteur %}
+                    <th class='w3-center'>auteur</th>
+                    {% endblock header_th_commentaire_maquetteList_maquette_auteur %}
+                    {% block header_th_commentaire_maquetteList_maquette_date %}
+                    <th class='w3-center'>date</th>
+                    {% endblock header_th_commentaire_maquetteList_maquette_date %}
+                    {% block header_th_commentaire_maquetteList_maquette_commentaire %}
+                    <th class='w3-center'>commentaire</th>
+                    {% endblock header_th_commentaire_maquetteList_maquette_commentaire %}       
+                    {% block header_endcommentaire_maquetteList_maquette %}
+                    {% endblock header_endcommentaire_maquetteList_maquette %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_commentaire_maquetteList_maquette %}
+            </thead>
+
+            <tbody>
+            {% for commentaire_maquette  in Maquette.commentaire_maquetteList %}
+                {% block line_commentaire_maquetteList_maquette %}
+                <tr name='commentaire_maquetteList' _id_='{{ commentaire_maquette.id }}' class='{{ commentaire_maquette.actif?"":"passif " }}{{ commentaire_maquette.auteur.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "commentaire_maquette", id: "{{ commentaire_maquette.id }}" }}'></i>
+                    {{ commentaire_maquette.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_commentaire_maquette_auteur %}
+                    <th class='w3-left'>{{ commentaire_maquette.auteur.getGeneric( true )|raw }}</th>
+                    {% endblock line_commentaire_maquette_auteur %}
+                    {% block line_commentaire_maquetteList_maquette_date %}
+                    <td class='w3-center'>{{ commentaire_maquette.date }}</td>
+                    {% endblock line_commentaire_maquetteList_maquette_date %}
+                    {% block line_commentaire_maquetteList_maquette_commentaire %}
+                    <td class='w3-center'>{{ commentaire_maquette.commentaire }}</td>
+                    {% endblock line_commentaire_maquetteList_maquette_commentaire %}
+                    {% block line_endcommentaire_maquetteList_maquette %}
+                    {% endblock line_endcommentaire_maquetteList_maquette %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_commentaire_maquetteList_maquette %}
+            {% endfor %}
+            {% block footer_endcommentaire_maquetteList_maquette %}
+            {% endblock footer_endcommentaire_maquetteList_maquette %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_commentaire_maquetteList_maquette %}    
+
+    {% block oneToOne_structure_enseignement %}  
+    <fieldset>
+        <legend>structure_enseignement</legend>
+        {% if not isCreation %}
+
+    <table class='w3-table-all w3-hoverable w3-small'>
+        <thead>
+            <tr class='w3-light-blue'>    
+                    <th>periode</th>    
+                    <th>nbetu</th>    
+                    <th>code_ue</th>    
+                    <th>code_ecue</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>    
+                        <td>{{ Maquette.structure_enseignement.periode }}</td>    
+                        <td>{{ Maquette.structure_enseignement.nbetu }}</td>    
+                        <td>{{ Maquette.structure_enseignement.code_ue }}</td>    
+                        <td>{{ Maquette.structure_enseignement.code_ecue }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        {% endif %}
+    </fieldset>
+    {% endblock oneToOne_structure_enseignement%}
+    
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

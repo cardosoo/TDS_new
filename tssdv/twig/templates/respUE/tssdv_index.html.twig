@@ -1,0 +1,20 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+    {% block respUE %}
+    <h3>Responsable d'UE</h3>
+    <ul>
+        <li>Liste des <a href='/{{App.appName}}/respUE/liste1'>UE à valider</a> dont je suis responsable</li>
+        <li>Liste des <a href='/{{App.appName}}/respUE/liste2'>UE dont je suis responsable</a></li>
+    </ul>
+    {% endblock respUE %}
+
+    {% block divers %}
+
+    {% endblock divers %}
+
+</div> 
+{% endblock %}

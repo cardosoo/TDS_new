@@ -1,0 +1,64 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+    {% if voeuList is empty %}
+    <h3 style="background-color:LightCoral">Il n'y a pas de voeux pour le moment </h3>
+    {% else %}
+    <h3>tous les voeux...</h3>
+    <table id="listVoeu" class="display compact">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>codeECUE</th>
+                <th>Intitulé</th>
+                <th>Choix</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for voeu in voeuList %}
+            <tr {{ voeu.v.actif?"":"style='background-color: LightCoral; text-decoration-line: line-through;'"}}> {#LightCoral#}
+                <td><a href='/{{App.appName}}/personne/{{ voeu.p.id }}'>{{ voeu.p.nom }}</a></td>
+                <td><a href='/{{App.appName}}/personne/{{ voeu.p.id }}'>{{ voeu.p.prenom }}</a></td>
+                <td><a href='/{{App.appName}}/enseignement/{{ voeu.e.id }}'>{{ voeu.e.code }}</a></td>
+                <td><a href='/{{App.appName}}/enseignement/{{ voeu.e.id }}'>{{ voeu.e.nom }}</a></td>
+                <td>
+                    {{ voeu.actif }}
+                    {{ voeu.v.cm != '0'?[voeu.v.cm,' CM/']|join:'' }}
+                    {{ voeu.v.ctd != '0'?[voeu.v.ctd,' CTD/']|join:'' }}
+                    {{ voeu.v.td != '0'?[voeu.v.td,' TD/']|join:'' }}
+                    {{ voeu.v.tp != '0'?[voeu.v.tp,' TP/']|join:'' }}
+                    {{ voeu.v.extra != '0'?[voeu.v.extra,' Extra/']|join:'' }}
+                    {{ voeu.v.bonus != '0'?[voeu.v.bonus,' Bonus/']|join:'' }}
+                    {{ voeu.v.correspondant=='t'?'Corr':'' }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <br>
+
+
+
+    <script>
+        $(document).ready(function () {
+            $('#listVoeu').DataTable({
+                order: [[0, "asc"], [1, "asc"]],
+                dom: 'Bfrtip',
+                paging: false,
+                buttons: [
+                    'copy',
+                    'excel',
+                    'csv',
+                    {
+                        extend: 'pdf',
+                        orientation: 'portrait'
+                    }
+                ]
+            });
+        });
+    </script>
+    {% endif %}
+
+{% endblock section %}

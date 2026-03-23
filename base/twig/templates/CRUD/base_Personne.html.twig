@@ -1,0 +1,35 @@
+{% extends "CRUD/_Personne_.html.twig" %}
+
+
+{% block header_endvoeuList_personne %}
+        <th class="w3-center">hTD</th>
+        <th class="w3-center w3-small">reste</th>
+{% endblock header_endvoeuList_personne %}
+
+{% block line_endvoeuList_personne %}
+        <td class='w3-center'>{{ Voeu.voeu_bilan_ligne.heures|f2 }}</td>
+        <td class='w3-center w3-small'>{{ Voeu.enseignement.voeu_enseignement_bilan.heures|f2 }}</td>
+{% endblock line_endvoeuList_personne %}
+
+
+{% block footer_endvoeuList_personne %}
+    <tr class='w3-light-blue'>    
+        <td></td>    
+        <th colspan=8 >Ecart à la charge (charge - vœux)</th>     
+        <td class='w3-center'>{{ Personne.voeu_personne_bilan.heures|f2 }}</td>
+        <td></td>
+        <td></td>
+    </tr>
+{% endblock footer_endvoeuList_personne %}
+
+{% block line_commentaire_personneList_personne_commentaire %}
+<td >{{ commentaire_personne.commentaire|markdown_to_html|raw }}</td>
+{% endblock line_commentaire_personneList_personne_commentaire %}
+
+{% block line_auteur_commentaire_personneList_auteur_commentaire %}
+<td >{{ commentaire_personne.commentaire|markdown_to_html|raw }}</td>
+{% endblock line_auteur_commentaire_personneList_auteur_commentaire %}
+
+{% block line_commentaire_enseignementList_auteur_commentaire %}
+<td >{{ commentaire_enseignement.commentaire|markdown_to_html|raw }}</td>
+{% endblock line_commentaire_enseignementList_auteur_commentaire %}

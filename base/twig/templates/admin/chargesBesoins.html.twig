@@ -1,0 +1,171 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+<br>
+<style>
+    table.dataTable{
+        padding: 1px 1px;
+        font-size: 12px;
+        line-height: 1.2em;
+    }    
+    
+</style>
+
+<br>
+<div class="w3-row">
+    <div class="w3-half w3-container">
+        <div class="w3-card">
+            <table id='besoins'>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Enseignement</th>
+                        <th>CM</th>
+                        <th>CTD</th>
+                        <th>TD</th>
+                        <th>TP</th>
+                        <th>Ext</th>
+                        <th>Corr.</th>
+                        <th>Bon</th>
+                        <th>HETD</th>
+                        <th>periode</th>
+                        <th>Cursus</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for besoin in besoinList %}
+                        <td><i class="fas fa-shopping-cart panier_cours" data-tipped-options="ajax: {data: { id: '{{besoin.enseignement.id}}' }}"></i></td>
+                        <td><a href="/{{ App.appName }}/enseignement/{{ besoin.enseignement.id }}">{{ besoin.enseignement.code}} - {{ besoin.enseignement.nom }}</a></td>
+                        <td style='text-align: center;'>{{ besoin.voeu_enseignement_bilan.cm|f2 }}</td>
+                        <td style='text-align: center;'>{{ besoin.voeu_enseignement_bilan.ctd|f2 }}</td>
+                        <td style='text-align: center;'>{{ besoin.voeu_enseignement_bilan.td|f2 }}</td>
+                        <td style='text-align: center;'>{{ besoin.voeu_enseignement_bilan.tp|f2 }}</td>
+                        <td style='text-align: center;'>{{ besoin.voeu_enseignement_bilan.extra|f2 }}</td>
+                        <td style='text-align: center;'>{{ besoin.voeu_enseignement_bilan.correspondant|f2 }}</td>
+                        <td style='text-align: center;'>{{ besoin.voeu_enseignement_bilan.bonus|f2 }}</td>
+                        <td style='text-align: center;'>{{ besoin.voeu_enseignement_bilan.heures|f2 }}</td>
+                        <td style='text-align: center;'>{{ besoin.enseignement_structure.periode }}</td>
+                        <td style='text-align: center;'>{{ besoin.enseignement_structure.cursus }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="w3-half w3-container">
+        <div class="w3-card w3-margin-left">
+            <table id='charges'>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Enseignant</th>
+                    <th>mail</th>
+                    <th>statut</th>
+                    <th>charge</th>
+                    <th>manque</th>
+                    <th>ratio</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for charge in chargeList %}
+                <tr  {{ (( (charge.personne_charge.charge -charge.voeu_personne_bilan.heures) >= 64)  or ( charge.statut.nom not in  ["PROF", "MCF"] ) )  ?'':'class="w3-red"'}}>
+                    <td><i class="fas fa-shopping-cart panier_user" data-tipped-options="ajax: {data: { id: '{{charge.personne.id}}' }}"></i></td>
+                    <td><a href='/{{ App.appName }}/personne/{{ charge.personne.id }}'>{{ charge.personne.prenom }} {{ charge.personne.nom }}</a></td>
+                    <td>{{ charge.personne.email }}</td>
+                    <td>{{ charge.statut.nom }}</td>
+                    <td>{{ charge.personne_charge.charge|f2}}</td>
+                    <td>{{ charge.voeu_personne_bilan.heures|f2}}</td>
+                    <td>{{ (100*charge.voeu_personne_bilan.heures/charge.personne_charge.charge)|f2}}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+
+<div id = 'userCart' class="w3-card w3-round w3-right" style='width: 800px; right:2em;'>
+</div>
+
+<div id = 'coursCart' class="w3-dropdown-content w3-card w3-round w3-right" style='width: 800px; right:2em;'>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#charges').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'portrait'
+                }
+            ]
+        });
+
+        $('#besoins').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'portrait'
+                }
+            ]
+        });
+        
+        Tipped.delegate('.panier_cours', {
+            ajax: {
+              url: '/{{ App.appName }}/enseignement/ajaxPanier',
+              type: 'POST'
+            },
+            skin: 'light',
+            showOn: 'click',
+            hideOn: 'click',
+            close: true,
+            radius: false,
+            size: 'large',
+            position: 'topleft'
+          });
+
+        Tipped.delegate('.panier_user', {
+            ajax: {
+            url: '/{{ App.appName }}/personne/ajaxPanier',
+            type: 'POST'
+            },
+            skin: 'light',
+            showOn: 'click',
+            hideOn: 'click',
+            close:true,
+            radius: false,
+            size: 'large',
+            position: 'topleft'
+        });
+    });
+
+    
+    function userCart() {
+      var x = document.getElementById("panierVisu");
+      if (x.className.indexOf("w3-show") == -1) { 
+        x.className += " w3-show";
+      } else {
+        x.className = x.className.replace(" w3-show", "");
+      }
+    }
+    
+</script>
+
+{% endblock section %}

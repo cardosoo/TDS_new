@@ -1,0 +1,197 @@
+<style>
+    p {
+        margin: 0px;
+    }
+</style>
+
+<div style='all: revert;'>
+    <div class='w3-container w3-card'>
+    {% block stage_info %}
+
+    {% endblock stage_info %}
+    {% if tab.canEdit %}
+        <header id='editStagesError' class="w3-container w3-red " style="display:none">
+            <span onclick="this.parentElement.style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <p class='w3-center'>Red often indicates a dangerous or negative situation.</p>
+        </header>
+            
+        <br>
+        <form id='stagesForm' action=''>
+            {% block volume_stage %}
+                <p>Vous déclarez encadrer <span data-bind='text: $root.nbStages()'>&nbsp;</span> stage(s)</p>
+                <p>Pour un volume dans le référentiel de <input type='number' min='0' max='12' style='width: 3em;' data-bind='textinput: d.volume' /> hETD</p>    
+            {% endblock %}
+            <table data-bind='visible: d.stages().length > 0'>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>N° etudiant</th>
+                        <th>Nom</th>
+                        <th>Etape</th>
+                        {% block co_encadrement_header_edit %}{% endblock %}
+                        <th>Commentaire</th>
+                    </tr>
+                </thead>
+                <tbody data-bind='foreach: d.stages'>
+                    <tr>
+                        <td><a href='#' data-bind='click: $root.removeStage'><i class="fa fa-trash" style="color:red"></i></a></td>
+                        <td data-bind='text: num'/></td>
+                        <td data-bind='text: nom'/></td>
+                        <td data-bind='text: eta' /></td>
+                        {% block co_encadrement_edit %}{% endblock %}
+                        <td><input data-bind='textinput: cm' oninput='stagesModel.d.stages.valueHasMutated()'/></td> 
+                    </tr>
+                </tbody>
+            </table>
+            <p><input  data-bind='value: numetu' style='width: 10em;' placeholder='n° étudiant'/> <button data-bind='click: addStage'>Ajouter un stage</button></p>
+            <br>
+            <p data-bind="visible: changed()"><button data-bind='click: save' >Enregistrer</button></p>
+        </form>
+    {% else %}
+        <h3>Encadrement des Stages</h3>
+        {% if tab.error =="" %}
+
+        Volume pris en compte : {{tab.volume}} hETD<br>
+        <table>
+            <tr>
+                <th>N° etudiant</th>
+                <th>Nom</th>
+                <th>Etape</th>
+                {% block co_encadrement_header %}{% endblock %}
+                <th>Commentaire</th>
+            </tr>
+            {% for S in tab.stageList %}
+             <tr>
+                <td>{{S.num}}</td>
+                <td>{{S.nom}}</td>
+                <td>{{S.eta}}</td>
+                {% block co_encadrement %}{% endblock %}
+                <td>{{S.cm}}</td>
+             </tr>                  
+            {% endfor %}            
+        </table>
+        {% else %}
+        <h3>{{ tab.error}}</h3>
+        {% endif %}
+    
+    {% endif %}
+    </div>
+</div>
+
+{% if tab.canEdit %}    
+
+<script>
+
+var StagesModel = function(stages, volume) {
+    var self = this;
+    self.d = [];
+    for(i=0;i<stages.length;i++){
+        stages[i].co = stages[i].co ==='true';
+        stages[i].cm = ko.observable(stages[i].cm);
+    }
+    self.d.stages = ko.observableArray(stages);
+    {% block calcul_volume_stages %}
+    self.d.volume = ko.observable(volume);
+    {% endblock %}
+    self.numetu = ko.observable('');
+    self.nbStages = ko.pureComputed(function() {
+        var count = 0;
+        self.d.stages().forEach(element => {
+            if (element['nom'] !== 'Pas trouvé'){
+                {% block co_encadrement_cadre%}count++;{% endblock %};
+            }
+        })
+        return count;
+    }, this);
+
+    self.getJSON = function(){
+        return  { 'stages': ko.mapping.toJS(self.d.stages), 'volume': self.d.volume() };
+    }
+
+    self.getJSONString = function(){
+        return JSON.stringify(self.getJSON());
+    }
+
+    self.changed = function(){
+        self.d.stages.valueHasMutated();
+        var changed = self.initialJSONString !== self.getJSONString();
+        return changed;
+    };
+
+    self.initialJSONString = self.getJSONString();
+
+
+    self.addStage = function() {
+
+        var posting = $.post('/{{ App.appName }}/personne/ldap/numetu',{
+            searchValue: self.numetu(),
+        });
+                
+        posting.done(function( json ) {
+
+            if (json==""){
+                data = [];
+                data.displayname='Pas trouvé'
+                etape = ['Pas touvé'];
+            } else {
+                data = JSON.parse(json);
+                etapeList = Array.isArray(data.supannetuetape)?data.supannetuetape:[data.supannetuetape];
+                etape = [];
+                
+                etapeList.forEach(function(et){
+                    etape.push(et.replace(/ *{[^)]*} */g, ""));
+                });
+            }
+
+            self.d.stages.push({
+                num: self.numetu(),
+                nom: data.displayname,
+                eta: etape.join(', '),
+                {% block co_encadrement_push %}{% endblock %}
+                cm: "",
+            });
+        });
+    };
+
+    {% block co_encadrement_script %}{% endblock %}
+
+    self.removeStage = function(stage) {
+        self.d.stages.remove(stage);
+    };
+ 
+    self.save = function(form) {
+        var jqxhr = $.post( "/{{ App.appName }}/personne/saveStages/{{ personne.id }}",  self.getJSON() , function(data) {
+            if ('success' == data) {
+                self.initialJSONString = self.getJSONString();
+                self.d.stages.valueHasMutated();
+//                window.location.reload(true);
+            } else {
+                $('#editStagesError > p').html(data);
+                document.getElementById('editStagesError').style.display = 'block'
+            }
+        })
+        .done(function(data) {
+        })
+        .fail(function() {
+        })
+        .always(function() {
+        });
+    };
+
+
+
+};
+ 
+
+var stagesModel = new StagesModel({{ tab.SL.commentaire==''?'""':tab.SL.commentaire|raw }}, '{{ tab.SL.volume }}' );
+ko.applyBindings(stagesModel, document.getElementById('stagesForm'));
+ 
+
+function hasChangedStages(){
+    var change = stagesModel.changed();
+    return change ;
+}
+
+</script>
+{% endif %}
+

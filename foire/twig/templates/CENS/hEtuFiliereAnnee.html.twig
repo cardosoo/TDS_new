@@ -1,0 +1,116 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+<style>
+
+td, th {
+  vertical-align: middle;
+  text-align: left;
+}
+
+.td_centre{
+  text-align: center !important;
+}
+
+.bold{
+  background: AliceBlue;
+  font-weight: bold;
+}
+
+.cache{
+  display : none;
+}
+</style>
+
+
+
+<div class="w3-cell-row">
+
+  <div class="w3-container w3-cell">
+    <div class="w3-card" style="max-width:1600px;margin-top:80px">    
+
+        <h3>Heures pour les étudiants</h3>
+        <p>Attention, ici sont comptabilisés l'ensemble des heures étudiant d'une maquette. 
+        Cela ne signifie pas que les étudiants effectuent toutes les heures comptabilisées.
+        En effet, si elles existe des options elles sont toutes comptabilisées dans le total.
+        Enfin, seules sont prises en compte les heures gérées par la foire.</p>
+      {% set ordre = 100 %}
+      <table id='list'>
+        <thead>
+            <tr>
+                <th class='cache'>ordre</th>
+                <th>Maquette</th>
+                <th>Diplome</th>
+                <th>Étape</th>
+                <th>nb Etu</th>
+                <th>h</th>
+                <th>hCM</th>
+                <th>hCTD</th>
+                <th>hTD</th>
+                <th>hTP</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for p in params %}{# |slice(0,1) #}
+          {% set ordre = ordre+1 %}
+          <tr>
+            <td class='cache'>{{ordre}}</td>
+            <td class='bold'>{{ p.composante.nom}}</td>
+            <td class='bold'></td>
+            <td class='bold'></td>
+            <td class='bold'></td>
+            <td class='bold'></td>
+            <td class='bold'></td>
+            <td class='bold'></td>
+            <td class='bold'></td>
+            <td class='bold'></td>
+          </tr>
+          {% for l in p.list %}
+            {% set ordre = ordre+1 %}
+            <tr> 
+              <td class='cache'>{{ordre}}</td>
+              <td>{{l.maquette}}</td>
+              <td>{{l.diplome}}</td>
+              <td>{{l.etape.nom }}</td>
+              <td>{{l.etape.nbetu}}</td>
+              <td class='td_centre'>{{(l.hEtu[0]+l.hEtu[1]+l.hEtu[2]+l.hEtu[3])|f2 }}</td>
+              <td class='td_centre'>{{l.hEtu[0]|f2 }}</td>
+              <td class='td_centre'>{{l.hEtu[1]|f2 }}</td>
+              <td class='td_centre'>{{l.hEtu[2]|f2 }}</td>
+              <td class='td_centre'>{{l.hEtu[3]|f2 }}</td>
+            </tr>
+          {% endfor %}
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div> 
+<br>
+<br>
+
+<script>
+    $(document).ready(function () {
+        $('#list').DataTable({
+            // order: [[0, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+
+{% endblock section %}
+
+

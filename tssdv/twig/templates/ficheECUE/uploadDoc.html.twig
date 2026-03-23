@@ -1,0 +1,30 @@
+<div id="drag-and-drop-zone" class="dm-uploader w3-card w3-khaki">
+    <div class="">Glisser-déposer les fichiers dans cette zone.</div>
+
+    <div class="btn btn-primary w3-center " style="height: 3em; padding: 1em;">
+        <span class="my-btn">Ouvrir le sélecteur de fichier.</span>
+        <input type="file" title='Cliquer pour ajouter des fichiers'/>
+    </div>
+    <div class="_col-md-6 _col-sm-12">
+        <div class="card h-100">
+            <ul class="l" id="files">
+            </ul>
+        </div>
+    </div>
+    <ul id='doc'>
+    {% for doc in docList %}
+        {% set title = doc.getTitle() %}
+        {% set time = doc.getTimestamp() %}
+        {% set rnd = random() %}
+        {% set id = 'li_' ~ rnd %}
+        {% set url = doc.getDocDownloadURL() %}
+        {% set title = doc.getTitle() %}
+        <li id='{{ id }}'>
+        {{ doc.getDate() }} 
+        <div  onclick="deleteDoc('{{ id }}', '{{ title }}', '{{ url }}')" class='w3-padding-small w3-margin-left w3-margin-right w3-tiny w3-button w3-round-large w3-red'><i class='fa fa-trash'></i></div>
+        <a href='{{ url }}' target='_blank'>{{ doc.getTitle }}</a>
+        <div  onclick="renameDoc('{{ id }}', '{{ title }}', '{{ url }}')" class='w3-padding-small  w3-margin-left w3-tiny w3-button w3-round-large w3-grey'><i class='fa fa-edit'></i></div>
+        </li>
+    {% endfor %}
+    </ul>
+</div>

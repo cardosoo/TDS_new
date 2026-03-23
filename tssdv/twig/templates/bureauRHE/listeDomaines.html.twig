@@ -1,0 +1,26 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+    {% block respDomaine %}
+
+    <h3>Liste des domaines</h3>
+    <ul>
+        {% for domaine in domaineList %}
+        <li>
+            <a href='/{{App.appName}}/respDomaine/listePersonnes/{{domaine.id}}'>Enseignants</a>,
+            <a href='/{{App.appName}}/respDomaine/listeEnseignements/{{domaine.id}}'>Enseignements</a>
+             {{domaine.acronyme}} - {{domaine.nom}} 
+        </li>
+        {% endfor %}
+    </ul>
+    {% endblock respDomaine %}
+
+    {% block divers %}
+
+    {% endblock divers %}
+
+</div> 
+{% endblock %}

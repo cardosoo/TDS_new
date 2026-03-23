@@ -1,0 +1,16 @@
+{% if App.auth.inBase %}
+    <a id="user_link" href="/{{ App.appName }}/personne/{{ App.auth.user.id }}" class="w3-bar-item w3-button"><i class="far fa-user w3-padding-small"></i>{{ App.auth.user.prenom }} {{ App.auth.user.nom }}</a>
+{% endif %}
+<div style='padding: 4px; display:inline-block;'>
+    <input id='searchEnseignement' onkeypress='inputKey(event)' class='w3-text-black' placeholder="Enseignement" >
+    <button onclick='searchEnseignement()' class="w3-padding-small w3-tail w3-round-xlarge  w3-theme-l5">
+    <i class="fas fa-search "></i>
+    <i class="fas fa-graduation-cap"></i>
+    </button>
+    <div style='width:3em; display: inline-block;'>   </div>
+    <input id='searchAll' onkeypress='inputKey(event)' class='w3-text-black' placeholder="recherche">
+    <button onclick='searchAll()' class="w3-padding-small w3-tail w3-round-xlarge w3-theme-l5">
+    <i class="fas fa-search "></i>
+    <i class="fas fa-user"></i>
+    </button>
+</div>

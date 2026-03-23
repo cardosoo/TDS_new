@@ -1,0 +1,52 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _personne_referentiel_heures_.html.twig
+    created : Fri, 13 Mar 2026 08:02:05 +0100 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "personne_referentiel_heures", id: "{{ personne_referentiel_heures.id }}" }}'></i>personne_referentiel_heures</legend>
+
+{% block heures_full %}
+    <p>
+    {% block heures_label %}
+    <label class='text' for="heures"> heures <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "personne_referentiel_heures", F: "heures", id: "{{personne_referentiel_heures.id}}" }}'></i></label>    
+    {% endblock heures_label %}
+    {% block heures_active %}
+    <input class='text' type="number"  value="{{ personne_referentiel_heures.heures }}" name="heures" id="heures" step="any" placeholder="0">
+
+    {% endblock heures_active %}
+    </p>
+{% endblock heures_full %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

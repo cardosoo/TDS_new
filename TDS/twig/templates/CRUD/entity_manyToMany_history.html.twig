@@ -1,0 +1,15 @@
+<b>Historique pour l'entité {{ entityName }}</b>
+{% if updateList is empty %}
+<br>Pas de modification pour ce lien
+{% else %}
+<ul>
+{% for r in updateList %}
+<li>{{ r.historique.ip}} -  {{ r.historique.date }}<br>
+{{ r.historique.requete }}
+</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+
+

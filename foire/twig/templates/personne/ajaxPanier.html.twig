@@ -1,0 +1,43 @@
+<div class='w3-card'>Panier de {{ P.prenom }} {{ E.nom }}</div>
+<div class="w3-card">
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Enseignemnt</th>
+                <th>Choix</th>
+                <th>Commentaire</th>
+            </tr>
+        </thead>
+    {% for p in Panier %}
+        <tr>
+            <td>{% if  p.getVoeu() %}<i class="fas fa-check"></i>{% endif %}</td>
+            <td><a href="/{{ App.appName }}/enseignement/{{ p.enseignement.id }}">{{ p.enseignement.code }} {{ p.enseignement.nom }}</a></td>
+            <td>
+                {% if  p.cm %}
+                CM
+                {% endif %}
+                {% if  p.ctd %}
+                CTD
+                {% endif %}
+                {% if  p.td %}
+                TD 
+                {% endif %}
+                {% if  p.tp %}
+                TP
+                {% endif %}
+                {% if  p.extra %}
+                Ext
+                {% endif %}
+                {% if  p.bonus %}
+                Bon
+                {% endif %}
+                {% if  p.responsable == 't' %}
+                Corr
+                {% endif %}
+            </td>
+            <td  style='max-width: 30em;'>{{ p.commentaire?p.commentaire|markdown_to_html:"" }}</td>
+        </tr>    
+    {% endfor %}
+    </table>    
+</div>

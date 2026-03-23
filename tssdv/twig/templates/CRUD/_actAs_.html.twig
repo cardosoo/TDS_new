@@ -1,0 +1,86 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _actAs_.html.twig
+    created : Wed, 30 Jul 2025 18:30:52 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "actAs", id: "{{ actAs.id }}" }}'></i>actAs</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "actAs", F: "actif", id: "{{actAs.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ actAs.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block oneToManyactAs_personne_full %}
+<p>
+    {% block oneToManyactAs_personne_label %}
+    <label class='select' for='personne'>
+        {{  actAs.personne ? actAs.personne.getCrudEditLink("personne")|raw : "personne"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "actAs", F: "personne", id: "{{actAs.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyactAs_personne_label %}
+    {% block oneToManyactAs_personne_active %}    
+    <input class='text {{ ( actAs.personne.id ==0 or  actAs.personne.actif)?"":" passif" }}'  value="{{ actAs.personne.generic() }}" name="personne" id="personne"  _id_="{{ actAs.personne.id }}">
+    <script>
+        setAutocomplete("#personne", "/tssdv/CRUD/L/Personne");
+    </script>
+    {% endblock oneToManyactAs_personne_active %}    
+</p>
+{% endblock oneToManyactAs_personne_full %}
+
+{% block oneToManyactAs_role_full %}
+<p>
+    {% block oneToManyactAs_role_label %}
+    <label class='select' for='role'>
+        {{  actAs.role ? actAs.role.getCrudEditLink("role")|raw : "role"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "actAs", F: "role", id: "{{actAs.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyactAs_role_label %}
+    {% block oneToManyactAs_role_active %}    
+    <input class='text {{ ( actAs.role.id ==0 or  actAs.role.actif)?"":" passif" }}'  value="{{ actAs.role.generic() }}" name="role" id="role"  _id_="{{ actAs.role.id }}">
+    <script>
+        setAutocomplete("#role", "/tssdv/CRUD/L/Role");
+    </script>
+    {% endblock oneToManyactAs_role_active %}    
+</p>
+{% endblock oneToManyactAs_role_full %}
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

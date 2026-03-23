@@ -1,0 +1,90 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+<style>
+
+td, th {
+  vertical-align: middle;
+}
+
+
+.td_centre{
+  text-align: center !important;
+}
+</style>
+
+<div class="w3-cell-row">
+
+  <div class="w3-container w3-cell">
+    <div class="w3-card" style="max-width:1600px;margin-top:80px">    
+        {% for composante in composanteList %}{# |slice(0,1) #}
+            <h3>{{ composante.nom }}</h3>
+
+            <ul>
+            {% for maquette in composante.maquetteList %} {# |slice(0,3) #} 
+              <li>{{ maquette.nom }}
+                <ul>
+                {% for diplome in maquette.diplomeList %} {# On a pas forcément besoin de cela #}
+                  <li>{{ diplome.nom }}
+                    <ul>
+                    {% for etape in diplome.etapeList %} {# C'est surtout cela qui est interessant #}
+                      {% if etape.cursus.id == cursusID %}
+                      <li>{{ etape.nom }}
+                        <table>
+                           <tr>
+                            <th >ECUE maquette</th>
+                            <th >Enseignement</th>
+                            <th class='td_centre'>Nb etu<br>Enseignement</th>
+                            <th class='td_centre'>Nb etu<br>Filière</th>
+                            <th class='td_centre'>hETD<br>Enseignement</th>
+                            <th class='td_centre'>hETD<br>Filière</th>
+                           </tr>
+                        {% set coutFiliere = 0 %}
+                        {% for semestre in etape.semestreList %}
+                          {% for ue in semestre.ueList %}
+                            {% for ecue in ue.ecueList %}
+                            <tr>
+                              <td>{{ ecue.getGeneric() }}</td>
+                              {% if not ecue.enseignement %}
+                                <td>Pas lié<td>
+                              {% else %}
+                                {% set E = ecue.enseignement %}
+                                {% set ES = E.enseignement_structure %}
+                                {% set EB = E.enseignement_besoins %}
+                                {% set cout = E.getNbEtu()> 0 ? EB.besoins*ecue.nbetu/E.getNbEtu():EB.besoins %}
+                                {% set coutFiliere = coutFiliere + cout %}
+                                <td>{{ ecue.enseignement.getGenericWithLink()|raw }}</td>
+                                <td class='td_centre'>{{ecue.nbetu|f2}}</td>
+                                <td class='td_centre'>{{ E.getNbEtu()|f2 }}</td>
+                                <td class='td_centre'>{{ EB.besoins|f2 }}</td>
+                                <td class='td_centre'>{{ cout|f2 }}</td>
+                              {% endif %}
+                            </tr>
+                            {% endfor %} {# ecue #}
+                          {% endfor %} {# ue #}
+                        {% endfor %} {# semestre #}
+                            <tr>
+                              <th colspan='5'>Total {{ etape.nom }}</th>
+                              <th>{{ coutFiliere|f2 }}</th>
+                            </tr>
+                        <table>
+                      </li>
+                      {% endif %}
+                    {% endfor %} {# etape #}
+                    </ul>
+                  </li>
+                {% endfor %}
+                </ul>
+              </li>
+            {% endfor %}
+            </ul>
+
+        {% endfor %}
+    </div>
+  </div>
+
+</div> 
+{% endblock section %}
+
+

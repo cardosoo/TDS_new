@@ -1,0 +1,366 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+
+
+{% include "ficheECUE/slider.html.twig" %}
+{% set readonly = uid != App.auth.uid %}
+
+{% if readonly %}
+<style>
+input, textarea, select {
+  pointer-events:none;
+  /*
+  background: red;
+  background: blue;
+  */
+}
+{% endif %}
+
+</style>
+
+<divclass="w3-container w3-content" style="max-width:900px;margin-top:80px">    
+    <h3>Fiche ECUE UFR Sciences du Vivant</h3>
+    <h5> pour l'année {{App.currentYear}} - {{App.currentYear + 1}}</h5>
+    {#% include('ficheECUE/uploadDoc.html.twig') %#}
+    
+    <br>
+    {% set divClass = "w3-border w3-hover-grey w3-padding" %}
+
+    <form id="ficheECUE" enctype="multipart/form-data" class="w3-container" method="POST" action=".">
+        <input type="hidden" name="name" value="{{name}}">
+        <input type="hidden" name="uid" value="{{uid}}">
+        {% include "ficheECUE/positionECUE.html.twig" %}        
+        {% include "ficheECUE/mutualisation.html.twig" %}
+        {% include "ficheECUE/volumeEnseignement.html.twig" %}
+        {% include "ficheECUE/MCC.html.twig" %}
+        {% include "ficheECUE/description.html.twig" %}
+        {##}
+        <div class="w3-panel w3-leftbar w3-sand w3-serif  {{divClass}}">
+        L'information ci-dessous ne fait pas partie intégrante de la fiche ECUE, mais permet de prendre quelques notes sur 
+        son état d'avancement.<br>
+        Seule la première ligne apparait dans le tableau récapitulatif.
+        <textarea  style='width:100%' rows="3" name='noteVersion'>{{data.noteVersion}}</textarea>
+        </div>
+        {% if not readonly %}
+        <button id ='sendButton' class="w3-btn w3-round-large w3-padding-small w3-theme-d2" onclick='doSave(this)'>Envoyer</button>
+        {% endif %}
+        
+
+    </form>
+</div>
+{% include "tools/ckEditor.js" %}
+
+
+{# Ici il faut beaucoup travailler car sinon cela ne va pas fonctionner comme on veut ! #}
+    <link rel="stylesheet" href="/{{App.appName}}/assets/uploader/jquery.dm-uploader.min.css">
+    <script src="/{{App.appName}}/assets/uploader/jquery.dm-uploader.min.js"></script>
+
+    <style>
+    .dm-uploader{
+        margin-top: 1em;
+        margin-bottom: 1em;
+        padding: 1em;
+    }
+
+    .my-btn{
+        background-color: LightGray;
+        border: solid 2px Gray;
+        border-radius: 0.5em;
+        padding: 0.2em 1em 0.2em 1em;
+    }   
+    </style>
+
+
+
+
+    <!-- /file list -->
+
+<script src="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.min.js"></script>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.js"></script>
+
+{#
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+#}
+
+<script src="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.js"></script>
+<script src="https://uicdn.toast.com/editor/latest/i18n/fr-fr.js"></script>
+
+<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+<link  rel="stylesheet" href="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.min.css" />
+<link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.css"/>
+
+
+
+<script src="/tssdv/assets/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    function initCKEditor(id){
+        elm = document.getElementById(id);
+        editorConfig['initialData']=elm.innerHTML;
+        editorConfig['placeholder']=elm.getAttribute('placeholder');
+        BalloonEditor.create(elm, editorConfig);        
+    }
+    var form;
+    var initialData;
+
+    const { Editor }  = toastui;
+    const { colorSyntax } = Editor.plugin;
+
+
+
+    function initToastUIEditor(id){
+
+        elm = document.getElementById(id);
+        var Editor = toastui.Editor;
+
+        var editor = new Editor({
+                el: elm,
+                plugins: [colorSyntax],
+                height: 'auto',
+                language: 'fr',
+                initialEditType: 'wysiwyg',
+                usageStatistics: false,
+                initialValue: elm.innerHTML,
+                hideModeSwitch: true,
+            });
+        return editor;
+    }
+
+/*
+    tinymce.init({selector: 'textarea#mentionMutualisationSDV', license_key: 'gpl'});
+    tinymce.init({selector: 'textarea#prerequis', license_key: 'gpl'});
+    tinymce.init({selector: 'textarea#competences', license_key: 'gpl'});
+    tinymce.init({selector: 'textarea#connaissances', license_key: 'gpl'});
+    tinymce.init({selector: 'textarea#syllabus', license_key: 'gpl'});
+
+    initCKEditor('mentionMutualisationSDV');
+    initCKEditor('prerequis');
+    initCKEditor('competences');
+    initCKEditor('connaissances');
+    initCKEditor('syllabus');
+*/
+
+
+{% if not readonly %}
+    var mutualisation = initToastUIEditor('mentionMutualisationSDV');
+    var prerequis = initToastUIEditor('prerequis');
+    var competences = initToastUIEditor('competences');
+    var connaissances = initToastUIEditor('connaissances');
+    var syllabus = initToastUIEditor('syllabus');
+
+
+    $( document ).ready(function() {
+
+        document.getElementById('body_start').scrollIntoView({ behavior: "instant", block: "start" });
+        initialData = getDataFromForm();
+
+    });
+{% endif %}
+
+
+    function getDataFromForm(){
+        form = document.getElementById('ficheECUE');
+        data = new FormData(form);
+        /*       
+        data.set('mentionMutualisationSDV', document.getElementById('mentionMutualisationSDV').innerHTML);
+        data.set('prerequis', document.getElementById('prerequis').innerHTML);
+        data.set('competences', document.getElementById('competences').innerHTML);
+        data.set('connaissances', document.getElementById('connaissances').innerHTML);
+        data.set('syllabus', document.getElementById('syllabus').innerHTML);
+        */
+        data.set('mentionMutualisationSDV', mutualisation.getHTML());
+        data.set('prerequis', prerequis.getHTML());
+        data.set('competences', competences.getHTML());
+        data.set('connaissances', connaissances.getHTML());
+        data.set('syllabus', syllabus.getHTML());
+        return data;
+    }
+
+
+
+    function doSave(button){
+        doItQuandMeme();
+        event.preventDefault();
+        data = getDataFromForm();
+
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: "/{{App.appName}}/ficheECUE/fiche/{{uid}}/{{name}}",
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 800000,
+            success: function (data) {
+                if ('success' == data) {
+                    window.location='/{{App.appName}}/ficheECUE/gestion';
+                    //window.location.reload(true);
+                } else {
+                    $('#editUserError > p').html(data);
+                    document.getElementById('editUserError').style.display = 'block'
+                    $("#submitBtn").prop("disabled", false);
+                }
+            },
+            error: function (e) {
+                $('#editUserError > p').html("Erreur réseau sans doute...");
+                document.getElementById('editUserError').style.display = 'block'
+                $("#submitBtn").prop("disabled", false);
+            }
+        });
+    }
+
+</script>
+{#    #}
+<!-- File item template -->
+    <script type="text/html" id="files-template">
+    <li class="media">
+        
+        <div class="media-body mb-1">
+        <p class="mb-2">
+            <strong>%%filename%%</strong> - Status: <span class="text-muted">Waiting</span>
+        </p>
+
+        <div class="w3-light-grey w3-small" style='height: 1em;'>
+            <div class="progress-bar  w3-green w3-center" style='width:0px'></div>
+        </div>     
+        
+        <p class="controls mb-2">
+            <button href="#" class="btn btn-sm btn-primary start" role="button">Start</button>
+            <button href="#" class="btn btn-sm btn-danger cancel" role="button" disabled="disabled">Cancel</button>
+        </p>
+        
+        <hr class="mt-1 mb-1" />
+        </div>
+    </li>
+    </script>
+
+      <div class="row">
+        <div class="col-12">
+           <div class="card h-100">
+            <div class="card-header">
+            </div>
+
+            <ul class="list-group list-group-flush" id="debug">
+              <li class="list-group-item text-muted empty">Loading plugin....</li>
+            </ul>
+          </div>
+        </div>
+      </div> <!-- /debug -->
+
+
+<script>
+
+    function deleteDoc(id, title, url){
+        if (confirm('Confirmer la suppression du document :\n'+title)){
+            $.get(
+                '/{{App.appName}}/ficheECUE/deleteDoc/'+(url.split('/').at(-1)),
+                function(data){
+                    if (data!='Done'){
+                        alert(data);
+                    } else {
+                        $("#"+id).remove();
+                    };
+                }
+            ); 
+        }
+    }
+
+    function renameDoc(id, title, url){
+        var newTitle = prompt('Renommer le document :', title)
+        if (null != newTitle){
+            console.log("On fait le post qui va ben",newTitle);
+            $.post(
+                '/{{App.appName}}/ficheECUE/renameDoc/'+(url.split('/').at(-1)),
+                { 'title': newTitle },
+                function(data){
+                    console.log("On est revenu...",data);
+                    if (data=='Pb'){
+                        alert("Il y a eu un problème lors du masquage de ce commentaire.");
+                    } else {
+                        html = buildDocHTML(id, newTitle, data);
+                        console.log(html);
+                        $("#"+id).html(html);
+                    };
+                }
+            ); 
+        }
+    }
+
+    function buildDocHTML(id, title, url){
+        return `<li id='${id}'>Maintenant 
+    <div  onclick="deleteDoc('${id}', '${title}', '${url}')" class='w3-padding-small w3-margin-left w3-margin-right w3-tiny w3-button w3-round-large w3-red'><i class='fa fa-trash'></i></div>
+    <a href='${url}' target='_blank'>${title}</a>
+    <div  onclick="renameDoc('${id}', '${title}', '${url}')" class='w3-padding-small  w3-margin-left w3-tiny w3-button w3-round-large w3-grey'><i class='fa fa-edit'></i></div>
+            </li>`
+    }
+
+
+    function tds_doSuccess(id, data){
+        doc = JSON.parse(data);
+        if (doc.error){
+        } else {
+            ul = $('#doc');
+
+            nID = Math.round(Math.random()*32000);
+            html = buildDocHTML(nID, doc.title, doc.url);
+            ul.prepend(html);
+            li = $('#uploaderFile'+id);
+            li.remove();
+        }
+    } 
+
+</script>
+
+{{ include("ficheECUE/document.js.twig", { id : uid, name: name } )  }}
+
+<script>
+
+$('#q1').html("{{data.quotite1}}%");
+$('#q2').html("{{100-data.quotite1}}%");
+$('#quotite1').on('input', function(){
+    console.log(this.val);
+    $('#q1').html(this.value+"%");
+    $('#q2').html((100-this.value)+"%");
+});
+
+$('#CC').html("{{data.ratioCET}}%");
+$('#ET').html("{{100-data.ratioCET}}%");
+$('#ratioCET').on('input', function(){
+    $('#CC').html(this.value+"%");
+    $('#ET').html((100-this.value)+"%");
+});
+
+$('#CCS1').html("{{data.ratioCETS1}}%");
+$('#ETS1').html("{{100-data.ratioCETS1}}%");
+$('#ratioCETS1').on('input', function(){
+    $('#CCS1').html(this.value+"%");
+    $('#ETS1').html((100-this.value)+"%");
+});
+
+$('#CCS2').html("{{data.ratioCETS2}}%");
+$('#ETS2').html("{{100-data.ratioCETS2}}%");
+$('#ratioCETS2').on('input', function(){
+    $('#CCS2').html(this.value+"%");
+    $('#ETS2').html((100-this.value)+"%");
+});
+
+var tab = [];
+function sdv_comp(){
+    var t = [];
+    $('.sdv_comp').each(function(){
+        t[this.name] = Number(this.value.replace(",","."));
+    });
+    cout = t['hCM']*t['nCM']*1.5 + t['hTD']*t['nTD']*1 + t['hTP']*t['nTP']*t['nEnseignantsTP']; 
+    console.log(cout);
+    $("[name='cout']").val(cout+ ' hEQTD');
+}
+
+$('.sdv_comp').on('change', sdv_comp);
+
+</script>
+
+{% endblock %}
+

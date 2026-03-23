@@ -1,0 +1,413 @@
+{% extends "layout.html.twig" %}
+
+{% block js %}
+    {{ parent() }}
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
+{% endblock js %}
+
+{% block aside %}
+    <style>
+        #menu {
+            width: 8em;
+            padding-left: .5rem;
+            position: fixed;
+            top: 50%;
+            left: 100%;
+            margin-top: -5em;
+            margin-left: -10em;
+            box-shadow: inset 5px 0 5px -5px #29627e;
+            font-style: italic;
+            color: #29627e;
+        }
+
+        #menu > p {
+            margin: .5rem;
+            font-family: 'Fira Sans', sans-serif;
+        }
+
+        tr.passif td, 
+        tr.passif th,
+        li.passif {
+            text-decoration: line-through blue !important;
+            color: blue !important;
+            background: lightcoral !important;
+        }
+
+        input.passif{
+            text-decoration: line-through blue !important;
+            color: blue !important;
+            background: lightcoral !important;
+        }
+
+
+        tr.passifLink td, 
+        tr.passifLink th {
+            text-decoration: line-through darkblue !important;
+            color: darkblue !important;
+            background: lightcoral !important;
+        }
+
+        div.passif  {
+            text-decoration: line-through blue !important;
+            color: blue !important;
+        }
+
+        .block {
+            border: dashed red 2px !important;
+            margin: 1px;
+            padding: 1px;
+        }
+
+        .blockManu {
+            border: dashed green 2px !important;
+            margin: 1px;
+            padding: 1px;
+        }
+
+
+    </style>
+
+    <script>
+
+    /* Cette fonction est utilisée par les fonction
+       autocomplete pour les relations oneToMany
+       Elle permet de mettre la classe CSS correspondant
+       à l'état actif de la sélection.
+    */
+    function setActif(what, actif){
+        if (actif==""){
+            what.removeClass("passif");
+        } else {
+            what.addClass("passif");
+        }
+    }
+
+    function setAutocomplete(elmId, url){
+        $( elmId ).autocomplete({
+            source: url,
+            select: function(event, ui) {
+                $( this ).attr("_id_", ui.item.id)
+                $( this ).removeClass( "NotGood");
+                setActif($(this), ui.item.id ==0 || ui.item.actif);
+            },
+            change: function( event, ui ) {
+                setActif($(this), ui.item.id ==0 || ui.item.actif);
+                if (ui.item) {
+                    if ( $(this).attr("_id_") != ui.item.id )  {
+                    $(this).addClass( "NotGood" );
+                    }    
+                } else {
+                    $(this).addClass( "NotGood" );
+                }  
+            }
+        })
+        .autocomplete( "instance" )._renderItem = function( ul, item ) {
+        return $( "<li>" )
+            .append( "<div class='"+item.actif+"'>" + item.label+"</div>" )
+            .appendTo( ul );
+        };;
+    }
+    </script>
+
+    {% block asidenav %}
+    <nav id='menu'>
+        {% if isCreation %}
+        <p> <button type="button" onclick='doSave(true)'>Créer</button></p>
+        {% else %}
+        <p> <button type="button" onclick='doSave(false)'>Enregister</button></p>
+        <p> <button type="button" onclick='doDelete()'>Supprimer</button></p>
+        {% endif %}
+    </nav>
+
+    <script>
+        function preserveInitialValues(){
+            var form = $( "form :input" ); 
+            $.each( form, function( i, field ) {
+                var f = $(field)
+                if (field.hasAttribute('_id_' )){ // alors il s'agit d'un champ lié oneToMany
+                    field.setAttribute('_value_', field.getAttribute('_id_'));
+                    field.onchange = function(){
+                        if ( this.getAttribute('_id_') != this.getAttribute('_value_') ){
+                            $(this).parent("p").addClass('Modif');
+                        } else {
+                            $(this).parent("p").removeClass('Modif');
+                        }
+                    };
+                } else if (field.getAttribute('type') == 'checkbox') {
+                    field.setAttribute('_value_', field.checked?'true':'false' );
+                    field.onchange = function(){
+                        if ( this.value != this.getAttribute('_value_') ){
+                            $(this).parent("p").addClass('Modif');
+                        } else {
+                            $(this).parent("p").removeClass('Modif');
+                        }
+                    };
+
+                } else {  // c'est un champ normal
+                    field.setAttribute('_value_', field.value);
+                    field.onchange = function(){
+                        if ( this.value != this.getAttribute('_value_') ){
+                            $(this).parent("p").addClass('Modif');
+                        } else {
+                            $(this).parent("p").removeClass('Modif');
+                        }
+                    };
+                }
+            });
+        }
+
+        function hasChanged(changed){
+            return ( ! $.isEmptyObject(changed['field'] )) || ( ! $.isEmptyObject(changed['MTM'] ));
+        }
+
+        function doBeforeUnload(event){
+            changed = getChanged();
+            if ( (changed === false ) || hasChanged(changed) ){
+                event.preventDefault();
+                event.returnValue = '';                    
+            }  
+        }
+
+        function getChanged(){ // if not valid return false
+            var form = $( "form :input" );
+            var res = {'field': {}, 'MTM': {}, 'MTM_E': {}, 'MTM_I': {} }; 
+            var valid = true;
+            $.each( form, function( i, field ) {
+                var value;
+                if ( $(field).hasClass('NotGood') ) {
+                    valid=false;
+                }
+                if (field.hasAttribute('_id_' )){ // alors il s'agit d'un champ lié oneToMany
+                    value = field.getAttribute('_id_');
+                } else if (field.getAttribute('type') == 'checkbox' ) { // alors il s'agit d'une checkbox
+                    value = field.checked?'true':'false';
+                } else {  // c'est un champ normal
+                    value = field.value;
+                }
+                if (value != field.getAttribute('_value_')){
+                    res['field'][field.name] = value;
+                }
+            });
+            if (!valid) return false; // si ce n'est pas valide on retourne false
+
+            var delList = $("tr[del]"); // on regarde maintenant si il y eu des suppression dans les associations manyToMany
+            var hasDel = false;
+
+            $.each(delList, function(i, tr){
+                hasDel=true,
+                name=tr.getAttribute('name');
+                id = tr.getAttribute('_id_');
+                res['MTM'][name+'_'+id] = 0;
+                res['MTM_E'][name+'_'+id] = name;
+                res['MTM_I'][name+'_'+id] = id;
+            });
+
+            return res;
+        }
+
+        $( document ).ready(function() {
+            preserveInitialValues();
+            window.addEventListener('beforeunload', doBeforeUnload);
+        });
+
+        function doSave(isCreation){
+            changed = getChanged();
+            if (changed == false ){
+                window.alert('Certaines valeurs ne sont pas correctes !');
+                return ;
+            }
+            if (! hasChanged(changed)){
+                window.alert("Il n'y a rien à mettre à jour !");
+                return ;
+            }
+
+            var params = $.param( changed);
+            var type = isCreation?'PUT':'PATCH';
+            $.ajax({
+                url: '',
+                type: type,
+                data: params,
+            })
+            .done(function(data) {
+                if (data=== "Done"){
+                    window.removeEventListener('beforeunload', doBeforeUnload );
+                    document.location.reload();
+                } else if (data.startsWith("Done")){
+                    window.removeEventListener('beforeunload', doBeforeUnload );
+                    id = data.substring(4);
+                    if (id=="-1"){
+                        window.history.back();
+                    } else {
+                        url = new URL(document.location.href);
+                        parts = url.pathname.split('/');
+                        last = parts[parts.length-1];
+                        if (Number.isFinite(Number.parseInt(last,10))){
+                            parts.pop();
+                        }
+                        url.pathname = parts.join('/');
+                        document.location.replace(url.href+"/"+id);
+                    }
+                } else {
+                    window.alert('Il y a eu un problème lors de la mise à jour : '+"\n"+ data);
+                }
+            })
+            .fail(function(data) {
+                console.log('fail',data);
+            })
+            .always(function(data) {
+                console.log('always',data);
+            });
+        }
+
+        function doDelete(){
+            console.log('doDelete');
+            openModal();
+            $.ajax({
+                url: '',
+                type: 'DELETE',
+            })
+            .done(function(data) {
+                console.log('Done');
+                modal = $('#modal_content');
+                console.log(modal); 
+                modal.html(data);
+            })
+            .fail(function(data) {
+                console.log('Fail');
+            })
+            .always(function(data) {
+                console.log('Always');
+            });
+        }
+
+
+        function doDelete2(){
+            closeModal();
+
+            $.ajax({
+                url: '',
+                type: 'DELETE',
+                data: 'confirm=on',
+            })
+            .done(function(data) {
+                if (data == "Done"){
+                    window.removeEventListener('beforeunload', doBeforeUnload );
+                    document.location.href='/{{ App.appName }}/CRUD/';
+                } else {
+                    window.alert('Il y a eu un problème lors de la suppression : '+"\n"+ data);
+                }
+            })
+            .fail(function(data) {
+            })
+            .always(function(data) {
+            });
+        }
+
+
+        function closeModal(){
+            $('#modal').removeClass('visible');
+            $('#modal').addClass('hidden');
+        }
+
+        function openModal(){
+            $('#modal').removeClass('hidden');
+            $('#modal').addClass('visible');            
+        }
+
+
+        function doDeleteLink(elm, p){
+            var tr = $(elm).parents('tr');
+            if (tr.attr('del')){
+                tr.removeAttr('del');
+            } else {
+                tr.attr('del','del');
+            }
+        }
+
+// Cela c'est pour l'historique sur l'ensemble de l'entité
+        Tipped.delegate('.history_entity', {
+            ajax: {
+              url: '/{{ App.appName }}/CRUD/HE',
+              type: 'POST'
+            },
+            skin: 'light',
+        //    showOn: 'mouseenter',
+        //    hideOn: 'click',
+            close: true,
+            radius: false,
+            size: 'large',
+            position: 'bottomleft',
+            cache: false,
+          });
+
+// Cela c'est pour l'historique sur un champ d'une entité
+        Tipped.delegate('.history_field', {
+            ajax: {
+              url: '/{{ App.appName }}/CRUD/HF',
+              type: 'POST'
+            },
+            skin: 'light',
+        //    showOn: 'mouseenter',
+        //    hideOn: 'click',
+            close: true,
+            radius: false,
+            size: 'large',
+            position: 'topleft',
+            cache: false,
+          });
+
+// Cela c'est pour l'historique sur l'ensemble des ManyToMany ou ManyToOne d'une entité
+        Tipped.delegate('.history_Links', {
+            ajax: {
+              url: '/{{ App.appName }}/CRUD/HL',
+              type: 'POST'
+            },
+            skin: 'light',
+        //    showOn: 'mouseenter',
+        //    hideOn: 'click',
+            close: true,
+            radius: false,
+            size: 'large',
+            position: 'bottomleft',
+            cache: false,
+          });
+
+// Cela c'est pour l'historique sur l'ensemble des ManyToMany ou ManyToOne d'une entité
+        Tipped.delegate('.history_ManyToMany', {
+            ajax: {
+              url: '/{{ App.appName }}/CRUD/HMM',
+              type: 'POST'
+            },
+            skin: 'light',
+        //    showOn: 'mouseenter',
+        //    hideOn: 'click',
+            close: true,
+            radius: false,
+            size: 'large',
+            position: 'bottomleft',
+            cache: false,
+          });
+
+
+
+</script>
+    {% endblock asidenav %}
+{% endblock aside %}
+
+
+{% block script %}
+    <script>
+    var isCRUD = true;
+console.log("isCRUD est défini...");
+    </script>
+
+    {{ parent() }}
+
+{% endblock script %}
+
+{% block main %}
+{% endblock %}
+
+{% block section %}
+{% endblock %}

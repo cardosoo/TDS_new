@@ -1,0 +1,24 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+<div class="w3-card-4 w3-white w3-margin">
+    <div class="w3-container w3-light-grey  w3-center">
+        <b>Calcul des reports</b>
+    </div>
+    {% apply markdown_to_html %}
+
+    Opération réalisées :
+    - suppression des reports antérieurs
+    - insertion de {{rp}} reports positifs
+    - insertion de {{rn}} reports negatifs
+
+
+    {% endapply %}
+
+    <div class="w3-container w3-light-grey  w3-center">
+        <b>Le calcul des reports a été réalisé</b>
+    </div>
+</div>
+
+{% endblock %}

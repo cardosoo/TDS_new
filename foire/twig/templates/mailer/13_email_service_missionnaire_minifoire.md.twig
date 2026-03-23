@@ -1,0 +1,26 @@
+Bonjour {{ P.getGeneric }},
+
+Bienvenu à l'UFR de physique d'Université de Paris,
+
+Vous venez d'accepter une mission d'enseignement. Afin de participer aux enseignements de l'UFR, il vous faut utiliser la plateforme de répartition des enseignements de notre UFR, la « foire ».
+
+{% if P.uid starts with '--' %}
+Pour vous connecter à la foire, en attendant de disposer d'un compte ENT, vous pouvez utiliser [ce lien](https://foire.physique.u-paris.fr/foire/directLink/{{ P.getDirectLink }}) qui est valable 3 mois. Merci de ne le communiquer à personne.
+{% else %}
+Pour vous connecter à la foire, merci de cliquer sur [ce lien](https://foire.physique.u-paris.fr), puis d'utiliser votre compte ENT (uid : {{ P.uid }}  Attention l'uid n'est pas l'identifiant que vous devez utiliser pour vous connecter, votre identifiant ressemble généralement à « prenom.nom » tout en minuscule). En cas de difficultés pour vous connecter n'hésitez pas à nous contacter.
+{% endif %}
+
+Merci de bien vouloir compléter votre fiche personnelle, en y ajoutant les moyens de vous joindre ainsi qu'une photo.
+
+La répartition des enseignements a déjà été faite pour la plupart des enseignements, mais certains d'entre eux ont été réservés pour vous, nouveaux missionnaires. Ils ont pour le moment été attribuées à un « Missionnaire Fictif » dont vous verrez la [page personnelle ici](https://foire.physique.u-paris.fr/foire/personne/1244).
+
+Merci de regarder au plus tôt, parmi ce qui est proposé les enseignements qui vous intéressent le plus.
+Vous trouverez des informations supplémentaire (niveau, syllabus, etc) en cliquant sur chaque enseignement.
+Envoyez un message à foirephy@gmail.com pour nous indiquer vos préférences et éventuellement ce que vous ne souhaitez surtout pas faire. Nous attendons votre réponse d'ici dimanche 14 juillet.
+
+Sentez-vous libre de classer plusieurs enseignements par ordre de préférence en dépassant le volume horaire de votre mission.
+Nous essaierons de respecter vos choix mais il est possible que nous ne puissions pas vous attribuer votre premier vœu.
+
+Bien à vous, Raphaël Galicher et Olivier Cardoso pour la foire
+{% include "mailer/signature.md.twig" %}
+

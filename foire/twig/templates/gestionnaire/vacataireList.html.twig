@@ -1,0 +1,105 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+<div class="w3-cell-row">
+
+<h3>Comparaison données OSE - Foire ; listing des services </h3>
+
+<table id="vacataireList" class="w3-table-all w3-centered">
+    <thead>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>date Modif</th>
+        <th>origine</th>
+        <th>Renouv.</th>
+        <th>Type contrat</th>
+        <th>Cursus</th>
+        <th>Semestre</th>
+        <th>CODE VET</th>
+        <th>CODE ECUE</th>
+        <th>Intitulé ECUE</th>
+        <th>CM</th>
+        <th>CMTD</th>
+        <th>TD</th>
+        <th>TP</th>
+        <th>TOTAL HeqTD</th>
+        <th>Adresse mail</th>
+        <th>Référent scolarité</th>
+    </thead>
+    <tbody>
+    {% set TL = {"cm": 'CM', "td": 'TD', "ctd": 'CMTD', "tp": 'TP', "bonus": 'FORFAIT', "extra": 'FORFAIT'} %}
+    {% set SL = {"1": 'S1', "2": 'S2', "":""} %}
+    {% for Pid in vList|keys -%}
+        {% set P = App.app.getPersonne(Pid) %}
+        {% for code in vList[Pid]|keys %}
+            {% set periode = "NULL" %}
+            {% set cursus = "NULL" %}
+            {% set codeVET = "NULL" %}
+            {% set cod_elp = code %}
+            {% set EList = [] %}
+            {% for Vid in vList[Pid][code]["voeuList"]|keys -%}
+                {% set modificationDate = vList[Pid][code]["voeuList"][Vid][0]%}
+                {% set modificationOrigin = vList[Pid][code]["voeuList"][Vid][1]%}
+                {% set V = App.app.getVoeu(Vid) %}
+                {% set E = V.enseignement %}
+                {% set VBL = V.voeu_bilan_ligne %}
+                {% set VDH = V.voeu_detail_heures %}
+                {%set renouvellement = V.anciennete > 0?"Oui":"Non"%}
+                {% set ecueList = E.getStructEcueList() %}
+                {% for ecueCode in ecueList|keys %}
+                    {% set periode = SL[ecueList[ecueCode].getPeriode()] %}
+                    {% set cursus = ecueList[ecueCode].getCursusName() %}
+                    {% set codeVET = ecueList[ecueCode].getEtape().getCode() %}
+                {% endfor %}
+    
+        <tr>
+            <td>{{ P.nom }}</td>
+            <td>{{ P.prenom }}</td>
+            <td>{{modificationDate}}</td>
+            <td>{{modificationOrigin}}</td>
+            <td>{{renouvellement}}</td>
+            <td>{{ P.statut.nom }}</td>
+            <td>{{cursus}}</td>
+            <td>{{periode}}</td>
+            <td>{{codeVET}}</td>
+            <td>{{E.code}}</td>
+            <td>{{E.nom}}</td>
+            <td>{{VDH.cm|f2}}</td>
+            <td>{{VDH.ctd|f2}}</td>
+            <td>{{VDH.td|f2}}</td>
+            <td>{{VDH.tp|f2}}</td>
+            <td>{{VBL.heures|f2}}</td>
+            <td>{{P.email}}</td>
+            <td>???</td>
+        </tr>
+            {% endfor %}
+        {% endfor %}
+    {% endfor %}
+
+    </tbody>
+</table>
+
+
+<script>
+    $(document).ready(function () {
+        $('#vacataireList').DataTable({
+            order: [[2, "dsc"], [6, "asc"], [8, "asc"], [9, "asc"], [0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+
+{% endblock section %}
+
+

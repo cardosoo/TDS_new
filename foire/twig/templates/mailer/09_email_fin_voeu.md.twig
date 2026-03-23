@@ -1,0 +1,51 @@
+Bonjour {{ P.getGeneric }},
+
+La **phase des Vœux {{App.currentYear}} est close**.
+
+Le contenu de votre panier et les vœux que vous avez émis sont listés à la fin de ce message.
+
+À partir de maintenant, **vous pouvez modifier votre panier** mais vous ne pouvez plus modifier vos vœux.
+
+Si vos vœux contiennent un enseignement en sur-effectif (écrit en rouge), la foire vous contactera dans les jours à venir. Pour nous aider à trouver une solution qui vous satisfasse, **veuillez compléter votre panier en ajoutant des commentaires** (ordre de préférence des enseignements, disponibilité S1/S2, etc).
+
+Pour cela, connectez-vous sur le [site de la foire](https://foire.physique.u-paris.fr/) :
+[https://foire.physique.u-paris.fr/](https://foire.physique.u-paris.fr/)
+
+Nous vous demandons d'être réactif aux messages que nous enverrons dans les jours qui viennent.
+
+Quelques rappels:
+- Le service de référence pour l'année {{ App.currentYear }} - {{ App.currentYear+1 }} est de {{ App.texte.chargeReference }} hTD
+- Votre service de référence (prenant en compte décharges, délégation, etc) est {{P.getCharge()}} hTD
+- Le service peut être modulé dans une fourchette de +/-40hTD, la différence avec le service de référence sera reportée sur le service de l'année prochaine
+- Si vos vœux dépassent la limite de votre service, les responsables de la foire peuvent supprimer des vœux en conservant votre service au-dessus de votre service de référence, ils le feront sans vous prévenir.
+- Toutes les règles de la foire pour [les permanents](https://foire.physique.u-paris.fr/foire/texte/regles) et [les non-permanents](https://foire.physique.u-paris.fr/foire/texte/non-permanents) sont précisées sur le site de la foire
+- Le buffet annuel de la foire aura lieu le {{ App.texte.dateFoire }} entre 11h30 et 14h au rez-de-chaussée du bâtiment Condorcet. Nous espérons vous y croiser.
+
+Si vous rencontrez un problème, veuillez contacter [foirephy@gmail.com](mailto:foirephy@gmail.com).
+
+**Vœux de  {{P.getGeneric}}**
+
+D'après les informations de la base de données {{App.baseName}}, **vous devez assurer une charge de {{P.getCharge()}} heures**
+d'enseignement et **vos vœux correspondent à une charge de {{(P.getCharge() - P.voeu_personne_bilan.heures)|f2}} heures**.
+
+Un enseignement écrit en rouge est en sur-effectif.
+
+{{ include("/mailer/voeux.md.twig")|markdown_to_html }}
+
+
+**Panier de {{P.getGeneric}}**
+
+Un enseignement écrit en rouge est en sur-effectif.
+
+Un enseignement écrit en vert est en sous-effectif.
+
+{{ include("/mailer/panier.md.twig")|markdown_to_html }}
+
+
+Bien à vous,
+
+Olivier Cardoso et Raphaël Galicher.
+
+{% include "mailer/signature.md.twig" %}
+
+

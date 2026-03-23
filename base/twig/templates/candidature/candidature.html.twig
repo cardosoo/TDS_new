@@ -1,0 +1,31 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<script>
+function doSubmit(){    
+    console.log('doSubmit');
+    elm = document.getElementById('sendButton');
+    console.log(elm);
+    console.log(elm.innerHTML);
+    elm.disabled = true; 
+    elm.innerHTML="C'est parti, patience...";
+    console.log(elm.innerHTML);
+}
+</script>
+
+
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+    <h3>Candidature à une mission d'enseignement pour l'année {{App.currentYear}} - {{App.currentYear + 1}}</h3>
+
+    <p>Pour ouvrir votre dossier de candidature à une mission d'enseignement,
+    merci de saisir une adresse éléctronique valide</p> 
+    <form id="userEditForm" enctype="multipart/form-data" class="w3-container" method="POST" action="/{{App.appName}}/candidatureME" onsubmit='return doSubmit()'>
+        <input class="w3-input" type="email" name="email" required placeholder="exemple@domaine.com" value='{{email}}' maxlength="80">
+        <button id= 'sendButton' class="w3-btn w3-round-large w3-padding-small w3-theme-d2" onclick='doSend()'>Envoyer</button>
+    </form>
+    <p>Vous allez recevoir à cette adresse un lien vous permettant de saisir et/ou de modifier les informations de votre dossier.</p>
+</div> 
+{% endblock %}
+

@@ -1,0 +1,136 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _FoncRef_.html.twig
+    created : Sun, 22 Mar 2026 23:12:16 +0100 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "FoncRef", id: "{{ FoncRef.id }}" }}'></i>FoncRef</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "FoncRef", F: "actif", id: "{{FoncRef.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ FoncRef.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block intitule_full %}
+    <p>
+    {% block intitule_label %}
+    <label class='text' for="intitule"> intitule <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "FoncRef", F: "intitule", id: "{{FoncRef.id}}" }}'></i></label>    
+    {% endblock intitule_label %}
+    {% block intitule_active %}
+    <textarea mode='raw' class='textarea' name="intitule" id="intitule" size="10"  placeholder="">{{ FoncRef.intitule }}</textarea>
+
+    {% endblock intitule_active %}
+    </p>
+{% endblock intitule_full %}    
+
+{% block oneToManyFoncRef_referentiel_full %}
+<p>
+    {% block oneToManyFoncRef_referentiel_label %}
+    <label class='select' for='referentiel'>
+        {{  FoncRef.referentiel ? FoncRef.referentiel.getCrudEditLink("referentiel")|raw : "referentiel"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "FoncRef", F: "referentiel", id: "{{FoncRef.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyFoncRef_referentiel_label %}
+    {% block oneToManyFoncRef_referentiel_active %}    
+    <input class='text {{ ( FoncRef.referentiel.id ==0 or  FoncRef.referentiel.actif)?"":" passif" }}'  value="{{ FoncRef.referentiel.generic() }}" name="referentiel" id="referentiel"  _id_="{{ FoncRef.referentiel.id }}">
+    <script>
+        setAutocomplete("#referentiel", "/services/CRUD/L/Referentiel");
+    </script>
+    {% endblock oneToManyFoncRef_referentiel_active %}    
+</p>
+{% endblock oneToManyFoncRef_referentiel_full %}
+
+    {% block manyToMany_personne_foncrefList_foncref %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "FoncRef", id: "{{ FoncRef.id }}", L: "personne_foncrefList" }}'></i>personne_foncrefList - {{ (FoncRef.personne_foncrefList)|length }} élément{{(FoncRef.personne_foncrefList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_personne_foncrefList_foncref %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/personne_foncRef/foncref/{{ FoncRef.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_personne_foncrefList_foncref_personne %}
+                    <th class='w3-center'>personne</th>
+                    {% endblock header_th_personne_foncrefList_foncref_personne %}
+                    {% block header_th_personne_foncrefList_foncref_commentaire %}
+                    <th class='w3-center'>commentaire</th>
+                    {% endblock header_th_personne_foncrefList_foncref_commentaire %}
+                    {% block header_th_personne_foncrefList_foncref_volume %}
+                    <th class='w3-center'>volume</th>
+                    {% endblock header_th_personne_foncrefList_foncref_volume %}       
+                    {% block header_endpersonne_foncrefList_foncref %}
+                    {% endblock header_endpersonne_foncrefList_foncref %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_personne_foncrefList_foncref %}
+            </thead>
+
+            <tbody>
+            {% for personne_foncRef  in FoncRef.personne_foncrefList %}
+                {% block line_personne_foncrefList_foncref %}
+                <tr name='personne_foncrefList' _id_='{{ personne_foncRef.id }}' class='{{ personne_foncRef.actif?"":"passif " }}{{ personne_foncRef.personne.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "personne_foncRef", id: "{{ personne_foncRef.id }}" }}'></i>
+                    {{ personne_foncRef.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_personne_foncRef_personne %}
+                    <th class='w3-left'>{{ personne_foncRef.personne.getGeneric( true )|raw }}</th>
+                    {% endblock line_personne_foncRef_personne %}
+                    {% block line_personne_foncrefList_foncref_commentaire %}
+                    <td class='w3-center'>{{ personne_foncRef.commentaire }}</td>
+                    {% endblock line_personne_foncrefList_foncref_commentaire %}
+                    {% block line_personne_foncrefList_foncref_volume %}
+                    <td class='w3-center'>{{ personne_foncRef.volume }}</td>
+                    {% endblock line_personne_foncrefList_foncref_volume %}
+                    {% block line_endpersonne_foncrefList_foncref %}
+                    {% endblock line_endpersonne_foncrefList_foncref %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_personne_foncrefList_foncref %}
+            {% endfor %}
+            {% block footer_endpersonne_foncrefList_foncref %}
+            {% endblock footer_endpersonne_foncrefList_foncref %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_personne_foncrefList_foncref %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

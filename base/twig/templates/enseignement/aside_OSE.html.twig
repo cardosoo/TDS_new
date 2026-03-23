@@ -1,0 +1,155 @@
+<style>
+.match {
+    background-color: LightGreen;
+}
+
+.inOSE {
+    background-color: LightPink;
+}
+
+.inDB{
+    background-color: LightCoral;
+}
+</style>
+
+
+<div style='all: revert;'>
+    <div class='w3-container w3-card '>
+        <h3>Informations depuis OSE pour : {{ E.code}} {{ E.nom }}<h3>
+
+        {% set oseL = tab.fromOSE.from %}
+        <div class='w3-small'>
+            <table>
+                <thead>
+                </thead>
+                <tbody>
+                {% for ose in oseL %}
+                    <tr>
+                        <th>composante</th>
+                        <th>etape</th>
+                        <th>cursus</th>
+                        <th>semestre</th>
+                    </tr>
+                    <tr>
+                        <td>{{ose.composante}}</td>
+                        <td>{{ose.etape}}</td>
+                        <td>{{ose.cursus}}</td>
+                        <td>{{ose.semestre}}</td>
+                    </tr>
+                    <tr>
+                        <th>semestre</th>
+                        <th>ecue</th>
+                        <th>intitulé</th>
+                        <th>effectif</th>
+                    </tr>
+                    <tr>
+                        <td>{{ose.semestre}}</td>
+                        <td>{{ose.ecue}}</td>
+                        <td>{{ose.intitule}}</td>
+                        <td>{{ose.effectif}}</td>
+                    </tr>
+                {% endfor %}
+                <tbody>
+            </table>
+            Volume dans OSE : 
+            {% for k,d in tab.fromOSE.details.volume %}
+                {% if d is not empty %}
+                     {{d[1]}} x {{ d[0] }}h {{ k }},   
+                {% endif %}
+            {% endfor %}
+
+
+    <table>
+        <thead>
+        </thead>
+        <tbody>
+        <tr>
+            <th>OSE</th>
+            <th>code UPCité</th>
+            <th colspan='2'>Personne</th>
+            <th>CM</th>
+            <th>CMTD</th>
+            <th>CMTD7</th>
+            <th>TD</th>
+            <th>TP</th>
+            <th>TP7</th>
+            <th>MD</th>
+            <th>REF</th>        
+        </tr>
+        <tr>
+            <th>TS</th>
+            <th>code UPCité</th>
+            <th>Prenom</th>
+            <th>Nom</th>
+            <th>CM</th>
+            <th colspan='2'>CTD</th>
+            <th>TD</th>
+            <th colspan='2'>TP</th>
+            <th>Extra</th>
+            <th>Bonus</th>        
+        </tr>
+
+        {% for match in tab.fromOSE.match %}
+            {% set o = match.fromOSE %}
+            {% set d = match.fromDB %}
+            <tr class='match'>
+                <th>OSE</th>
+                <td>{{o.ose}}</td>
+                <td colspan='2'>{{o.personne}}</td>
+                <td>{% if o.CM >0 %}{{o.CM|f2}}{% endif %}</td>
+                <td>{% if o.CMTD >0 %}{{o.CMTD|f2}} {% endif %}</td>
+                <td>{% if o.CMTD7 >0 %}{{o.CMTD7|f2}}{% endif %}</td>
+                <td>{% if o.TD >0 %}{{o.TD|f2}}{% endif %}</td>
+                <td>{% if o.TP >0 %}{{o.TP|f2}}{% endif %}</td>
+                <td>{% if o.TP7 >0 %}{{o.TP7|f2}}{% endif %}</td>
+                <td>{% if o.MD >0 %}{{o.MD|f2}}{% endif %}</td>
+                <td>{% if o.Référentiel >0 %}{{o.Référentiel|f2}}{% endif %}</td>
+            </tr>
+            <tr class='match'>
+                <th>TS</td>
+                <td>{{d.personne.ose}}</td>
+                <td>{{d.personne.nom}} {{d.personne.prenom}}</td>
+                <td>{% set dh = d.voeu_detail_heures %}</td>
+                <td>{% if dh.cm >0 %}{{dh.cm|f2}}{% endif %}</td>
+                <td colspan='2'>{% if dh.ctd >0 %}{{dh.ctd|f2}}{% endif %}</td>
+                <td>{% if dh.td >0 %}{{dh.td|f2}}{% endif %}</td>
+                <td colspan='2'>{% if dh.tp >0 %}{{dh.tp|f2}}{% endif %}</td>
+                <td>{% if dh.extra >0 %}{{dh.extra|f2}}{% endif %}</td>
+                <td>{% if dh.bonus >0 %}{{dh.bonus|f2}}{% endif %}</td>
+            </tr>
+        {% endfor %}
+        {% for o in tab.fromOSE.inOSE %}
+            <tr class='inOSE'>
+                <th>OSE</th>
+                <td>{{o.ose}}</td>
+                <td colspan='2'>{{o.personne}}</td>
+                <td>{% if o.CM >0 %}{{o.CM|f2}}{% endif %}</td>
+                <td>{% if o.CMTD >0 %}{{o.CMTD|f2}} {% endif %}</td>
+                <td>{% if o.CMTD7 >0 %}{{o.CMTD7|f2}}{% endif %}</td>
+                <td>{% if o.TD >0 %}{{o.TD|f2}}{% endif %}</td>
+                <td>{% if o.TP >0 %}{{o.TP|f2}}{% endif %}</td>
+                <td>{% if o.TP7 >0 %}{{o.TP7|f2}}{% endif %}</td>
+                <td>{% if o.MD >0 %}{{o.MD|f2}}{% endif %}</td>
+                <td>{% if o.Référentiel >0 %}{{o.Référentiel|f2}}{% endif %}</td>
+            </tr>
+        {% endfor %}
+        {% for d in tab.fromOSE.inDB %}
+            <tr class='inDB'>
+                <th>TS</td>
+                <td>{{d.personne.ose}}</td>
+                <td>{{d.personne.nom}} {{d.personne.prenom}}</td>
+                <td>{% set dh = d.voeu_detail_heures %}</td>
+                <td>{% if dh.cm >0 %}{{dh.cm|f2}}{% endif %}</td>
+                <td colspan='2'>{% if dh.ctd >0 %}{{dh.ctd|f2}}{% endif %}</td>
+                <td>{% if dh.td >0 %}{{dh.td|f2}}{% endif %}</td>
+                <td colspan='2'>{% if dh.tp >0 %}{{dh.tp|f2}}{% endif %}</td>
+                <td>{% if dh.extra >0 %}{{dh.extra|f2}}{% endif %}</td>
+                <td>{% if dh.bonus >0 %}{{dh.bonus|f2}}{% endif %}</td>
+            </tr>
+        {% endfor %}
+        <tbody>
+    </table>
+
+        </div>
+    </div>
+</div>

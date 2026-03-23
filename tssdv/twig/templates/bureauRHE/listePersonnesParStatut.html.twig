@@ -1,0 +1,103 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+    <div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+        <h3>Liste des Enseignants avec {{ S.nom }} pour statut</h3>
+
+        <table id='list'>
+            <thead>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Domaines</th>
+                <th>TS total</th>
+                {#
+                <th>Charge théorique dans le domaine</th>
+                <th>Charge d'enseignement dans le domaine</th>
+                #}
+                <th>Présentiel</th>
+                {#
+                <th>Présentiel dans le domaine</th>
+                #}
+                <th>Référentiel total</th>
+                <th>Situation particulières</th>
+                <th>Écart à la charge global</th>
+                {#
+                <th>Écart à la charge dans le domaine</th>
+                <th>Présentiel hors ce domaine</th>
+                #}
+                <th>Actif</th>
+            </thead>
+            <tbody>
+                {% for P in PL %}
+                    {% set CR = P.getChargeRepartition() %}
+                    {% set charge = CR.charge - CR.serviceReferentiel %}
+                    {% set chargeTotale = CR.obligation - CR.bilan %}
+
+                    {% set domaines = [] %}
+                    {% set s = 0%}
+                    {% for DP in P.domaine_personneList %}
+                        {% set s = s + DP.quotite %}
+                    {% endfor %}
+                    {% for DP in P.domaine_personneList %}
+                        {% set quo = (DP.quotite * 100 / s) ~ "%" %}
+                        {% set dom = quo ~ " " ~ DP.domaine.acronyme %}
+                        {% set domaines = domaines|merge([dom])  %}
+                    {% endfor %}
+                    {% set domaines = domaines|join("</br>") %}
+                    {#
+                    {% set s = 0%}
+                    {% set quot = 0 %}
+                    {% for DP in P.domaine_personneList %}
+                        {% set s = s + DP.quotite %}
+                        {% if DP.domaine.id == D.id %}
+                            {% set quot = DP.quotite %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% set Q = (charge * quot / s ) %}
+                    {% set Q2 = (CR.obligation * quot / s ) %}
+                    #}
+
+                    <tr {{ P.actif?"":"class='passif';" }}>
+                        <td><a href='/{{App.appName}}/personne/{{P.id}}'>{{ P.prenom }}</a></td>
+                        <td><a href='/{{App.appName}}/personne/{{P.id}}'>{{ P.nom }}</a></td>
+                        <td>{{ domaines|raw }}</td>
+                        <td  class='w3-center'>{{ chargeTotale|f2}}</td>
+                        {# <td  class='w3-center'>{{ Q2|f2}}</td> {# charge théorique dans le domaine #}
+                        {# <td class='w3-center'>{{ Q|f2 }}</td> {# charge d'enseignement dans le domaine #}
+                        <td  class='w3-center'>{{ CR.serviceEnseignement|f2}}</td> {# cahrge totale (présentiel) #}
+                        {# <td class='w3-center'>{{ CR.serviceParDomaine[D.id ]|f2}}</td> {# charge dans le domaine #}
+                        <td class='w3-center'>{{ CR.serviceReferentiel|f2 }}</td> 
+                        <td class='w3-center'>{{ CR.reduction|f2 }}</td> 
+                        <td class='w3-center'>{{ (-CR.bilan)|f2 }}</td> {# écart à la charge "total" #} 
+                        {# <td class='w3-center'>{{ (CR.serviceParDomaine[D.id ]-Q)|f2 }}</td>  {# écart à la charge dans le domaine #}
+                        {# <td class='w3-center'>{{ CR.serviceHorsDomaine|f2 }}</td> {# hors UFR SDV ? #}
+                        <td class='w3-center'>{{ P.actif?"":"inactif" }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div> 
+
+    <script>
+        $(document).ready(function () {
+            $('#list').DataTable({
+                order: [[1, "asc"]],
+                dom: 'Bfrtip',
+                paging: false,
+                buttons: [
+                    'copy',
+                    'excel',
+                    'csv',
+                    {
+                        extend: 'pdf',
+                        orientation: 'landscape'
+                    }
+                ]
+            });
+        });
+    </script>
+
+{% endblock %}

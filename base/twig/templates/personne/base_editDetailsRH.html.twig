@@ -1,0 +1,389 @@
+<style>
+    input:invalid {
+        border: -2px dashed red;
+    }
+
+    input:valid {
+        border: 1px solid gainsboro;
+    }
+
+    input:required:invalid,
+    input:focus:invalid {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAeVJREFUeNqkU01oE1EQ/mazSTdRmqSxLVSJVKU9RYoHD8WfHr16kh5EFA8eSy6hXrwUPBSKZ6E9V1CU4tGf0DZWDEQrGkhprRDbCvlpavan3ezu+LLSUnADLZnHwHvzmJlvvpkhZkY7IqFNaTuAfPhhP/8Uo87SGSaDsP27hgYM/lUpy6lHdqsAtM+BPfvqKp3ufYKwcgmWCug6oKmrrG3PoaqngWjdd/922hOBs5C/jJA6x7AiUt8VYVUAVQXXShfIqCYRMZO8/N1N+B8H1sOUwivpSUSVCJ2MAjtVwBAIdv+AQkHQqbOgc+fBvorjyQENDcch16/BtkQdAlC4E6jrYHGgGU18Io3gmhzJuwub6/fQJYNi/YBpCifhbDaAPXFvCBVxXbvfbNGFeN8DkjogWAd8DljV3KRutcEAeHMN/HXZ4p9bhncJHCyhNx52R0Kv/XNuQvYBnM+CP7xddXL5KaJw0TMAF8qjnMvegeK/SLHubhpKDKIrJDlvXoMX3y9xcSMZyBQ+tpyk5hzsa2Ns7LGdfWdbL6fZvHn92d7dgROH/730YBLtiZmEdGPkFnhX4kxmjVe2xgPfCtrRd6GHRtEh9zsL8xVe+pwSzj+OtwvletZZ/wLeKD71L+ZeHHWZ/gowABkp7AwwnEjFAAAAAElFTkSuQmCC);
+        background-position: right top;
+        background-repeat: no-repeat;
+        -moz-box-shadow: none;
+    }
+
+    input:required:valid {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAepJREFUeNrEk79PFEEUx9/uDDd7v/AAQQnEQokmJCRGwc7/QeM/YGVxsZJQYI/EhCChICYmUJigNBSGzobQaI5SaYRw6imne0d2D/bYmZ3dGd+YQKEHYiyc5GUyb3Y+77vfeWNpreFfhvXfAWAAJtbKi7dff1rWK9vPHx3mThP2Iaipk5EzTg8Qmru38H7izmkFHAF4WH1R52654PR0Oamzj2dKxYt/Bbg1OPZuY3d9aU82VGem/5LtnJscLxWzfzRxaWNqWJP0XUadIbSzu5DuvUJpzq7sfYBKsP1GJeLB+PWpt8cCXm4+2+zLXx4guKiLXWA2Nc5ChOuacMEPv20FkT+dIawyenVi5VcAbcigWzXLeNiDRCdwId0LFm5IUMBIBgrp8wOEsFlfeCGm23/zoBZWn9a4C314A1nCoM1OAVccuGyCkPs/P+pIdVIOkG9pIh6YlyqCrwhRKD3GygK9PUBImIQQxRi4b2O+JcCLg8+e8NZiLVEygwCrWpYF0jQJziYU/ho2TUuCPTn8hHcQNuZy1/94sAMOzQHDeqaij7Cd8Dt8CatGhX3iWxgtFW/m29pnUjR7TSQcRCIAVW1FSr6KAVYdi+5Pj8yunviYHq7f72po3Y9dbi7CxzDO1+duzCXH9cEPAQYAhJELY/AqBtwAAAAASUVORK5CYII=);
+        background-position: right top;
+        background-repeat: no-repeat;
+    }
+
+    span.sp12{
+        display: inline-block;
+        width: 8em;
+    }
+
+    #image_preview>img,
+    img {
+        height: 130px;
+    }
+
+    .tool-tip {
+        position: absolute;
+        right: 0;
+        top: 0px
+    }
+
+    .icon {
+        padding: 0em;
+        width: 20px;
+    }
+
+    .situationDeleted {
+        opacity: 0.5;
+        text-decoration: line-through;
+    }
+
+    .referentielDeleted {
+        opacity: 0.5;
+        text-decoration: line-through;
+    }
+
+
+</style>
+
+
+
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js">div</script>
+<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+<script>
+
+    var detailsRHForm;
+    var detailsRHFormData;
+    var theBlob;
+    
+    var Editor = toastui.Editor;
+
+    function isFormDataDetailsRHChanged(data) {
+        console.log('isFormDataDetailsRHChanged', data);
+        for (var key of detailsRHFormData.keys()) {
+            test = data.get(key);
+            if (test.constructor.name == 'File') {
+                if (test.name != '') {
+                    return true;
+                }
+            } else {
+                if (test.valueOf() != detailsRHFormData.get(key).valueOf()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    var situation_editor={};
+    var referentiel_editor={};
+
+    $(document).ready(function () {
+        detailsRHForm = $('#detailsRHForm')[0];
+        detailsRHFormData = new FormData(detailsRHForm);
+
+        theBlob = null;
+        
+        $("#detailsRHForm").submit(function (e) {
+            //stop submit the form, we will post it manually.
+            event.preventDefault();
+            // Get form
+            var form = $('#detailsRHForm')[0];
+            // Create an FormData object 
+            var data = new FormData(form);
+            // If you want to add an extra field for the FormData
+            
+            for(var i in situation_editor){
+                data.set('situation['+i+'][commentaire]', situation_editor[i].getMarkdown());
+            }
+
+            for(var i in referentiel_editor){
+                data.set('referentiel['+i+'][commentaire]', referentiel_editor[i].getMarkdown());
+            }
+
+            // disabled the submit button
+            $("#submitBtn").prop("disabled", true);
+
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "/{{ App.appName }}/personne/details/{{ personne.id }}",
+                data: data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 800000,
+                success: function (data) {
+                    if ('success' == data) {
+                        window.location.reload(true);
+                    } else {
+                        $('#editDetailsError > p').html(data);
+                        document.getElementById('editDetailsError').style.display = 'block'
+                        $("#submitBtn").prop("disabled", false);
+                    }
+                },
+                error: function (e) {
+                    $('#editDetailsError > p').html("Erreur réseau sans doute...");
+                    document.getElementById('editDetailsError').style.display = 'block'
+                    $("#submitBtn").prop("disabled", false);
+                }
+            });
+        });
+    });
+
+
+    function closeModalDetailsEditForm() {
+        if (!isFormDataDetailsRHChanged(new FormData($('#detailsRHForm')[0]))) {
+            document.getElementById('editDetails').style.display = 'none';
+            return;
+        }
+
+        if (confirm("Confirmer l'abandon de l'édition")) {
+            document.getElementById('editDetails').style.display = 'none';
+            window.location.reload(false);
+        } else {
+        }
+    }
+
+    function delSituation(e,id){
+        e.stopPropagation();
+
+        var elm = $('#details_'+id);
+        elm.toggleClass('situationDeleted');
+        elm=$('[name="situation['+id+'][deleted]"]');
+
+        elm.each(function(){
+            this.value = this.value == 'no'?'yes':'no';
+        })
+        return;
+    }
+
+
+    var newSituation = 0;
+
+    function addSituation(e){
+        e.stopPropagation();
+        newSituation++;
+        var html = $('#situation-item-template').html().replaceAll('id_to_be_replaced', '_'+newSituation);
+        $('#situationList').prepend(html)
+        $('#details__'+newSituation).attr('open', true);
+        return false;
+    }
+
+
+    function delReferentiel(e,id){
+        e.stopPropagation();
+
+        var elm = $('#referentiel_'+id);
+        elm.toggleClass('referentielDeleted');
+        elm=$('[name="referentiel['+id+'][deleted]"]');
+
+        elm.each(function(){
+            this.value = this.value == 'no'?'yes':'no';
+        })
+        return;
+    }
+
+
+    var newReferentiel = 0;
+
+    function addReferentiel(e){
+        e.stopPropagation();
+        newReferentiel++;
+        var html = $('#referentiel-item-template').html().replaceAll('id_to_be_replaced', '_'+newReferentiel);
+        $('#referentielList').prepend(html)
+        $('#referentiel__'+newSituation).attr('open', true);
+        return false;
+    }
+
+    function hasChangedDetailsRH(){
+        return isFormDataDetailsRHChanged(new FormData($('#detailsRHForm')[0]));
+    }
+
+
+</script>
+
+<!-- Situation item template -->
+{% set date = date() %}
+{% set dateS = date.format('Y-m-d') %}
+{% set PS = {
+    id: 'id_to_be_replaced',
+    situation: {
+        id: 0,
+    },
+    debut: dateS,
+    fin: dateS,
+    reduction: 0,
+    commentaire: ''
+}%}
+
+    <div style='display: none;' id="situation-item-template">
+{% include("/personne/base_editRHSituation.html.twig") %}
+    </div>
+
+<!-- Referentiel item template -->
+{% set date = date() %}
+{% set dateS = date.format('Y-m-d') %}
+{% set PR = {
+    id: 'id_to_be_replaced',
+    referentiel: {
+        id: 0,
+    },
+    volume: 0,
+    commentaire: ''
+}%}
+
+    <div style='display: none;' id="referentiel-item-template">
+{% include("/personne/base_editRHReferentiel.html.twig") %}
+    </div>
+
+    <div id="editDetails" class="w3-modal">
+
+        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+            <div class="w3-center"><br>
+                <span onclick="closeModalDetailsEditForm()" class="w3-button w3-xlarge w3-hover-red w3-display-topright"
+                    title="Close Modal">&times;</span>
+            </div>
+
+            {# Pour afficher les éventuelles erreurs #}
+            <header id='editDetailsError' class="w3-container w3-red " style="display:none">
+                <span onclick="this.parentElement.style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                <p class='w3-center'>Red often indicates a dangerous or negative situation.</p>
+            </header>
+
+            {# Le formulaire proprement dit #}
+            <form id="detailsRHForm" enctype="multipart/form-data" class="w3-container" method='POST'
+                action="/{{ App.appName }}/personne/details/{{ personne.id }}">
+                <div class="w3-section">
+                    <div class='w3-row'>
+                        <div class="w3-third">
+                            Actif
+                        </div>
+                        <div class="w3-twothird w3-tooltip">
+                            <input class="w3-input" type="checkbox" name='actif' {{ personne.actif?'checked':'' }}>
+                            <span class="w3-text w3-tag tool-tip">Acitf ?</span>
+                        </div>
+                    </div>
+                    <div class='w3-row'>
+                        <div class="w3-third">
+                            UID
+                        </div>
+                        <div class="w3-twothird w3-tooltip">
+                            <input class="w3-input" type="text" name='uid' placeholder="UID" data-bind="textInput: $root.uid" maxlength='30'>
+                            <span class="w3-text w3-tag tool-tip">UID</span>
+                        </div>
+                    </div>
+                    <div class='w3-row'>
+                        <div class="w3-third">
+                            OSE
+                        </div>
+                        <div class="w3-twothird w3-tooltip">
+                            <input class="w3-input" type="text" name='ose' placeholder="Code OSE" data-bind="textInput: $root.ose" maxlength='30'>
+                            <span class="w3-text w3-tag tool-tip">Code OSE</span>
+                        </div>
+                    </div>
+                    <div class='w3-row'>
+                        <div class="w3-row w3-tooltip">
+                            <select name="statut" class="w3-select">
+                                <option value='0'>Statut ?</option>
+                                {% for s in tab.statutList %}
+                                <option value='{{ s.id }}' {{ s.id==personne.statut.id?"selected":"" }}>
+                                    {{ s.nom }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <span class="w3-text w3-tag  tool-tip">Statut</span>
+                        </div>
+                    </div>
+                    <details open>
+                        <summary class='w3-teal'>Situations Particulières (Modifications de service dû)</summary>     
+                        <div class="w3-container">
+                            <div class='w3-row'>
+                                <p  id ='situation_add' onclick="addSituation(event)" class='w3-padding-small w3-tiny w3-button w3-round-large w3-green w3-right'>Ajouter une situation particulière</p>
+                            </div>
+                            <div id='situationList'>
+                            {% for PS in personne.personne_situationList %}
+                                {% include("/personne/base_editRHSituation.html.twig") %}
+                            {% endfor %}
+                            </div>
+                        </div>
+                    </details>
+                    <details open>
+                        <summary class='w3-teal'>PCC - Référentiel</summary> 
+                        <div class="w3-container">
+                            <div class='w3-row'>
+                                <p  id ='referentiel_add' onclick="addReferentiel(event)" class='w3-padding-small w3-tiny w3-button w3-round-large w3-green w3-right'>Ajouter une fonction du référentiel</p>
+                            </div>
+                            <div id='referentielList'>
+                            {% for PR in personne.personne_foncrefList %}
+                                {% include("/personne/base_editRHReferentiel.html.twig") %}
+                            {% endfor %}
+                            </div>
+                        </div>
+                    </details>
+                    <button id='submitBtn' class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Valider les modifications</button>
+                </div>
+            </form>
+
+            <details>
+                <summary class='w3-teal'>Recherche LDAP</summary> 
+                
+                <div class="w3-container">
+                
+                    <div class="w3-tooltip">
+                        <input class="w3-input" style='width:97%' id="quoi" data-bind="textInput: $root.searchValue" placeholder="nom, code...">
+                        <span class="w3-text w3-tag tool-tip">prénom, nom, uid, login, code OSE</span>
+                    </div>
+                    
+                    <div class="w3-tooltip" id='ldapResult'>
+                        <span class="w3-text w3-tag tool-tip">prénom, nom, uid, login, code OSE</span>
+                    </div>
+                </div>
+            </details>
+        </div>
+    </div>
+
+<script>
+
+
+    var searchModel = function() {
+        var self = this;  
+
+        self.uid = ko.observable("{{ personne.uid }}");
+        self.ose = ko.observable("{{ personne.ose }}");
+        self.actif = ko.observable({{personne.actif}});
+
+
+        self.searchValue=ko.observable("{{tab.initialSearch}}");
+        self.search = ko.computed(function() {
+            var search = "";
+            var posting = $.post('/{{ App.appName }}/personne/ldap',{
+                searchValue: self.searchValue(),
+            });
+                    
+            posting.done(function( data ) {
+                $('#ldapResult').empty().append( data );
+                $('#ldapTableResult').DataTable({
+                    paging: false,
+                });        
+            });
+            return search;
+        }, this).extend({ rateLimit: { timeout: 500, method: "notifyWhenChangesStop" } });;
+
+    };
+
+    var model = new searchModel();
+    ko.applyBindings(model);
+
+
+</script>

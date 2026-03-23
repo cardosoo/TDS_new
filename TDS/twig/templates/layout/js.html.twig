@@ -1,0 +1,148 @@
+{% if App.auth.isAuth %}
+<script>
+  var alive = setInterval(stayAlive, 1000*60*1); // pour faire un truc toutes les 1 minutes
+
+
+  function setConnection(active){
+    var connect_link = document.getElementById('connect_button');
+    var connect_button = document.getElementById('connect_button');
+    var href = "/{{ App.appName }}/auth/log"+(active?"out":"in");
+    var className = "w3-bar-item w3-button w3-right w3-"+(active?'light-green':'red');
+    var content = (active?'Déc':'C')+"onnexion...";
+//    connect_button.href=href;
+//    connect_button.innerHTML=content;
+    connect_button.href=href;
+    connect_button.innerHTML=content;
+    connect_button.className=className;
+    connect_link.href=href;
+    connect_link.innerHTML=content;
+
+  //  console.log(connect_button);
+  }
+
+
+  function transferComplete(evt) {
+  //  console.log('transfertComplete');
+    setConnection(true);
+  }
+
+  function transferFailed(evt) {
+  //  console.log('transfertFailed');
+    setConnection(false);
+  }
+
+  function transferCanceled(evt) {
+//    console.log('transfertCanceled');
+    setConnection(false);
+  }
+
+  function loadEnd(e) {
+//    console.log('loadEnd');
+  }
+
+
+  function stayAlive(){
+    var oReq = new XMLHttpRequest();
+
+//    oReq.addEventListener("progress", updateProgress, false);
+    oReq.addEventListener("load", transferComplete, false);
+    oReq.addEventListener("error", transferFailed, false);
+    oReq.addEventListener("abort", transferCanceled, false);
+    oReq.addEventListener("loadend", loadEnd, false);
+
+    oReq.open("get", "/{{ App.appName }}/alive", true);
+    oReq.send();
+  }
+  
+  
+
+</script>
+{% endif %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+
+{% if App.cmpl.withMathjax %}
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+{% endif %}
+
+{% if App.cmpl.withJQuery %}
+<script src="/{{ App.appName }}/assets/jquery/jquery-3.4.1.min.js"></script>
+<script src="/{{ App.appName }}/assets/jquery/jquery.form.min.js"></script>
+<script src="/{{ App.appName }}/assets/tipped/dist/js/tipped.min.js"></script>
+<script src="/{{ App.appName }}/assets/tipped/dist/js/tipped.min.js"></script>
+
+<script src="/{{ App.appName }}/assets/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="/{{ App.appName }}/assets/jquery-ui-1.12.1/jquery-ui.min.css">
+
+<script src="/{{ App.appName }}/assets/js/marked.min.js"></script>
+<script src="/{{ App.appName }}/assets/js/autosize.min.js"></script>
+{% endif %}
+  
+{% if App.cmpl.withKnockout %}
+<script src="/{{ App.appName }}/assets/knockout/knockout-latest.min.js"></script>
+<script src="/{{ App.appName }}/assets/knockout/knockout-jqAutocomplete.js"></script>
+<script src="/{{ App.appName }}/assets/knockout/knockout.mapping-latest.js"></script>
+{% endif %}
+
+{% if App.cmpl.withDataTables %}
+{#
+<script src="/{{ App.appName }}/assets/jquery/jquery.dataTables.min.js"></script>
+<script src="/{{ App.appName }}/assets/jquery/dataTables.buttons.min.js"></script>
+<script src="/{{ App.appName }}/assets/jquery/buttons.flash.min.js"></script>
+<script src="/{{ App.appName }}/assets/jquery/jszip.min.js"></script>
+<script src="/{{ App.appName }}/assets/jquery/pdfmake.min.js"></script>
+<script src="/{{ App.appName }}/assets/jquery/vfs_fonts.js"></script>
+<script src="/{{ App.appName }}/assets/jquery/buttons.html5.min.js"></script>
+<script src="/{{ App.appName }}/assets/jquery/buttons.print.min.js"></script>
+<link rel="stylesheet" href="/{{ App.appName }}/assets/jquery/jquery.dataTables.min.css">
+#}
+
+{% set datatablesCDN = "cdn.datatables.net" %}
+{% set datatablesCDN = "datatables-cdn.com" %}
+
+<link href="https://{{ datatablesCDN }}/v/dt/jszip-3.10.1/dt-2.2.2/af-2.7.0/b-3.2.2/b-colvis-3.2.2/b-html5-3.2.2/b-print-3.2.2/cr-2.0.4/date-1.5.5/fc-5.0.4/fh-4.0.1/kt-2.12.1/r-3.0.4/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.2/sp-2.3.3/sl-3.0.0/sr-1.4.1/datatables.min.css" rel="stylesheet" integrity="sha384-Ds1Vklai96R25BXbTa08O+OjpAevmakmGFQNAQECNryYdQ0qbN4CJSMwUSFT+NYe" crossorigin="anonymous">
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js" integrity="sha384-VFQrHzqBh5qiJIU0uGU5CIW3+OWpdGGJM9LBnGbuIH2mkICcFZ7lPd/AAtI7SNf7" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js" integrity="sha384-/RlQG9uf0M2vcTw3CX7fbqgbj/h8wKxw7C3zu9/GxcBPRKOEcESxaxufwRXqzq6n" crossorigin="anonymous"></script>
+<script src="https://{{ datatablesCDN }}/v/dt/jszip-3.10.1/dt-2.2.2/af-2.7.0/b-3.2.2/b-colvis-3.2.2/b-html5-3.2.2/b-print-3.2.2/cr-2.0.4/date-1.5.5/fc-5.0.4/fh-4.0.1/kt-2.12.1/r-3.0.4/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.2/sp-2.3.3/sl-3.0.0/sr-1.4.1/datatables.min.js" integrity="sha384-lGlyEraPH4ouPKo2ethY8Xic4JlIXN/CUbMNpOce3EjRhLuGH732aMGDH7Cv8+VY" crossorigin="anonymous"></script>
+
+{#
+<script src="https://{{ datatablesCDN }}/2.2.2/js/dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
+
+<script src="https://{{ datatablesCDN }}/buttons/3.2.2/js/dataTables.buttons.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.2.2/css/buttons.dataTables.min.css">
+
+<script src="https://{{ datatablesCDN }}/buttons/3.2.2/js/buttons.print.min.js"></script>
+#}
+
+{% endif %}
+
+{% if App.cmpl.withChartJS %}
+<script src="/{{ App.appName }}/assets/Chart/Chart.min.js"></script>
+<script src="/{{ App.appName }}/assets/Chart/Chart.bundle.min.js"></script>
+<link rel="stylesheet" href="/{{ App.appName }}/assets/Chart/Chart.min.css">
+{% endif %}
+
+{% if App.cmpl.withBokeh %}
+<script src="/{{ App.appName }}/assets/bokeh/bokeh-1.3.4.min.js"></script>
+<script src="/{{ App.appName }}/assets/bokeh/bokeh-widgets-1.3.4.min.js"></script>
+<script src="/{{ App.appName }}/assets/bokeh/bokeh-tables-1.3.4.min.js"></script>
+<script src="/{{ App.appName }}/assets/bokeh/bokeh-gl-1.3.4.min.js"></script>
+<script src="/{{ App.appName }}/assets/bokeh/bokeh-api-1.3.4.min.js"></script>
+{% endif %}
+
+{% if App.cmpl.withCKEditor %}
+		<script src="https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.umd.js" crossorigin></script>
+{% endif %}

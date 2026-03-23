@@ -1,0 +1,123 @@
+<div class="w3-container w3-theme-l2">
+    <h5>volume d'enseignement</h5>
+</div>
+{#<div class="w3-panel w3-leftbar w3-sand w3-serif">
+Si le nombre de CM est différent de 1, il faut contacter la RHE
+</div>#}
+<div class="w3-row-padding">
+    <div class="w3-half">
+        <label>volume horaire présentiel étudiant</label>
+        <div class="w3-row-padding">
+            <div class="w3-third {{divClass}}">
+                <label>hCM</label>
+                <input class="w3-input sdv_comp" style='width:8em;' name="hCM" type="number" step='any' placeholder="hCM" value="{{data.hCM}}">
+            </div>
+            <div class="w3-third {{divClass}}">
+                <label>hTD</label>
+                <input class="w3-input sdv_comp" style='width:8em;' name="hTD" type="number"  step='any' placeholder="hTD" value="{{data.hTD}}">
+            </div>
+            <div class="w3-third {{divClass}}">
+                <label>hTP</label>
+                <input class="w3-input sdv_comp" style='width:8em;' name="hTP" type="number"  step='any' placeholder="hTP" value="{{data.hTP}}">
+            </div>
+        </div>
+    </div>
+    <div class="w3-half">
+        <label>capacité d'accueil</label>
+        <div class="w3-row-padding">
+            <div class="w3-half {{divClass}}">
+                <label>totale</label>
+                <input class="w3-input" style='width:8em;' name="capaciteTotale" type="number"  placeholder="" value="{{data.capaciteTotale}}">
+            </div>
+            <div class="w3-half {{divClass}}">
+                <label>SDV</label>
+                <input class="w3-input" style='width:8em;' name="capaciteSDV" type="number" placeholder="" value="{{data.capaciteSDV}}">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="w3-row-padding">
+    <div class="w3-half">
+        <label>Nombre de groupes</label>
+        <div class="w3-row-padding">
+            <div class="w3-third {{divClass}}">
+                <label>CM</label>
+                <input class="w3-input sdv_comp" style='width:8em;' name="nCM" type="number"  step='any' max='2' min='0' placeholder="CM" value="{{data.nCM}}">
+            </div>
+            <div class="w3-third {{divClass}}">
+                <label>TD</label>
+                <input class="w3-input sdv_comp" style='width:8em;' name="nTD" type="number"  step='any' placeholder="TD"  min='0'  value="{{data.nTD}}">
+            </div>
+            <div class="w3-third {{divClass}}">
+                <label>TP</label>
+                <input class="w3-input sdv_comp" style='width:8em;' name="nTP" type="number"  step='any' placeholder="TP"  min='0'  value="{{data.nTP}}">
+            </div>
+        </div>
+    </div>
+    <div class="w3-half">
+        <label>&nbsp;</label>
+        <div class="w3-row-padding">
+            <div class="w3-half {{divClass}}">
+                <label>enseignants par TP</label>
+                <input class="w3-input sdv_comp" style='width:8em;' name="nEnseignantsTP" type="number"  step='any' min='0' max='1.5' placeholder="" value="{{data.nEnseignantsTP}}">
+            </div>
+            <div class="w3-half">
+                <label>coût total:</label>
+                <input readonly='true' class="w3-input" style='width:8em;' name="cout" type="text"  value="{{data.cout}} hEQTD">                    
+            </div>
+        </div>
+    </div>
+</div>
+<div class="w3-row-padding">
+    <div class="w3-half">
+        <label>Nombre EC Statutaire</label>
+        <div class="w3-row-padding">
+            <div class="w3-quarter {{divClass}}">
+                <label>SDV</label>
+                <input class="w3-input" style='width:3em;' name="nEC_SDV" type="number"  placeholder="" value="{{data.nEC_SDV}}">
+            </div>
+            <div class="w3-quarter {{divClass}}">
+                <label>UP Cité</label>
+                <input class="w3-input" style='width:3em;' name="nEC_UPCite" type="number"  placeholder="" value="{{data.nEC_UPCite}}">
+            </div>
+            <div class="w3-quarter {{divClass}}">
+                <label>Extérieur</label>
+                <input class="w3-input" style='width:3em;' name="nEC_Ext" type="number"  placeholder="" value="{{data.nEC_Ext}}">
+            </div>
+            <div class="w3-quarter {{divClass}}">
+                <label>Bénévoles</label>
+                <input class="w3-input" style='width:3em;' name="nBenevoles" type="number"  placeholder="" value="{{data.nBenevoles}}">
+            </div>
+        </div>
+    </div>
+    <div class="w3-half">
+        <label>Nombre EC Statutaire</label>
+            <div class="w3-row-padding">
+            <div class="w3-quarter {{divClass}}">
+                <label>ATER</label>
+                <input class="w3-input" style='width:3em;' name="nEC_ATER" type="number"  placeholder="" value="{{data.nEC_ATER}}">
+            </div>
+            <div class="w3-quarter {{divClass}}">
+                <label>DCME</label>
+                <input class="w3-input" style='width:3em;' name="nEC_DCME" type="number"  placeholder="" value="{{data.nEC_DCME}}">
+            </div>
+            <div class="w3-quarter {{divClass}}">
+                <label>Vacataires</label>
+                <input class="w3-input" style='width:3em;' name="nVacataires" type="number"  placeholder="" value="{{data.nVacataires}}">
+            </div>
+        </div>
+    </div>
+    {#
+    <div class="w3-panel w3-leftbar w3-sand w3-serif">
+    Indiquer ci-dessous, le volume horaire total assuré par les EC (permanents et non-permanents) de SDV
+    </div>#}
+    <div class="w3-quarter {{divClass}}">
+        <label>Coût enseignement pour SDV (en hETD)</label>
+        <input class="w3-input" style='width:15em;' name="coutSDV" type="number"  placeholder="" value="{{data.coutSDV}}">
+    </div>
+    <div class="w3-rest {{divClass}}">
+        <label>Commentaires</label>
+        <textarea  style='width:100%' rows="3" name='commentaires'>{{data.commentaires}}</textarea>
+    </div>
+</div>
+

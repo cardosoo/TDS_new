@@ -1,0 +1,110 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _domaine_personne_.html.twig
+    created : Wed, 30 Jul 2025 18:30:52 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "domaine_personne", id: "{{ domaine_personne.id }}" }}'></i>domaine_personne</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "domaine_personne", F: "actif", id: "{{domaine_personne.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ domaine_personne.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block oneToManydomaine_personne_domaine_full %}
+<p>
+    {% block oneToManydomaine_personne_domaine_label %}
+    <label class='select' for='domaine'>
+        {{  domaine_personne.domaine ? domaine_personne.domaine.getCrudEditLink("domaine")|raw : "domaine"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "domaine_personne", F: "domaine", id: "{{domaine_personne.id}}" }}'></i>
+    </label>
+    {% endblock oneToManydomaine_personne_domaine_label %}
+    {% block oneToManydomaine_personne_domaine_active %}    
+    <input class='text {{ ( domaine_personne.domaine.id ==0 or  domaine_personne.domaine.actif)?"":" passif" }}'  value="{{ domaine_personne.domaine.generic() }}" name="domaine" id="domaine"  _id_="{{ domaine_personne.domaine.id }}">
+    <script>
+        setAutocomplete("#domaine", "/tssdv/CRUD/L/Domaine");
+    </script>
+    {% endblock oneToManydomaine_personne_domaine_active %}    
+</p>
+{% endblock oneToManydomaine_personne_domaine_full %}
+
+{% block oneToManydomaine_personne_personne_full %}
+<p>
+    {% block oneToManydomaine_personne_personne_label %}
+    <label class='select' for='personne'>
+        {{  domaine_personne.personne ? domaine_personne.personne.getCrudEditLink("personne")|raw : "personne"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "domaine_personne", F: "personne", id: "{{domaine_personne.id}}" }}'></i>
+    </label>
+    {% endblock oneToManydomaine_personne_personne_label %}
+    {% block oneToManydomaine_personne_personne_active %}    
+    <input class='text {{ ( domaine_personne.personne.id ==0 or  domaine_personne.personne.actif)?"":" passif" }}'  value="{{ domaine_personne.personne.generic() }}" name="personne" id="personne"  _id_="{{ domaine_personne.personne.id }}">
+    <script>
+        setAutocomplete("#personne", "/tssdv/CRUD/L/Personne");
+    </script>
+    {% endblock oneToManydomaine_personne_personne_active %}    
+</p>
+{% endblock oneToManydomaine_personne_personne_full %}
+
+{% block ordre_full %}
+    <p>
+    {% block ordre_label %}
+    <label class='text' for="ordre"> ordre <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "domaine_personne", F: "ordre", id: "{{domaine_personne.id}}" }}'></i></label>    
+    {% endblock ordre_label %}
+    {% block ordre_active %}
+    <input class='text' type="number"  value="{{ domaine_personne.ordre }}" name="ordre" id="ordre" placeholder="0">
+
+    {% endblock ordre_active %}
+    </p>
+{% endblock ordre_full %}    
+
+{% block quotite_full %}
+    <p>
+    {% block quotite_label %}
+    <label class='text' for="quotite"> quotite <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "domaine_personne", F: "quotite", id: "{{domaine_personne.id}}" }}'></i></label>    
+    {% endblock quotite_label %}
+    {% block quotite_active %}
+    <input class='text' type="number"  value="{{ domaine_personne.quotite }}" name="quotite" id="quotite" step="any" placeholder="0">
+
+    {% endblock quotite_active %}
+    </p>
+{% endblock quotite_full %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

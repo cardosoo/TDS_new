@@ -1,0 +1,75 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+<div class="w3-container w3-row">
+    <div class="w3-card" style="max-width:1600px;margin-top:80px">    
+        <h3>Recherche dans le LDAP de l'université de Paris</h3>
+
+        <form href="" method='POST'>
+            <label for='uid'>Identifiant : </label><input id='uid' name='uid'  value = '{{ search.uid }}'>
+            <label for='name'>Nom : </label><input id='name' name='name' value = '{{ search.name }}'>
+            <button type='submit'>Rechercher</button>
+        </form>
+    </div>
+</div>
+
+
+
+    <table id="ldap" class="display compact">
+        <thead>
+            <tr>
+                <th>action</th>
+                <th>Nom</th>
+                <th>email</th>
+                <th>uid</th>
+                <th>Code OSE</th>
+                <th>login</th>
+                <th>Usage</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ldap in ldapList %}
+            <tr>
+                <td class="w3-center">
+                {% if ldap.inBase %}
+                    <a href='/{{App.appName}}/personne/{{ldap.inBase}}'>voir</a>
+                {% else %}
+                    <a href='/{{App.appName}}/admin/addFromLDAP/{{ldap.uid}}'>ajouter</a>
+                {% endif %}
+                </td>
+                <td>{{ ldap.displayname }}</td>
+                <td class="w3-center">{{ ldap.mail }}</td>
+                <td class="w3-center">{{ ldap.uid }}</a></td>
+                <td class="w3-center">{{ ldap.supannempid }}</a></td>
+                <td class="w3-center">{{ ldap.supannaliaslogin }}</a></td>
+                <td class="w3-center">{{ ldap.edupersonaffiliation|join('<br>')|raw }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <br>
+
+
+
+    <script>
+        $(document).ready(function () {
+            $('#ldap').DataTable({
+                order: [[0, "des"], [1, "asc"]],
+                dom: 'Bfrtip',
+                paging: false,
+                buttons: [
+                    'copy',
+                    'excel',
+                    'csv',
+                    {
+                        extend: 'pdf',
+                        orientation: 'portrait'
+                    }
+                ]
+            });
+        });
+    </script>
+
+{% endblock section %}

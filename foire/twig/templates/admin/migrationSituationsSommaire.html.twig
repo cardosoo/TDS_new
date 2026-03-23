@@ -1,0 +1,52 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+<div class="w3-card-4 w3-white w3-margin">
+    <div class="w3-container w3-light-grey  w3-center">
+        <b>Migration des situations individuelles</b>
+    </div>
+    {% apply markdown_to_html %}
+
+    Cette opération doit-être un fois après avoir copié la base de données depuis l'année précédente vers cette nouvelle année.
+    Elle pré-suppose que les Situations particulières de l'année précédente sont présentes.
+
+
+    Opération réalisées :
+    - suppression des situations particulières qui sont cochées dans la liste ci-dessous,
+    - par défaut, les situations particulières cochées sont celles pour lesquelles les dates de validaté encadre la date du 12 décembre de l'année de l'année courante,
+    - les situations particulières sont classées par type de situation,
+    - le button de validation du formulaire se situe tout en bas de cette page.
+    --- 
+
+    {% endapply %}
+
+    <form action="./migrationSituations/confirm" method='POST'>
+    {% set dateString = "#{App.currentYear}-12-31" %} 
+    <ul>
+    {% for S in sList %}
+        <li>{{S.ose}} - {{S.nom}}
+            <ul>
+            {% for PS in S.personne_situationList %}
+                <li>
+                    <input type='hidden' name = 'id[]' value='{{PS.id}}'>
+                    <input type='checkbox' {{ ( (PS.debut < dateString) and  (PS.fin > dateString) )?"":"checked" }} name='id_{{PS.id}}'> 
+                    {{ PS.personne.getGenericWithLink()|raw }}, réduction : {{PS.reduction}} hETD
+
+                    <br>début : {{ PS.debut }}, fin : {{ PS.fin }}
+
+                    {{ PS.commentaire |markdown_to_html|raw }}
+                </li>
+            {% endfor %}
+            </ul>
+        </li>
+
+    {% endfor %}
+    </ul>
+    <div class="w3-container w3-light-grey  w3-center">
+        <input type="submit" value="Supprimer les situations particulières cochées">
+    </div>
+    </form>    
+</div>
+
+{% endblock %}

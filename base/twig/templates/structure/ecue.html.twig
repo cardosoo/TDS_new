@@ -1,0 +1,39 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+{% set besoins = ecue.getBesoins()|json_decode(true) %}
+{% set charge = [] %}
+
+{% for type in besoins|keys|sort %}
+    {% set charge = charge|merge([besoins[type].heures ~ 'h ' ~ type] ) %} 
+{% endfor %}
+
+{% set charge = charge|join(", ", " et ")%}
+
+
+<h1>Données pour l'ECUE : {{ ecue.nom }}</h1>
+
+<ul>
+    <li>code :    {{ecue.code}}</li>
+    <li>nom :     {{ecue.nom}}</li>
+    <li>periode : {{ecue.periode}}</li>
+    <li>Charge étudiant : {{charge}}</li>
+</ul>
+
+
+<h3>Liste des étapes auxquelles est attachée l'ECUE : {{ ecue.code }} - {{ ecue.nom}}</h3>
+
+<ul>
+{% for elm in ecue.ecue_etapes %}
+    {% set etape = elm.etape %}
+    <li><a href='/{{App.appName}}/structure/etape/{{etape.code}}' >{{ etape.code }}</a> -{{ etape.nom }}</li>
+{% endfor %}
+</ul>
+
+
+{% if ecue.canCreateEnseignementInDatabase() %}
+<a href='/{{App.appName}}/structure/addEnseignement/{{ecue.code}}'>Ajouter cet enseignement dans la base de données</a>
+{% endif %}
+
+{% endblock %}

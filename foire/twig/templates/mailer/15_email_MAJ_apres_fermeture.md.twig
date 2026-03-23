@@ -1,0 +1,20 @@
+Bonjour {{ P.getGeneric }},
+
+Suite à nos échanges d'emails, voici une mise à jour de votre service pour {{ App.currentYear }}-{{ App.currentYear+1 }}.
+
+Bien Cordialement,
+
+Raphaël Galicher, pour la foire.
+
+**Vœux de  {{ P.getGeneric }}**
+
+D'après les informations de la base de données {{ App.appName }}{{ App.currentYear }}, vous devez assurer une charge de 
+{{P.getCharge()}} heures d'enseignement et vos vœux correspondent à une charge de {{P.getCharge() - P.voeu_personne_bilan.heures|f2}} heures.
+
+{{ include('mailer/voeux.md.twig') }}
+
+Les lignes en rouge correspondent aux UE en surcharge.<br>
+Les lignes en vert  correspondent aux UE en sous effectif.<br>
+
+{% include "mailer/signature.md.twig" %}
+

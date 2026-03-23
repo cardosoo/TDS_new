@@ -1,0 +1,50 @@
+{% extends "layout.html.twig" %}
+
+
+{% block section %}
+
+<p>Code ECUE: <input data-bind="value: codeECUE" /></p>
+
+<h2>Information sur l'ECUE</h2>
+
+<p>ECUE : <b data-bind="text: code"></b> - <b data-bind="text: nom"></b></p>
+<p>Composante : <span data-bind="text: structure"></span> </p>
+<p>Étape : <span data-bind="text: etape"></span> </p>
+<p>Cursus : <span data-bind="text: cursus"></span> </p>
+<p>Semestre : <span data-bind="text: semestre"></span> </p>
+
+
+<script>
+
+var ViewModel = function() {
+    self = this;
+    this.codeECUE = ko.observable('PH01Y030');
+
+    this.nom = ko.observable('');
+    this.structure = ko.observable('');
+    this.etape = ko.observable('');
+    this.cursus = ko.observable('');
+    this.semestre = ko.observable('');
+    
+
+    this.code = ko.pureComputed(function() {
+        $.getJSON('/{{ App.appName }}/vacation/infoECUE/'+this.codeECUE(), function(json){
+            this.json = json;
+            console.log(json.nom);
+            self.nom(json.nom);
+            self.structure(json.structure);
+            self.etape(json.etape);
+            self.cursus(json.cursus);
+            self.semestre(json.semestre);
+        });
+        return this.codeECUE();
+    }, this);
+};
+ 
+ko.applyBindings(new ViewModel()); 
+
+</script>
+
+
+
+{% endblock %}

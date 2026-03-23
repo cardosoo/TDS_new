@@ -1,0 +1,17 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+    <h3>Liste des Statuts</h3>
+    <ul>
+        {% for S in SL %}
+        <li>
+            Liste des personnes avec <a href='/{{App.appName}}/statut/listePersonnes/{{S.id}}'>{{ S.nom }} </a> comme statut 
+        </li>
+        {% endfor %}
+    </ul>
+
+</div> 
+{% endblock %}

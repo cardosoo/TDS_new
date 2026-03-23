@@ -1,0 +1,22 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+<div class="w3-cell-row">
+
+  <div class="w3-container w3-cell">
+    <div class="w3-card" style="max-width:1600px;margin-top:80px">
+        <h3>coût par filière et par années</h3>
+        
+        <h4><a href='/{{ App.appName}}/CENS/coutFiliereAnnee'>Tableau synthétique</a></h4>
+        
+        <h4>Tableaux par cursus avec détail des enseignements</h4>
+        <p>Maintenant accessible via la <a href='/{{App.appName}}/structure'>structure des enseignements</a> </p>
+        <p>et plus spécifiquement pour les étapes de l'<a href='/{{App.appName}}/structure/structure/UFR%20de%20Physique'>UFR de physique</a> </p>
+    </div>
+
+  </div>
+
+</div> 
+{% endblock section %}
+
+

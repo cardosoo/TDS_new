@@ -1,0 +1,26 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+<div class="w3-card-4 w3-white w3-margin">
+    <div class="w3-container w3-light-grey  w3-center">
+        <b>Migration des voeux prioritaires</b>
+    </div>
+    {% apply markdown_to_html %}
+
+    Cette opération doit-être un fois après avoir copié la base de données depuis l'année précédente vers cette nouvelle année.
+
+    Opération réalisées :
+    - augmentation de l'ancienneté pour l'ensemble des voeux
+    - suppression des voeux qui ne sont pas prioritaires (ancienneté >=4 ans) et qui sont attribuables
+    - mise à 0 des charges de CM, CTD, TD, TP (mais pas des bonus et extra) pour les enseignements qui sont attribuables
+
+    {% endapply %}
+
+    <div class="w3-container w3-light-grey  w3-center">
+        <b><a href='./migrationVoeux/confirm'>Effectuer cette action</a></b>
+    </div>
+</div>
+
+
+{% endblock %}

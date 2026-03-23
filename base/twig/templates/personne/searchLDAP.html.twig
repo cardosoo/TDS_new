@@ -1,0 +1,31 @@
+    <table id="ldapTableResult" class="display compact">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Données</th>
+                <th>Fonctions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ldap in ldapList %}
+            <tr>
+                <td class="w3-cell-middle">
+                {% if ldap.inBase %}
+                    <a href='/{{App.appName}}/personne/{{ldap.inBase}}'>{{ ldap.displayname }}</a>
+                {% else %}
+                    {{ ldap.displayname }}
+                {% endif %}
+                </td>
+                <td>
+                    <div><span>UID : </span><span>{{ ldap.uid }}</span></div>
+                    <div><span>OSE : </span><span>{{ ldap.supannempid }}</span></div>
+                    <div><span>login : </span><span>{{ ldap.supannaliaslogin }}</span></div>
+                    <div><span>mèl : </span><span>{{ ldap.mail }}</span></div>
+                </td>
+                <td class="w3-center">{{ ldap.edupersonaffiliation|join('<br>')|raw }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <br>

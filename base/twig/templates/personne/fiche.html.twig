@@ -1,0 +1,25 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+<div class="w3-container w3-content {{ personne.actif?"":"w3-pale-red w3-leftbar w3-rightbar w3-border-red" }}" style="max-width:1600px;margin-top:80px" >
+{% if not personne.actif %}
+    <div class="w3-panel w3-pale-yellow w3-bottombar w3-topbar w3-border-yellow">
+    <h2 class="w3-center">Cette personne est marquée comme inactive</h2>
+    </div>
+{% endif %}    
+    <div class="w3-row">
+        <div class="w3-col s12 m12 l3">
+        {% block colonne %}
+            {% include(["personne/card.html.twig", "personne/base_card.html.twig"]) %}
+            {% include(["personne/editUser.html.twig", "personne/base_editUser.html.twig"]) %}
+        {% endblock colonne %}
+        </div>
+        <div class="w3-col s12 m12 l9">
+        {% block principale %}
+            {% include(["personne/histo.html.twig", "personne/base_histo.html.twig"]) %}
+            {% include(["personne/voeux.html.twig", "personne/base_voeux.html.twig"]) %}
+        {% endblock principale %}
+        </div>
+    </div>
+</div> 
+{% endblock %}

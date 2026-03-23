@@ -1,0 +1,32 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+<div class="w3-cell-row">
+
+  <div class="w3-container w3-cell">
+    <div class="w3-card">    
+    {{ parent() }}
+    </div>
+  </div>
+
+  <div class="w3-container w3-cell">
+    <div class="w3-card" style="max-width:1600px;margin-top:80px">    
+        <h3>pour le CENS...</h3>
+        <ul>
+          <li><a href='/{{App.appName}}/CENS/repFiliereAnnee'>Répartition des enseignements par filière et par année</a></li>
+          <li><a href='/{{App.appName}}/CENS/potentielEnseignant'>Potentiel enseignant</a></li>
+          <li><a href='/{{App.appName}}/CENS/coutTotal'>Cout Total</a></li>
+        </ul>
+
+        <h3>Situations particulières et fonctions du référentiel</h3>
+        <ul>
+          <li>Liste des <a href='/{{App.appName}}/CENS/listeSituations'>situations particulières</a></li>
+          <li>Liste des <a href='/{{App.appName}}/CENS/listeReferentiel'>fonctions du référentiel</a></li>
+          <li>Liste des <a href='/{{App.appName}}/CENS/listeStages'>Liste des stages</a></li>
+        </ul>
+
+    </div>
+  </div>
+
+</div> 
+{% endblock section %}

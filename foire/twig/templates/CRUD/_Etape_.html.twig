@@ -1,0 +1,220 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _Etape_.html.twig
+    created : Fri, 02 May 2025 23:33:41 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "Etape", id: "{{ Etape.id }}" }}'></i>Etape</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Etape", F: "actif", id: "{{Etape.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ Etape.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block ordre_full %}
+    <p>
+    {% block ordre_label %}
+    <label class='text' for="ordre"> ordre <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Etape", F: "ordre", id: "{{Etape.id}}" }}'></i></label>    
+    {% endblock ordre_label %}
+    {% block ordre_active %}
+    <input class='text' type="number"  value="{{ Etape.ordre }}" name="ordre" id="ordre" placeholder="0">
+
+    {% endblock ordre_active %}
+    </p>
+{% endblock ordre_full %}    
+
+{% block code_full %}
+    <p>
+    {% block code_label %}
+    <label class='text' for="code"> code <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Etape", F: "code", id: "{{Etape.id}}" }}'></i></label>    
+    {% endblock code_label %}
+    {% block code_active %}
+    <input class='text'  type="text" value="{{ Etape.code }}" name="code" id="code" size="50" maxlength="100", placeholder="">
+
+    {% endblock code_active %}
+    </p>
+{% endblock code_full %}    
+
+{% block nom_full %}
+    <p>
+    {% block nom_label %}
+    <label class='text' for="nom"> nom <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Etape", F: "nom", id: "{{Etape.id}}" }}'></i></label>    
+    {% endblock nom_label %}
+    {% block nom_active %}
+    <input class='text'  type="text" value="{{ Etape.nom }}" name="nom" id="nom" size="50" maxlength="100", placeholder="">
+
+    {% endblock nom_active %}
+    </p>
+{% endblock nom_full %}    
+
+{% block nbetu_full %}
+    <p>
+    {% block nbetu_label %}
+    <label class='text' for="nbetu"> nbetu <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Etape", F: "nbetu", id: "{{Etape.id}}" }}'></i></label>    
+    {% endblock nbetu_label %}
+    {% block nbetu_active %}
+    <input class='text' type="number"  value="{{ Etape.nbetu }}" name="nbetu" id="nbetu" placeholder="0">
+
+    {% endblock nbetu_active %}
+    </p>
+{% endblock nbetu_full %}    
+
+{% block oneToManyEtape_diplome_full %}
+<p>
+    {% block oneToManyEtape_diplome_label %}
+    <label class='select' for='diplome'>
+        {{  Etape.diplome ? Etape.diplome.getCrudEditLink("diplome")|raw : "diplome"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Etape", F: "diplome", id: "{{Etape.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyEtape_diplome_label %}
+    {% block oneToManyEtape_diplome_active %}    
+    <input class='text {{ ( Etape.diplome.id ==0 or  Etape.diplome.actif)?"":" passif" }}'  value="{{ Etape.diplome.generic() }}" name="diplome" id="diplome"  _id_="{{ Etape.diplome.id }}">
+    <script>
+        setAutocomplete("#diplome", "/foire/CRUD/L/Diplome");
+    </script>
+    {% endblock oneToManyEtape_diplome_active %}    
+</p>
+{% endblock oneToManyEtape_diplome_full %}
+
+{% block oneToManyEtape_cursus_full %}
+<p>
+    {% block oneToManyEtape_cursus_label %}
+    <label class='select' for='cursus'>
+        {{  Etape.cursus ? Etape.cursus.getCrudEditLink("cursus")|raw : "cursus"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Etape", F: "cursus", id: "{{Etape.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyEtape_cursus_label %}
+    {% block oneToManyEtape_cursus_active %}    
+    <input class='text {{ ( Etape.cursus.id ==0 or  Etape.cursus.actif)?"":" passif" }}'  value="{{ Etape.cursus.generic() }}" name="cursus" id="cursus"  _id_="{{ Etape.cursus.id }}">
+    <script>
+        setAutocomplete("#cursus", "/foire/CRUD/L/Cursus");
+    </script>
+    {% endblock oneToManyEtape_cursus_active %}    
+</p>
+{% endblock oneToManyEtape_cursus_full %}
+
+    {% block manyToMany_responsableList_etape %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Etape", id: "{{ Etape.id }}", L: "responsableList" }}'></i>responsableList - {{ (Etape.responsableList)|length }} élément{{(Etape.responsableList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_responsableList_etape %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/responsable/etape/{{ Etape.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_responsableList_etape_personne %}
+                    <th class='w3-center'>personne</th>
+                    {% endblock header_th_responsableList_etape_personne %}       
+                    {% block header_endresponsableList_etape %}
+                    {% endblock header_endresponsableList_etape %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_responsableList_etape %}
+            </thead>
+
+            <tbody>
+            {% for responsable  in Etape.responsableList %}
+                {% block line_responsableList_etape %}
+                <tr name='responsableList' _id_='{{ responsable.id }}' class='{{ responsable.actif?"":"passif " }}{{ responsable.personne.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "responsable", id: "{{ responsable.id }}" }}'></i>
+                    {{ responsable.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_responsable_personne %}
+                    <th class='w3-left'>{{ responsable.personne.getGeneric( true )|raw }}</th>
+                    {% endblock line_responsable_personne %}
+                    {% block line_endresponsableList_etape %}
+                    {% endblock line_endresponsableList_etape %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_responsableList_etape %}
+            {% endfor %}
+            {% block footer_endresponsableList_etape %}
+            {% endblock footer_endresponsableList_etape %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_responsableList_etape %}    
+
+    {% block manyToOne_semestreList_semestreList %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Etape", id: "{{ Etape.id }}", L: "semestreList" }}'></i>semestreList - {{ (Etape.semestreList)|length }} élément{{(Etape.semestreList)|length >1?'s':''}}</legend>
+
+                <ul>
+                {% for L in Etape.semestreList %}   {% block manyToOne_Etape_etape %}
+                    <li class='{{ L.actif?"":"passif" }}'>
+                        {{ L.getGeneric(true)|raw }}
+                    </li>
+                    {% endblock manyToOne_Etape_etape %}
+                {% endfor %}
+                </ul>
+    </fieldset>
+    {% endblock manyToOne_semestreList_semestreList %}    
+
+    {% block oneToOne_structure_enseignement %}  
+    <fieldset>
+        <legend>structure_enseignement</legend>
+        {% if not isCreation %}
+
+    <table class='w3-table-all w3-hoverable w3-small'>
+        <thead>
+            <tr class='w3-light-blue'>    
+                    <th>periode</th>    
+                    <th>nbetu</th>    
+                    <th>code_ue</th>    
+                    <th>code_ecue</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>    
+                        <td>{{ Etape.structure_enseignement.periode }}</td>    
+                        <td>{{ Etape.structure_enseignement.nbetu }}</td>    
+                        <td>{{ Etape.structure_enseignement.code_ue }}</td>    
+                        <td>{{ Etape.structure_enseignement.code_ecue }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        {% endif %}
+    </fieldset>
+    {% endblock oneToOne_structure_enseignement%}
+    
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

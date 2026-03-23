@@ -1,0 +1,41 @@
+Bonjour {{ P.getGeneric }},
+        
+La phase des Vœux {{ App.currentYear }} est ouverte jusqu'au {{ App.texte.limiteVoeux }}.<br>
+La répartition se terminera le {{ App.texte.dateFoire }}.
+
+D'aujourd'hui à la fin de la répartition, essayez s'il-vous-plaît d'être aussi réactif que possible quand la foire vous contacte.
+
+Nous rappelons la différence entre Panier et Vœux:
+
+- **Panier** : placez-y tous les enseignements qui pourraient vous intéresser sans vous limiter dans le nombre. Cela permettra à la foire de vous proposer des enseignements qui vous plaisent au cas où vos vœux ne peuvent pas être réalisés. Sans information, nous vous proposerons ce qui nous arrange.
+- **Vœux** : il s'agit des enseignements que vous aimeriez faire en {{ App.currentYear }} - {{ App.currentYear+1 }} dans la limite de votre service (l'ensemble des vœux émis est inclus dans le panier).
+
+Pendant la période des vœux vous pouvez :
+
+- **émettre un voeu** en suivant [les explications](https://foire.physique.u-paris.fr/foire/texte/voeu) décrites sur le site de la foire ;
+- modifier votre panier ;
+- modifier vos informations ;
+- modifier votre fiche.
+
+Enfin quelques rappels :
+
+- Le service de référence pour l'année {{ App.currentYear }} - {{ App.currentYear+1 }} est {{ App.texte.chargeReference }} hTD.
+- Vous pouvez moduler votre service dans une fourchette de +/-40hTD. La différence avec le service de référence sera reportée sur le service de l'année prochaine.
+- Faites des vœux dans la limite de votre service. Dans le cas contraire, si les responsables de la foire peuvent supprimer des vœux en conservant votre service au-dessus du service de référence, ils le feront sans vous prévenir.
+- Toutes les règles de la foire pour [permanents](https://foire.physique.u-paris.fr/foire/texte/regles) et [non permanents](https://foire.physique.u-paris.fr/foire/texte/non-permanents) sont précisées sur le site de la foire.
+- Étape 3, entre le {{ App.texte.debutDiagonalisation }} et le {{App.texte.finDiagonalisation }} : les responsables de la foire travailleront pour réaliser vos vœux autant que faire se peut.
+- Étape 4, le {{ App.texte.dateFoire }} : La répartition des enseignements sera terminée et nous le fêterons autour d'un buffet entre 11h30 et 14h00.
+  
+
+Nous vous souhaitons une bonne période de vœux sur le site de la foire [https://foire.physique.u-paris.fr/](https://foire.physique.u-paris.fr/)
+
+Si vous avez une question, surfez sur le site de la foire ; il y a beaucoup d'informations.<br>
+Si vous ne trouvez pas l'information, vérifiez bien qu'elle n'est pas sur le site.<br>
+Si vraiment vous ne trouvez pas, alors vous pouvez contacter [foirephy@gmail.com](mailto:foirephy@gmail.com)<br>
+
+Bien à vous,
+
+Olivier Cardoso et Raphaël Galicher.
+
+{{ include('mailer/signature.md.twig') }}
+    

@@ -1,0 +1,134 @@
+<style>
+tr.passif td, 
+tr.passif th {
+    text-decoration: line-through blue;
+    color: blue;
+}
+
+tr.passifLink td, 
+tr.passifLink th {
+    text-decoration: line-through darkblue;
+    color: darkblue;
+}
+</style>
+
+<div class="w3-container w3-card w3-white w3-round  {{ compact?"":"w3-margin"}}">
+    <div class='w3-responsive'>
+        <div class="w3-panel w3-left  {{ compact?"w3-medium":"w3-xlarge"}}">
+            <i class="fa fa-arrow-circle-right fa-fw w3-text-theme"></i>
+            {% if Titre %}
+                {{ Titre }}
+            {% else %}
+                {{ App.phaseList[App.phase].voeuxPersonneLabel }}
+            {% endif %}
+            {% block action %}{% endblock action%}
+        </div>
+    </div>
+    {% if personne.voeuList %}
+    <div class='w3-responsive'>
+        <table class='w3-table-all w3-hoverable {{ compact?"w3-small":"w3-large"}}'>
+            <thead>
+                <tr class='w3-light-blue'>
+                    <th>Enseignement</th>
+                    {% block detailsTS_head %}
+                    {% if not compact %}
+                    <th class="w3-center" title='Nb de groupes de Cours Magistral'>CM</th>
+                    <th class="w3-center" title='Nb de groupes de Cours TD'>CTD</th>
+                    <th class="w3-center" title='Nb de groupes de Travaux Dirigés'>TD</th>
+                    <th class="w3-center" title='Nb de groupes de Travaux Pratiques'>TP</th>
+                    <th class="w3-center" title="Nb d'heures en Extra">Ext</th>
+                    <th class="w3-center" title="Nb d'heures en Bonus">Bon</th>
+                    {% block anciennete_titre %}{% endblock anciennete_titre %}
+                    {% block correspondant_titre %}
+                    <th class="w3-center" title="Correspondant pour l'enseignement">Cor</th>
+                    {% endblock correspondant_titre %}
+                    {% else %}
+                    <th class="w3-center" ></th>
+                    {% endif %}
+                    {% block total_heures_titre %}
+                    <th class="w3-center" title='Charge en heure équivalent TD'>hTD</th>
+                    {% if not compact %}
+                    <th class="w3-center w3-small"  title='Heures restant à affecter pour cet enseignement'>reste</th>
+                    {% endif %}
+                    {% endblock total_heures_titre %}
+                    {% endblock detailsTS_head %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in personne.voeuList %}
+                <tr class="{{ v.actif?"":"passif" }} {{ v.enseignement.actif?"":"passifLink" }}" >
+                    <th  {{ compact?'colspan="2"':'' }}>{{v.enseignement.getGenericWithLink|raw }}</a></th>
+                    {% block detailsTS_ligne %}
+                    {% if not compact %}
+                    <td class="w3-center">{{ v.cm|f2 }}</td>
+                    <td class="w3-center">{{ v.ctd|f2 }}</td>
+                    <td class="w3-center">{{ v.td|f2 }}</td>
+                    <td class="w3-center">{{ v.tp|f2 }}</td>
+                    <td class="w3-center">{{ v.extra|f2 }}</td>
+                    <td class="w3-center">{{ v.bonus|f2 }}</td>
+                    {% block anciennete_voeu %}{% endblock anciennete_voeu %}
+                    <td class="w3-center">{{ v.correspondant ? 'oui' : '' }}</td>
+                    {% endif %}
+                    {% block total_heures_ligne %}
+                    <td class="w3-center">{{ v.voeu_bilan_ligne.heures|f2 }}</td>
+                    {% if not compact %}
+                    <td class="w3-center w3-small {{v.enseignement.voeu_enseignement_bilan.heures <0.1 ?'w3-text-red' }}">{{ v.enseignement.voeu_enseignement_bilan.heures|f2 }}</td>
+                    {% endif %}
+                    {% endblock total_heures_ligne %}
+                    {% endblock detailsTS_ligne %}
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% if App.auth.inBase %}
+            {% block detailsTS_foot %}
+            {% block bilan_heures %}
+            <tfoot>
+                <tr class='w3-light-blue'>
+                    {% set bilan = personne.voeu_personne_bilan.heures|abs %}
+                    {% set H = 10*(40-min(40,bilan))/4 %}
+                    <th>
+                        {% if personne.voeu_personne_bilan.heures >0.1 %}  
+                            Service au-dessous de la charge
+                        {% elseif personne.voeu_personne_bilan.heures <-0.1 %}
+                            Service au-dessus de la charge
+                        {% else %}
+                            Service égal à la charge
+                        {% endif %}
+                    </th>
+                    {% block bilan %}
+                    <td {{ not compact?'colspan="8"':''}} style='text-align: right;'>
+                        {% if personne.voeu_personne_bilan.heures >0.1 %}  
+                            Il manque :
+                        {% elseif personne.voeu_personne_bilan.heures <-0.1 %}
+                            Dépassement de :
+                        {% else %}
+                        {% endif %}
+                    </td>
+                    {% endblock bilan %}
+                    <td class="w3-center" style='background-color: hsl( {{ H }}, 100%, 50%);' >
+                        {% if personne.voeu_personne_bilan.heures >0.1 %}  
+                            {{ personne.voeu_personne_bilan.heures|f2 }}
+                        {% elseif personne.voeu_personne_bilan.heures <-0.1 %}
+                            {{ - personne.voeu_personne_bilan.heures|f2 }}
+                        {% else %}
+                            Service égal à la charge
+                        {% endif %}
+                    
+                    </td>
+                </tr>
+            </tfoot>
+            {% endblock bilan_heures %}
+            {% endblock detailsTS_foot %}
+            {% endif %}
+        </table>
+{% block ligne_bilanPlus %}
+{% endblock ligne_bilanPlus %}
+
+        <br>
+    </div>
+    {% else %}
+    <div class='w3-responsive w3-theme-l1 w3-center' style="font-size: large">Pas d'enseignement pour cette année</div>
+    {% endif %}
+</div>
+
+<!-- End Middle Column -->

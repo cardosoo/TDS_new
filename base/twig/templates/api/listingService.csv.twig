@@ -1,0 +1,5 @@
+extraction listing des service from {{ App.appName }} au {{ "now"|date("m/d/Y") }}
+"ose", "prenom", "nom", "ecue", "intitule", "cm", "ctd", "td", "tp", "extra", "bonus"
+{% for S in serviceList %}
+"{{S.personne.ose}}", "{{S.personne.prenom}}", "{{S.personne.nom}}", "{{S.enseignement_structure.ecue}}", "{{S.enseignement.intitule}}", "{{S.voeu_detail_heures.cm}}", "{{S.voeu_detail_heures.ctd}}", "{{S.voeu_detail_heures.td}}", "{{S.voeu_detail_heures.tp}}", "{{S.voeu_detail_heures.extra}}", "{{S.voeu_detail_heures.bonus}}"
+{% endfor %}

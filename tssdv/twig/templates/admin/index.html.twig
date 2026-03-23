@@ -1,0 +1,37 @@
+{% extends "admin/base_index.html.twig" %}
+
+{% block section %}
+<div class="w3-cell-row">
+
+  <div class="w3-container w3-cell">
+    <div class="w3-card">    
+    {{ parent() }}
+    </div>
+  </div>
+
+  <div class="w3-container w3-cell">
+    <div class="w3-card" style="max-width:1600px;margin-top:80px">    
+      <h3> Gestion des états des enseignements et des personnes vis à vis de l'édition du Tableau de service</h3>
+      <ul>
+          <li>Pour les <a href="/{{App.appName}}/admin/configEditionTSPersonne">les personnes</a></li>
+          <li>Pour les <a href="/{{App.appName}}/admin/configEditionTSEnseignement">les enseignements</a></li>
+      </ul>
+
+      <h3>Nouvelle Année</h3>
+      <ul>
+          <li><a href="/{{App.appName}}/admin/remise0Voeux">Remise à 0 des voeux</a></li>
+          <li><a href="/{{App.appName}}/admin/transfertReports">Transfert des reports</a></li>
+          <li><a href="/{{App.appName}}/admin/migrationSituations">Transfert des situations particulières</a></li>
+          <li><a href="/{{App.appName}}/admin/migrationReferentiels">Transfert des fonctions du référentiel</a></li>
+      </ul>
+      <h3>Gestion</h3>
+      <ul>
+          <li><a href="/{{App.appName}}/admin/forceAValider">Passage de tous les TS « en latence » à « à valider »</a></li>
+      </ul>
+    </div>
+  </div>
+
+
+
+</div> 
+{% endblock section %}

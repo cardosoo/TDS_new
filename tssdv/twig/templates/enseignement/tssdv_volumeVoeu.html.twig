@@ -1,0 +1,21 @@
+{% embed "enseignement/base_volumeVoeu.html.twig" with {'MAX': E.enseignement_besoins_detail} %}
+
+
+{% block correspondant %}
+	<div>
+		<input type="checkbox" id="correspondant" name="correspondant" {{ V.correspondant=='t'?'checked':''}}>
+		<label for="correspondant">
+			Je suis responsable pour cet enseignement</label>
+	</div>
+{% endblock correspondant %}
+
+
+{% block complementVolumeVoeu %}
+<div>
+    <input type="checkbox" id="validation" name="validation" {{ V.etat_ts == 1 ?'':'checked'}}>
+    <label for="validation">demander la validation pour cet enseignement</label>
+</div>
+{% endblock complementVolumeVoeu %}
+
+
+{% endembed %}

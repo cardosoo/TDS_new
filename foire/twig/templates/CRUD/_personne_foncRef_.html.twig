@@ -1,0 +1,110 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _personne_foncRef_.html.twig
+    created : Fri, 02 May 2025 23:33:41 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "personne_foncRef", id: "{{ personne_foncRef.id }}" }}'></i>personne_foncRef</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "personne_foncRef", F: "actif", id: "{{personne_foncRef.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ personne_foncRef.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block oneToManypersonne_foncRef_personne_full %}
+<p>
+    {% block oneToManypersonne_foncRef_personne_label %}
+    <label class='select' for='personne'>
+        {{  personne_foncRef.personne ? personne_foncRef.personne.getCrudEditLink("personne")|raw : "personne"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "personne_foncRef", F: "personne", id: "{{personne_foncRef.id}}" }}'></i>
+    </label>
+    {% endblock oneToManypersonne_foncRef_personne_label %}
+    {% block oneToManypersonne_foncRef_personne_active %}    
+    <input class='text {{ ( personne_foncRef.personne.id ==0 or  personne_foncRef.personne.actif)?"":" passif" }}'  value="{{ personne_foncRef.personne.generic() }}" name="personne" id="personne"  _id_="{{ personne_foncRef.personne.id }}">
+    <script>
+        setAutocomplete("#personne", "/foire/CRUD/L/Personne");
+    </script>
+    {% endblock oneToManypersonne_foncRef_personne_active %}    
+</p>
+{% endblock oneToManypersonne_foncRef_personne_full %}
+
+{% block oneToManypersonne_foncRef_foncref_full %}
+<p>
+    {% block oneToManypersonne_foncRef_foncref_label %}
+    <label class='select' for='foncref'>
+        {{  personne_foncRef.foncref ? personne_foncRef.foncref.getCrudEditLink("foncref")|raw : "foncref"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "personne_foncRef", F: "foncref", id: "{{personne_foncRef.id}}" }}'></i>
+    </label>
+    {% endblock oneToManypersonne_foncRef_foncref_label %}
+    {% block oneToManypersonne_foncRef_foncref_active %}    
+    <input class='text {{ ( personne_foncRef.foncref.id ==0 or  personne_foncRef.foncref.actif)?"":" passif" }}'  value="{{ personne_foncRef.foncref.generic() }}" name="foncref" id="foncref"  _id_="{{ personne_foncRef.foncref.id }}">
+    <script>
+        setAutocomplete("#foncref", "/foire/CRUD/L/FoncRef");
+    </script>
+    {% endblock oneToManypersonne_foncRef_foncref_active %}    
+</p>
+{% endblock oneToManypersonne_foncRef_foncref_full %}
+
+{% block commentaire_full %}
+    <p>
+    {% block commentaire_label %}
+    <label class='text' for="commentaire"> commentaire <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "personne_foncRef", F: "commentaire", id: "{{personne_foncRef.id}}" }}'></i></label>    
+    {% endblock commentaire_label %}
+    {% block commentaire_active %}
+    <textarea mode='raw' class='textarea' name="commentaire" id="commentaire" size="10"  placeholder="">{{ personne_foncRef.commentaire }}</textarea>
+
+    {% endblock commentaire_active %}
+    </p>
+{% endblock commentaire_full %}    
+
+{% block volume_full %}
+    <p>
+    {% block volume_label %}
+    <label class='text' for="volume"> volume <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "personne_foncRef", F: "volume", id: "{{personne_foncRef.id}}" }}'></i></label>    
+    {% endblock volume_label %}
+    {% block volume_active %}
+    <input class='text' type="number"  value="{{ personne_foncRef.volume }}" name="volume" id="volume" step="any" placeholder="0">
+
+    {% endblock volume_active %}
+    </p>
+{% endblock volume_full %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

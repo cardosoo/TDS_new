@@ -1,0 +1,110 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _dommaine_enseignement_.html.twig
+    created : Thu, 17 Jun 2021 12:00:12 +0000 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "dommaine_enseignement", id: "{{ dommaine_enseignement.id }}" }}'></i>dommaine_enseignement</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "dommaine_enseignement", F: "actif", id: "{{dommaine_enseignement.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ dommaine_enseignement.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block oneToManydommaine_enseignement_domaine_full %}
+<p>
+    {% block oneToManydommaine_enseignement_domaine_label %}
+    <label class='select' for='domaine'>
+        {{  dommaine_enseignement.domaine ? dommaine_enseignement.domaine.getCrudEditLink("domaine")|raw : "domaine"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "dommaine_enseignement", F: "domaine", id: "{{dommaine_enseignement.id}}" }}'></i>
+    </label>
+    {% endblock oneToManydommaine_enseignement_domaine_label %}
+    {% block oneToManydommaine_enseignement_domaine_active %}    
+    <input class='text {{ ( dommaine_enseignement.domaine.id ==0 or  dommaine_enseignement.domaine.actif)?"":" passif" }}'  value="{{ dommaine_enseignement.domaine.generic() }}" name="domaine" id="domaine"  _id_="{{ dommaine_enseignement.domaine.id }}">
+    <script>
+        setAutocomplete("#domaine", "/tssdv/CRUD/L/Domaine");
+    </script>
+    {% endblock oneToManydommaine_enseignement_domaine_active %}    
+</p>
+{% endblock oneToManydommaine_enseignement_domaine_full %}
+
+{% block oneToManydommaine_enseignement_enseignement_full %}
+<p>
+    {% block oneToManydommaine_enseignement_enseignement_label %}
+    <label class='select' for='enseignement'>
+        {{  dommaine_enseignement.enseignement ? dommaine_enseignement.enseignement.getCrudEditLink("enseignement")|raw : "enseignement"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "dommaine_enseignement", F: "enseignement", id: "{{dommaine_enseignement.id}}" }}'></i>
+    </label>
+    {% endblock oneToManydommaine_enseignement_enseignement_label %}
+    {% block oneToManydommaine_enseignement_enseignement_active %}    
+    <input class='text {{ ( dommaine_enseignement.enseignement.id ==0 or  dommaine_enseignement.enseignement.actif)?"":" passif" }}'  value="{{ dommaine_enseignement.enseignement.generic() }}" name="enseignement" id="enseignement"  _id_="{{ dommaine_enseignement.enseignement.id }}">
+    <script>
+        setAutocomplete("#enseignement", "/tssdv/CRUD/L/Enseignement");
+    </script>
+    {% endblock oneToManydommaine_enseignement_enseignement_active %}    
+</p>
+{% endblock oneToManydommaine_enseignement_enseignement_full %}
+
+{% block ordre_full %}
+    <p>
+    {% block ordre_label %}
+    <label class='text' for="ordre"> ordre <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "dommaine_enseignement", F: "ordre", id: "{{dommaine_enseignement.id}}" }}'></i></label>    
+    {% endblock ordre_label %}
+    {% block ordre_active %}
+    <input class='text' type="number"  value="{{ dommaine_enseignement.ordre }}" name="ordre" id="ordre" placeholder="0">
+
+    {% endblock ordre_active %}
+    </p>
+{% endblock ordre_full %}    
+
+{% block quotite_full %}
+    <p>
+    {% block quotite_label %}
+    <label class='text' for="quotite"> quotite <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "dommaine_enseignement", F: "quotite", id: "{{dommaine_enseignement.id}}" }}'></i></label>    
+    {% endblock quotite_label %}
+    {% block quotite_active %}
+    <input class='text' type="number"  value="{{ dommaine_enseignement.quotite }}" name="quotite" id="quotite" step="any" placeholder="0">
+
+    {% endblock quotite_active %}
+    </p>
+{% endblock quotite_full %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

@@ -1,0 +1,56 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+<div class="w3-cell-row">
+
+    <h3>Liste des situations particulières </h3>
+
+    <table class="standardList" class="w3-table-all w3-centered">
+        <thead>
+                <th>code OSE</th>
+                <th>Situation</th>
+                <th>code OSE</th>
+                <th>Personne</th>
+                <th>Réduction</th>
+                <th>début</th>
+                <th>fin</th>
+                <th>commentaire</th>
+        </thead>
+        <tbody>
+            {% for ps in psList %}
+            <tr>
+                <td>{{ ps.situation.ose }}</td>
+                <td>{{ ps.situation.nom }}</td>
+                <td>{{ ps.personne.ose }}</td>
+                <td>{{ ps.personne.getGenericWithLink()|raw }}</td>
+                <td>{{ ps.reduction }}</td>
+                <td>{{ ps.debut|date('Y/m/d') }}</td>
+                <td>{{ ps.fin|date('Y/m/d') }}</td>
+               <td>{{ ps.commentaire|markdown_to_html }}</td>
+             </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+ 
+
+</div> 
+<script>
+    $(document).ready(function () {
+        $('.standardList').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock %}

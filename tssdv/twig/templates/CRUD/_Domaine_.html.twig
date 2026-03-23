@@ -1,0 +1,229 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _Domaine_.html.twig
+    created : Wed, 30 Jul 2025 18:30:52 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "Domaine", id: "{{ Domaine.id }}" }}'></i>Domaine</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Domaine", F: "actif", id: "{{Domaine.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ Domaine.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block nom_full %}
+    <p>
+    {% block nom_label %}
+    <label class='text' for="nom"> nom <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Domaine", F: "nom", id: "{{Domaine.id}}" }}'></i></label>    
+    {% endblock nom_label %}
+    {% block nom_active %}
+    <input class='text'  type="text" value="{{ Domaine.nom }}" name="nom" id="nom" size="50" maxlength="100", placeholder="">
+
+    {% endblock nom_active %}
+    </p>
+{% endblock nom_full %}    
+
+{% block acronyme_full %}
+    <p>
+    {% block acronyme_label %}
+    <label class='text' for="acronyme"> acronyme <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Domaine", F: "acronyme", id: "{{Domaine.id}}" }}'></i></label>    
+    {% endblock acronyme_label %}
+    {% block acronyme_active %}
+    <input class='text'  type="text" value="{{ Domaine.acronyme }}" name="acronyme" id="acronyme" size="50" maxlength="100", placeholder="">
+
+    {% endblock acronyme_active %}
+    </p>
+{% endblock acronyme_full %}    
+
+    {% block manyToMany_domaine_personneList_domaine %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Domaine", id: "{{ Domaine.id }}", L: "domaine_personneList" }}'></i>domaine_personneList - {{ (Domaine.domaine_personneList)|length }} élément{{(Domaine.domaine_personneList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_domaine_personneList_domaine %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/domaine_personne/domaine/{{ Domaine.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_domaine_personneList_domaine_personne %}
+                    <th class='w3-center'>personne</th>
+                    {% endblock header_th_domaine_personneList_domaine_personne %}
+                    {% block header_th_domaine_personneList_domaine_ordre %}
+                    <th class='w3-center'>ordre</th>
+                    {% endblock header_th_domaine_personneList_domaine_ordre %}
+                    {% block header_th_domaine_personneList_domaine_quotite %}
+                    <th class='w3-center'>quotite</th>
+                    {% endblock header_th_domaine_personneList_domaine_quotite %}       
+                    {% block header_enddomaine_personneList_domaine %}
+                    {% endblock header_enddomaine_personneList_domaine %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_domaine_personneList_domaine %}
+            </thead>
+
+            <tbody>
+            {% for domaine_personne  in Domaine.domaine_personneList %}
+                {% block line_domaine_personneList_domaine %}
+                <tr name='domaine_personneList' _id_='{{ domaine_personne.id }}' class='{{ domaine_personne.actif?"":"passif " }}{{ domaine_personne.personne.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "domaine_personne", id: "{{ domaine_personne.id }}" }}'></i>
+                    {{ domaine_personne.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_domaine_personne_personne %}
+                    <th class='w3-left'>{{ domaine_personne.personne.getGeneric( true )|raw }}</th>
+                    {% endblock line_domaine_personne_personne %}
+                    {% block line_domaine_personneList_domaine_ordre %}
+                    <td class='w3-center'>{{ domaine_personne.ordre }}</td>
+                    {% endblock line_domaine_personneList_domaine_ordre %}
+                    {% block line_domaine_personneList_domaine_quotite %}
+                    <td class='w3-center'>{{ domaine_personne.quotite }}</td>
+                    {% endblock line_domaine_personneList_domaine_quotite %}
+                    {% block line_enddomaine_personneList_domaine %}
+                    {% endblock line_enddomaine_personneList_domaine %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_domaine_personneList_domaine %}
+            {% endfor %}
+            {% block footer_enddomaine_personneList_domaine %}
+            {% endblock footer_enddomaine_personneList_domaine %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_domaine_personneList_domaine %}    
+
+    {% block manyToMany_domaine_enseignementList_domaine %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Domaine", id: "{{ Domaine.id }}", L: "domaine_enseignementList" }}'></i>domaine_enseignementList - {{ (Domaine.domaine_enseignementList)|length }} élément{{(Domaine.domaine_enseignementList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_domaine_enseignementList_domaine %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/domaine_enseignement/domaine/{{ Domaine.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_domaine_enseignementList_domaine_enseignement %}
+                    <th class='w3-center'>enseignement</th>
+                    {% endblock header_th_domaine_enseignementList_domaine_enseignement %}
+                    {% block header_th_domaine_enseignementList_domaine_ordre %}
+                    <th class='w3-center'>ordre</th>
+                    {% endblock header_th_domaine_enseignementList_domaine_ordre %}
+                    {% block header_th_domaine_enseignementList_domaine_quotite %}
+                    <th class='w3-center'>quotite</th>
+                    {% endblock header_th_domaine_enseignementList_domaine_quotite %}       
+                    {% block header_enddomaine_enseignementList_domaine %}
+                    {% endblock header_enddomaine_enseignementList_domaine %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_domaine_enseignementList_domaine %}
+            </thead>
+
+            <tbody>
+            {% for domaine_enseignement  in Domaine.domaine_enseignementList %}
+                {% block line_domaine_enseignementList_domaine %}
+                <tr name='domaine_enseignementList' _id_='{{ domaine_enseignement.id }}' class='{{ domaine_enseignement.actif?"":"passif " }}{{ domaine_enseignement.enseignement.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "domaine_enseignement", id: "{{ domaine_enseignement.id }}" }}'></i>
+                    {{ domaine_enseignement.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_domaine_enseignement_enseignement %}
+                    <th class='w3-left'>{{ domaine_enseignement.enseignement.getGeneric( true )|raw }}</th>
+                    {% endblock line_domaine_enseignement_enseignement %}
+                    {% block line_domaine_enseignementList_domaine_ordre %}
+                    <td class='w3-center'>{{ domaine_enseignement.ordre }}</td>
+                    {% endblock line_domaine_enseignementList_domaine_ordre %}
+                    {% block line_domaine_enseignementList_domaine_quotite %}
+                    <td class='w3-center'>{{ domaine_enseignement.quotite }}</td>
+                    {% endblock line_domaine_enseignementList_domaine_quotite %}
+                    {% block line_enddomaine_enseignementList_domaine %}
+                    {% endblock line_enddomaine_enseignementList_domaine %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_domaine_enseignementList_domaine %}
+            {% endfor %}
+            {% block footer_enddomaine_enseignementList_domaine %}
+            {% endblock footer_enddomaine_enseignementList_domaine %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_domaine_enseignementList_domaine %}    
+
+    {% block manyToMany_domaine_responsableList_domaine %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Domaine", id: "{{ Domaine.id }}", L: "domaine_responsableList" }}'></i>domaine_responsableList - {{ (Domaine.domaine_responsableList)|length }} élément{{(Domaine.domaine_responsableList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_domaine_responsableList_domaine %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/domaine_responsable/domaine/{{ Domaine.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_domaine_responsableList_domaine_responsable %}
+                    <th class='w3-center'>responsable</th>
+                    {% endblock header_th_domaine_responsableList_domaine_responsable %}       
+                    {% block header_enddomaine_responsableList_domaine %}
+                    {% endblock header_enddomaine_responsableList_domaine %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_domaine_responsableList_domaine %}
+            </thead>
+
+            <tbody>
+            {% for domaine_responsable  in Domaine.domaine_responsableList %}
+                {% block line_domaine_responsableList_domaine %}
+                <tr name='domaine_responsableList' _id_='{{ domaine_responsable.id }}' class='{{ domaine_responsable.actif?"":"passif " }}{{ domaine_responsable.responsable.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "domaine_responsable", id: "{{ domaine_responsable.id }}" }}'></i>
+                    {{ domaine_responsable.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_domaine_responsable_responsable %}
+                    <th class='w3-left'>{{ domaine_responsable.responsable.getGeneric( true )|raw }}</th>
+                    {% endblock line_domaine_responsable_responsable %}
+                    {% block line_enddomaine_responsableList_domaine %}
+                    {% endblock line_enddomaine_responsableList_domaine %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_domaine_responsableList_domaine %}
+            {% endfor %}
+            {% block footer_enddomaine_responsableList_domaine %}
+            {% endblock footer_enddomaine_responsableList_domaine %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_domaine_responsableList_domaine %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

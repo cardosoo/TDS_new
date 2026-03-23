@@ -1,0 +1,48 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+<div class="w3-cell-row">
+
+    <h3>Liste des utilisateurs actifs</h3>
+
+    <table class="standardList" class="w3-table-all">
+        <thead>
+                <th>Personne</th>
+                <th>Laboratoire</th>
+                <th>Acronyme</th>
+                <th>Statut</th>
+        </thead>
+        <tbody>
+            {% for P in pList %}
+            <tr>
+                <td>{{ P.getGenericWithLink()|raw }}</td>
+                <td>{{ P.labo.nom }}</td>
+                <td>{{ P.labo.acronyme }}</td>
+                <td>{{ P.statut.nom }}</td>
+             </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+ 
+
+</div> 
+<script>
+    $(document).ready(function () {
+        $('.standardList').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<div class="w3-cell-row">
+
+<h3>Utilisation des services enseignant</h3>
+<details open='true'>
+    <summary>Services Enseignants</summary>
+    <table class="standardList" class="w3-table-all w3-centered">
+        <thead>
+                <th>Statut</th>
+                <th>Nombre</th>
+                <th>volume légal</th>
+                <th>volume</th>
+                <th>réduction</th>
+                <th>volume réduit</th>
+                <th>volume realisé</th>
+        </thead>
+        <tbody>
+            {% for line in services %}
+            <tr>
+                <td>{{ line.statut }}</td>
+                <td>{{ line.nb }}</td>
+                <td>{{ line.volumelegal }}</td>
+                <td>{{ line.volume }}</td>
+                <td>{{ line.reduction }}</td>
+                <td>{{ line.volumereduit }}</td>
+                <td>{{ line.realise|f2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</details>    
+
+<details open='true'>
+    <summary>Besoins en heures d'enseignement</summary>
+    <table class="standardList" class="w3-table-all w3-centered">
+        <thead>
+                <th>Type</th>
+                <th>composante</th>
+                <th>cursus</th>
+                <th>Besoins</th>
+        </thead>
+        <tbody>
+            {% for line in besoins %}
+            <tr>	
+                <td>{{ line.typeue }}</td>
+                <td>{{ line.composante }}</td>
+                <td>{{ line.cursus }}</td>
+                <td>{{ line.besions |f2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</details>    
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+</div> 
+<script>
+    $(document).ready(function () {
+        $('.standardList').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+
+{% endblock %}

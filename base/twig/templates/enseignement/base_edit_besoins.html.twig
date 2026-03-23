@@ -1,0 +1,117 @@
+{% extends "layout.html.twig" %}
+
+
+{% block section %}
+
+<style>
+input {
+    width : 5em;
+}
+
+input[type='submit']{
+    width: auto;
+}
+.w3-table {
+    width: auto;
+}
+</style>
+
+<div class="w3-card w3-round w3-white ">
+    <div class="w3-white">
+        <i class="fa fa fa-arrow-circle-right fa-fw w3-margin-right"></i>Besoins  {{ E.enseignement_besoins.besoins|f2 }} hETD
+    </div>
+    
+    <form action='/{{App.appName}}/enseignement/editBesoins/{{E.id}}' method='POST' >
+    <div class="w3-container">
+        <div class='w3-responsive' style="font-size: small">
+            <table class='w3-table w3-hoverable'>
+                <thead>
+                    <tr class='w3-light-blue' >
+                        <th></th>
+                        <th class="w3-center">CM</th>
+                        <th class="w3-center">CTD</th>
+                        <th class="w3-center">TD</th>
+                        <th class="w3-center">TP</th>
+                        <th class="w3-center">Ex</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>Nb Groupes</th>
+                        <td class="w3-center"><input type='number' name='cm' value='{{ E.cm }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='ctd' value='{{ E.ctd }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='td' value='{{ E.td }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='tp' value='{{ E.tp }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='extra' value='{{ E.extra }}' min='0' step='any'></td>
+                    </tr>
+{% block nbSeances %}
+                    <tr>
+                        <th>Nb Séances</th>
+                        <td class="w3-center"><input type='number' name='s_cm' value='{{ E.s_cm }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='s_ctd' value='{{ E.s_ctd }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='s_td' value='{{ E.s_td }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='s_tp' value='{{ E.s_tp }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='s_extra' value='{{ E.s_extra }}' min='0' step='any'></td>
+                    </tr>
+{% endblock nbSeances %}
+{% block dureeSeance %}
+                    <tr>
+                        <th>Durée Séance</th>
+                        <td class="w3-center"><input type='number' name='d_cm' value='{{ E.d_cm }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='d_ctd' value='{{ E.d_ctd }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='d_td' value='{{ E.d_td }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='d_tp' value='{{ E.d_tp }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='d_extra' value='{{ E.d_extra }}' min='0' step='any'></td>
+                    </tr>
+{% endblock dureeSeance %}
+{% block nbIntervenant %}
+                    <tr>
+                        <th>Nb Intervenant</th>
+                        <td class="w3-center"><input type='number' name='i_cm' value='{{ E.i_cm }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='i_ctd' value='{{ E.i_ctd }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='i_td' value='{{ E.i_td }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='i_tp' value='{{ E.i_tp }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='i_extra' value='{{ E.i_extra }}' min='0' step='any'></td>
+                    </tr>
+{% endblock nbIntervenant %}
+{% block nbSeancesParSemaine %}
+                    <tr>
+                        <th>Nb Séances/Sem</th>
+                        <td class="w3-center"><input type='number' name='n_cm' value='{{ E.n_cm }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='n_ctd' value='{{ E.n_ctd }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='n_td' value='{{ E.n_td }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='n_tp' value='{{ E.n_tp }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='n_extra' value='{{ E.n_extra }}' min='0' step='any'></td>
+                    </tr>
+{% endblock nbSeancesParSemaine %}
+{% block bonus %}
+                    <tr>
+                        <th>Bonus</th>
+                        <td class="w3-center"><input type='number' name='bonus' value='{{ E.bonus }}' min='0' step='any'></td>
+                    </tr>
+{% endblock bonus %}
+                </tbody>
+                <tfoot>
+{% block totaux %}
+{#
+                    <tr class='w3-light-blue'>
+                        <th>hEQTD /Groupe</th>
+                        <td class="w3-center">{{ C.cm   |f2 }}</td>
+                        <td class="w3-center">{{ C.ctd  |f2 }}</td>
+                        <td class="w3-center">{{ C.td   |f2 }}</td>
+                        <td class="w3-center">{{ C.tp   |f2 }}</td>
+                        <td class="w3-center">{{ C.extra|f2 }}</td>
+                    </tr>
+#}
+{% endblock totaux %}
+                </tfoot>
+            </table>
+        </div>
+        <br>
+    </div>
+    <input type="submit" value="Enregistrer">
+    </form>
+</div>
+<br>
+
+{% endblock section %}

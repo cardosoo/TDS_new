@@ -1,0 +1,84 @@
+ Bonjour {{ P.getGeneric }},
+
+**Version courte**
+
+Nous vous rappelons que la **phase des Vœux {{ App.currentYear }} ferme le {{ App.texte.limiteVoeux }}**.
+
+- **vœux** : faites vos vœux, c'est-à-dire les enseignements que vous souhaitez faire en {{ App.currentYear }} - {{ App.currentYear+1 }}.
+
+- **vœux blancs** : Vendredi à 12h, nous retirerons les enseignements qui se trouvent dans vos vœux et pour lesquels vous n'avez sélectionné aucun groupe. Vos vœux dans leur état actuel sont listés à la fin de ce message.
+
+- **dépassement de service** : si vos vœux dépassent trop largement votre service, nous retirerons les vœux qui nous arrangent sans vous consulter. Veillez donc à faire des vœux dans la limite de votre service.
+
+- **panier** : vérifiez le contenu de votre panier, enseignements auxquels vous aimeriez participer si vous aviez un temps infini. Cela sera utile à la foire pour la répartition.
+
+**Version plus étoffée**
+
+Nous vous rappelons que la **phase des Vœux {{ App.currentYear }} ferme le {{ App.texte.limiteVoeux }}**.
+
+Il vous reste donc quelques jours pour choisir les enseignements que vous aimeriez faire en {{ App.currentYear }} - {{ App.currentYear+1 }}.
+
+Vendredi à 12h, nous retirerons les enseignements qui se trouvent dans vos vœux et pour lesquels vous 
+n'avez sélectionné aucun groupe. Vos vœux dans leur état actuel sont listés à la fin de ce message.
+
+Si vos vœux dépassent votre service le  {{ App.texte.limiteVoeux }}, nous retirerons les vœux qui nous arrangent sans vous consulter. Veillez donc à faire des vœux dans la limite de votre service.
+
+Si certains de vos vœux sont dans des UE en surcharge (i.e. trop de demandes) et que vous n'êtes pas prioritaire (voir les [règles de priorité](https://foire.physique.u-paris.fr/foire/texte/regles)), nous vous encourageons à chercher un autre enseignement à la place. En particulier, une ancienneté entre 1 et 3 ans est prioritaire sur une ancienneté 0 qui est elle-même prioritaire sur une ancienneté supérieure ou égale à 4.
+
+Voir [cette page](https://foire.physique.u-paris.fr/foire/texte/rechercheEnseignement) pour plus d'explications sur la recherche d'enseignements sur le site.
+
+{% if  P.voeu_personne_bilan.heures<-40 %} 
+<font color="red">Le total de vos vœux dépasse de plus de 40hETD votre service.<br>
+ Nous vous invitons à supprimer certains de vos vœux et à utiliser le panier pour exprimer votre autres choix.</font>
+{% elseif P.voeu_personne_bilan.heures>40 %}
+<font color="red">Il manque plus de 40h pour compléter votre service. Peut-être n'avez vous sélectionné aucun groupe dans les enseignements où vous êtes prioritaire (et qui ont été reportés **vides** automatiquement).</font><br>
+Vous pouvez trouver un enseignement qui est actuellement en sous-effectif :
+- aller sur [la page de recherche des enseignements](https://foire.physique.u-paris.fr/foire/quoi/) ;
+- sélectionner "Uniquement les enseignements en sous-effectif"."
+{% elseif P.voeu_personne_bilan.heures<40 and P.voeu_personne_bilan.heures>-40%}
+{% endif %}
+
+
+Pour que les responsables de la foire puissent vous proposer des enseignements à votre goût au cas où vos vœux ne puissent pas être réalisés, 
+veuillez **ajouter des commentaires** aux enseignements que vous avez mis dans votre panier. 
+Le contenu actuel de votre panier est donné à la fin de ce message.
+
+Quelques rappels:
+- [Les explications](https://foire.physique.u-paris.fr/foire/texte/voeu) pour **émettre un voeu**.
+- **Il n'y a pas** de priorité premier arrivé, premier servi !
+- Le service de référence pour l'année {{ App.currentYear }} - {{ App.currentYear+1 }} est {{ App.texte.chargeReference }} hTD. 
+- Vous pouvez moduler votre service dans une fourchette de +/-40hTD. La différence avec le service de référence sera reportée
+ sur le service de l'année suivante.
+- Faites des vœux dans la limite de votre service. Dans le cas contraire, si les responsables de la foire peuvent supprimer des vœux en 
+conservant votre service au-dessus du service de référence, ils le feront sans vous prévenir.
+- Étape 3, entre le {{ App.texte.debutDiagonalisation }} et le {{App.texte.finDiagonalisation }} : 
+les responsables de la foire travailleront pour réaliser vos vœux autant que faire se peut.
+- Étape 4, le {{ App.texte.dateFoire }} : la répartition des enseignements sera terminée.
+
+Nous vous souhaitons une bonne période de vœux sur le [site de la foire](https://foire.physique.u-paris.fr/).
+
+[https://foire.physique.u-paris.fr/](https://foire.physique.u-paris.fr/)
+
+Si vous avez une question, surfez sur le site de la foire ; il y a beaucoup d'informations.<br>
+Si vous ne trouvez pas l'information, alors vous pouvez contacter [foirephy@gmail.com](mailto:foirephy@gmail.com)<br>
+
+Bien à vous,
+
+Olivier Cardoso et Raphaël Galicher.
+
+**Vœux de  {{ P.getGeneric }}**
+
+D'après les informations de la base de données {{ App.appName }}{{ App.currentYear }}, vous devez assurer une charge de 
+{{P.getCharge()}} heures d'enseignement et vos vœux correspondent à une charge de {{(P.getCharge() - P.voeu_personne_bilan.heures)|f2}} heures.
+
+{{ include('mailer/voeux.md.twig') }}
+
+Les lignes en rouge correspondent aux UE en surcharge.<br>
+Les lignes en vert  correspondent aux UE en sous effectif.<br>
+
+
+**Panier de {{ P.getGeneric }}**
+{{ include('mailer/panier.md.twig') }} 
+
+
+{% include "mailer/signature.md.twig" %}

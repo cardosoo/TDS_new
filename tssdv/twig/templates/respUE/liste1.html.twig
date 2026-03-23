@@ -1,0 +1,62 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+    {% block respUE %}
+        <h3>Liste des Enseignements dont vous êtes responsable</h3>
+
+        {% for elm in eList %}
+        <div class="w3-container w3-large w3-card w3-round w3-margin">
+            {{ include('respUE/voeuxList1.html.twig', { open: elm.aValider>0 } ) }}
+        </div>
+        {% endfor %}
+    {% endblock respUE %}
+
+    {% block divers %}
+
+    {% endblock divers %}
+
+</div> 
+
+<script>
+
+function doReloadVoeuxListe1(elm, id){
+    details = $($(elm).parents('details').get(0));
+    details.parent().load('/{{ App.appName }}/respUE/doReloadVoeuxListe1/'+id);
+}
+
+function changeEtat(elm, id){
+    idName = '#saveVoeux-'+id;
+    button = $(idName);
+    button.removeClass('w3-hide');
+}
+
+function doSaveVoeuxListe1(elm,id){
+    details = $($(elm).parents('details').get(0));
+    checked = $('#details-'+id+' input:checked').filter(':not([action="noChange"])');
+    var params = {};
+    checked.each(function(index){
+        elm=$(this);
+        vid = elm.attr('vid');
+        action = elm.attr('action');
+        params[vid]=action
+    })
+    console.log(checked.attr('vid'), checked.attr('action'));
+    console.log(params);
+
+    $.post( "/{{ App.appName }}/respUE/doSaveVoeuxListe1", params)
+    .done(function( data ) {
+        if (data == "Done"){
+          doReloadVoeuxListe1(elm,id)
+        } else {
+            console.log(data);
+        }
+    });
+}
+
+
+</script>
+
+{% endblock %}

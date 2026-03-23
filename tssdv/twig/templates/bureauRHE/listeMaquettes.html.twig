@@ -1,0 +1,50 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px;margin-bottom:80px">    
+    <h3>Liste des maquettes</h3>
+
+    <table id="tdsList" class="w3-table-all w3-centered">
+        <thead>
+            <th>Détails</th>
+            <th>Maquette</th>
+            <th>Gestionnaire</th>
+            <th>Responsable</th>
+            <th>co-Responsable</th>
+        </thead>
+        <tbody>
+        {% for M in maquetteList %}
+            <tr>
+                <td><a href='/{{App.appName}}/maquettePlus/{{M.id}}'>Détails</a></td>
+                <td><a href='/{{App.appName}}/maquette/{{M.id}}'>{{ M.nom}}</a></td>
+                <td><a href='/{{App.appName}}/personne/{{M.gestionnaire.id}}'>{{ M.gestionnaire.getGeneric() }}</a></td>
+                <td><a href='/{{App.appName}}/personne/{{M.responsable.id}}'>{{ M.responsable.getGeneric() }}</a></td>
+                <td><a href='/{{App.appName}}/personne/{{M.co_responsable.id}}'>{{ M.co_responsable.getGeneric() }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div> 
+
+<script>
+    $(document).ready(function () {
+        $('#tdsList').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'portrait'
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock %}

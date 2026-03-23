@@ -1,0 +1,30 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+    {% block gestionnaire %}
+    <h3>Gestionnaire</h3>
+    <ul>
+        <li><a href='/{{App.appName}}/gestionnaire/utilisationServices'>Utilisations des services Enseignant</a></li>
+        <li><a href='/{{App.appName}}/gestionnaire/compareEcueFromFoireToOse'>Comparaison avec des ECUE avec ce qui est dans OSE (préliminaire)</a></li>
+        <li><a href='/{{App.appName}}/OSE/comparaison'>Comparaison TS -OSE</a></li>
+        <li>Liste des <a href='/{{App.appName}}/gestionnaire/listeSituations'>situations particulières</a></li>
+        <li>Liste des <a href='/{{App.appName}}/gestionnaire/listeReferentiel'>fonctions du référentiel</a></li>
+        <li>Liste des <a href='/{{App.appName}}/gestionnaire/listeUtilisateursActifs'>utilisateurs actifs</a></li>
+        <li>Liste des <a href='/{{App.appName}}/gestionnaire/listeUtilisateursLDAP'>utilisateurs avec LDAP</a></li>
+        <li>Exportation <a href='/{{App.appName}}/gestionnaire/exportOSEUserList'>vers OSE</a></li>
+    
+    </ul>
+
+
+
+    {% endblock gestionnaire %}
+
+    {% block divers %}
+
+    {% endblock divers %}
+
+</div> 
+{% endblock %}

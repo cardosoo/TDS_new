@@ -1,0 +1,86 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _responsable_.html.twig
+    created : Fri, 02 May 2025 23:33:41 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "responsable", id: "{{ responsable.id }}" }}'></i>responsable</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "responsable", F: "actif", id: "{{responsable.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ responsable.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block oneToManyresponsable_etape_full %}
+<p>
+    {% block oneToManyresponsable_etape_label %}
+    <label class='select' for='etape'>
+        {{  responsable.etape ? responsable.etape.getCrudEditLink("etape")|raw : "etape"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "responsable", F: "etape", id: "{{responsable.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyresponsable_etape_label %}
+    {% block oneToManyresponsable_etape_active %}    
+    <input class='text {{ ( responsable.etape.id ==0 or  responsable.etape.actif)?"":" passif" }}'  value="{{ responsable.etape.generic() }}" name="etape" id="etape"  _id_="{{ responsable.etape.id }}">
+    <script>
+        setAutocomplete("#etape", "/foire/CRUD/L/Etape");
+    </script>
+    {% endblock oneToManyresponsable_etape_active %}    
+</p>
+{% endblock oneToManyresponsable_etape_full %}
+
+{% block oneToManyresponsable_personne_full %}
+<p>
+    {% block oneToManyresponsable_personne_label %}
+    <label class='select' for='personne'>
+        {{  responsable.personne ? responsable.personne.getCrudEditLink("personne")|raw : "personne"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "responsable", F: "personne", id: "{{responsable.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyresponsable_personne_label %}
+    {% block oneToManyresponsable_personne_active %}    
+    <input class='text {{ ( responsable.personne.id ==0 or  responsable.personne.actif)?"":" passif" }}'  value="{{ responsable.personne.generic() }}" name="personne" id="personne"  _id_="{{ responsable.personne.id }}">
+    <script>
+        setAutocomplete("#personne", "/foire/CRUD/L/Personne");
+    </script>
+    {% endblock oneToManyresponsable_personne_active %}    
+</p>
+{% endblock oneToManyresponsable_personne_full %}
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

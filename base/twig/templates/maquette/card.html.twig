@@ -1,0 +1,16 @@
+
+<div class='w3-bar w3-center w3-theme-l1'>Composante : <a href='/{{App.appName}}/composante/{{M.composante.id}}'>{{M.composante.getGeneric }}</div>
+<br>
+{% for D in M.diplomeList %}
+<div class="w3-bar w3-center w3-theme-l2">Diplôme : {{ D.code }} - {{ D.nom }}</div>
+    <p> </p>
+    {% for E in D.etapeList%}
+    <div class="w3-card w3-round w3-white">
+        <div class="w3-bar w3-center w3-theme-l3">Étape : {{ E.code }} - {{ E.nom }}</div>
+        {% for S in E.semestreList %}
+            <div class="w3-bar w3-center w3-theme-l4">Semestre : <a href="#{{ S.code }} - {{ S.nom }}">{{ S.code }} - {{ S.nom }}</a></div>
+        {% endfor %}
+    </div>
+    <p></p>
+    {% endfor %}
+{% endfor %}

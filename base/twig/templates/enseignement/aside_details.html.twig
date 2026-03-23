@@ -1,0 +1,17 @@
+{% set whichDetails = E.whichDetails() %}
+<div style='all: revert;'>
+    <div class='w3-container w3-card'>
+        <h3>Détails pour l'enseignement : {{ E.code}} - {{ E.nom }}<h3>
+        <ul>
+        {#
+        {% if whichDetails['syllabus'] %}
+            <li>Edition du <a href='/{{App.appName}}/enseignement/editSyllabus/{{E.id}}'>Syllabus</a></li>
+        {% endif %}
+        #}
+        {% if whichDetails['besoins'] %}
+            <li>Edition des <a target='enseignement_details' href='/{{App.appName}}/enseignement/editBesoins/{{E.id}}'>Besoins</a></li>
+        {% endif %}
+        </ul>
+
+    </div>
+</div>

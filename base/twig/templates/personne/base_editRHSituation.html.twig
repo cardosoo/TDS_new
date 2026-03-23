@@ -1,0 +1,43 @@
+<div class='w3-row' >
+    <input type='hidden' name='situation[{{PS.id}}][deleted]' value='no'>
+    <details id='details_{{PS.id}}' >
+        <summary class='w3-light-green'><span>{{ PS.situation.nom }}</span>
+        </summary>
+        <div class='w3-card'>
+            <div class='w3-row'>
+                <div class='w3-twothird'>
+                    <select name="situation[{{PS.id}}][situation]" class="w3-select">
+                        <option value='0'>Situation ?</option>
+                        {% for s in tab.situationList %}
+                        <option value='{{ s.id }}' {{ s.id==PS.situation.id?"selected":"" }}>
+                            {{ s.nom }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class='w3-third'>
+                    <span  id ='siutation_del_{{PS.id}}' onclick="delSituation(event, {{PS.id}})" class='w3-padding-small w3-tiny w3-button w3-round-large w3-red w3-right'>Supprimer</span>
+                </div>
+            </div>    
+            <div class='w3-row'>
+                <div><span class='sp12'>début :</span> <input name= 'situation[{{PS.id}}][debut]' value='{{PS.debut}}' type='date' style='width: 10em;'></div>
+                <div><span class='sp12'>fin :</span> <input name= 'situation[{{PS.id}}][fin]'value='{{PS.fin}}' type='date' style='width: 10em;'></div>
+                <div><span class='sp12'>réduction :</span> <input name= 'situation[{{PS.id}}][reduction]' value='{{PS.reduction}}' type='number' style='width: 4em;'/> hETD</div>
+            </div>
+            <div class='w3-row' >
+                <div id='situation_commentaire_{{PS.id}}' md=`{{PS.commentaire}}`>{{PS.commentaire|markdown_to_html}}</div>
+                <script>
+                    var situation_commentaire_{{PS.id}} = document.querySelector('#situation_commentaire_{{PS.id}}');
+                    if ( '{{PS.id}}'.substring(3) != 'to_be_replaced'){
+                        situation_editor['{{PS.id}}'] = new Editor({
+                            el: situation_commentaire_{{PS.id}},
+                            initialEditType: 'wysiwyg',
+                            usageStatistics: false,
+                            initialValue: situation_commentaire_{{PS.id}}.md
+                        });
+                    }
+                </script>
+            </div>
+        </div>
+    </details>
+</div>

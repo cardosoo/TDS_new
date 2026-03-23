@@ -1,0 +1,22 @@
+{% extends "enseignement/base_edit_besoins.html.twig" %}
+
+{% block nbSeances %}
+{% endblock nbSeances %}
+
+
+{% block nbSeancesParSemaine %}
+{% endblock nbSeancesParSemaine %}
+
+{% block dureeSeance %}
+                    <tr>
+                        <th>Heures / Groupe</th>
+                        <td class="w3-center"><input type='number' name='d_cm' value='{{ E.d_cm }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='d_ctd' value='{{ E.d_ctd }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='d_td' value='{{ E.d_td }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='d_tp' value='{{ E.d_tp }}' min='0' step='any'></td>
+                        <td class="w3-center"><input type='number' name='d_extra' value='{{ E.d_extra }}' min='0' step='any'></td>
+{% endblock dureeSeance %}
+
+
+{% block totaux %}
+{% endblock totaux %}

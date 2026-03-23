@@ -1,0 +1,21 @@
+role: id,actif [boolean DEFAULT TRUE],nom [varchar(100) DEFAULT ''],auth [text DEFAULT '']
+actas: id,actif [boolean DEFAULT TRUE],#personne->personne>id,#role->role>id
+foncref: id,actif [boolean DEFAULT TRUE],intitule [text DEFAULT ''],#referentiel->referentiel>id
+referentiel: id,actif [boolean DEFAULT TRUE],code [varchar(100) DEFAULT ''],description [text DEFAULT ''],calcul [text DEFAULT ''],observations [text DEFAULT ''],#catref->catref>id
+catref: id,actif [boolean DEFAULT TRUE],description [text DEFAULT ''],#cat1ref->cat1ref>id
+cat1ref: id,actif [boolean DEFAULT TRUE],description [varchar(100) DEFAULT '']
+
+labo: id,actif [boolean DEFAULT TRUE],nom [varchar(100) DEFAULT ''],acronyme [varchar(100) DEFAULT ''],url [varchar(100) DEFAULT '']
+statut: id,actif [boolean DEFAULT TRUE],nom [varchar(100) DEFAULT ''],obligation [integer DEFAULT 192]
+personne_foncref: id,actif [boolean DEFAULT TRUE],#personne->personne>id,#foncref->foncref>id,commentaire [text DEFAULT ''],volume [real DEFAULT 0]
+personne_situation: id,actif [boolean DEFAULT TRUE],#personne->personne>id,#situation->situation>id,,,reduction [integer DEFAULT 0],commentaire [text DEFAULT '']
+
+enseignement: id,actif [boolean DEFAULT TRUE],nuac [varchar(100) DEFAULT ''],code [varchar(100) DEFAULT ''],variante [varchar(100) DEFAULT ''],nom [varchar(100) DEFAULT ''],intitule [varchar(100) DEFAULT ''],attribuable [boolean DEFAULT FALSE],cm [real DEFAULT 0],td [real DEFAULT 0],ctd [real DEFAULT 0],tp [real DEFAULT 0],extra [real DEFAULT 0],s_cm [real DEFAULT 1],s_td [real DEFAULT 1],s_ctd [real DEFAULT 1],s_tp [real DEFAULT 1],s_extra [real DEFAULT 1],i_cm [real DEFAULT 1],i_td [real DEFAULT 1],i_ctd [real DEFAULT 1],i_tp [real DEFAULT 1],i_extra [real DEFAULT 1],d_cm [real DEFAULT 0],d_td [real DEFAULT 0],d_ctd [real DEFAULT 0],d_tp [real DEFAULT 0],d_extra [real DEFAULT 0],n_cm [real DEFAULT 1],n_td [real DEFAULT 1],n_ctd [real DEFAULT 1],n_tp [real DEFAULT 1],n_extra [real DEFAULT 1],m_cm [real DEFAULT 0],m_td [real DEFAULT 0],m_ctd [real DEFAULT 0],m_tp [real DEFAULT 0],m_extra [real DEFAULT 0],bonus [real DEFAULT 0],syllabus [text DEFAULT ''],url [text DEFAULT ''],#typeue->typeue>id,#payeur->payeur>id
+voeu: id,actif [boolean DEFAULT TRUE],#personne->personne>id,#enseignement->enseignement>id,cm [real DEFAULT 0],ctd [real DEFAULT 0],td [real DEFAULT 0],tp [real DEFAULT 0],bonus [real DEFAULT 0],extra [real DEFAULT 0],correspondant [boolean DEFAULT FALSE],anciennete [integer DEFAULT 0]
+personne: id,actif [boolean DEFAULT TRUE],uid [varchar(100) DEFAULT ''],ose [varchar(100) DEFAULT ''],nom [varchar(100) DEFAULT ''],prenom [varchar(100) DEFAULT ''],adresse [text DEFAULT ''],tel1 [varchar(100) DEFAULT ''],tel2 [varchar(100) DEFAULT ''],email [varchar(100) DEFAULT ''],info [text DEFAULT ''],#statut->statut>id,#situation->situation>id,#labo->labo>id
+situation: id,actif [boolean DEFAULT TRUE],nom [varchar(100) DEFAULT ''],ose [varchar(100) DEFAULT ''],reduction [integer DEFAULT 0],public [boolean DEFAULT FALSE],reduction_legale [varchar(100) DEFAULT '0h'],ufr [boolean DEFAULT FALSE]
+
+heritage: id,actif [boolean DEFAULT TRUE],#parent->enseignement>id,#enfant->enseignement>id
+panier: id,actif [boolean DEFAULT TRUE],#personne->personne>id,#enseignement->enseignement>id,cm [boolean DEFAULT FALSE],ctd [boolean DEFAULT FALSE],td [boolean DEFAULT FALSE],tp [boolean DEFAULT FALSE],commentaire [text DEFAULT '']
+typeue: id,actif [boolean DEFAULT TRUE],nom [varchar(100) DEFAULT '']
+payeur: id,actif [boolean DEFAULT TRUE],nom [varchar(100) DEFAULT '']

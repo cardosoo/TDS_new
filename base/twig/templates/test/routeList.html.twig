@@ -1,0 +1,48 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+<div class="w3-cell-row">
+
+    <h3>Liste des fonctions du référentiel </h3>
+
+    <table class="standardList" class="w3-table-all w3-centered">
+        <thead>
+                <th>method</th>
+                <th>route</th>
+                <th>target</th>
+                <th>name</th>
+        </thead>
+        <tbody>
+            {% for route in routeList %}
+            <tr>
+                <td>{{ route[0] }}</td>
+                <td>{{ route[1] }}</td>
+                <td>{{ route[2] }}</td>
+                <td>{{ route[3] }}</td>
+             </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+ 
+
+</div> 
+<script>
+    $(document).ready(function () {
+        $('.standardList').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<title>TinyMCE</title>
+		<link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.css" crossorigin>
+		<script src="/foire/assets/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+	</head>
+	<body>
+
+		<textarea id='test3'>C'est mon test...</textarea>
+
+		<script>
+		tinymce.init({
+            license_key: 'gpl',
+            selector: 'textarea#test3'
+		});
+		</script>
+
+	</body>
+</html>

@@ -1,0 +1,14 @@
+{% extends "layout.html.twig" %}
+{% block aside %}{% endblock %}
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">
+    <div class="w3-card">
+            {% include "recherche/personne/form.html.twig" %}
+    </div>
+    {% if not (who is null) %}
+    <div class="w3-card">
+        {% include "recherche/personne/results.html.twig" %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

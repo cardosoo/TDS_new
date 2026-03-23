@@ -1,0 +1,62 @@
+{% extends "layout.html.twig" %}
+
+
+{% block section %}
+
+<div class="w3-card-4 w3-white w3-margin">
+    <div class="w3-container w3-light-grey  w3-center">
+        <b>Importation des fiches de validation des enseignements Vacataires</b>
+    </div>
+    {% if data is not null %}
+        <div class="w3-card w3-pale-yellow">
+            <header class="w3-yellow">
+                <h4>Bilan de l'importation</h4>
+        </header>
+        {% if added >0 %}
+            {{ added }} fiches crées
+        {% endif %}
+    {% endif %}
+
+    <div class='w3-card w3-pale-blue'>
+        <header class="w3-blue">
+            <h4>Aide : fonctionnement de l'importation des fiches de validation des enseignements Vacataires</h4>
+        </header>
+    {% apply markdown_to_html %}
+
+    - Cette opération peut être réalisée n'importe quand.  
+    - Elle permet uniquement d'ajouter de nouvelles fiches. 
+    - Elle ne permet pas de créer de nouvelles fiches.
+    - Il faut une ligne par enseignement réalisé, les champs sont séparés par des tabulations.
+    - Il peut y avoir des colonnes supplémentaires par rapport au modèle proposé ci-dessous
+    - les lignes qui commencent par inDB sont ignorées (ligne des noms de colonne)
+    - Les données pour les fiches vacations issues de la base de données (dans un format qui convient ici) peut être importé dans un tableur en utilisante la fonction
+« liste des enseignements réalisés par [vacataires](/{{App.appName}}/vacation/listeInDB) » du menu Admin.
+    - Les colonnes doivent être organisées de la façon suivante (on peut ajouter des colonnes supplémentaires qui seront ignorées):
+
+
+
+| inDB  |Code UE | NOM  |PRENOM | uid Validateur  | hCM  | hCMTD | hTD | hTP | Gestionnaire Scol |
+|-------|--------|------|-------|-----------------|------|-------|-----|-----|-------------------|
+|in|PH03Y010|Petit|Nicolas|ocardoso|26|0|12|0|Clara Warnier|
+| |CP15E300|Doe|John|slerouge|0|24|0|0|Christophe Grémare|
+
+
+
+    {% endapply %}
+    </div>
+
+    <form action="./importFromText" method='POST'>
+    <textarea name='data' cols='200' rows='20' placeholder="inDB	Code UE	NOM 	PRENOM	uid Validateur	hCM	hCMTD	hTD	hTP	Gestionnaire Scol
+in	PH03Y010	Petit	Nicolas	ocardoso	16	0	12	0	Clara Warnier
+	CP15E300	Doe	John	slerouge	0	24	0	0	Christophe Grémare
+">{{data|join("\n")|raw}}</textarea>
+
+    <div class="w3-container w3-light-grey  w3-center">
+        <input type="submit" value="Importer les nouvelles fiches de validation des vacations">
+    </div>
+    </form>
+</div>
+
+
+
+{% endblock %}

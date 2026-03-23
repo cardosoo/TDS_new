@@ -1,0 +1,9 @@
+{% extends "CRUD/_Maquette_.html.twig" %}
+
+
+{% block actif_full %}
+    <p style='text-align: center;'>
+        <a href='/{{ App.appName }}/admin/maquette/{{ Maquette.id }}' >Edition de la maquette</a>
+    </p>
+    {{ parent() }}
+{% endblock actif_full %}

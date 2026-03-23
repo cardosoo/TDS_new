@@ -1,0 +1,120 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _Diplome_.html.twig
+    created : Wed, 30 Jul 2025 18:30:52 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "Diplome", id: "{{ Diplome.id }}" }}'></i>Diplome</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Diplome", F: "actif", id: "{{Diplome.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ Diplome.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block ordre_full %}
+    <p>
+    {% block ordre_label %}
+    <label class='text' for="ordre"> ordre <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Diplome", F: "ordre", id: "{{Diplome.id}}" }}'></i></label>    
+    {% endblock ordre_label %}
+    {% block ordre_active %}
+    <input class='text' type="number"  value="{{ Diplome.ordre }}" name="ordre" id="ordre" placeholder="0">
+
+    {% endblock ordre_active %}
+    </p>
+{% endblock ordre_full %}    
+
+{% block code_full %}
+    <p>
+    {% block code_label %}
+    <label class='text' for="code"> code <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Diplome", F: "code", id: "{{Diplome.id}}" }}'></i></label>    
+    {% endblock code_label %}
+    {% block code_active %}
+    <input class='text'  type="text" value="{{ Diplome.code }}" name="code" id="code" size="50" maxlength="100", placeholder="">
+
+    {% endblock code_active %}
+    </p>
+{% endblock code_full %}    
+
+{% block nom_full %}
+    <p>
+    {% block nom_label %}
+    <label class='text' for="nom"> nom <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Diplome", F: "nom", id: "{{Diplome.id}}" }}'></i></label>    
+    {% endblock nom_label %}
+    {% block nom_active %}
+    <input class='text'  type="text" value="{{ Diplome.nom }}" name="nom" id="nom" size="50" maxlength="100", placeholder="">
+
+    {% endblock nom_active %}
+    </p>
+{% endblock nom_full %}    
+
+{% block oneToManyDiplome_maquette_full %}
+<p>
+    {% block oneToManyDiplome_maquette_label %}
+    <label class='select' for='maquette'>
+        {{  Diplome.maquette ? Diplome.maquette.getCrudEditLink("maquette")|raw : "maquette"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Diplome", F: "maquette", id: "{{Diplome.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyDiplome_maquette_label %}
+    {% block oneToManyDiplome_maquette_active %}    
+    <input class='text {{ ( Diplome.maquette.id ==0 or  Diplome.maquette.actif)?"":" passif" }}'  value="{{ Diplome.maquette.generic() }}" name="maquette" id="maquette"  _id_="{{ Diplome.maquette.id }}">
+    <script>
+        setAutocomplete("#maquette", "/tssdv/CRUD/L/Maquette");
+    </script>
+    {% endblock oneToManyDiplome_maquette_active %}    
+</p>
+{% endblock oneToManyDiplome_maquette_full %}
+
+    {% block manyToOne_etapeList_etapeList %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Diplome", id: "{{ Diplome.id }}", L: "etapeList" }}'></i>etapeList - {{ (Diplome.etapeList)|length }} élément{{(Diplome.etapeList)|length >1?'s':''}}</legend>
+
+                <ul>
+                {% for L in Diplome.etapeList %}   {% block manyToOne_Diplome_diplome %}
+                    <li class='{{ L.actif?"":"passif" }}'>
+                        {{ L.getGeneric(true)|raw }}
+                    </li>
+                    {% endblock manyToOne_Diplome_diplome %}
+                {% endfor %}
+                </ul>
+    </fieldset>
+    {% endblock manyToOne_etapeList_etapeList %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

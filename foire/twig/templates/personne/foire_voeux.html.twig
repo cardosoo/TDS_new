@@ -1,0 +1,29 @@
+{% extends "personne/base_voeux.html.twig" %}
+
+{% block anciennete_titre %}
+                    <th class="w3-center" title="Ancienneté dans cet enseignement ou dans un enseignement lié">Anc</th> 
+{% endblock anciennete_titre %}
+
+
+{% block anciennete_voeu %}
+                    <td class="w3-center w3-text-green {{v.anciennete>3?'w3-text-red'}} {{v.anciennete<1?'w3-text-black'}}" >{{ v.anciennete|f2 }}</td>
+{% endblock anciennete_voeu %}
+
+
+{% block anciennete_bilan %}
+                    <td {{ not compact?'colspan="9"':''}} style='text-align: right;'> écart à la charge&nbsp;:</td>
+{% endblock anciennete_bilan %}
+
+
+{% block ligne_bilanPlus %}
+    {% set hEnseignement = personne.getCharge() - personne.voeu_personne_bilan.heures %}
+    
+    {% if false and (hEnseignement<64) and  (personne.statut.nom in ['PROF', 'MCF']) %}
+        <div class='w3-panel w3-red w3-center'>
+            <h2>Attention ! Votre service doit être de 64hETD d'enseignement minimum.</h2>
+            <h4>Votre service d'enseignement actuel est de {{hEnseignement}} hETD</h4>
+            <div>Cela pourrait bloquer la délivrance de primes...</div>
+        </div>
+    {% endif %}
+
+{% endblock ligne_bilanPlus %}

@@ -1,0 +1,74 @@
+{% if visuPanier %}
+<br>
+<div class="w3-card w3-round">
+    <div class="w3-white">
+        <i class="fa fa fa-arrow-circle-right fa-fw w3-margin-right"></i>Votre panier
+    </div>
+
+    
+    <div id="ListePanier" class="w3-show w3-container">
+        {% for p in personne.panierList %}
+        {% set bilan = p.enseignement.voeu_enseignement_bilan.heures %}
+        {% set color1 = (bilan<0)?"w3-red":((bilan>0)?"w3-green":"")%}
+            <div class='w3-container'>
+                <div class='w3-col' style='width: 1.5em;'> 
+                    {% if (App.phaseList[App.phase].withAjouterVoeux)  %}
+                    {% set VBL = p.panierBilan %}
+                    {% if VBL is null %}
+                        {% set color, title = 'black', ([ 'mettre ', p.enseignement.code, ' dans les voeux']|join) %}
+                    {% elseif VBL >0 %}
+                        {% set color, title = 'green', ([ 'modifier les voeux pour ', p.enseignement.code, '']|join) %}
+                    {% else %}
+                        {% set color, title = 'orange', ([ 'mettre un volume pour ', p.enseignement.code, '']|join) %}
+                    {% endif %}
+                    <a href='/{{App.appName}}/enseignement/voeu/{{p.enseignement.id}}' class="fas fa-magic w3-{{ color }}" title='{{ title }}'></a>
+                    {% endif %}
+                </div>
+
+
+                <div id="panier-{{ p.id }}" class="w3-rest {{color1}}"><a href='/{{ App.appName}}/enseignement/{{ p.enseignement.id }}'>{{bilan}} - {{ p.enseignement.code }}</a> - {{ p.enseignement.nom }}</div>
+                <div id="panier-tooltip-{{ p.id }}" style="display: none;" class="w3-container">
+                    <div class="w3-card-2 w3-padding">
+                       {{ p.enseignement.code }} - {{ p.enseignement.nom }}                    
+                    </div>
+                    <div class="w3-card-2 w3-padding ">
+                        {% if  p.cm %}
+                        <div>Cours Magistral</div>
+                        {% endif %}
+                        {% if  p.ctd %}
+                        <div>Cours-Travaux Dirigés</div>
+                        {% endif %}
+                        {% if  p.td %}
+                        <div>Travaux Dirigés</div> 
+                        {% endif %}
+                        {% if  p.tp %}
+                        <div>Travaux Pratiques</div>
+                        {% endif %}
+                    </div>
+                    <div  class="w3-card-2  w3-padding">{{ p.commentaire?p.commentaire|markdown_to_html:"" }}</div>
+                </div>
+            </div>
+            <script>            
+                $(document).ready(function() {
+                    if (window.matchMedia("(max-width: 600px)").matches){
+                        var pos = 'top';
+                    } else {
+                        var pos = 'right';
+                    }
+                    Tipped.create('#panier-{{ p.id }}', {
+                        inline: 'panier-tooltip-{{ p.id }}',
+                        skin: 'lightyellow',
+                        radius: '10px',
+                        padding: '1px',
+                        position: pos,
+                        size: 'medium',
+                        maxWidth: 400
+                    });
+                });
+            </script>      
+        {% endfor %}
+    </div>
+    <br>
+</div>
+<br>
+{% endif %}

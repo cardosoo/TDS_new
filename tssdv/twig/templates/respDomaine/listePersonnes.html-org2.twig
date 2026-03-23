@@ -1,0 +1,66 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+    <div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+        <h3>Liste des Enseignants rattachés au domaine {{ D.getGeneric() }}</h3>
+
+        <table id='list'>
+            <thead>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Charge dans le domaine</th>
+                <th>TS dans le domaine</th>
+                <th>Écart à la charge</th>
+                <th>Actif</th>
+            </thead>
+            <tbody>
+                {% for DP in D.domaine_personneList %}
+                    {% set P = DP.personne %}
+                    {% set CR = P.getChargeRepartition() %}
+                    {% set charge = CR.charge - CR.serviceReferentiel %}
+
+                    {% set s = 0%}
+                    {% set quot = 0 %}
+                    {% for DP in P.domaine_personneList %}
+                        {% set s = s + DP.quotite %}
+                        {% if DP.domaine.id == D.id %}
+                            {% set quot = DP.quotite %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% set Q = (charge * quot / s ) %}
+                    <tr {{ P.actif?"":"class='passif';" }}>
+                        <td><a href='/{{App.appName}}/personne/{{P.id}}'>{{ P.prenom }}</a></td>
+                        <td><a href='/{{App.appName}}/personne/{{P.id}}'>{{ P.nom }}</a></td>
+                        <td class='w3-center'>{{ Q|f2 }}</td>
+                        <td class='w3-center'>{{ CR.serviceParDomaine[D.id ]|f2}}</td>
+                        <td class='w3-center'>{{ CR.bilan|f2 }}</td>
+                        <td class='w3-center'>{{ P.actif?"":"inactif" }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div> 
+
+    <script>
+        $(document).ready(function () {
+            $('#list').DataTable({
+                // order: [[0, "asc"]],
+                dom: 'Bfrtip',
+                paging: false,
+                buttons: [
+                    'copy',
+                    'excel',
+                    'csv',
+                    {
+                        extend: 'pdf',
+                        orientation: 'landscape'
+                    }
+                ]
+            });
+        });
+    </script>
+
+{% endblock %}

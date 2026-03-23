@@ -1,0 +1,170 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+
+<div class="w3-cell-row">
+
+    <h3>Vérification des ECUEs de la foire avec les infos d'OSE</h3>
+
+    <details>
+        <summary>Enseignements de la foire - non trouvés dans OSE  ({{ HOL|length }} elm)</summary>
+        <table class="standardList" class="w3-table-all w3-centered">
+            <thead>
+                    <th>ECUE</th>
+                    <th>Foire</th>
+                    <th>Période</th>
+                    <th>Code</th>
+                    <th>Etape</th>
+            </thead>
+            <tbody>
+                {% for HO in HOL %}
+                <tr>
+                    <td>{{ HO.enseignement_structure.ecue | split('|') | join('<br>')|raw}}</td>
+                    <td>{{ HO.getGenericWithLink|raw }}</td>
+                    <td>{{ HO.enseignement_structure.periode }}</td>
+                    <td>{{ HO.enseignement_structure.code }}</td>
+                    <td>{{ HO.enseignement_structure.etape }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </details>
+
+    <details>
+        <summary>Enseignements de la foire - les détails ne collent pas  ({{ BDL|length }} elm)</summary>
+        <table class="standardList" class="w3-table-all w3-centered">
+            <thead>
+                    <th>ECUE</th>
+                    <th>Intitulé</th>
+                    <th>détails Foire</th>
+                    <th>détails OSE</th>
+                    <th>étape Foire</th>
+            </thead>
+            <tbody>
+                {% for BD in BDL %}
+                {% set E = BD.enseignement %}
+                <tr>
+                    <td>{{ E.enseignement_structure.ecue | split('|') | join('<br>')|raw}}</td>
+                    <td>{{ E.getGenericWithLink|raw }}</td>
+                    <td> {# détails Foire #}
+                        {{ BD.detailsFoire.cm!=0?''~BD.detailsFoire.cm~'h CM ':""  }}
+                        {{ BD.detailsFoire.td!=0?''~BD.detailsFoire.td~'h TD ':""  }}
+                        {{ BD.detailsFoire.tp!=0?''~BD.detailsFoire.tp~'h TP ':""  }}
+                        {{ BD.detailsFoire.ctd!=0?''~BD.detailsFoire.ctd~'h CMTD ':""  }}
+                        {{ BD.detailsFoire.extra!=0?''~BD.detailsFoire.extra~'h Extra ':""  }}
+                        {{ BD.detailsFoire.bonus!=0?''~BD.detailsFoire.bonus~'h Bonus ':""  }}
+                    </td>
+                    <td> {# détails OSE #}
+                        {% for k in BD.rep|keys %}
+                        {% set dOSE = BD.rep[k].dOSE %}
+                        {{ loop.first?"":"<br>"}}
+                        {{ k }} - 
+                        {{ dOSE.cm!=0?''~dOSE.cm~'h CM ':""  }}
+                        {{ dOSE.td!=0?''~dOSE.td~'h TD ':""  }}
+                        {{ dOSE.tp!=0?''~dOSE.tp~'h TP ':""  }}
+                        {{ dOSE.ctd!=0?''~dOSE.ctd~'h CMTD ':""  }}
+                        {{ dOSE.extra!=0?''~dOSE.extra~'h Extra ':""  }}
+                        {{ dOSE.bonus!=0?''~dOSE.bonus~'h Bonus ':""  }}
+                        <br>                            
+                        {% endfor %}
+                    </td>
+                    <td>{{ E.enseignement_structure.etape }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </details>
+
+    <details>
+        <summary>Enseignements de la foire - avec des ECUE Multiples  ({{ MEL|length }} elm)</summary>
+        <table class="standardList" class="w3-table-all w3-centered">
+            <thead>
+                <th>ECUE</th>
+                <th>Intitulé</th>
+                <th>Détails Foire</th>
+                <th>Détails OSE</th>
+                <th>Etape Foire</th>
+            </thead>
+            <tbody>
+                {% for ML in MEL %}
+                {% set E = ML.enseignement %}
+                <tr> {# détails Foire #}
+                    <td>{{ E.enseignement_structure.ecue | split('|') | join('<br>')|raw}}</td>
+                    <td>{{ E.getGenericWithLink|raw }}</td>
+                    <td>
+                        {{ ML.detailsFoire.cm!=0?''~ML.detailsFoire.cm~'h CM ':""  }}
+                        {{ ML.detailsFoire.td!=0?''~ML.detailsFoire.td~'h TD ':""  }}
+                        {{ ML.detailsFoire.tp!=0?''~ML.detailsFoire.tp~'h TP ':""  }}
+                        {{ ML.detailsFoire.ctd!=0?''~ML.detailsFoire.ctd~'h CMTD ':""  }}
+                        {{ ML.detailsFoire.extra!=0?''~ML.detailsFoire.extra~'h Extra ':""  }}
+                        {{ ML.detailsFoire.bonus!=0?''~ML.detailsFoire.bonus~'h Bonus ':""  }}
+                    </td>
+                    <td> {# détails OSE #}
+                        {% for k in ML.rep|keys %}
+                        {% set dOSE = ML.rep[k].dOSE %}
+                        {{ loop.first?"":"<br>"}}
+                        {{ k }} - 
+                        {{ dOSE.cm!=0?''~dOSE.cm~'h CM ':""  }}
+                        {{ dOSE.td!=0?''~dOSE.td~'h TD ':""  }}
+                        {{ dOSE.tp!=0?''~dOSE.tp~'h TP ':""  }}
+                        {{ dOSE.ctd!=0?''~dOSE.ctd~'h CMTD ':""  }}
+                        {{ dOSE.extra!=0?''~dOSE.extra~'h Extra ':""  }}
+                        {{ dOSE.bonus!=0?''~dOSE.bonus~'h Bonus ':""  }}                           
+                        {% endfor %}
+                    </td>
+                    <td>{{ E.enseignement_structure.etape }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </details>
+
+    <details>
+        <summary>Enseignements de la foire qui correspondent dans OSE ({{ OKL|length}} elm)</summary>
+        <table class="standardList" class="w3-table-all w3-centered">
+            <thead>
+                <th>ECUE</th>
+                <th>Intitulé</th>
+            </thead>
+            <tbody>
+                {% for OK in OKL %}
+                <tr>
+                    <td>{{ OK.ecue }}</td>
+                    <td>{{ OK.getGenericWithLink|raw }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </details>
+
+    {{ dump({
+        'OKL': OKL|length,
+        'Hors OSE': HOL|length,
+        'Bad Details': BDL|length,
+        'Bad Period': BPL|length,
+        'Multiple ECUE': MEL|length,
+        }) 
+    }}
+
+</div> 
+<script>
+    $(document).ready(function () {
+        $('.standardList').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock %}

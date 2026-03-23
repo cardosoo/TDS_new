@@ -1,0 +1,14 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Bienvenue sur cette application de TDS{% endblock %}
+
+{% block section %}
+<div style='min-height: 2em;'></div>
+<h1>Bienvenue sur cette application  de TDS</h1>
+
+
+<p>Un truc $-b \pm \sqrt{b^2-4ac} \over 2a$</p>
+
+{{ dump(App.cmpl.withMathjax) }}
+
+{% endblock %} 

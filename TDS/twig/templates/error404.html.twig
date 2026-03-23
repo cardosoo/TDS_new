@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang='fr'>
+<head>
+<meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1.0">
+<meta name='Author' content='Olivier Cardoso'>
+<meta charset='ISO-8859-15'>
+<meta name='copyright' content='&copy; 2000-2019 Olivier Cardoso.'>
+<meta name='keywords' content='gestion de base de données relationnelles BD2'>
+<meta name='date' content='1994-11-06T08:49:37+00:00'>
+<title>Foire aux enseignements</title>
+<link rel="icon" href="/favicon.ico" />
+<style>
+body {
+	font: normal 13px/20px Arial, Helvetica, sans-serif;
+	color: #969696;
+	margin: 0;
+	background-color: #fff;
+}
+.error-center {
+	width: 800px;
+	margin-left: -400px;
+	position: absolute;
+	top: 30%;
+	left: 50%;
+	text-align: center;
+}
+.error-404 {
+	margin: 0;
+	font-size: 200px;
+	line-height: 200px;
+	font-weight: bold;
+}
+.error-404 span {
+	text-shadow: 1px 5px 7px rgba(150, 150, 150, 1);
+}
+h1, h2 {
+	color: #616161;
+}
+h2 {
+	font-size: 24px;
+	line-height: 24px;
+}
+</style>
+
+</head>
+
+<body id="top">
+
+<div class="error-center">
+    <h2>{{ App.longAppName }}</h2>
+    <h1 class="error-404">
+        <span>404</span>
+    </h1>
+
+    <h2 class="title">Page non trouvée</h2>
+    <p class="message">
+        La page que vous avez demandée n'existe pas. Aller vers l'<a href="/">Accueil</a>
+		<br>
+		{{ App.webmaster|raw }}
+    </p>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,23 @@
+<table class='display'>
+    <thead>
+        <tr>
+            <th>-</th>
+            <th>Code</th>
+            <th>Nom</th>
+            <th>Cursus</th>
+            <th>Période</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for ecue in ecueList %}
+        <tr>
+            <td style='text-align: center'><a href="#" onclick='selectECUE("{{ecue.getCode() }}")'>Choisir</td>
+            <td style='text-align: center'>{{ecue.getCode() }}</td>
+            <td>{{ ecue.getNom() }}</td>
+            <td>{{ ecue.getCursusName() }}</td>
+            <td style='text-align: center'>{{ ecue.getPeriodeName() }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

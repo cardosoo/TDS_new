@@ -1,0 +1,108 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<table class="standardList display order-column no-wrap">
+    <thead>
+            <th>code</th>
+            <th>nuac</th>
+            <th>Intitulé</th>
+            <th>Composante</th>
+            <th>Cursus</th>
+            <th>Période</th>
+            <th>Étape</th>
+            <th>Maquette</th>
+            <th>CM-gr</th>
+            <th>CM-se</th>
+            <th>CM-du</th>
+            <th>CTD-gr</th>
+            <th>CTD-se</th>
+            <th>CTD-du</th>
+            <th>TD-gr</th>
+            <th>TD-se</th>
+            <th>TD-du</th>
+            <th>TP-gr</th>
+            <th>TP-se</th>
+            <th>TP-du</th>
+            <th>Enseignants</th>
+    </thead>
+    <tbody>
+        {% for E in L %}
+        {% set ES = E.enseignement_structure %}
+        <tr>
+            <td>{{ ES.code|replace({'|': "<br> "})|raw }}</td>
+{#            <td>
+                <ul>
+                {% for code in ES.code|split('|') %}
+                    {% set co = code|split('_') %}
+                    <li>{{ co[1] }} - {{ co[0] }}</li>
+                {% endfor %}
+                </ul>
+            </td>
+#}
+            <td>{{ E.nuac }}</td>
+            <td><a href='/{{App.appName}}/enseignement/{{E.id}}'>{{ E.intitule }}</a></td>
+            <td>{{ ES.composante }}</td>
+            <td>{{ ES.cursus }}</td>
+            <td>{{ ES.periode }}</td>
+            <td>{{ ES.etape|replace({'|': '<br>'})|raw }}</td>
+{#
+            <td>
+                <ul>
+                {% for tt in ES.etape|split('|') %}
+                    <li>{{ tt }}</li>
+                {% endfor %}
+                </ul>
+            </td>
+#}
+            <td>{{ ES.maquette|replace({'|': '<br>'})|raw }}</td>
+{#
+            <td>
+                <ul>
+                {% for tt in ES.maquette|split('|') %}
+                    <li>{{ tt }}</li>
+                {% endfor %}
+                </ul>
+            </td>
+#}
+            <td>{{ E.cm|f2 }}</td>
+            <td>{{ E.s_cm|f2 }}</td>
+            <td>{{ E.d_cm|f2 }}</td>
+            <td>{{ E.ctd|f2 }}</td>
+            <td>{{ E.s_ctd|f2 }}</td>
+            <td>{{ E.d_ctd|f2 }}</td>
+            <td>{{ E.td|f2 }}</td>
+            <td>{{ E.s_td|f2 }}</td>
+            <td>{{ E.d_td|f2 }}</td>
+            <td>{{ E.tp|f2 }}</td>
+            <td>{{ E.s_tp|f2 }}</td>
+            <td>{{ E.d_tp|f2 }}</td>
+            <td> {% for V in E.voeuList%}{{ V.personne.getGeneric }}<br>{% endfor %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('.standardList').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            "scrollX": true,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+
+{% endblock %}

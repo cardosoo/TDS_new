@@ -1,0 +1,27 @@
+<script>
+    function loadHistorique(){
+        var e = document.getElementById("selectHistorique");
+        var url = '/{{ App.appName }}/enseignement/historique/{{ E.id}}/'+e.options[e.selectedIndex].value;
+        $('#historiqueContent').load(url);
+    }
+    $(document).ready(function() {
+        loadHistorique();
+    });
+</script>
+
+<div class="w3-container w3-card w3-theme-l1 w3-round w3-margin">
+    <details>
+        <summary>
+            Historique
+            <select id="selectHistorique"  onchange="loadHistorique()">
+                {% for annee in App.historyYearList %}
+                    {% set isCurrent = (annee == App.currentYear-1) %}
+                    <option value="{{ annee }}"  {{  isCurrent ? "selected" : "" }} >{{App.appName}} {{ annee }}</option>
+                {% endfor %}    
+            </select>
+        </summary>
+        <div id='historique' class='w3-responsive'  style="font-size: small">
+            <div id='historiqueContent'>C'est là que doit venir l'ajax</div>
+        </div>
+    </details>
+</div>

@@ -1,0 +1,79 @@
+<p>
+    <label for="what">Enseignement recherché :</label>
+    <input id="what" data-bind="textInput: $root.searchValue" placeholder="intiulé, code...">
+</p>
+
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>Modalités d'enseignement</th>
+                <th>Cursus</th>
+                <th>Semestre</th>
+                <th>Structure</th>
+                <th>Etapes</th>
+{% block extraFilterHeader %}{% endblock extraFilterHeader %}
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <select data-bind="options: $root.modaliteList, selectedOptions: modalite, optionsText: 'nom', optionsValue: 'id', optionsCaption: 'Toutes les Modalités'" multiple='multiple'  size='10'></select>
+                </td><td>
+                    <select data-bind="options: $root.cursusList, selectedOptions: cursus, optionsText: 'nom', optionsValue: 'id', optionsCaption: 'Tous les Cursus'" multiple='multiple'  size='10'></select>
+                </td><td>
+                    <select data-bind="options: $root.semestreList, selectedOptions: semestre, optionsText: 'nom', optionsValue: 'id',  optionsCaption: 'Tous les Semestres' " multiple size='10'></select>
+                </td><td>
+                    <select data-bind="options: $root.structureList, selectedOptions: structure, optionsText: 'nom', optionsValue: 'id',  optionsCaption: 'Toutes les structures' " multiple size='10'></select>
+                </td><td>
+                    <select data-bind="options: $root.getEtapeList(), selectedOptions: etape, optionsText: 'nom', optionsValue: 'id',  optionsCaption: 'Toutes les étapes' " multiple size='10'></select>
+                </td>{% block extraFilterBody %}{% endblock extraFilterBody %}
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <input type="checkbox" data-bind="checked: $root.withInactif" id='withInactif'/>
+    <label for="withInactif">Inclure les enseignements rendus inactifs</label>
+    {% if App.auth.isSuperAdmin %}
+    <i class="fas fa-long-arrow-alt-right"> </i> <input type="checkbox" data-bind="checked: $root.onlyInactif" id='onlyInactif'/>
+    <label for='onlyInactif'>Uniquemement les enseignements rendus inactifs</label>
+    {% endif %}<br>
+
+    <input type="checkbox" data-bind="checked: $root.withSousEffectif" id='withSousEffectif'/>
+    <label for='withSousEffectif'>Uniquement les enseignements en sous-effectif</label><br>  
+{% block avecPriorité %}
+    <span data-bind='visible: $root.withSousEffectif' style='padding-left:5em;'>
+    </span>
+{% endblock avecPriorité %}
+    <table>
+            <tr>
+                <td>
+                    <input type="checkbox" data-bind="checked: $root.withStructure" id='withStructure'/>
+                    <label for='withStructure'>Avec les structures associées</label>
+                </td>
+                <td>
+                    <input type="checkbox" data-bind="checked: $root.withEtape" id='withEtape' />
+                    <label for='withEtape'>Avec les etapes associées</label>
+                </td>
+{% block avecDomaine %}
+{% endblock avecDomaine %}
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" data-bind="checked: $root.withEquipe" id='withEquipe' id='withEquipe' />
+                    <label for='withEquipe'>Avec les équipes d'enseignement</label>
+                </td>
+                <td>
+                    <input type="checkbox" data-bind="checked: $root.withCorrespondant" id='withCorrespondant' id='withCorrespondant' />
+                    <label for='withCorrespondant'>Avec les {{ App.texte['correspondants'] }}</label>
+                </td>
+            </tr>
+    </table>
+    
+    {% if App.auth.isAdmin %}
+    <select data-bind="options: typeFiches, value: selectedFiche"></select>
+    {% endif %}
+    
+    <input type='hidden' data-bind="text: $root.search">
+</div>

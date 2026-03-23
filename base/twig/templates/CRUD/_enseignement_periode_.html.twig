@@ -1,0 +1,52 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _enseignement_periode_.html.twig
+    created : Sat, 12 Apr 2025 22:55:31 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "enseignement_periode", id: "{{ enseignement_periode.id }}" }}'></i>enseignement_periode</legend>
+
+{% block periode_full %}
+    <p>
+    {% block periode_label %}
+    <label class='text' for="periode"> periode <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "enseignement_periode", F: "periode", id: "{{enseignement_periode.id}}" }}'></i></label>    
+    {% endblock periode_label %}
+    {% block periode_active %}
+    <input class='text'  type="text" value="{{ enseignement_periode.periode }}" name="periode" id="periode" size="50" maxlength="100", placeholder="">
+
+    {% endblock periode_active %}
+    </p>
+{% endblock periode_full %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

@@ -1,0 +1,33 @@
+{% if App.auth.isAuth %}
+    {% if App.auth.inBase %}
+        <div class='w3-card w3-round w3-white w3-xlarge w3-center'>Bienvenue dans {{App.appName|capitalize}}, {{ App.auth.user.prenom }} {{ App.auth.user.nom }} !</div>
+    {% else %}
+        <div class='w3-card  w3-round w3-red  w3-xlarge w3-center'>Vous êtes êtes identifié avec l'identifant {{ App.auth.user.uid }}. 
+        Il n'y a pas de lien entre cet identifiant et un compte de {{App.appName|capitalize}}
+        Votre accès est limité.
+        </div>
+    {% endif %}
+{% else %}
+    <div class='w3-card  w3-round w3-red  w3-xlarge w3-center'>Vous êtes ici sans identification - votre accès est limité</div>
+{% endif %}
+
+
+### Introduction à {{App.appName|capitalize}}
+
+Ceci est le texte introductif à l'application **{{App.appName|capitalize}}**. 
+Cette application sert simplement de base aux différentes versions d'applications de gestion de la répartition des enseignements
+
+Pour le moment elle se décline en 2 applications avec des comportements différents :
+- [Foire](https://foire.cardoso.cloudns.cl/foire) l'application pour l'UFR de physique de l'Université de Paris.
+- [TsSDV](https://tssdv.cardoso.cloudns.cl/tssdv) l'application pour l'UFR de Sciences du Vivant de l'Université de Paris
+
+
+
+{#
+- {{ App.appName }}
+- {{ App.currentYear }}
+- {{ App.auth.user.prenom }}
+- {{ App.auth.user.nom }}
+- {{ dump(App) }}
+#}
+{{ dump(App) }}

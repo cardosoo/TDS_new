@@ -1,0 +1,70 @@
+            $data = ['uid' => $uid];
+            $data = ['name' => $name];
+            // informations personnelles
+            $data['diplome'] = self::input('diplome');
+            $data['mention'] = self::input('mention');
+            $data['parcours'] = self::input('parcours');
+            $data['intituleECUE'] = self::input('intituleECUE');
+            $data['codeECUE'] = self::input('codeECUE');
+            $data['codeUE'] = self::input('codeUE');
+            $data['ECTS'] = self::input('ECTS');
+            $data['semestre'] = self::input('semestre');
+            $data['typeUE'] = self::input('typeUE');
+            $data['responsable'] = self::input('responsable');
+            $data['langue'] = self::input('langue');
+            $data['natureCours'] = self::input('natureCours');
+            $data['domaine1'] = self::input('domaine1');
+            $data['quotite1'] = self::input('quotite1');
+            $data['domaine2'] = self::input('domaine2');
+            $data['quotite2'] = self::input('quotite2');
+
+            // Mutualistion au sein de SDV (sans doute à remplacer par un tableau)
+            $data['mentionMutualisationSDV'] = self::input('mentionMutualisationSDV');
+            $data['parcoursMutualisationSDV'] = self::input('parcoursMutualisationSDV');
+
+            // Mutualistion en dehors de SDV (sans doute à remplacer par un tableau)
+            $data['mentionMutualisationUPCite'] = self::input('mentionMutualisationUPCite');
+            $data['parcoursMutualisationUPCite'] = self::input('parcoursMutualisationUPCite');
+
+            // Mutualisation avec des partenaires externes
+            // Il faut voir ici...
+
+            // volume horaire présentiel étudiant
+            $data['hCM'] = self::input('hCM');
+            $data['hTD'] = self::input('hTD');
+            $data['hTP'] = self::input('hTP');
+
+            // Effectifs
+            $data['capaciteTotale'] = self::input('capaciteTotale');
+            $data['capaciteSDV'] = self::input('capaciteSDV');
+            $data['nCM'] = self::input('nCM');
+            $data['nTD'] = self::input('nTD');
+            $data['nTP'] = self::input('nTP');
+            
+            // encadrement
+            $data['nEnseignantsTP'] = self::input('nEnseignantsTP');     
+            $data['coutTotal'] = $data['hCM']*$data['nCM'] * 1.5 + $data['hTD']*$data['nTD'] * 1 + $data['hTP']*$data['nTP'] * $data['nEnseignantsTP']; 
+                    
+            $data['nEC_SDV'] = self::input('nEC_SDV');
+            $data['nEC_UPCite'] = self::input('nEC_UPCite');
+            $data['nEC_Ext'] = self::input('nEC_Ext');
+            $data['nEC_ATER'] = self::input('nEC_ATER');
+            $data['nEC_DCME'] = self::input('nEC_DCME');
+            $data['nVacataires'] = self::input('nVacataires');
+            $data['nGratos'] = self::input('nGratos');
+            $data['coutSDV'] = self::input('coutSDV');
+
+            // MCC session Unique
+            $data['ratioCET'] = self::input('ratioCET'); // 0 signifie CC 1 signifie ET
+            $data['typeETS1'] = self::input('typeETS1');
+            // MCC S1
+            $data['ratioCETS1'] = self::input('ratioCETS1'); // 0 signifie CC 1 signifie ET
+            $data['typeETS1'] = self::input('typeETS1');
+            // MCC S2
+            $data['ratioCETS2'] = self::input('ratioCETS2'); // 0 signifie CC 1 signifie ET
+            $data['typeETS2'] = self::input('typeETS2');
+
+            $data['prerequis'] = self::input('prerequis');
+            $data['syllabus'] = self::input('syllabus');
+            $data['connaissances'] = self::input('connaissances');
+            $data['competences'] = self::input('competences');

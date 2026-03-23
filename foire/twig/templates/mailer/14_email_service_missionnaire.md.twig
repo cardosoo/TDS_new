@@ -1,0 +1,27 @@
+Bonjour {{ P.getGeneric }},
+
+Nous venons de terminer la répartition des enseignements entre tous les missionaires.<br>
+Nous avons pris en compte vos préférences autant que possible.<br>
+Vous trouverez un récapitulatif ci-dessous et sur votre fiche personnelle sur [le site de la foire](https://foire.physique.u-paris.fr/foire/texte/introduction).
+
+Nous vous encourageons à contacter **dès maintenant** les responsables des enseignements dans lesquels vous interviendrez.<br>
+Les réunions pédagogiques ont déjà commencé pour certains enseignements.
+
+Si vous faites un peu moins ou un peu plus d'heures que votre contrat, ces heures seront reportées sur votre service l'an prochain. Par exemple, si vous faites 5h de moins que votre contrat en {{ App.currentYear }} - {{ App.currentYear+1 }}, vous devrez faire 5h de plus en {{ App.currentYear+1 }} - {{ App.currentYear+2 }}. Pour plus d'information, vous pouvez lire tous les explications sur [le site de la foire](https://foire.physique.u-paris.fr/foire/texte/introduction).
+
+Bien Cordialement,
+
+Olivier Cardoso et Raphaël Galicher.
+
+**Vœux de  {{ P.getGeneric }}**
+
+D'après les informations de la base de données {{ App.appName }}{{ App.currentYear }}, vous devez assurer une charge de 
+{{P.getCharge()}} heures d'enseignement et vos vœux correspondent à une charge de {{P.getCharge() - P.voeu_personne_bilan.heures|f2}} heures.
+
+{{ include('mailer/voeux.md.twig') }}
+
+Les lignes en rouge correspondent aux UE en surcharge.<br>
+Les lignes en vert  correspondent aux UE en sous effectif.<br>
+
+{% include "mailer/signature.md.twig" %}
+

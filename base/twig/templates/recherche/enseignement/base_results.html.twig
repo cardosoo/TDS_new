@@ -1,0 +1,192 @@
+<div id='searchResult'  data-bind="style: {'background-color' : 'Fiches pour foire'==$root.selectedFiche()? 'white':'inherit'}">    
+</div>
+
+
+<script>
+    var searchModel = function() {
+        var self = this;
+        self.oldSearchParams = {};
+
+        self.searchValue=ko.observable('{{ f.searchValue }}');
+
+        self.withInactif=ko.observable($('#withInactif').prop('checked'));
+        self.onlyInactif=ko.observable($('#onlyInactif').prop('checked'));
+
+        self.withSousEffectif=ko.observable($('#withSousEffectif').prop('checked'));
+        self.nonPrioritaire=ko.observable($('#nonPrioritaire').prop('checked'));
+        
+        self.withStructure=ko.observable($('#withStructure').prop('checked'));
+        self.withEtape=ko.observable($('#withEtape').prop('checked'));
+        self.withEquipe=ko.observable($('#withEquipe').prop('checked'));
+        self.withCorrespondant=ko.observable($('#withCorrespondant').prop('checked'));
+
+
+        self.modaliteList = {{ f.modaliteList|json_encode()|raw }};
+        self.cursusList = {{ f.cursusList|json_encode()|raw }};
+        self.semestreList = {{ f.semestreList|json_encode()|raw }};
+        self.structureList = {{ f.structureList|json_encode()|raw }};
+        self.etapeList = {{ f.etapeList|json_encode()|raw }};
+
+
+        self.oldSelectEtapeJSON = '';
+        self.modalite=ko.observable();  
+        self.cursus=ko.observable();  
+        self.semestre=ko.observable();  
+        self.structure=ko.observable();  
+        self.etape=ko.observable();  
+
+{% block extraFilter1 %}{% endblock %}
+
+        self.complement =  function(){ 
+            self.modalite($($('select')[0]).val().map(x => parseInt(x)));  
+            self.cursus($($('select')[1]).val().map(x => parseInt(x))); 
+            self.semestre($($('select')[2]).val().map(x => parseInt(x)));  
+            self.structure($($('select')[3]).val().map(x => parseInt(x)));
+            self.etape($($('select')[4]).val().map(x => parseInt(x)));  
+{% block extraFilter2 %}{% endblock %}
+        } 
+        
+        self.typeFiches =  ko.observableArray(['Recheche', 'Fiches pour foire']);
+        self.selectedFiche = ko.observable('Recherche');
+        
+        self.getEtapeList = function(){    
+            var posting = $.post('/{{ App.appName }}/selectEtapeJSON',{
+                cursus: self.cursus(),
+                semestre: self.semestre(),
+                structure: self.structure(),
+                modalite: self.modalite(),
+{% block extraFilter3 %}{% endblock %}
+            });
+            
+            posting.done(function(data){
+                if (self.oldSelectEtapeJSON !== data){
+                    self.oldSelectEtapeJSON = data;
+                    self.etapeList = JSON.parse(data);
+                    self.modalite.valueHasMutated();
+                    //O.C-begin
+                    self.semestre.valueHasMutated();
+                    self.cursus.valueHasMutated();
+                    self.structure.valueHasMutated();
+                    //O.C-end
+                }
+            });
+            
+            return self.etapeList;
+        }
+
+        self.search = ko.computed(function() {
+            var search = '';
+
+            if (self.cursus() !== undefined) search += " " + self.cursus().toString();    
+            if (self.semestre() !== undefined) search += " " + self.semestre().toString();
+            if (self.structure() !== undefined) search += " " + self.structure().toString();
+            if (self.etape() !== undefined) search += " " + self.etape().toString();
+            if (self.modalite() !== undefined) search += " " + self.modalite().toString();
+
+{% block extraFilter4 %}{% endblock %}
+
+            // pour ne pas déclencher la recherche sans critère
+            if ((search.trim()=='') && (self.searchValue().length==0) ) {
+                return;
+            }
+
+
+            searchParams =  {
+                searchValue: self.searchValue(),
+                withFoire3: 'true',
+                cursus: self.cursus(),
+                semestre: self.semestre(),
+                structure: self.structure(),
+                etape: self.etape(),
+                modalite: self.modalite(),
+{% block extraFilter5 %}{% endblock %}
+                withInactif: self.withInactif(),
+                onlyInactif: self.onlyInactif(),
+                withSousEffectif: self.withSousEffectif(),
+                nonPrioritaire: self.nonPrioritaire(),
+                withStructure: self.withStructure(),
+                withEtape: self.withEtape(),
+                withEquipe: self.withEquipe(),
+                withCorrespondant: self.withCorrespondant(),
+                typeFiche: self.selectedFiche(),
+            }
+            // pour ne pas faire la recherche si on a pas chnangé les paramètres
+            if (JSON.stringify(self.oldSearchParams) == JSON.stringify(searchParams)){
+                return;
+            }
+            $('#spinner').css('visibility', 'visible');
+            var posting = $.post('/{{ App.appName }}/rechercheEnseignement', searchParams);
+            posting.done(function( data ) {
+                $('#spinner').css('visibility', 'hidden');
+                if (self.selectedFiche() == 'Fiches pour foire'){                    
+//                    $('#searchResult').empty().append("Il faut que cela fonctionne..." );
+                    $('#searchResult').empty().append("<a href='/{{App.appName}}/getFicheFoireHTML' target='_blank'>ouvrir le HTML dans un nouvel onglet</a>" );
+                    return;
+                }
+
+                $('#searchResult').empty().append( data );
+
+                $('table.display').DataTable({
+                    dom: 'lBfrtip' ,
+                    order: [[ 0, 'asc' ]],
+                    "language": {
+                        "sProcessing":     "Traitement en cours...",
+                        "sSearch":         "Filtrer&nbsp;:",
+                        "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+                        "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                        "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+                        "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                        "sInfoPostFix":    "",
+                        "sLoadingRecords": "Chargement en cours...",
+                        "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                        "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
+                        "oPaginate": {
+                            "sFirst":      "Premier",
+                            "sPrevious":   "Pr&eacute;c&eacute;dent",
+                            "sNext":       "Suivant",
+                            "sLast":       "Dernier"
+                        },
+                        "oAria": {
+                            "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+                            "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+                        },
+                        "select": {
+                            "rows": {
+                                _: "%d lignes séléctionnées",
+                                0: "Aucune ligne séléctionnée",
+                                1: "1 ligne séléctionnée"
+                            } 
+                        }
+                    },
+                    lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "Tous"] ],
+                    pageLength: -1,        
+                    paging: true,
+                    select: true,
+                    buttons: [
+                        {
+                            extend: 'copy',
+                            text: 'Copier'
+                        },
+                        'excel',
+                        'csv',
+                        {
+                            extend: 'pdf',
+                            orientation: 'landscape'
+                        },
+                    ]
+                });        
+            });
+            return search;
+        }, this).extend({ rateLimit: { method: "notifyWhenChangesStop", timeout: 400 } }); // cela c'est pour éviter de faire la requ
+
+    };
+
+    ko.options.deferUpdates = true;
+    var model = new searchModel();
+    ko.applyBindings(model);
+    ko.options.deferUpdates = true;
+    $( document ).ready(function() {
+        model.complement();
+    });
+
+</script>

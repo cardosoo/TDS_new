@@ -1,0 +1,86 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _etape_enseignement_.html.twig
+    created : Mon, 07 Apr 2025 15:20:41 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "etape_enseignement", id: "{{ etape_enseignement.id }}" }}'></i>etape_enseignement</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "etape_enseignement", F: "actif", id: "{{etape_enseignement.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ etape_enseignement.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block oneToManyetape_enseignement_etape_ose_full %}
+<p>
+    {% block oneToManyetape_enseignement_etape_ose_label %}
+    <label class='select' for='etape_ose'>
+        {{  etape_enseignement.etape_ose ? etape_enseignement.etape_ose.getCrudEditLink("etape_ose")|raw : "etape_ose"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "etape_enseignement", F: "etape_ose", id: "{{etape_enseignement.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyetape_enseignement_etape_ose_label %}
+    {% block oneToManyetape_enseignement_etape_ose_active %}    
+    <input class='text {{ ( etape_enseignement.etape_ose.id ==0 or  etape_enseignement.etape_ose.actif)?"":" passif" }}'  value="{{ etape_enseignement.etape_ose.generic() }}" name="etape_ose" id="etape_ose"  _id_="{{ etape_enseignement.etape_ose.id }}">
+    <script>
+        setAutocomplete("#etape_ose", "/base/CRUD/L/Etape_OSE");
+    </script>
+    {% endblock oneToManyetape_enseignement_etape_ose_active %}    
+</p>
+{% endblock oneToManyetape_enseignement_etape_ose_full %}
+
+{% block oneToManyetape_enseignement_enseignement_full %}
+<p>
+    {% block oneToManyetape_enseignement_enseignement_label %}
+    <label class='select' for='enseignement'>
+        {{  etape_enseignement.enseignement ? etape_enseignement.enseignement.getCrudEditLink("enseignement")|raw : "enseignement"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "etape_enseignement", F: "enseignement", id: "{{etape_enseignement.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyetape_enseignement_enseignement_label %}
+    {% block oneToManyetape_enseignement_enseignement_active %}    
+    <input class='text {{ ( etape_enseignement.enseignement.id ==0 or  etape_enseignement.enseignement.actif)?"":" passif" }}'  value="{{ etape_enseignement.enseignement.generic() }}" name="enseignement" id="enseignement"  _id_="{{ etape_enseignement.enseignement.id }}">
+    <script>
+        setAutocomplete("#enseignement", "/base/CRUD/L/Enseignement");
+    </script>
+    {% endblock oneToManyetape_enseignement_enseignement_active %}    
+</p>
+{% endblock oneToManyetape_enseignement_enseignement_full %}
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

@@ -1,0 +1,47 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}
+    {{ parent() }}
+{% endblock %}
+
+{% block section %}
+
+<div class="w3-container w3-content {{ E.actif?"":"w3-pale-red w3-leftbar w3-rightbar w3-border-red" }}" style="max-width:1600px;margin-top:80px" >
+{% if not E.actif %}
+    <div class="w3-panel w3-pale-yellow w3-bottombar w3-topbar w3-border-yellow">
+    <h2 class="w3-center">Cet enseignement est marqué comme inactif</h2>
+    </div>
+{% endif %}
+    <div class="w3-row">
+        <div class="w3-col s12 m12 l3">
+            {% include(["enseignement/card.html.twig", "enseignement/base_card.html.twig"]) %}
+            {% include(["enseignement/besoins.html.twig", "enseignement/base_besoins.html.twig"]) %}            
+            {# en pratique ce n'est pas une bonne idée de faire cela car les voeux de l'utilisateur courant ne sont pas
+            remis à jour quand ils changent. 
+            Il faudrait une procédure spéciale pour les mettre à jour !
+            
+            { with {personne: App.auth.user, compact: true} %}
+            {% include(["personne/voeux.html.twig", "personne/base_voeux.html.twig"]) %}
+            {% endwith %}
+            #}
+        </div>
+        
+        <div class="w3-col s12 m12 l9">
+            {% include(["enseignement/syllabus.html.twig", "enseignement/base_syllabus.html.twig"]) %} 
+            {% include(["enseignement/histo.html.twig", "enseignement/base_histo.html.twig"]) %} 
+            {% include(["enseignement/voeux.html.twig", "enseignement/base_voeux.html.twig"]) %} 
+            <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+                <div class="w3-col s12 m12 l6">
+                    {% include(["enseignement/besoins.html.twig", "enseignement/base_besoins.html.twig"]) %}
+                </div>
+                <div class="w3-col s12 m12 l6">
+                    {% include(["enseignement/volumeVoeu.html.twig", "enseignement/base_volumeVoeu.html.twig"]) %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
+{% endblock %}
+
+

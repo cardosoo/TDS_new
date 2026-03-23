@@ -1,0 +1,96 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _CatRef_.html.twig
+    created : Sun, 22 Mar 2026 23:12:16 +0100 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "CatRef", id: "{{ CatRef.id }}" }}'></i>CatRef</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "CatRef", F: "actif", id: "{{CatRef.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ CatRef.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block description_full %}
+    <p>
+    {% block description_label %}
+    <label class='text' for="description"> description <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "CatRef", F: "description", id: "{{CatRef.id}}" }}'></i></label>    
+    {% endblock description_label %}
+    {% block description_active %}
+    <textarea mode='raw' class='textarea' name="description" id="description" size="10"  placeholder="">{{ CatRef.description }}</textarea>
+
+    {% endblock description_active %}
+    </p>
+{% endblock description_full %}    
+
+{% block oneToManyCatRef_cat1ref_full %}
+<p>
+    {% block oneToManyCatRef_cat1ref_label %}
+    <label class='select' for='cat1ref'>
+        {{  CatRef.cat1ref ? CatRef.cat1ref.getCrudEditLink("cat1ref")|raw : "cat1ref"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "CatRef", F: "cat1ref", id: "{{CatRef.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyCatRef_cat1ref_label %}
+    {% block oneToManyCatRef_cat1ref_active %}    
+    <input class='text {{ ( CatRef.cat1ref.id ==0 or  CatRef.cat1ref.actif)?"":" passif" }}'  value="{{ CatRef.cat1ref.generic() }}" name="cat1ref" id="cat1ref"  _id_="{{ CatRef.cat1ref.id }}">
+    <script>
+        setAutocomplete("#cat1ref", "/services/CRUD/L/Cat1Ref");
+    </script>
+    {% endblock oneToManyCatRef_cat1ref_active %}    
+</p>
+{% endblock oneToManyCatRef_cat1ref_full %}
+
+    {% block manyToOne_referentielList_referentielList %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "CatRef", id: "{{ CatRef.id }}", L: "referentielList" }}'></i>referentielList - {{ (CatRef.referentielList)|length }} élément{{(CatRef.referentielList)|length >1?'s':''}}</legend>
+
+                <ul>
+                {% for L in CatRef.referentielList %}   {% block manyToOne_CatRef_catref %}
+                    <li class='{{ L.actif?"":"passif" }}'>
+                        {{ L.getGeneric(true)|raw }}
+                    </li>
+                    {% endblock manyToOne_CatRef_catref %}
+                {% endfor %}
+                </ul>
+    </fieldset>
+    {% endblock manyToOne_referentielList_referentielList %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

@@ -1,0 +1,129 @@
+{% extends "CRUD/_Enseignement_.html.twig" %}
+
+{% block css %}
+    {{ parent() }}
+
+    <style>
+        #besoins input {
+            width: 4em;
+        }
+    
+    </style>
+{% endblock %}
+
+
+{% block m_cm_full %}
+    <p>
+    <label class='text' for="m_cm">Personnalistion pour le fun</label>    
+
+    {% block m_cm_active %}
+        {{ parent() }}
+    {% endblock %}
+    </p>
+{% endblock %}
+
+
+{% macro inp(E, F, f=true) %}
+    <input type='number' value="{{ attribute(E, F) == 0?'':attribute(E, F) }}" name="{{F}}" {{ f ? 'step="any"': ''}} >
+{% endmacro %}
+
+{% block besoins %}
+    <div>
+    <label class='text' for="besoins">Besoins </label>
+    <table id='besoins'>
+        <thead>
+            <th></th>
+            <th>CM</th>
+            <th>CTD</th>
+            <th>TD</th>
+            <th>TP</th>
+            <th>Extra</th>
+        </thead>
+        <tbody>
+            <tr>
+                <th>Nb Groupes</th>
+                <td>{{ _self.inp(Enseignement, "cm") }}</td>
+                <td>{{ _self.inp(Enseignement, "ctd") }}</td>
+                <td>{{ _self.inp(Enseignement, "td") }}</td>
+                <td>{{ _self.inp(Enseignement, "tp") }}</td>
+                <td>{{ _self.inp(Enseignement, "extra") }}</td>
+            </tr><tr>
+                <th>Nb Séances</th>
+                <td>{{ _self.inp(Enseignement, "s_cm") }}</td>
+                <td>{{ _self.inp(Enseignement, "s_ctd") }}</td>
+                <td>{{ _self.inp(Enseignement, "s_td") }}</td>
+                <td>{{ _self.inp(Enseignement, "s_tp") }}</td>
+                <td>{{ _self.inp(Enseignement, "s_extra") }}</td>
+            </tr><tr>
+                <th>Durée Séances</th>
+                <td>{{ _self.inp(Enseignement, "d_cm") }}</td>
+                <td>{{ _self.inp(Enseignement, "d_ctd") }}</td>
+                <td>{{ _self.inp(Enseignement, "d_td") }}</td>
+                <td>{{ _self.inp(Enseignement, "d_tp") }}</td>
+                <td>{{ _self.inp(Enseignement, "d_extra") }}</td>
+            </tr><tr>
+                <th>Nb Intervenants</th>
+                <td>{{ _self.inp(Enseignement, "i_cm") }}</td>
+                <td>{{ _self.inp(Enseignement, "i_ctd") }}</td>
+                <td>{{ _self.inp(Enseignement, "i_td") }}</td>
+                <td>{{ _self.inp(Enseignement, "i_tp") }}</td>
+                <td>{{ _self.inp(Enseignement, "i_extra") }}</td>
+            </tr><tr>
+                <th>Nb Séances/semaines</th>
+                <td>{{ _self.inp(Enseignement, "n_cm") }}</td>
+                <td>{{ _self.inp(Enseignement, "n_ctd") }}</td>
+                <td>{{ _self.inp(Enseignement, "n_td") }}</td>
+                <td>{{ _self.inp(Enseignement, "n_tp") }}</td>
+                <td>{{ _self.inp(Enseignement, "n_extra") }}</td>
+            </tr><tr>
+                <th>Capacité d'un groupe</th>
+                <td>{{ _self.inp(Enseignement, "m_cm") }}</td>
+                <td>{{ _self.inp(Enseignement, "m_ctd") }}</td>
+                <td>{{ _self.inp(Enseignement, "m_td") }}</td>
+                <td>{{ _self.inp(Enseignement, "m_tp") }}</td>
+                <td>{{ _self.inp(Enseignement, "m_extra") }}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Cout total </th>
+                <td colspan="4">{{ Enseignement.enseignement_besoins.besoins|f2 }} hETD</td>
+            </tr>
+        </tfoot>
+    </table>
+    </div> 
+{% endblock %}
+
+
+{% block header_endvoeuList_enseignement %}
+        <th class="w3-center">hTD</th>
+        <th class="w3-center w3-small">reste</th>
+{% endblock header_endvoeuList_enseignement %}
+
+{% block line_endvoeuList_enseignement %}
+        <td class="w3-center" class='w3-center'>{{ Voeu.voeu_bilan_ligne.heures|f2 }}</td>
+        <td class="w3-center w3-small">{{ Voeu.personne.voeu_personne_bilan.heures|f2 }}</td>
+{% endblock line_endvoeuList_enseignement %}
+
+
+{% block footer_endvoeuList_enseignement %}
+    <tr class='w3-light-blue'>    
+        <td></td>    
+        <th>Manque</th>    
+        <td class='w3-center'>{{ Enseignement.voeu_enseignement_bilan.cm }}</td>    
+        <td class='w3-center'>{{ Enseignement.voeu_enseignement_bilan.ctd }}</td>    
+        <td class='w3-center'>{{ Enseignement.voeu_enseignement_bilan.td }}</td>    
+        <td class='w3-center'>{{ Enseignement.voeu_enseignement_bilan.tp }}</td>    
+        <td class='w3-center'>{{ Enseignement.voeu_enseignement_bilan.bonus }}</td>    
+        <td class='w3-center'>{{ Enseignement.voeu_enseignement_bilan.extra }}</td>    
+        <td class='w3-center'>{{ Enseignement.voeu_enseignement_bilan.correspondant }}</td>    
+        <th class='w3-center'>Reste en hTD :</th>    
+        <td class='w3-center'>{{ Enseignement.voeu_enseignement_bilan.heures|f2 }} hTD</td>
+        <td></td>
+        <td></td>
+    </tr>
+{% endblock footer_endvoeuList_enseignement %}
+
+{% block line_commentaire_enseignementList_enseignement_commentaire %}
+<td>{{ commentaire_enseignement.commentaire|markdown_to_html|raw }}</td>
+{% endblock line_commentaire_enseignementList_enseignement_commentaire %}

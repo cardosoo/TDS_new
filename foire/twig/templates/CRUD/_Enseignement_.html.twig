@@ -1,0 +1,1088 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _Enseignement_.html.twig
+    created : Fri, 02 May 2025 23:33:41 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "Enseignement", id: "{{ Enseignement.id }}" }}'></i>Enseignement</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "actif", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ Enseignement.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block nuac_full %}
+    <p>
+    {% block nuac_label %}
+    <label class='text' for="nuac"> nuac <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "nuac", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock nuac_label %}
+    {% block nuac_active %}
+    <input class='text'  type="text" value="{{ Enseignement.nuac }}" name="nuac" id="nuac" size="50" maxlength="100", placeholder="">
+
+    {% endblock nuac_active %}
+    </p>
+{% endblock nuac_full %}    
+
+{% block code_full %}
+    <p>
+    {% block code_label %}
+    <label class='text' for="code"> code <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "code", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock code_label %}
+    {% block code_active %}
+    <input class='text'  type="text" value="{{ Enseignement.code }}" name="code" id="code" size="50" maxlength="100", placeholder="">
+
+    {% endblock code_active %}
+    </p>
+{% endblock code_full %}    
+
+{% block variante_full %}
+    <p>
+    {% block variante_label %}
+    <label class='text' for="variante"> variante <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "variante", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock variante_label %}
+    {% block variante_active %}
+    <input class='text'  type="text" value="{{ Enseignement.variante }}" name="variante" id="variante" size="50" maxlength="100", placeholder="">
+
+    {% endblock variante_active %}
+    </p>
+{% endblock variante_full %}    
+
+{% block nom_full %}
+    <p>
+    {% block nom_label %}
+    <label class='text' for="nom"> nom <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "nom", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock nom_label %}
+    {% block nom_active %}
+    <input class='text'  type="text" value="{{ Enseignement.nom }}" name="nom" id="nom" size="50" maxlength="100", placeholder="">
+
+    {% endblock nom_active %}
+    </p>
+{% endblock nom_full %}    
+
+{% block intitule_full %}
+    <p>
+    {% block intitule_label %}
+    <label class='text' for="intitule"> intitule <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "intitule", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock intitule_label %}
+    {% block intitule_active %}
+    <input class='text'  type="text" value="{{ Enseignement.intitule }}" name="intitule" id="intitule" size="50" maxlength="100", placeholder="">
+
+    {% endblock intitule_active %}
+    </p>
+{% endblock intitule_full %}    
+
+{% block attribuable_full %}
+    <p>
+    {% block attribuable_label %}
+    <label class='text' for="attribuable"> attribuable <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "attribuable", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock attribuable_label %}
+    {% block attribuable_active %}
+    <input class='text' type="checkbox"  {{ Enseignement.attribuable==1?'checked':'' }} name="attribuable" id="attribuable">
+
+    {% endblock attribuable_active %}
+    </p>
+{% endblock attribuable_full %}    
+{% block besoins %}
+{% block cm_full %}
+    <p>
+    {% block cm_label %}
+    <label class='text' for="cm"> cm <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "cm", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock cm_label %}
+    {% block cm_active %}
+    <input class='text' type="number"  value="{{ Enseignement.cm }}" name="cm" id="cm" step="any" placeholder="0">
+
+    {% endblock cm_active %}
+    </p>
+{% endblock cm_full %}    
+
+{% block td_full %}
+    <p>
+    {% block td_label %}
+    <label class='text' for="td"> td <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "td", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock td_label %}
+    {% block td_active %}
+    <input class='text' type="number"  value="{{ Enseignement.td }}" name="td" id="td" step="any" placeholder="0">
+
+    {% endblock td_active %}
+    </p>
+{% endblock td_full %}    
+
+{% block ctd_full %}
+    <p>
+    {% block ctd_label %}
+    <label class='text' for="ctd"> ctd <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "ctd", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock ctd_label %}
+    {% block ctd_active %}
+    <input class='text' type="number"  value="{{ Enseignement.ctd }}" name="ctd" id="ctd" step="any" placeholder="0">
+
+    {% endblock ctd_active %}
+    </p>
+{% endblock ctd_full %}    
+
+{% block tp_full %}
+    <p>
+    {% block tp_label %}
+    <label class='text' for="tp"> tp <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "tp", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock tp_label %}
+    {% block tp_active %}
+    <input class='text' type="number"  value="{{ Enseignement.tp }}" name="tp" id="tp" step="any" placeholder="0">
+
+    {% endblock tp_active %}
+    </p>
+{% endblock tp_full %}    
+
+{% block extra_full %}
+    <p>
+    {% block extra_label %}
+    <label class='text' for="extra"> extra <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "extra", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock extra_label %}
+    {% block extra_active %}
+    <input class='text' type="number"  value="{{ Enseignement.extra }}" name="extra" id="extra" step="any" placeholder="0">
+
+    {% endblock extra_active %}
+    </p>
+{% endblock extra_full %}    
+
+{% block s_cm_full %}
+    <p>
+    {% block s_cm_label %}
+    <label class='text' for="s_cm"> s_cm <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "s_cm", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock s_cm_label %}
+    {% block s_cm_active %}
+    <input class='text' type="number"  value="{{ Enseignement.s_cm }}" name="s_cm" id="s_cm" step="any" placeholder="1">
+
+    {% endblock s_cm_active %}
+    </p>
+{% endblock s_cm_full %}    
+
+{% block s_td_full %}
+    <p>
+    {% block s_td_label %}
+    <label class='text' for="s_td"> s_td <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "s_td", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock s_td_label %}
+    {% block s_td_active %}
+    <input class='text' type="number"  value="{{ Enseignement.s_td }}" name="s_td" id="s_td" step="any" placeholder="1">
+
+    {% endblock s_td_active %}
+    </p>
+{% endblock s_td_full %}    
+
+{% block s_ctd_full %}
+    <p>
+    {% block s_ctd_label %}
+    <label class='text' for="s_ctd"> s_ctd <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "s_ctd", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock s_ctd_label %}
+    {% block s_ctd_active %}
+    <input class='text' type="number"  value="{{ Enseignement.s_ctd }}" name="s_ctd" id="s_ctd" step="any" placeholder="1">
+
+    {% endblock s_ctd_active %}
+    </p>
+{% endblock s_ctd_full %}    
+
+{% block s_tp_full %}
+    <p>
+    {% block s_tp_label %}
+    <label class='text' for="s_tp"> s_tp <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "s_tp", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock s_tp_label %}
+    {% block s_tp_active %}
+    <input class='text' type="number"  value="{{ Enseignement.s_tp }}" name="s_tp" id="s_tp" step="any" placeholder="1">
+
+    {% endblock s_tp_active %}
+    </p>
+{% endblock s_tp_full %}    
+
+{% block s_extra_full %}
+    <p>
+    {% block s_extra_label %}
+    <label class='text' for="s_extra"> s_extra <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "s_extra", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock s_extra_label %}
+    {% block s_extra_active %}
+    <input class='text' type="number"  value="{{ Enseignement.s_extra }}" name="s_extra" id="s_extra" step="any" placeholder="1">
+
+    {% endblock s_extra_active %}
+    </p>
+{% endblock s_extra_full %}    
+
+{% block i_cm_full %}
+    <p>
+    {% block i_cm_label %}
+    <label class='text' for="i_cm"> i_cm <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "i_cm", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock i_cm_label %}
+    {% block i_cm_active %}
+    <input class='text' type="number"  value="{{ Enseignement.i_cm }}" name="i_cm" id="i_cm" step="any" placeholder="1">
+
+    {% endblock i_cm_active %}
+    </p>
+{% endblock i_cm_full %}    
+
+{% block i_td_full %}
+    <p>
+    {% block i_td_label %}
+    <label class='text' for="i_td"> i_td <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "i_td", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock i_td_label %}
+    {% block i_td_active %}
+    <input class='text' type="number"  value="{{ Enseignement.i_td }}" name="i_td" id="i_td" step="any" placeholder="1">
+
+    {% endblock i_td_active %}
+    </p>
+{% endblock i_td_full %}    
+
+{% block i_ctd_full %}
+    <p>
+    {% block i_ctd_label %}
+    <label class='text' for="i_ctd"> i_ctd <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "i_ctd", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock i_ctd_label %}
+    {% block i_ctd_active %}
+    <input class='text' type="number"  value="{{ Enseignement.i_ctd }}" name="i_ctd" id="i_ctd" step="any" placeholder="1">
+
+    {% endblock i_ctd_active %}
+    </p>
+{% endblock i_ctd_full %}    
+
+{% block i_tp_full %}
+    <p>
+    {% block i_tp_label %}
+    <label class='text' for="i_tp"> i_tp <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "i_tp", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock i_tp_label %}
+    {% block i_tp_active %}
+    <input class='text' type="number"  value="{{ Enseignement.i_tp }}" name="i_tp" id="i_tp" step="any" placeholder="1">
+
+    {% endblock i_tp_active %}
+    </p>
+{% endblock i_tp_full %}    
+
+{% block i_extra_full %}
+    <p>
+    {% block i_extra_label %}
+    <label class='text' for="i_extra"> i_extra <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "i_extra", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock i_extra_label %}
+    {% block i_extra_active %}
+    <input class='text' type="number"  value="{{ Enseignement.i_extra }}" name="i_extra" id="i_extra" step="any" placeholder="1">
+
+    {% endblock i_extra_active %}
+    </p>
+{% endblock i_extra_full %}    
+
+{% block d_cm_full %}
+    <p>
+    {% block d_cm_label %}
+    <label class='text' for="d_cm"> d_cm <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "d_cm", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock d_cm_label %}
+    {% block d_cm_active %}
+    <input class='text' type="number"  value="{{ Enseignement.d_cm }}" name="d_cm" id="d_cm" step="any" placeholder="0">
+
+    {% endblock d_cm_active %}
+    </p>
+{% endblock d_cm_full %}    
+
+{% block d_td_full %}
+    <p>
+    {% block d_td_label %}
+    <label class='text' for="d_td"> d_td <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "d_td", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock d_td_label %}
+    {% block d_td_active %}
+    <input class='text' type="number"  value="{{ Enseignement.d_td }}" name="d_td" id="d_td" step="any" placeholder="0">
+
+    {% endblock d_td_active %}
+    </p>
+{% endblock d_td_full %}    
+
+{% block d_ctd_full %}
+    <p>
+    {% block d_ctd_label %}
+    <label class='text' for="d_ctd"> d_ctd <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "d_ctd", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock d_ctd_label %}
+    {% block d_ctd_active %}
+    <input class='text' type="number"  value="{{ Enseignement.d_ctd }}" name="d_ctd" id="d_ctd" step="any" placeholder="0">
+
+    {% endblock d_ctd_active %}
+    </p>
+{% endblock d_ctd_full %}    
+
+{% block d_tp_full %}
+    <p>
+    {% block d_tp_label %}
+    <label class='text' for="d_tp"> d_tp <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "d_tp", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock d_tp_label %}
+    {% block d_tp_active %}
+    <input class='text' type="number"  value="{{ Enseignement.d_tp }}" name="d_tp" id="d_tp" step="any" placeholder="0">
+
+    {% endblock d_tp_active %}
+    </p>
+{% endblock d_tp_full %}    
+
+{% block d_extra_full %}
+    <p>
+    {% block d_extra_label %}
+    <label class='text' for="d_extra"> d_extra <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "d_extra", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock d_extra_label %}
+    {% block d_extra_active %}
+    <input class='text' type="number"  value="{{ Enseignement.d_extra }}" name="d_extra" id="d_extra" step="any" placeholder="0">
+
+    {% endblock d_extra_active %}
+    </p>
+{% endblock d_extra_full %}    
+
+{% block n_cm_full %}
+    <p>
+    {% block n_cm_label %}
+    <label class='text' for="n_cm"> n_cm <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "n_cm", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock n_cm_label %}
+    {% block n_cm_active %}
+    <input class='text' type="number"  value="{{ Enseignement.n_cm }}" name="n_cm" id="n_cm" step="any" placeholder="1">
+
+    {% endblock n_cm_active %}
+    </p>
+{% endblock n_cm_full %}    
+
+{% block n_td_full %}
+    <p>
+    {% block n_td_label %}
+    <label class='text' for="n_td"> n_td <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "n_td", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock n_td_label %}
+    {% block n_td_active %}
+    <input class='text' type="number"  value="{{ Enseignement.n_td }}" name="n_td" id="n_td" step="any" placeholder="1">
+
+    {% endblock n_td_active %}
+    </p>
+{% endblock n_td_full %}    
+
+{% block n_ctd_full %}
+    <p>
+    {% block n_ctd_label %}
+    <label class='text' for="n_ctd"> n_ctd <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "n_ctd", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock n_ctd_label %}
+    {% block n_ctd_active %}
+    <input class='text' type="number"  value="{{ Enseignement.n_ctd }}" name="n_ctd" id="n_ctd" step="any" placeholder="1">
+
+    {% endblock n_ctd_active %}
+    </p>
+{% endblock n_ctd_full %}    
+
+{% block n_tp_full %}
+    <p>
+    {% block n_tp_label %}
+    <label class='text' for="n_tp"> n_tp <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "n_tp", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock n_tp_label %}
+    {% block n_tp_active %}
+    <input class='text' type="number"  value="{{ Enseignement.n_tp }}" name="n_tp" id="n_tp" step="any" placeholder="1">
+
+    {% endblock n_tp_active %}
+    </p>
+{% endblock n_tp_full %}    
+
+{% block n_extra_full %}
+    <p>
+    {% block n_extra_label %}
+    <label class='text' for="n_extra"> n_extra <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "n_extra", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock n_extra_label %}
+    {% block n_extra_active %}
+    <input class='text' type="number"  value="{{ Enseignement.n_extra }}" name="n_extra" id="n_extra" step="any" placeholder="1">
+
+    {% endblock n_extra_active %}
+    </p>
+{% endblock n_extra_full %}    
+
+{% block m_cm_full %}
+    <p>
+    {% block m_cm_label %}
+    <label class='text' for="m_cm"> m_cm <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "m_cm", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock m_cm_label %}
+    {% block m_cm_active %}
+    <input class='text' type="number"  value="{{ Enseignement.m_cm }}" name="m_cm" id="m_cm" step="any" placeholder="0">
+
+    {% endblock m_cm_active %}
+    </p>
+{% endblock m_cm_full %}    
+
+{% block m_td_full %}
+    <p>
+    {% block m_td_label %}
+    <label class='text' for="m_td"> m_td <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "m_td", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock m_td_label %}
+    {% block m_td_active %}
+    <input class='text' type="number"  value="{{ Enseignement.m_td }}" name="m_td" id="m_td" step="any" placeholder="0">
+
+    {% endblock m_td_active %}
+    </p>
+{% endblock m_td_full %}    
+
+{% block m_ctd_full %}
+    <p>
+    {% block m_ctd_label %}
+    <label class='text' for="m_ctd"> m_ctd <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "m_ctd", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock m_ctd_label %}
+    {% block m_ctd_active %}
+    <input class='text' type="number"  value="{{ Enseignement.m_ctd }}" name="m_ctd" id="m_ctd" step="any" placeholder="0">
+
+    {% endblock m_ctd_active %}
+    </p>
+{% endblock m_ctd_full %}    
+
+{% block m_tp_full %}
+    <p>
+    {% block m_tp_label %}
+    <label class='text' for="m_tp"> m_tp <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "m_tp", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock m_tp_label %}
+    {% block m_tp_active %}
+    <input class='text' type="number"  value="{{ Enseignement.m_tp }}" name="m_tp" id="m_tp" step="any" placeholder="0">
+
+    {% endblock m_tp_active %}
+    </p>
+{% endblock m_tp_full %}    
+
+{% block m_extra_full %}
+    <p>
+    {% block m_extra_label %}
+    <label class='text' for="m_extra"> m_extra <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "m_extra", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock m_extra_label %}
+    {% block m_extra_active %}
+    <input class='text' type="number"  value="{{ Enseignement.m_extra }}" name="m_extra" id="m_extra" step="any" placeholder="0">
+
+    {% endblock m_extra_active %}
+    </p>
+{% endblock m_extra_full %}    
+{% endblock %} 
+{% block bonus_full %}
+    <p>
+    {% block bonus_label %}
+    <label class='text' for="bonus"> bonus <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "bonus", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock bonus_label %}
+    {% block bonus_active %}
+    <input class='text' type="number"  value="{{ Enseignement.bonus }}" name="bonus" id="bonus" step="any" placeholder="0">
+
+    {% endblock bonus_active %}
+    </p>
+{% endblock bonus_full %}    
+
+{% block syllabus_full %}
+    <p>
+    {% block syllabus_label %}
+    <label class='text' for="syllabus"> syllabus <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "syllabus", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock syllabus_label %}
+    {% block syllabus_active %}
+    <textarea mode='html' class='textarea' name="syllabus" id="syllabus" size="10"  placeholder="">{{ Enseignement.syllabus }}</textarea>
+
+    {% endblock syllabus_active %}
+    </p>
+{% endblock syllabus_full %}    
+
+{% block url_full %}
+    <p>
+    {% block url_label %}
+    <label class='text' for="url"> url <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "url", id: "{{Enseignement.id}}" }}'></i></label>    
+    {% endblock url_label %}
+    {% block url_active %}
+    <textarea mode='raw' class='textarea' name="url" id="url" size="10"  placeholder="">{{ Enseignement.url }}</textarea>
+
+    {% endblock url_active %}
+    </p>
+{% endblock url_full %}    
+
+{% block oneToManyEnseignement_typeue_full %}
+<p>
+    {% block oneToManyEnseignement_typeue_label %}
+    <label class='select' for='typeue'>
+        {{  Enseignement.typeue ? Enseignement.typeue.getCrudEditLink("typeue")|raw : "typeue"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "typeue", id: "{{Enseignement.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyEnseignement_typeue_label %}
+    {% block oneToManyEnseignement_typeue_active %}    
+    <input class='text {{ ( Enseignement.typeue.id ==0 or  Enseignement.typeue.actif)?"":" passif" }}'  value="{{ Enseignement.typeue.generic() }}" name="typeue" id="typeue"  _id_="{{ Enseignement.typeue.id }}">
+    <script>
+        setAutocomplete("#typeue", "/foire/CRUD/L/TypeUE");
+    </script>
+    {% endblock oneToManyEnseignement_typeue_active %}    
+</p>
+{% endblock oneToManyEnseignement_typeue_full %}
+
+{% block oneToManyEnseignement_payeur_full %}
+<p>
+    {% block oneToManyEnseignement_payeur_label %}
+    <label class='select' for='payeur'>
+        {{  Enseignement.payeur ? Enseignement.payeur.getCrudEditLink("payeur")|raw : "payeur"}}
+        <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Enseignement", F: "payeur", id: "{{Enseignement.id}}" }}'></i>
+    </label>
+    {% endblock oneToManyEnseignement_payeur_label %}
+    {% block oneToManyEnseignement_payeur_active %}    
+    <input class='text {{ ( Enseignement.payeur.id ==0 or  Enseignement.payeur.actif)?"":" passif" }}'  value="{{ Enseignement.payeur.generic() }}" name="payeur" id="payeur"  _id_="{{ Enseignement.payeur.id }}">
+    <script>
+        setAutocomplete("#payeur", "/foire/CRUD/L/Payeur");
+    </script>
+    {% endblock oneToManyEnseignement_payeur_active %}    
+</p>
+{% endblock oneToManyEnseignement_payeur_full %}
+
+    {% block manyToMany_voeuList_enseignement %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Enseignement", id: "{{ Enseignement.id }}", L: "voeuList" }}'></i>voeuList - {{ (Enseignement.voeuList)|length }} élément{{(Enseignement.voeuList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_voeuList_enseignement %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/Voeu/enseignement/{{ Enseignement.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_voeuList_enseignement_personne %}
+                    <th class='w3-center'>personne</th>
+                    {% endblock header_th_voeuList_enseignement_personne %}
+                    {% block header_th_voeuList_enseignement_cm %}
+                    <th class='w3-center'>cm</th>
+                    {% endblock header_th_voeuList_enseignement_cm %}
+                    {% block header_th_voeuList_enseignement_ctd %}
+                    <th class='w3-center'>ctd</th>
+                    {% endblock header_th_voeuList_enseignement_ctd %}
+                    {% block header_th_voeuList_enseignement_td %}
+                    <th class='w3-center'>td</th>
+                    {% endblock header_th_voeuList_enseignement_td %}
+                    {% block header_th_voeuList_enseignement_tp %}
+                    <th class='w3-center'>tp</th>
+                    {% endblock header_th_voeuList_enseignement_tp %}
+                    {% block header_th_voeuList_enseignement_bonus %}
+                    <th class='w3-center'>bonus</th>
+                    {% endblock header_th_voeuList_enseignement_bonus %}
+                    {% block header_th_voeuList_enseignement_extra %}
+                    <th class='w3-center'>extra</th>
+                    {% endblock header_th_voeuList_enseignement_extra %}
+                    {% block header_th_voeuList_enseignement_correspondant %}
+                    <th class='w3-center'>correspondant</th>
+                    {% endblock header_th_voeuList_enseignement_correspondant %}
+                    {% block header_th_voeuList_enseignement_anciennete %}
+                    <th class='w3-center'>anciennete</th>
+                    {% endblock header_th_voeuList_enseignement_anciennete %}       
+                    {% block header_endvoeuList_enseignement %}
+                    {% endblock header_endvoeuList_enseignement %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_voeuList_enseignement %}
+            </thead>
+
+            <tbody>
+            {% for Voeu  in Enseignement.voeuList %}
+                {% block line_voeuList_enseignement %}
+                <tr name='voeuList' _id_='{{ Voeu.id }}' class='{{ Voeu.actif?"":"passif " }}{{ Voeu.personne.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "Voeu", id: "{{ Voeu.id }}" }}'></i>
+                    {{ Voeu.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_Voeu_personne %}
+                    <th class='w3-left'>{{ Voeu.personne.getGeneric( true )|raw }}</th>
+                    {% endblock line_Voeu_personne %}
+                    {% block line_voeuList_enseignement_cm %}
+                    <td class='w3-center'>{{ Voeu.cm }}</td>
+                    {% endblock line_voeuList_enseignement_cm %}
+                    {% block line_voeuList_enseignement_ctd %}
+                    <td class='w3-center'>{{ Voeu.ctd }}</td>
+                    {% endblock line_voeuList_enseignement_ctd %}
+                    {% block line_voeuList_enseignement_td %}
+                    <td class='w3-center'>{{ Voeu.td }}</td>
+                    {% endblock line_voeuList_enseignement_td %}
+                    {% block line_voeuList_enseignement_tp %}
+                    <td class='w3-center'>{{ Voeu.tp }}</td>
+                    {% endblock line_voeuList_enseignement_tp %}
+                    {% block line_voeuList_enseignement_bonus %}
+                    <td class='w3-center'>{{ Voeu.bonus }}</td>
+                    {% endblock line_voeuList_enseignement_bonus %}
+                    {% block line_voeuList_enseignement_extra %}
+                    <td class='w3-center'>{{ Voeu.extra }}</td>
+                    {% endblock line_voeuList_enseignement_extra %}
+                    {% block line_voeuList_enseignement_correspondant %}
+                    <td class='w3-center'>{{ Voeu.correspondant }}</td>
+                    {% endblock line_voeuList_enseignement_correspondant %}
+                    {% block line_voeuList_enseignement_anciennete %}
+                    <td class='w3-center'>{{ Voeu.anciennete }}</td>
+                    {% endblock line_voeuList_enseignement_anciennete %}
+                    {% block line_endvoeuList_enseignement %}
+                    {% endblock line_endvoeuList_enseignement %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_voeuList_enseignement %}
+            {% endfor %}
+            {% block footer_endvoeuList_enseignement %}
+            {% endblock footer_endvoeuList_enseignement %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_voeuList_enseignement %}    
+
+    {% block manyToOne_ecueList_ecueList %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Enseignement", id: "{{ Enseignement.id }}", L: "ecueList" }}'></i>ecueList - {{ (Enseignement.ecueList)|length }} élément{{(Enseignement.ecueList)|length >1?'s':''}}</legend>
+
+                <ul>
+                {% for L in Enseignement.ecueList %}   {% block manyToOne_Enseignement_enseignement %}
+                    <li class='{{ L.actif?"":"passif" }}'>
+                        {{ L.getGeneric(true)|raw }}
+                    </li>
+                    {% endblock manyToOne_Enseignement_enseignement %}
+                {% endfor %}
+                </ul>
+    </fieldset>
+    {% endblock manyToOne_ecueList_ecueList %}    
+
+    {% block manyToMany_commentaire_enseignementList_enseignement %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Enseignement", id: "{{ Enseignement.id }}", L: "commentaire_enseignementList" }}'></i>commentaire_enseignementList - {{ (Enseignement.commentaire_enseignementList)|length }} élément{{(Enseignement.commentaire_enseignementList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_commentaire_enseignementList_enseignement %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/commentaire_enseignement/enseignement/{{ Enseignement.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_commentaire_enseignementList_enseignement_auteur %}
+                    <th class='w3-center'>auteur</th>
+                    {% endblock header_th_commentaire_enseignementList_enseignement_auteur %}
+                    {% block header_th_commentaire_enseignementList_enseignement_date %}
+                    <th class='w3-center'>date</th>
+                    {% endblock header_th_commentaire_enseignementList_enseignement_date %}
+                    {% block header_th_commentaire_enseignementList_enseignement_commentaire %}
+                    <th class='w3-center'>commentaire</th>
+                    {% endblock header_th_commentaire_enseignementList_enseignement_commentaire %}       
+                    {% block header_endcommentaire_enseignementList_enseignement %}
+                    {% endblock header_endcommentaire_enseignementList_enseignement %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_commentaire_enseignementList_enseignement %}
+            </thead>
+
+            <tbody>
+            {% for commentaire_enseignement  in Enseignement.commentaire_enseignementList %}
+                {% block line_commentaire_enseignementList_enseignement %}
+                <tr name='commentaire_enseignementList' _id_='{{ commentaire_enseignement.id }}' class='{{ commentaire_enseignement.actif?"":"passif " }}{{ commentaire_enseignement.auteur.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "commentaire_enseignement", id: "{{ commentaire_enseignement.id }}" }}'></i>
+                    {{ commentaire_enseignement.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_commentaire_enseignement_auteur %}
+                    <th class='w3-left'>{{ commentaire_enseignement.auteur.getGeneric( true )|raw }}</th>
+                    {% endblock line_commentaire_enseignement_auteur %}
+                    {% block line_commentaire_enseignementList_enseignement_date %}
+                    <td class='w3-center'>{{ commentaire_enseignement.date }}</td>
+                    {% endblock line_commentaire_enseignementList_enseignement_date %}
+                    {% block line_commentaire_enseignementList_enseignement_commentaire %}
+                    <td class='w3-center'>{{ commentaire_enseignement.commentaire }}</td>
+                    {% endblock line_commentaire_enseignementList_enseignement_commentaire %}
+                    {% block line_endcommentaire_enseignementList_enseignement %}
+                    {% endblock line_endcommentaire_enseignementList_enseignement %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_commentaire_enseignementList_enseignement %}
+            {% endfor %}
+            {% block footer_endcommentaire_enseignementList_enseignement %}
+            {% endblock footer_endcommentaire_enseignementList_enseignement %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_commentaire_enseignementList_enseignement %}    
+
+    {% block manyToMany_Heritage_Enfants_enfants %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Enseignement", id: "{{ Enseignement.id }}", L: "Heritage_Enfants" }}'></i>Heritage_Enfants - {{ (Enseignement.Heritage_Enfants)|length }} élément{{(Enseignement.Heritage_Enfants)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_Heritage_Enfants_enfants %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/Heritage/parent/{{ Enseignement.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_Heritage_Enfants_enfants_enfant %}
+                    <th class='w3-center'>enfant</th>
+                    {% endblock header_th_Heritage_Enfants_enfants_enfant %}       
+                    {% block header_endHeritage_Enfants_enfants %}
+                    {% endblock header_endHeritage_Enfants_enfants %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_Heritage_Enfants_enfants %}
+            </thead>
+
+            <tbody>
+            {% for Heritage  in Enseignement.Heritage_Enfants %}
+                {% block line_Heritage_Enfants_enfants %}
+                <tr name='Heritage_Enfants' _id_='{{ Heritage.id }}' class='{{ Heritage.actif?"":"passif " }}{{ Heritage.enfant.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "Heritage", id: "{{ Heritage.id }}" }}'></i>
+                    {{ Heritage.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_Heritage_parents %}
+                    <th class='w3-left'>{{ Heritage.enfant.getGeneric( true )|raw }}</th>
+                    {% endblock line_Heritage_parents %}
+                    {% block line_endHeritage_Enfants_enfants %}
+                    {% endblock line_endHeritage_Enfants_enfants %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_Heritage_Enfants_enfants %}
+            {% endfor %}
+            {% block footer_endHeritage_Enfants_enfants %}
+            {% endblock footer_endHeritage_Enfants_enfants %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_Heritage_Enfants_enfants %}    
+
+    {% block manyToMany_Heritage_Parents_parents %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Enseignement", id: "{{ Enseignement.id }}", L: "Heritage_Parents" }}'></i>Heritage_Parents - {{ (Enseignement.Heritage_Parents)|length }} élément{{(Enseignement.Heritage_Parents)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_Heritage_Parents_parents %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/Heritage/enfant/{{ Enseignement.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_Heritage_Parents_parents_parent %}
+                    <th class='w3-center'>parent</th>
+                    {% endblock header_th_Heritage_Parents_parents_parent %}       
+                    {% block header_endHeritage_Parents_parents %}
+                    {% endblock header_endHeritage_Parents_parents %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_Heritage_Parents_parents %}
+            </thead>
+
+            <tbody>
+            {% for Heritage  in Enseignement.Heritage_Parents %}
+                {% block line_Heritage_Parents_parents %}
+                <tr name='Heritage_Parents' _id_='{{ Heritage.id }}' class='{{ Heritage.actif?"":"passif " }}{{ Heritage.parent.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "Heritage", id: "{{ Heritage.id }}" }}'></i>
+                    {{ Heritage.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_Heritage_enfants %}
+                    <th class='w3-left'>{{ Heritage.parent.getGeneric( true )|raw }}</th>
+                    {% endblock line_Heritage_enfants %}
+                    {% block line_endHeritage_Parents_parents %}
+                    {% endblock line_endHeritage_Parents_parents %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_Heritage_Parents_parents %}
+            {% endfor %}
+            {% block footer_endHeritage_Parents_parents %}
+            {% endblock footer_endHeritage_Parents_parents %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_Heritage_Parents_parents %}    
+
+    {% block manyToMany_panierList_enseignement %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Enseignement", id: "{{ Enseignement.id }}", L: "panierList" }}'></i>panierList - {{ (Enseignement.panierList)|length }} élément{{(Enseignement.panierList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_panierList_enseignement %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/Panier/enseignement/{{ Enseignement.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_panierList_enseignement_personne %}
+                    <th class='w3-center'>personne</th>
+                    {% endblock header_th_panierList_enseignement_personne %}
+                    {% block header_th_panierList_enseignement_cm %}
+                    <th class='w3-center'>cm</th>
+                    {% endblock header_th_panierList_enseignement_cm %}
+                    {% block header_th_panierList_enseignement_ctd %}
+                    <th class='w3-center'>ctd</th>
+                    {% endblock header_th_panierList_enseignement_ctd %}
+                    {% block header_th_panierList_enseignement_td %}
+                    <th class='w3-center'>td</th>
+                    {% endblock header_th_panierList_enseignement_td %}
+                    {% block header_th_panierList_enseignement_tp %}
+                    <th class='w3-center'>tp</th>
+                    {% endblock header_th_panierList_enseignement_tp %}
+                    {% block header_th_panierList_enseignement_commentaire %}
+                    <th class='w3-center'>commentaire</th>
+                    {% endblock header_th_panierList_enseignement_commentaire %}       
+                    {% block header_endpanierList_enseignement %}
+                    {% endblock header_endpanierList_enseignement %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_panierList_enseignement %}
+            </thead>
+
+            <tbody>
+            {% for Panier  in Enseignement.panierList %}
+                {% block line_panierList_enseignement %}
+                <tr name='panierList' _id_='{{ Panier.id }}' class='{{ Panier.actif?"":"passif " }}{{ Panier.personne.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "Panier", id: "{{ Panier.id }}" }}'></i>
+                    {{ Panier.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_Panier_personne %}
+                    <th class='w3-left'>{{ Panier.personne.getGeneric( true )|raw }}</th>
+                    {% endblock line_Panier_personne %}
+                    {% block line_panierList_enseignement_cm %}
+                    <td class='w3-center'>{{ Panier.cm }}</td>
+                    {% endblock line_panierList_enseignement_cm %}
+                    {% block line_panierList_enseignement_ctd %}
+                    <td class='w3-center'>{{ Panier.ctd }}</td>
+                    {% endblock line_panierList_enseignement_ctd %}
+                    {% block line_panierList_enseignement_td %}
+                    <td class='w3-center'>{{ Panier.td }}</td>
+                    {% endblock line_panierList_enseignement_td %}
+                    {% block line_panierList_enseignement_tp %}
+                    <td class='w3-center'>{{ Panier.tp }}</td>
+                    {% endblock line_panierList_enseignement_tp %}
+                    {% block line_panierList_enseignement_commentaire %}
+                    <td class='w3-center'>{{ Panier.commentaire }}</td>
+                    {% endblock line_panierList_enseignement_commentaire %}
+                    {% block line_endpanierList_enseignement %}
+                    {% endblock line_endpanierList_enseignement %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_panierList_enseignement %}
+            {% endfor %}
+            {% block footer_endpanierList_enseignement %}
+            {% endblock footer_endpanierList_enseignement %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_panierList_enseignement %}    
+
+    {% block oneToOne_enseignement_besoins %}  
+    <fieldset>
+        <legend>enseignement_besoins</legend>
+        {% if not isCreation %}
+
+    <table class='w3-table-all w3-hoverable w3-small'>
+        <thead>
+            <tr class='w3-light-blue'>    
+                    <th>besoins</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>    
+                        <td>{{ Enseignement.enseignement_besoins.besoins }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        {% endif %}
+    </fieldset>
+    {% endblock oneToOne_enseignement_besoins%}
+    
+    {% block oneToOne_enseignement_periode %}  
+    <fieldset>
+        <legend>enseignement_periode</legend>
+        {% if not isCreation %}
+
+    <table class='w3-table-all w3-hoverable w3-small'>
+        <thead>
+            <tr class='w3-light-blue'>    
+                    <th>periode</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>    
+                        <td>{{ Enseignement.enseignement_periode.periode }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        {% endif %}
+    </fieldset>
+    {% endblock oneToOne_enseignement_periode%}
+    
+    {% block oneToOne_enseignement_structure %}  
+    <fieldset>
+        <legend>enseignement_structure</legend>
+        {% if not isCreation %}
+
+    <table class='w3-table-all w3-hoverable w3-small'>
+        <thead>
+            <tr class='w3-light-blue'>    
+                    <th>periode</th>    
+                    <th>code</th>    
+                    <th>ecue</th>    
+                    <th>cursus</th>    
+                    <th>etape</th>    
+                    <th>maquette</th>    
+                    <th>composante</th>    
+                    <th>nbetu</th>    
+                    <th>netu</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>    
+                        <td>{{ Enseignement.enseignement_structure.periode }}</td>    
+                        <td>{{ Enseignement.enseignement_structure.code }}</td>    
+                        <td>{{ Enseignement.enseignement_structure.ecue }}</td>    
+                        <td>{{ Enseignement.enseignement_structure.cursus }}</td>    
+                        <td>{{ Enseignement.enseignement_structure.etape }}</td>    
+                        <td>{{ Enseignement.enseignement_structure.maquette }}</td>    
+                        <td>{{ Enseignement.enseignement_structure.composante }}</td>    
+                        <td>{{ Enseignement.enseignement_structure.nbetu }}</td>    
+                        <td>{{ Enseignement.enseignement_structure.netu }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        {% endif %}
+    </fieldset>
+    {% endblock oneToOne_enseignement_structure%}
+    
+    {% block oneToOne_enseignement_etudiant_details %}  
+    <fieldset>
+        <legend>enseignement_etudiant_details</legend>
+        {% if not isCreation %}
+
+    <table class='w3-table-all w3-hoverable w3-small'>
+        <thead>
+            <tr class='w3-light-blue'>    
+                    <th>cm</th>    
+                    <th>ctd</th>    
+                    <th>td</th>    
+                    <th>tp</th>    
+                    <th>extra</th>    
+                    <th>bonus</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>    
+                        <td>{{ Enseignement.enseignement_etudiant_details.cm }}</td>    
+                        <td>{{ Enseignement.enseignement_etudiant_details.ctd }}</td>    
+                        <td>{{ Enseignement.enseignement_etudiant_details.td }}</td>    
+                        <td>{{ Enseignement.enseignement_etudiant_details.tp }}</td>    
+                        <td>{{ Enseignement.enseignement_etudiant_details.extra }}</td>    
+                        <td>{{ Enseignement.enseignement_etudiant_details.bonus }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        {% endif %}
+    </fieldset>
+    {% endblock oneToOne_enseignement_etudiant_details%}
+    
+    {% block oneToOne_voeu_enseignement_bilan %}  
+    <fieldset>
+        <legend>voeu_enseignement_bilan</legend>
+        {% if not isCreation %}
+
+    <table class='w3-table-all w3-hoverable w3-small'>
+        <thead>
+            <tr class='w3-light-blue'>    
+                    <th>cm</th>    
+                    <th>ctd</th>    
+                    <th>td</th>    
+                    <th>tp</th>    
+                    <th>bonus</th>    
+                    <th>extra</th>    
+                    <th>correspondant</th>    
+                    <th>heures</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>    
+                        <td>{{ Enseignement.voeu_enseignement_bilan.cm }}</td>    
+                        <td>{{ Enseignement.voeu_enseignement_bilan.ctd }}</td>    
+                        <td>{{ Enseignement.voeu_enseignement_bilan.td }}</td>    
+                        <td>{{ Enseignement.voeu_enseignement_bilan.tp }}</td>    
+                        <td>{{ Enseignement.voeu_enseignement_bilan.bonus }}</td>    
+                        <td>{{ Enseignement.voeu_enseignement_bilan.extra }}</td>    
+                        <td>{{ Enseignement.voeu_enseignement_bilan.correspondant }}</td>    
+                        <td>{{ Enseignement.voeu_enseignement_bilan.heures }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        {% endif %}
+    </fieldset>
+    {% endblock oneToOne_voeu_enseignement_bilan%}
+    
+    {% block oneToOne_voeu_enseignement_bilan_prioritaire %}  
+    <fieldset>
+        <legend>voeu_enseignement_bilan_prioritaire</legend>
+        {% if not isCreation %}
+
+    <table class='w3-table-all w3-hoverable w3-small'>
+        <thead>
+            <tr class='w3-light-blue'>    
+                    <th>cm</th>    
+                    <th>ctd</th>    
+                    <th>td</th>    
+                    <th>tp</th>    
+                    <th>bonus</th>    
+                    <th>extra</th>    
+                    <th>correspondant</th>    
+                    <th>heures</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>    
+                        <td>{{ Enseignement.voeu_enseignement_bilan_prioritaire.cm }}</td>    
+                        <td>{{ Enseignement.voeu_enseignement_bilan_prioritaire.ctd }}</td>    
+                        <td>{{ Enseignement.voeu_enseignement_bilan_prioritaire.td }}</td>    
+                        <td>{{ Enseignement.voeu_enseignement_bilan_prioritaire.tp }}</td>    
+                        <td>{{ Enseignement.voeu_enseignement_bilan_prioritaire.bonus }}</td>    
+                        <td>{{ Enseignement.voeu_enseignement_bilan_prioritaire.extra }}</td>    
+                        <td>{{ Enseignement.voeu_enseignement_bilan_prioritaire.correspondant }}</td>    
+                        <td>{{ Enseignement.voeu_enseignement_bilan_prioritaire.heures }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        {% endif %}
+    </fieldset>
+    {% endblock oneToOne_voeu_enseignement_bilan_prioritaire%}
+    
+    {% block oneToOne_structure_enseignement %}  
+    <fieldset>
+        <legend>structure_enseignement</legend>
+        {% if not isCreation %}
+
+    <table class='w3-table-all w3-hoverable w3-small'>
+        <thead>
+            <tr class='w3-light-blue'>    
+                    <th>periode</th>    
+                    <th>nbetu</th>    
+                    <th>code_ue</th>    
+                    <th>code_ecue</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>    
+                        <td>{{ Enseignement.structure_enseignement.periode }}</td>    
+                        <td>{{ Enseignement.structure_enseignement.nbetu }}</td>    
+                        <td>{{ Enseignement.structure_enseignement.code_ue }}</td>    
+                        <td>{{ Enseignement.structure_enseignement.code_ecue }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        {% endif %}
+    </fieldset>
+    {% endblock oneToOne_structure_enseignement%}
+    
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

@@ -1,0 +1,28 @@
+Bonjour à tous,
+
+Nous avons de nombreux besoins pour {{App.currentYear}}-{{App.currentYear+1}}.
+La liste des enseignements disponibles se trouve ici
+https://foire.physique.u-paris.fr/foire/personne/1244
+(j'ai regroupé les enseignements sous "missionnaire fictif" mais n'importe quel vacataire peut faire ces enseignements)
+
+Si un des enseignements vous intéresse, veuillez nous contacter.
+Comme il est important que nous complétions les équipes, j'appliquerai la politique du "premier arrivé, premier servi". 
+
+Si vous connaissez des personnes intéressées par des vacations (thésitifs, post-doc, CNRS, autres), vous pouvez leur donner nos coordonnées.
+
+Bien à vous,
+
+Raphaël Galicher.
+
+**Vous avez le droit d'enseigner jusqu'à 64h par an maximum.**
+
+**Vœux de  {{P.getGeneric}}**
+
+D'après les informations de la base de données {{App.baseName}}, **vos vœux correspondent à une charge de {{(P.getCharge() - P.voeu_personne_bilan.heures)|f2}} heures**.
+
+Un enseignement écrit en rouge est en sur-effectif.
+
+{{ include("/mailer/voeux.md.twig")|markdown_to_html }}
+
+
+

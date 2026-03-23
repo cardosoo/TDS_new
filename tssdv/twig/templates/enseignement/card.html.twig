@@ -1,0 +1,25 @@
+{% extends "enseignement/base_card.html.twig" %}
+
+
+{% block domaineCard %}
+    {% set s = 0%}
+    {% for DE in E.domaine_enseignementList %}
+        {% set s = s + DE.quotite %}
+    {% endfor %}
+
+    <div class="w3-card w3-round">
+        <div class="w3-white">
+            <i class="fa fa fa-arrow-circle-right fa-fw w3-margin-right"></i>Domaines associés :
+            <ul>
+            {% for DE in E.domaine_enseignementList %}
+                <li>{{ (DE.quotite/s*100)|f2 }}% - {{ DE.domaine.nom }} </li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+{% endblock domaineCard %}
+
+{% block voeuxCard %}
+    {% include(["enseignement/voeuxCard.html.twig", "enseignement/tssdv_voeuxCard.html.twig"]) %}
+{% endblock voeuxCard %}             

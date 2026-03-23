@@ -1,0 +1,52 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _personne_situation_reduction_.html.twig
+    created : Sun, 22 Mar 2026 23:12:16 +0100 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "personne_situation_reduction", id: "{{ personne_situation_reduction.id }}" }}'></i>personne_situation_reduction</legend>
+
+{% block reduction_full %}
+    <p>
+    {% block reduction_label %}
+    <label class='text' for="reduction"> reduction <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "personne_situation_reduction", F: "reduction", id: "{{personne_situation_reduction.id}}" }}'></i></label>    
+    {% endblock reduction_label %}
+    {% block reduction_active %}
+    <input class='text' type="number"  value="{{ personne_situation_reduction.reduction }}" name="reduction" id="reduction" placeholder="0">
+
+    {% endblock reduction_active %}
+    </p>
+{% endblock reduction_full %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

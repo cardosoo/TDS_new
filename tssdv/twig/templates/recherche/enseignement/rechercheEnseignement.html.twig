@@ -1,0 +1,33 @@
+{% extends "recherche/enseignement/base_rechercheEnseignement.html.twig" %}
+
+{% block detail_recherche %}
+    Besoins / Sous-Éffectifs
+{% endblock detail_recherche %}
+
+
+{% block extraWithHeader %}
+    {% if App.cmpl.withDomaine %}<th rowspan=2>Domaines</th>{% endif %}
+{% endblock extraWithHeader %}
+
+
+{% block besoins %}
+<td style='text-align: center'>{{ ens.cm|e2 }}/{{ens.voeu_enseignement_bilan.cm|e2}}</td>
+<td style='text-align: center'>{{ ens.ctd|e2 }}/{{ens.voeu_enseignement_bilan.ctd|e2}}</td>
+<td style='text-align: center'>{{ ens.td|e2 }}/{{ens.voeu_enseignement_bilan.td|e2}}</td>
+<td style='text-align: center'>{{ ens.tp|e2 }}/{{ens.voeu_enseignement_bilan.tp|e2}}</td>
+<td style='text-align: center'>{{ ens.bonus|e2 }}/{{ens.voeu_enseignement_bilan.bonus|e2}}</td>
+{% endblock  besoins %}
+
+
+{% block extraWithBody %}
+    {% if App.cmpl.withDomaine %}
+    <td>
+        <ul>
+        {% for quotite in ens.quotite|split('|') %}
+            <li>{{quotite}}</li>
+        {% endfor %}
+        </ul>
+    </td>
+    {% endif %}
+{% endblock extraWithBody %}
+

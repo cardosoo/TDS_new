@@ -1,0 +1,119 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _Cursus_.html.twig
+    created : Wed, 30 Jul 2025 18:30:52 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "Cursus", id: "{{ Cursus.id }}" }}'></i>Cursus</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Cursus", F: "actif", id: "{{Cursus.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ Cursus.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block nom_full %}
+    <p>
+    {% block nom_label %}
+    <label class='text' for="nom"> nom <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Cursus", F: "nom", id: "{{Cursus.id}}" }}'></i></label>    
+    {% endblock nom_label %}
+    {% block nom_active %}
+    <input class='text'  type="text" value="{{ Cursus.nom }}" name="nom" id="nom" size="50" maxlength="100", placeholder="">
+
+    {% endblock nom_active %}
+    </p>
+{% endblock nom_full %}    
+
+{% block intitule_full %}
+    <p>
+    {% block intitule_label %}
+    <label class='text' for="intitule"> intitule <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Cursus", F: "intitule", id: "{{Cursus.id}}" }}'></i></label>    
+    {% endblock intitule_label %}
+    {% block intitule_active %}
+    <input class='text'  type="text" value="{{ Cursus.intitule }}" name="intitule" id="intitule" size="50" maxlength="100", placeholder="">
+
+    {% endblock intitule_active %}
+    </p>
+{% endblock intitule_full %}    
+
+    {% block manyToOne_etapeList_etapeList %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Cursus", id: "{{ Cursus.id }}", L: "etapeList" }}'></i>etapeList - {{ (Cursus.etapeList)|length }} élément{{(Cursus.etapeList)|length >1?'s':''}}</legend>
+
+                <ul>
+                {% for L in Cursus.etapeList %}   {% block manyToOne_Cursus_cursus %}
+                    <li class='{{ L.actif?"":"passif" }}'>
+                        {{ L.getGeneric(true)|raw }}
+                    </li>
+                    {% endblock manyToOne_Cursus_cursus %}
+                {% endfor %}
+                </ul>
+    </fieldset>
+    {% endblock manyToOne_etapeList_etapeList %}    
+
+    {% block oneToOne_structure_enseignement %}  
+    <fieldset>
+        <legend>structure_enseignement</legend>
+        {% if not isCreation %}
+
+    <table class='w3-table-all w3-hoverable w3-small'>
+        <thead>
+            <tr class='w3-light-blue'>    
+                    <th>periode</th>    
+                    <th>nbetu</th>    
+                    <th>code_ue</th>    
+                    <th>code_ecue</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>    
+                        <td>{{ Cursus.structure_enseignement.periode }}</td>    
+                        <td>{{ Cursus.structure_enseignement.nbetu }}</td>    
+                        <td>{{ Cursus.structure_enseignement.code_ue }}</td>    
+                        <td>{{ Cursus.structure_enseignement.code_ecue }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        {% endif %}
+    </fieldset>
+    {% endblock oneToOne_structure_enseignement%}
+    
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

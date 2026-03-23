@@ -1,0 +1,90 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+<div class="w3-cell-row" style='margin:3em'>
+
+<h3>Comparaison données OSE - Foire ; listing des services </h3>
+
+<details>
+    <summary>Personnes pas trouvées dans le LDAP</summary>
+    <table class="standardList" class="w3-table-all w3-centered">
+        <thead>
+            <tr>
+                <th>uid</th>
+                <th>personne</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for line in absentLDAP %}
+            <tr>
+                <td>{{ line.uid }}</td>
+                <td><a href='/{{App.appname}}/personne/{{line.id}}'>{{ line.prenom }} {{line.nom}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</details>    
+ 
+<details>
+    <summary>Personnes sans code OSE dans le LDAP</summary>
+    <table class="standardList" class="w3-table-all w3-centered">
+        <thead>
+            <th>uid</th>
+            <th>personne</th>
+        </thead>
+        <tbody>
+            {% for line in sansOSE %}
+            <tr>
+                <td>{{ line.uid }}</td>
+                <td><a href='/{{App.appname}}/personne/{{line.id}}'>{{ line.prenom }} {{line.nom}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</details>    
+
+
+
+<details>
+    <summary>Personnes pour lesquelles tout va bien</summary>
+    <table class="standardList" class="w3-table-all w3-centered">
+        <thead>
+            <th>uid</th>
+            <th>personne</th>
+            <th>OSE</th>
+        </thead>
+        <tbody>
+            {% for line in ok %}
+            <tr>
+                <td>{{ line.uid }}</td>
+                <td><a href='/{{App.appname}}/personne/{{line.id}}'>{{ line.prenom }} {{line.nom}}</td>
+                <td>{{ line.ose }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</details>    
+
+
+
+</div> 
+<script>
+    $(document).ready(function () {
+        $('.standardList').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock %}

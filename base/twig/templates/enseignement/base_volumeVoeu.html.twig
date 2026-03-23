@@ -1,0 +1,131 @@
+<style>
+	input[type="number"] {
+		width: 4em;
+	}
+	input + span {
+		padding-right: 30px;
+	}
+
+	input:invalid+span:after {
+		position: absolute;
+		content: '✖';
+		padding-left: 5px;
+	}
+
+	input:valid+span:after {
+		position: absolute;
+		content: '✓';
+		padding-left: 5px;
+	}
+</style>
+
+
+<div id='volumeVoeu' class="w3-card w3-round w3-yellow ">
+	<div>
+		<i class="fa fa fa-arrow-circle-right fa-fw w3-margin-right"></i>Votre vœu
+	</div>
+	<div class='w3-container'>
+		<div class="w3-card w3-round w3-white ">
+			<div class="w3-section w3-container">
+				<form id="addVoeuForm" method='POST' action="/{{ App.appName }}/enseignement/voeu/{{ E.id }}">
+					{% if  E.cm %}
+						<div>
+							<input type="number" id="cm" name="cm" min='0.0' max='{{ MAX.cm }}' step='any' data-bind="value: cm">
+							<span class="validity"></span>
+							<label for="cm">
+								<span class='fix5em'>CM</span>
+								Cours Magistral</label>
+						</div>
+					{% endif %}
+					{% if  E.ctd %}
+						<div>
+							<input type="number" id="ctd" name="ctd" min='0.0' max='{{ MAX.ctd }}' step='any' data-bind="value: ctd">
+							<span class="validity"></span>
+							<label for="ctd">
+								<span class='fix5em'>CTD</span>
+								Cours / Travaux Dirigés</label>
+						</div>
+					{% endif %}
+					{% if  E.td %}
+						<div>
+							<input type="number" id="td" name="td" min='0.0' max='{{ MAX.td }}' step='any' data-bind="value: td">
+							<span class="validity"></span>
+							<label for="td">
+								<span class='fix5em'>TD</span>
+								Travaux Dirigés</label>
+						</div>
+					{% endif %}
+					{% if  E.tp %}
+						<div>
+							<input type="number" id="tp" name="tp" min='0.0' max='{{ MAX.tp }}' step='any' data-bind="value: tp">
+							<span class="validity"></span>
+							<label for="tp">
+								<span class='fix5em'>TP</span>
+								Travaux Pratiques</label>
+						</div>
+					{% endif %}
+					{% if  E.extra %}
+						<div>
+							<input type="number" id="extra" name="extra" min='0' max='{{ MAX.extra }}' data-bind="value: extra">
+							<span class="validity"></span>
+							<label for="extra">
+								<span class='fix5em'>Ext</span>
+								Extra</label>
+						</div>
+					{% endif %}
+					{% if  E.bonus %}
+						<div>
+							<input type="number" id="bonus" name="bonus" min='0' max='{{ MAX.bonus }}' data-bind="value: bonus">
+							<span class="validity"></span>
+							<label for="bonus">
+								<span class='fix5em'>Bon</span>
+								Bonus</label>
+						</div>
+					{% endif %}
+					{% block correspondant %}
+					<div>
+						<input type="checkbox" id="correspondant" name="correspondant" {{ V.correspondant=='t'?'checked':''}}>
+						<label for="correspondant">
+							Je souhaite être correspondant pour cet enseignement</label>
+					</div>
+					{% endblock correspondant %}
+					{% block complementVolumeVoeu %}
+                    <div>{{ M }}</div>
+					{% endblock complementVolumeVoeu %}
+					<button class="w3-button w3-block w3-green w3-section w3-padding">Émettre</button>
+				</form>
+				<h2>Charge :<span data-bind="text: charge"></span>hETD</h2>
+			</div>
+		</div>
+	</div>
+	<br>
+</div>
+
+<script>
+
+	var ViewModel = function (cm, ctd, td, tp, extra, bonus) {
+
+this.cm = ko.observable(cm);
+this.ctd = ko.observable(ctd);
+this.td = ko.observable(td);
+this.tp = ko.observable(tp);
+this.extra = ko.observable(extra);
+this.bonus = ko.observable(bonus);
+
+this.charge = ko.pureComputed(function () {
+var cm = parseFloat(this.cm()) * {{ C.cm }};
+var ctd = parseFloat(this.ctd()) * {{ C.ctd }};
+var td = parseFloat(this.td()) * {{ C.td }};
+var tp = parseFloat(this.tp()) * {{ C.tp }};
+var extra = parseFloat(this.extra()) * {{ C.extra }};
+var bonus = parseFloat(this.bonus());
+return Math.round(100 * (cm + ctd + td + tp + extra + bonus)) / 100;
+}, this);
+};
+
+ko.applyBindings(new ViewModel({{ V.cm?V.cm:0 }}, {{ V.ctd?V.ctd:0 }}, {{ V.td?V.td:0 }}, {{ V.tp?V.tp:0 }}, {{ V.extra?V.extra:0 }}, {{ V.bonus?V.bonus:0 }})); // This makes Knockout get to work
+
+element = document.getElementById('volumeVoeu');
+element.scrollIntoView();
+</script>
+

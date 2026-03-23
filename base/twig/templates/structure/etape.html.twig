@@ -1,0 +1,109 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+    {# calcul du cout (somme des besoins) de ce qui est dans la base #}
+    {% set cout = 0 %}
+    {% for elm in IL|sort((a, b) => a.ecue.code <=> b.ecue.code) %}
+        {% set cout = cout + elm.besoins %}
+    {% endfor %}
+    {# calcul des couts en vacation pour ce qui est hors de la base #}
+    {% set coutVac = 0 %}
+    {% set coutVacIn = 0 %}
+    {% for elm in IL|sort((a, b) => a.ecue.code <=> b.ecue.code) %}
+        {% set coutVac = coutVac + elm.vacOut %}
+        {% set coutVacIn = coutVacIn + elm.vacIn %}
+    {% endfor %}
+    {% for elm in OL|sort((a, b) => a.ecue.code <=> b.ecue.code) %}
+        {% set coutVac = coutVac + elm.vacOut %}
+        {% set coutVacIn = coutVacIn + elm.vacIn %}
+    {% endfor %}
+
+    <div class="w3-panel w3-red">
+    <h3>Attention !</h3>
+    <p>Cette présentation ne prend pas (encore) en compte la mutualisation des enseignements.</p>
+    <p>Si un enseignement est présent dans plusieurs etapes, Le côut englobant toutes les filières est présent ici.</p>
+    </div>  
+
+<h1>Données pour l'étape : <b title='{{etape.OseNom}}'>{{ etape.nom }}</b></h1>
+
+<ul>
+    <li>nom : {{ etape.nom }}</li>
+    <li>nom  apogee : {{ etape.getOseNom }}</li>
+    <li>code : {{ etape.code }}</li>
+    <li>cursus : {{ etape.cursusName }}</li>
+    <li>type : {{ etape.type }}</li>
+    <li>niveau : {{ etape.niveau }}</li>
+    {% for personne in etape.responsables %}
+    <li>responsable : <a href='/{{ App.appName }}/personne/{{personne.id}}'>{{ personne.prenom}} {{ personne.nom }}</a></li>
+    {% endfor %}
+    <li>Coût total : {{ cout + coutVac }} hEQTD</li>
+    <li>Coût dans la base : {{ cout }} hEQTD 
+    {% if coutVacIn > 0 %}
+        dont vacations {{ coutVacIn }} hEQTD
+    {% endif %}
+    </li>
+    <li>Coût des vacations hors base : {{ coutVac }} hEQTD</li>
+
+</ul>
+
+
+<h3>Enseignements présents dans la base de données</h3>
+<ul>
+{% for elm in IL|sort((a, b) => a.ecue.code <=> b.ecue.code) %}
+    {% set ecue = elm.ecue %}
+    {% set E = elm.enseignement %}
+    
+    {# <li><a href='/{{App.appName}}/enseignement/{{E.id}}' >{{ ecue.code }}</a> -{{ ecue.nom }} ({{E.nom }})</li> #}
+    <li title="{{ecue.getNom()}}">
+        <span class='IL'>{{E.getGenericWithLink|raw}}</span>
+        <span>({{elm.besoins }} {{ elm.vacOut > 0 ? "+ " ~ elm.vacOut ~ (vacation) : "" }} hEQTD)</span>
+    </li>
+{% endfor %}
+</ul>
+
+<h3>Enseignements absents dans la base de données</h3>
+<ul>
+
+{% for elm in OL|sort((a, b) => a.ecue.code <=> b.ecue.code) %}
+
+    {% set ecue = elm.ecue %}
+    {% set c = elm.c %}
+
+    <li title="{{ecue.getNom()}}">
+        <span class='IL'>
+            <a href='/{{App.appName}}/structure/ecue/{{ecue.code}}' >{{ ecue.code }}</a> {{ ecue.nom }} ({{c}})
+        </span>
+        {{ elm.vacOut > 0 ? " (" ~ elm.vacOut ~ "hEQTD)" : "" }}
+    </li>
+
+{% endfor %}
+</ul>
+
+<style>
+
+
+.OL, 
+.IL {
+  display: inline-block;
+  width: 40em;
+  position: relative;
+  white-space: nowrap;
+}
+
+.OL,
+.IL::after {
+  content: ".............................................................................................................................";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #999;
+  z-index: 0;
+  pointer-events: none;
+}
+
+
+</style>
+{% endblock %}

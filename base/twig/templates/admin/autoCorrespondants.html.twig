@@ -1,0 +1,16 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+    <br>
+    <h3>Attribution automatique des correspondants</h3>
+    
+    {% if mod==0 %}
+        Il n'y a pas eu de modification des correspondants.
+    {% else %}
+        Il y eu {{ mod }} correspondant{{ mod>1?"s":""}} ajouté{{ mod>1?"s":"" }}.        
+    {% endif %}
+{% endblock %}
+
+

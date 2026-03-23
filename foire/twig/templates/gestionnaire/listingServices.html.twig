@@ -1,0 +1,155 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+<div class="w3-cell-row">
+
+<h3>Comparaison données OSE - Foire ; listing des services </h3>
+
+<details>
+    <summary>Enseignant pas trouvés dans la foire</summary>
+        <table class="standardList" class="w3-table-all w3-centered">
+            <thead>
+                    <th>Intervernant</th>
+                    <th>Statut</th>
+                    <th>SIHAM</th>
+            </thead>
+            <tbody>
+                {% for line in emptyList %}
+                <tr>
+                    <td>{{ line.intervenant }}</td>
+                    <td>{{ line.statut }}</td>
+                    <td>{{ line.siham }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</details>    
+ 
+<details>
+    <summary>Voeux de la foire pas trouvés dans OSE</summary>
+        <table class="standardList" class="w3-table-all w3-centered">
+            <thead>
+                    <th>Intervernant</th>
+                    <th>Enseignement</th>
+                    <th>ECUE</th>
+                    <th>étape</th>
+                    <th>CM</th>
+                    <th>CTD</th>
+                    <th>TD</th>
+                    <th>TP</th>
+                    <th>Extra</th>
+                    <th>Bonus</th>
+            </thead>
+            <tbody>
+                {% for line in voeuList %}
+                <tr>
+                    <td><a href='/{{App.appName}}/personne/{{line.personne_id}}'></a>{{line.nom}}</td>
+                    <td><a href='/{{App.appName}}/enseignement/{{line.enseignement_id}}'></a>{{line.intitule}}</td>
+                    <td class='w3-center'>{{ line.ecue|f2 }}</td>
+                    <td class='w3-center'>{{ line.etape|f2 }}</td>
+                    <td class='w3-center'>{{ line.cm|f2 }}</td>
+                    <td class='w3-center'>{{ line.ctd|f2 }}</td>
+                    <td class='w3-center'>{{ line.td|f2 }}</td>
+                    <td class='w3-center'>{{ line.tp|f2 }}</td>
+                    <td class='w3-center'>{{ line.extra|f2 }}</td>
+                    <td class='w3-center'>{{ line.bonus|f2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</details>    
+
+
+
+
+<details>
+    <summary>Lignes dans OSE trouvées dans la foire</summary>
+        <table class="standardList" class="w3-table-all w3-centered">
+            <thead>
+                    <th>Intervernant</th>
+                    <th>Enseignement</th>
+                    <th>ECUE</th>
+                    <th>étape</th>
+                    <th>CM</th>
+                    <th>CTD</th>
+                    <th>TD</th>
+                    <th>TP</th>
+                    <th>Extra</th>
+                    <th>Bonus</th>
+            </thead>
+            <tbody>
+                {% for line in ligneFoundList %}
+                <tr>
+                    <td>{{ attribute(line,'Intervenant') }}</td>   
+                    <td>{{ attribute(line,'Enseignement ou fonction référentielle') }}</td>
+                    <td class='w3-center'>{{ attribute(line,'Code enseignement') }}</td>
+                    <td class='w3-center'>{{ attribute(line,'Code formation') }}</td>
+                    <td class='w3-center'>{{ attribute(line,'CM') }}</td>
+                    <td class='w3-center'>{{ attribute(line,'CMTD') }}</td>
+                    <td class='w3-center'>{{ attribute(line,'TD') }}</td>
+                    <td class='w3-center'>{{ attribute(line,'TP7') }}</td>
+                    <td class='w3-center'>{{ attribute(line,'MD') }}</td>
+                    <td class='w3-center'>{{ attribute(line,'Référentiel') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</details>    
+
+<details>
+    <summary>Lignes dans OSE pas trouvées dans la foire</summary>
+        <table class="standardList" class="w3-table-all w3-centered">
+            <thead>
+                    <th>Intervernant</th>
+                    <th>Enseignement</th>
+                    <th>ECUE</th>
+                    <th>étape</th>
+                    <th>CM</th>
+                    <th>CTD</th>
+                    <th>TD</th>
+                    <th>TP</th>
+                    <th>Extra</th>
+                    <th>Bonus</th>
+            </thead>
+            <tbody>
+                {% for line in ligneNotFoundList %}
+                <tr>
+                    <td>{{ attribute(line,'Intervenant') }}</td>   
+                    <td>{{ attribute(line,'Enseignement ou fonction référentielle') }}</td>
+                    <td class='w3-center'>{{ attribute(line,'Code enseignement') }}</td>
+                    <td class='w3-center'>{{ attribute(line,'Code formation') }}</td>
+                    <td class='w3-center'>{{ attribute(line,'CM') }}</td>
+                    <td class='w3-center'>{{ attribute(line,'CMTD') }}</td>
+                    <td class='w3-center'>{{ attribute(line,'TD') }}</td>
+                    <td class='w3-center'>{{ attribute(line,'TP7') }}</td>
+                    <td class='w3-center'>{{ attribute(line,'MD') }}</td>
+                    <td class='w3-center'>{{ attribute(line,'Référentiel') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</details>    
+
+
+
+</div> 
+<script>
+    $(document).ready(function () {
+        $('.standardList').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock %}

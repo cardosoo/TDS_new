@@ -1,0 +1,27 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px">    
+    {% block outils %}
+    <h3>Outils</h3>
+    <ul>
+        <li><a href='/{{App.appName}}/admin/searchLDAP'>recherche LDAP</a></li>
+        <li><s href='/{{App.appName}}/admin/updateOSE_FromLDAP'>Mise à jour des codes OSE à partir du LDAP (on fait correspondre les uid)</s></li>
+        <li><s href='/{{App.appName}}/admin/importReferentielOSE'>Importation des référentiels depuis le listing des services de OSE</s></li>
+        <li><s href='/{{App.appName}}/admin/importServicesOSE'>Importation des services depuis le listing des services de OSE</s></li>
+        <li><s href='/{{App.appName}}/admin/importRespUE'>Importation des responsables d'UE et autres bricoles</s></li>
+        <li>Importation des Structures d'enseignement de l'établissement <a href='/{{App.appName}}/admin/structure/importExtraction'>Extraction</a></li>
+        <li>Importation des Structures d'enseignement de l'établissement <a href='/{{App.appName}}/admin/structure/importMutualisation'>Mutualisationtion</a></li>
+        <li>Correction des <a href='/{{App.appName}}/admin/structure/correctionEtape'>Etapes</a></li>
+        {#<li><a href='/{{App.appName}}/admin/importStructure'>Importation des Structures d'enseignement de l'établissement</a></li>#}
+    </ul>
+    {% endblock outils %}
+
+    {% block divers %}
+
+    {% endblock divers %}
+
+</div> 
+{% endblock %}

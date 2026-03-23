@@ -1,0 +1,26 @@
+{% if P %}
+<table>
+    <thead>
+        <tr>
+            <th style='width: 20em; text-align:left;'>Enseignement</th>
+            <th style='width: 10em; text-align:center;'>Choix</th>
+            <th style='text-align:left;'>Commentaire</th>
+            <th style='width: 10em; text-align:center;'>Reste</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in P %}
+        <tr>
+            <td style='width: 20em; text-align:left; {{ (0+p.voeu_enseignement_bilan.heures)<-0.01?'color: red;'}}{{ (0+p.voeu_enseignement_bilan.heures)>0.01?'color: green;'}}'>{{ p.enseignement.code }} - {{ p.enseignement.nom }}</td>
+            <td style='width: 10em; text-align:center;'>{{ p.panier.cours?"CM ":"" }}{{ p.panier.ctd?"CTD ":"" }}{{ p.panier.td?"TD ":"" }}{{ p.panier.tp?"TP ":"" }}{{ p.panier.colle?"Extra ":"" }}{{ p.panier.bonus?"Bonus ":"" }}{{ 't'==p.panier.responsable?'oui':'' }}</td>
+            <td style='text-align:left;'>{{ p.panier.commentaire|markdown_to_html }}</td>
+            <td style='width: 10em; text-align:center; {{ (0+p.voeu_enseignement_bilan.heures)<-0.01?"color: red;"}}{{ (0+p.voeu_enseignement_bilan.heures)>0.01?"color: green;"}}'> 
+            {{ p.voeu_enseignement_bilan.heures|f2 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    ### Pas de panier pour l'année {{ foire.anneeCourante }} - {{ foire.anneeCourante +1 }}
+{% endif %}
+

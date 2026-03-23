@@ -1,0 +1,87 @@
+{% set E = elm.E %}
+<details class="{{elm.aValider>0?"w3-theme-l2":""}}" id='details-{{E.id}}' {{ open?"open":""}}>
+    <summary>
+    <span class='w3-blue-grey w3-padding-small'>{{ elm.aValider }} ligne{{elm.aValider>1?"s":""}} à Valider</span>
+    <span class='w3-light-grey w3-padding-small'>{{ elm.valide}} ligne{{elm.aValider>1?"s":""}} validée{{elm.valide>1?"s":""}}</span>
+    <span class='w3-blue-grey w3-padding-small'>{{ elm.enAttente }} ligne{{elm.aValider>1?"s":""}} en attente</span>
+    <span class='w3-light-grey w3-padding-small'>{{ E.getGenericWithLink|raw }}</span>
+    <span class='w3-right'>
+        <a class='w3-btn' onclick='doReloadVoeuxListe1(this, {{ E.id }} )'><i class="fas fa-sync-alt"></i></a>
+        <a id = 'saveVoeux-{{E.id}}' class='w3-btn w3-red w3-hide' onclick='doSaveVoeuxListe1(this, {{ E.id }} )'>Enregister</a>
+    </span>
+    </summary>
+    <div class="w3-cell-row ">
+        <div class='w3-container w3-cell'>
+            {{ include("enseignement/besoins.html.twig") }}
+        </div>
+        {% if E.voeuList %}
+        {% set Bilan = E.voeu_enseignement_bilan %}
+        <div class='w3-container w3-medium w3-cell'>
+            <table class='w3-table-all w3-hoverable'>
+                <thead>
+                    <tr class='w3-light-blue'>
+                        <th>Enseignant</th>
+                        <th class="w3-center" title='Nb de groupes de Cours Magistral'>CM</th>
+                        <th class="w3-center" title='Nb de groupes de Cours TD'>CTD</th>
+                        <th class="w3-center" title='Nb de groupes de Travaux Dirigés'>TD</th>
+                        <th class="w3-center" title='Nb de groupes de Travaux Pratiques'>TP</th>
+                        <th class="w3-center" title="Nb d'heures en Extra">Ext</th>
+                        <th class="w3-center" title="Nb d'heures en Bonus">Bon</th>
+                        <th class="w3-center" title="Correspondant pour l'enseignement">Cor</th>
+                        <th class="w3-center" title='Charge en heure équivalent TD'>hTD</th>
+                        <th class="w3-center" title="Validation dans le Tableau de Service">Valid</th> 
+                        <th class="w3-center w3-small"  title='Heures restant à affecter pour cette personne'>reste</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for v in E.voeuList %}
+                    <tr class="{{ v.actif?"":"passif" }} {{ v.personne.actif?"":"passifLink" }}" >
+                        <th><a href="/{{ App.appName }}/personne/{{ v.personne.id}}">{{ v.personne.prenom }} {{ v.personne.nom }}</a></th>
+                        <td class="w3-center">{{ v.cm|f2 }}</td>
+                        <td class="w3-center">{{ v.ctd|f2 }}</td>
+                        <td class="w3-center">{{ v.td|f2 }}</td>
+                        <td class="w3-center">{{ v.tp|f2 }}</td>
+                        <td class="w3-center">{{ v.extra|f2 }}</td>
+                        <td class="w3-center">{{ v.bonus|f2 }}</td>
+                        <td class="w3-center">{{ v.correspondant ? 'oui' : '' }}</td>
+                        <td class="w3-center">{{ v.voeu_bilan_ligne.heures|f2 }}</td> 
+                        <td class="{{v.etat_ts == 2?"w3-left":"w3-center"}}" >
+                            {% if v.etat_ts == 2%}
+                            <input onchange='changeEtat(this, {{E.id}})' type="radio" id="noChange_{{v.id}}" vid='{{v.id}}' action='noChange' name="etat_{{v.id}}" value="0" checked>
+                            <label for="noChange_{{v.id}}">Pas de changement</label><br>
+                            <input onchange='changeEtat(this, {{E.id}})' type="radio" id="validate_{{v.id}}" vid='{{v.id}}'  action='validate' name="etat_{{v.id}}" value="valid">
+                            <label for="validate_{{v.id}}">Valider</label><br>
+                            <input onchange='changeEtat(this, {{E.id}})' type="radio" id="delete_{{v.id}}" vid='{{v.id}}'  action='delete' name="etat_{{v.id}}" value="supp">
+                            <label for="delete_{{v.id}}">Supprimer</label><br>
+                            {% elseif v.etat_ts == 3%}
+                            <i class="far fa-check-circle"></i>
+                            {% endif %}
+                        </td>
+                        <td class="w3-center w3-small">{{ v.personne.voeu_personne_bilan.heures|number_format }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class='w3-light-blue'>
+                        <th>Manque</th>
+                        <td class="w3-center {{Bilan.cm>0.01?'w3-green':''}}{{Bilan.cm<-0.01?'w3-red':''}}">{{ Bilan.cm|f2 }}</td>
+                        <td class="w3-center {{Bilan.ctd>0.01?'w3-green':''}}{{Bilan.ctd<-0.01?'w3-red':''}}">{{ Bilan.ctd|f2 }}</td>
+                        <td class="w3-center {{Bilan.td>0.01?'w3-green':''}}{{Bilan.td<-0.01?'w3-red':''}}">{{ Bilan.td|f2 }}</td>
+                        <td class="w3-center {{Bilan.tp>0.01?'w3-green':''}}{{Bilan.tp<-0.01?'w3-red':''}}">{{ Bilan.tp|f2 }}</td>
+                        <td class="w3-center {{Bilan.extra>0.01?'w3-green':''}}{{Bilan.extra<-0.01?'w3-red':''}}">{{ Bilan.extra|f2 }}</td>
+                        <td class="w3-center {{Bilan.bonus>0.01?'w3-green':''}}{{Bilan.bonus<-0.01?'w3-red':''}}">{{ Bilan.bonus|f2 }}</td>
+                        <td class="w3-center"></td>
+                        <td class="w3-center"></td>
+                        <td class="w3-center {{Bilan.heures>0.01?'w3-green':''}}{{Bilan.heures<-0.01?'w3-red':''}}">{{ Bilan.heures|f2 }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <br>
+        </div>
+    {% else %}
+        =&gt; Pas d'équipe pour l'année {{ App.currentYear }} - {{ App.currentYear+1 }}
+    {% endif %}
+    </div>    
+</details>
+
+

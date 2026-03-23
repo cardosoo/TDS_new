@@ -1,0 +1,143 @@
+{% extends "layout.html.twig" %}
+
+{% block aside %}{% endblock %}
+
+{% block section %}
+
+<div class="w3-container w3-content" style="max-width:1600px;margin-top:80px;margin-bottom:80px">
+    <h3>{{ M.getGenericWithLink()| raw}}</h3>
+
+    {% for D in M.diplomeList %}
+        {% for ET in D.etapeList %}
+        <div class='w3-card w3-container w3-pale-yellow'>
+            <div class="w3-container w3-third" >
+                Diplome : {{ D.code }} {{ D.nom }} <br>
+                Etape : {{ ET.code }} {{ ET.nom }} <br>
+                Cursus : {{ ET.cursus.nom }}, {{ ET.cursus.intitule }}<br>
+            </div>
+            <div class="w3-container w3-twothird">
+            Responsables :
+            <ul> 
+            {% for R in ET.responsableList %}
+                <li>{{ R.personne.getGenericWithLink()| raw }}</li>
+            {% endfor %}
+            </ul>
+            </div>
+        </div>
+            {% for S in ET.semestreList %}
+            <div class='w3-card w3-container'>
+                <div class="w3-container">
+                    Semestre : {{ S.code }} {{ S.nom }} <br>
+                    Période : {{ S.periode }} <br>
+                </div>
+                <div class="w3-container">
+                {% for UE in S.ueList %}
+                    <ul class='w3-ul w3-border'>
+                    {% for ECUE in UE.ecueList %}
+                        <li> 
+                        <div class='w3-container'>
+                            <div class="w3-container w3-third">
+                                UE : {{ UE.code }} {{ UE.nom }} <br>
+                                ECUE : {{ ECUE.code }} - {{ ECUE.nom }} <br>
+                                ECTS : {{ ECUE.ects }}
+                            </div>
+                            {% set E = ECUE.enseignement %}
+                            <div class="w3-container w3-twothird">
+                                <div class='w3-container {{ E.attribuable?"w3-pale-yellow":"w3-light-blue"}}'>     
+                                    {{ E.nuac }} - {{ E.nom }} - {{ E.getGenericWithLink()| raw }} <br>
+                                    {% if E.cm %}
+                                        <b>CM :</b> {{E.cm}}x{{ E.s_cm * E.d_cm }}x{{E.i_cm}}
+                                    {% endif %}
+                                    {% if E.td %}
+                                        <b>TD :</b> {{E.td}}x{{ E.s_td * E.d_td }}x{{E.i_td}}
+                                    {% endif %}
+                                    {% if E.ctd %}
+                                        <b>CTD :</b> {{E.ctd}}x{{ E.s_ctd * E.d_ctd }}x{{E.i_ctd}}
+                                    {% endif %}
+                                    {% if E.tp %}
+                                        <b>TP :</b> {{E.tp}}x{{ E.s_tp * E.d_tp }}x{{E.i_tp}}
+                                    {% endif %}
+                                    {% if E.extra %}
+                                        <b>Extra :</b> {{E.extra}}x{{ E.s_extra * E.d_extra }}x{{E.i_extra}}
+                                    {% endif %} <br>                                    
+                                    Coût total {{ E.enseignement_besoins.besoins| f2}} hETD
+                                </div>
+                                <div class='w3-container'>
+                                    <div class='w3-container w3-half'>
+                                        <ul class='w3-ul w3-tiny'>
+                                        {% for V in E.voeuList %}
+                                            {% if V.correspondant %}
+                                                <li>{{ V.personne.getGeneric() }}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class='w3-container w3-half'>
+                                        <ul class='w3-ul w3-tiny'>
+                                        {% for V in E.voeuList %}
+                                            {% if not V.correspondant %}
+                                                <li>{{ V.personne.getGeneric() }}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </li>
+                    {% endfor %} {# ECUEList #}
+                    </ul>
+                {% endfor %} {# UEList #}
+                </div>
+            </div>
+            <br> 
+            {% endfor %} {# semestreList #}
+        {% endfor %} {# etapeList #} 
+    {% endfor %} {# diplomeList #}
+</div>
+
+
+
+
+
+{#
+    <table id="tdsList" class="w3-table-all w3-centered">
+        <thead>
+            <th>maquette</th>
+            <th>Gestionnaire</th>
+            <th>Responsable</th>
+            <th>co-Responsable</th>
+        </thead>
+        <tbody>
+        {% for M in maquetteList %}
+            <tr>
+                <td><a href='/{{App.appName}}/maquette/{{M.id}}'>{{ M.nom}}</a></td>
+                <td><a href='/{{App.appName}}/personne/{{M.gestionnaire.id}}'>{{ M.gestionnaire.getGeneric() }}</a></td>
+                <td><a href='/{{App.appName}}/personne/{{M.responsable.id}}'>{{ M.responsable.getGeneric() }}</a></td>
+                <td><a href='/{{App.appName}}/personne/{{M.co_responsable.id}}'>{{ M.co_responsable.getGeneric() }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div> 
+
+<script>
+    $(document).ready(function () {
+        $('#tdsList').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'portrait'
+                }
+            ]
+        });
+    });
+</script>
+#}
+{% endblock %}

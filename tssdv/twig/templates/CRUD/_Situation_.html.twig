@@ -1,0 +1,182 @@
+
+{#  This file is auto-generated and should not be changed by hand.
+    filename : _Situation_.html.twig
+    created : Wed, 30 Jul 2025 18:30:52 +0200 UTC
+#}
+
+{% extends "CRUD/CRUD.html.twig" %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="/{{ App.appName }}/assets/css/forms.css"> 
+
+<div class="wrapper">
+    <div id="modal" class="hidden">
+        <div id='modal_in'>
+            <div class="modal__content">
+                <div id='modal_content'>
+                    Il faut attendre un peu...
+                </div>
+                <div class="modal__footer">
+                    <button onclick='doDelete2()'>Confirmer la Suppression</button>
+                </div>
+                <a href="#" class="modal__close" onclick='closeModal()'>&times;</a>
+            </div>
+        </div>
+    </div>
+    <form>
+        <fieldset>
+            <legend><i class='fas fa-history history_entity' data-tipped-options='ajax: {data: { E: "Situation", id: "{{ Situation.id }}" }}'></i>Situation</legend>
+
+{% block actif_full %}
+    <p>
+    {% block actif_label %}
+    <label class='text' for="actif"> actif <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Situation", F: "actif", id: "{{Situation.id}}" }}'></i></label>    
+    {% endblock actif_label %}
+    {% block actif_active %}
+    <input class='text' type="checkbox"  {{ Situation.actif==1?'checked':'' }} name="actif" id="actif">
+
+    {% endblock actif_active %}
+    </p>
+{% endblock actif_full %}    
+
+{% block nom_full %}
+    <p>
+    {% block nom_label %}
+    <label class='text' for="nom"> nom <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Situation", F: "nom", id: "{{Situation.id}}" }}'></i></label>    
+    {% endblock nom_label %}
+    {% block nom_active %}
+    <input class='text'  type="text" value="{{ Situation.nom }}" name="nom" id="nom" size="50" maxlength="100", placeholder="">
+
+    {% endblock nom_active %}
+    </p>
+{% endblock nom_full %}    
+
+{% block ose_full %}
+    <p>
+    {% block ose_label %}
+    <label class='text' for="ose"> ose <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Situation", F: "ose", id: "{{Situation.id}}" }}'></i></label>    
+    {% endblock ose_label %}
+    {% block ose_active %}
+    <input class='text'  type="text" value="{{ Situation.ose }}" name="ose" id="ose" size="50" maxlength="100", placeholder="">
+
+    {% endblock ose_active %}
+    </p>
+{% endblock ose_full %}    
+
+{% block reduction_full %}
+    <p>
+    {% block reduction_label %}
+    <label class='text' for="reduction"> reduction <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Situation", F: "reduction", id: "{{Situation.id}}" }}'></i></label>    
+    {% endblock reduction_label %}
+    {% block reduction_active %}
+    <input class='text' type="number"  value="{{ Situation.reduction }}" name="reduction" id="reduction" placeholder="0">
+
+    {% endblock reduction_active %}
+    </p>
+{% endblock reduction_full %}    
+
+{% block public_full %}
+    <p>
+    {% block public_label %}
+    <label class='text' for="public"> public <i class='fas fa-history history_field' data-tipped-options='ajax: {data: { E: "Situation", F: "public", id: "{{Situation.id}}" }}'></i></label>    
+    {% endblock public_label %}
+    {% block public_active %}
+    <input class='text' type="checkbox"  {{ Situation.public==1?'checked':'' }} name="public" id="public">
+
+    {% endblock public_active %}
+    </p>
+{% endblock public_full %}    
+
+    {% block manyToOne_personneList_personneList %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Situation", id: "{{ Situation.id }}", L: "personneList" }}'></i>personneList - {{ (Situation.personneList)|length }} élément{{(Situation.personneList)|length >1?'s':''}}</legend>
+
+                <ul>
+                {% for L in Situation.personneList %}   {% block manyToOne_Situation_situation %}
+                    <li class='{{ L.actif?"":"passif" }}'>
+                        {{ L.getGeneric(true)|raw }}
+                    </li>
+                    {% endblock manyToOne_Situation_situation %}
+                {% endfor %}
+                </ul>
+    </fieldset>
+    {% endblock manyToOne_personneList_personneList %}    
+
+    {% block manyToMany_personne_situationList_situation %} 
+    <fieldset>            
+        <legend><i class='fas fa-history history_Links' data-tipped-options='ajax: {data: { E: "Situation", id: "{{ Situation.id }}", L: "personne_situationList" }}'></i>personne_situationList - {{ (Situation.personne_situationList)|length }} élément{{(Situation.personne_situationList)|length >1?'s':''}}</legend>
+
+        <table class='w3-table-all w3-hoverable w3-small'>
+            <thead>
+                {% block header_tr_personne_situationList_situation %}
+                <tr class='w3-light-blue'>
+                    <th class="w3-left">{% if not isCreation %}<a href='/{{ App.appName }}/CRUD/personne_situation/situation/{{ Situation.id }} '><i class='fa fa-plus' aria-hidden='true'></i></a>{% endif %}</th>
+                    
+                    {% block header_th_personne_situationList_situation_personne %}
+                    <th class='w3-center'>personne</th>
+                    {% endblock header_th_personne_situationList_situation_personne %}
+                    {% block header_th_personne_situationList_situation_debut %}
+                    <th class='w3-center'>debut</th>
+                    {% endblock header_th_personne_situationList_situation_debut %}
+                    {% block header_th_personne_situationList_situation_fin %}
+                    <th class='w3-center'>fin</th>
+                    {% endblock header_th_personne_situationList_situation_fin %}
+                    {% block header_th_personne_situationList_situation_reduction %}
+                    <th class='w3-center'>reduction</th>
+                    {% endblock header_th_personne_situationList_situation_reduction %}
+                    {% block header_th_personne_situationList_situation_commentaire %}
+                    <th class='w3-center'>commentaire</th>
+                    {% endblock header_th_personne_situationList_situation_commentaire %}       
+                    {% block header_endpersonne_situationList_situation %}
+                    {% endblock header_endpersonne_situationList_situation %}
+                    <th class="w3-right" ></th>
+                </tr>
+                {% endblock header_tr_personne_situationList_situation %}
+            </thead>
+
+            <tbody>
+            {% for personne_situation  in Situation.personne_situationList %}
+                {% block line_personne_situationList_situation %}
+                <tr name='personne_situationList' _id_='{{ personne_situation.id }}' class='{{ personne_situation.actif?"":"passif " }}{{ personne_situation.personne.actif?"":"passifLink " }}'>
+                    <td >
+                    <i class='fas fa-history history_ManyToMany' data-tipped-options='ajax: {data: { E: "personne_situation", id: "{{ personne_situation.id }}" }}'></i>
+                    {{ personne_situation.getCrudEditLink('<i class="fas fa-edit" ></i>')|raw }}</td>    
+                    {% block line_personne_situation_personne %}
+                    <th class='w3-left'>{{ personne_situation.personne.getGeneric( true )|raw }}</th>
+                    {% endblock line_personne_situation_personne %}
+                    {% block line_personne_situationList_situation_debut %}
+                    <td class='w3-center'>{{ personne_situation.debut }}</td>
+                    {% endblock line_personne_situationList_situation_debut %}
+                    {% block line_personne_situationList_situation_fin %}
+                    <td class='w3-center'>{{ personne_situation.fin }}</td>
+                    {% endblock line_personne_situationList_situation_fin %}
+                    {% block line_personne_situationList_situation_reduction %}
+                    <td class='w3-center'>{{ personne_situation.reduction }}</td>
+                    {% endblock line_personne_situationList_situation_reduction %}
+                    {% block line_personne_situationList_situation_commentaire %}
+                    <td class='w3-center'>{{ personne_situation.commentaire }}</td>
+                    {% endblock line_personne_situationList_situation_commentaire %}
+                    {% block line_endpersonne_situationList_situation %}
+                    {% endblock line_endpersonne_situationList_situation %}
+                    <td><a onclick='doDeleteLink(this)'><i class="fas fa-trash" ></i></a></td>
+                </tr>
+                {% endblock  line_personne_situationList_situation %}
+            {% endfor %}
+            {% block footer_endpersonne_situationList_situation %}
+            {% endblock footer_endpersonne_situationList_situation %}
+            </tbody>
+        </table>
+    </fieldset>
+    {% endblock manyToMany_personne_situationList_situation %}    
+
+        </fieldset>
+        <br>
+        <br>
+        <br>
+        <br>
+        </form>
+</div>
+{% endblock %}       
+        

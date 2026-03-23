@@ -1,0 +1,92 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+
+<div class="w3-cell-row">
+
+    <h3>Comparaison des ECUE depuis La Foire avec OSE </h3>
+
+
+
+    <details>
+        <summary>Enseignements de la foire - non trouvés dans OSE</summary>
+        <table class="standardList" class="w3-table-all w3-centered">
+            <thead>
+                    <th>ECUE</th>
+                    <th>Foire</th>
+                    <th>Période</th>
+                    <th>Code</th>
+                    <th>Etape</th>
+            </thead>
+            <tbody>
+                {% for l in unmatch %}
+                <tr>
+                    <td r>{{ l.E.enseignement_structure.code | split('|') | join('<br>')|raw}}</td>
+                    <td><a href='/{{App.appName}}/enseignement/{{l.E.id}}'>{{ l.E.intitule }}</a></td>
+                    <td>{{ l.E.enseignement_structure.periode }}</td>
+                    <td>{{ O.semestre }}</td>
+                    <td>{{ l.E.enseignement_structure.code }}</td>
+                    <td>{{ l.E.enseignement_structure.etape }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </details>
+
+    <details>
+        <summary>Enseignements de la foire - trouvés dans OSE</summary>
+        <table class="standardList" class="w3-table-all w3-centered">
+            <thead>
+                    <th>ECUE</th>
+                    <th>Foire</th>
+                    <th>OSE</th>
+            </thead>
+            <tbody>
+                {% for l in match %}
+                    {% for O in l.OSE %}
+                    <tr {{ (O is empty)?"style='background-color: red;'":"" }}>
+                        <td rowspan='4'>{{ l.E.enseignement_structure.code | split('|') | join('<br>')|raw}}</td>
+                        <td><a href='/{{App.appName}}/enseignement/{{l.E.id}}'>{{ l.E.intitule }}</a></td>
+                        <td>{{ O.intitule }}</td>
+                    </tr>                    
+                    <tr>
+                        <td>{{ l.E.enseignement_structure.periode }}</td>
+                        <td>{{ O.semestre }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ l.E.enseignement_structure.code }}</td>
+                        <td>{{ O.ecue }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ l.E.enseignement_structure.etape }}</td>
+                        <td>{{ O.cursus }}</td>
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </details>
+
+
+</div> 
+<script>
+    $(document).ready(function () {
+        $('.standardList').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock %}

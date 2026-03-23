@@ -1,0 +1,7 @@
+{% extends "personne/base_card.html.twig" %}
+
+
+{% block extendBaseCard %}
+    {% include(["personne/panierCard.html.twig", "personne/foire_panierCard.html.twig"]) %}
+{% endblock extendBaseCard %}             
+

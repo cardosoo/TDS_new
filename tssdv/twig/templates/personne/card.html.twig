@@ -1,0 +1,142 @@
+{% extends "personne/base_card.html.twig" %}
+
+
+{% block charge %}
+
+    {% set loggedUser = App.auth.user %}
+    {% set roleList = App.auth.roleList %}
+    {% set isConcerned = personne.id == loggedUser.id %}
+    {% set isRHE = roleList['bureauRHE'] is defined %}
+    {% set isRespDomaine = roleList['respDomaine'] is defined %}
+    {% set isRespDomaine = personne.isResponsableDomaine(loggedUser.id)  %}
+    {% set canSeeDetails = isConcerned or isRHE or isRespDomaine %}
+
+    <div class='w3-border-left'>
+        <div class="w3-rest w3-padding-small">Statut : {{ personne.statut.nom }}</div>
+
+        {% if (canSeeDetails)  %}
+            <div class='w3-pale-red'> 
+            {% if personne.personne_situationList|length >0  %}
+            <div class='w3-container w3-light-gray'>Situations Particulières</div>
+            <ul >
+            {% for PS in personne.personne_situationList %}
+                <li>
+                    {{ PS.situation.nom }}<br>
+                    du {{ PS.debut }} au {{ PS.fin }}<br>
+                    réduction de {{ PS.reduction }} HETD<br>
+                    <div>{{ PS.commentaire|markdown_to_html|raw }}</div>
+                </li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+            {% if personne.personne_foncrefList|length >0  %}
+            <div class='w3-container w3-light-gray'>Fonctions du référentiel</div>
+            <ul>
+            {% for FR in personne.personne_foncrefList %}
+                <li>
+                    {{ FR.foncref.referentiel.code }} {{ FR.foncref.intitule }}<br>
+                    volume de {{ FR.volume }} HETD<br>
+                    {% if FR.foncref.id ==4 %}
+                    {% set stageList = FR.commentaire|json_decode %}
+                    <ul>
+                    {% for stage in stageList %}
+                        <li>{{stage.num}} {{stage.nom}}</li>
+                    {% endfor %}
+                    </ul>
+                    {% else %}
+                    <div>{{ FR.commentaire|markdown_to_html|raw }}</div>                    
+                    {% endif %}
+                </li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% if personne.situation %}
+            <div class="w3-rest w3-padding-small">{{ personne.situation.nom }} {# ⇒ réduction : {{ personne.situation.reduction }}h #}</div>
+            {% endif %}
+
+        </div>
+        {% endif %}
+    </div>
+    
+{% endblock charge %}
+
+
+{% block extendBaseCard %}
+
+    {% set loggedUser = App.auth.user %}
+    {% set roleList = App.auth.roleList %}
+    {% set isConcerned = personne.id == loggedUser.id %}
+    {% set isRHE = roleList['bureauRHE'] is defined %}
+    {% set isRespDomaine = roleList['respDomaine'] is defined %}
+    {% set isRespDomaine = personne.isResponsableDomaine(loggedUser.id)  %}
+    {% set canSeeDetails = isConcerned or isRHE or isRespDomaine %}
+    {% set CR = personne.getChargeRepartition() %}
+    {% set charge = CR.charge - CR.serviceReferentiel %}
+
+    {% set s = 0%}
+    {% for DP in personne.domaine_personneList %}
+        {% set s = s + DP.quotite %}
+    {% endfor %}
+
+    <div class="w3-card w3-round">
+        <div class="w3-white">
+            <i class="fa fa fa-arrow-circle-right fa-fw w3-margin-right"></i>Domaines associés :
+            <ul>
+            {% for DP in personne.domaine_personneList %}
+                <li>{{ DP.domaine.acronyme }} : {{ (DP.quotite/s*100)|f2 }}% 
+                {% if canSeeDetails %}
+                <span class='w3-pale-red'> = {{ (charge * DP.quotite / s )|f2 }} hETD</span>
+                {% endif %}
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% if canSeeDetails %}
+        
+        <div class="w3-pale-red">
+            <i class="fa fa fa-arrow-circle-right fa-fw w3-margin-right"></i>Résumé répartition :
+            <table class = 'w3-table w3-hoverable w3-small w3-pale-red'>
+                <thead>
+                    <tr>
+                        <td></td>
+                        <th>à faire</th>
+                        <th>prévu</th>
+                    </tr>
+                </thead>
+                <tbody >
+                    <tr>
+                        <th>Statutaire</th>
+                        <td>{{CR.obligation|f2}}</td>
+                        <td>{{(CR.obligation - CR.bilan)|f2}}</td>
+                    </tr>
+                    <tr>
+                        <th>Situation</th>
+                        <td>-</td>
+                        <td>{{ CR.reduction|f2 }}</td>
+                    </tr>
+                    <tr>
+                        <th>Référentiel</th>
+                        <td>-</td>
+                        <td>{{ CR.serviceReferentiel|f2 }}</td>
+                    </tr>
+                    {% for DP in personne.domaine_personneList %}
+                    <tr>
+                        <th>{{ DP.domaine.acronyme }}</th>
+                        <td>{{ (charge * DP.quotite / s )|f2 }}</td>
+                        <td>{{ CR.serviceParDomaine[DP.domaine.id]|f2 }}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <th>autres Domaines</th>
+                        <td></td>
+                        <td>{{ CR.serviceHorsDomaine|f2 }}</td>
+                    </tr>
+                
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+
+{% endblock extendBaseCard %}

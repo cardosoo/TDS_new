@@ -1,0 +1,47 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+<div class="w3-card-4 w3-white w3-margin">
+    <div class="w3-container w3-light-grey  w3-center">
+        <b>Calcul des reports</b>
+    </div>
+    {% apply markdown_to_html %}
+
+    Cette opération doit-être un fois après avoir copié la base de données depuis l'année précédente vers cette nouvelle année.
+    Elle ne doit-être réalisée qu'à ce moment là.
+    {# Cette opération peut cependant être réalisée n'importe quand et autant de fois qu'on le souhaite #}
+
+    Opérations réalisées :
+    - suppression des reports avec une valeur > 0,
+    - conversion des reports ayant une valeur < 0 en report avec une valeur > 0
+
+    {% endapply %}
+
+    <div class="w3-container w3-light-grey  w3-center">
+        <b><a href='./transfertReports/confirm'>Effectuer cette action</a></b>
+    </div>
+</div>
+
+
+<details>
+    <summary> {{ a_supprimer|length }} reports à supprimer (valeur &gt; 0)</summary>
+    <ul>
+    {% for report in a_supprimer %}
+        <li><a href='/{{App.appName}}/personne/{{report.id}}'>{{report.prenom}} {{report.nom}}</a> : volume de report = {{report.reduction}}</li>
+    {% endfor %}
+    </ul>
+</details>
+
+
+<details>
+    <summary> {{ a_convertir|length }} reports à convertir (valeur &lt; 0)</summary>
+    <ul>
+    {% for report in a_convertir %}
+        <li><a href='/{{App.appName}}/personne/{{report.id}}'>{{report.prenom}} {{report.nom}}</a> : volume de report = {{report.reduction}}</li>
+    {% endfor %}
+    </ul>
+</details>
+
+
+{% endblock %}

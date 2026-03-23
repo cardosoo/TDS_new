@@ -1,0 +1,436 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+
+{#
+            'noNo' => $noNo,           // pour indiquer les trucs pour lesquels il n'y a ni le code OSE de la personne ni le code ECUE de l'enseignement dans DB
+#}
+<style>
+
+</style>
+
+
+<details>
+    <summary>Pas du tout dans la base</summary>
+    <table class='standardList w3-table-all'>
+        <thead>
+            <tr>
+                <th>OSE</th>
+                <th>Personne</th>
+                <th>ECUE</th>
+                <th>Intitulé</th>
+                <th>Semestre</th>
+                <th>Etape</th>
+                <th>Cursus</th>
+                <th>CM</th>
+                <th>CMTD</th>
+                <th>CMTD7</th>
+                <th>TD</th>
+                <th>TP</th>
+                <th>TP7</th>
+                <th>MD</th>
+                <th>REF</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for V in noNo %}
+            <tr>
+                <td>{{ V.ose }}</td>
+                <td>{{ V.personne }}</td>
+                <td>{{ V.ecue }}</td>
+                <td>{{ V.intitule }}</td>
+                <td>{{ V.semestre }}</td>
+                <td>{{ V.etape }}</td>
+                <td>{{ V.cursus }}</td>
+                <td>{{ V.CM|f2 }}</td>
+                <td>{{ V.CMTD|f2 }}</td>
+                <td>{{ V.CMTD7|f2 }}</td>
+                <td>{{ V.TD|f2 }}</td>
+                <td>{{ V.TP|f2 }}</td>
+                <td>{{ V.TP7|f2 }}</td>
+                <td>{{ V.MD|f2 }}</td>
+                <td>{{ V.Référentiel|f2 }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</details>
+
+
+{#
+            'noPersonne' => $noPersonne,       // pour indiquer les trucs où le code OSE de la personne n'est pas présent dans DB
+#}
+
+<details>
+    <summary>La personne n'est pas présente dans la base de données</summary>
+    <table class='standardList w3-table-all'>
+        <thead>
+            <tr>
+                <th>OSE</th>
+                <th>Personne</th>
+                <th>ECUE</th>
+                <th>Intitulé</th>
+                <th>Semestre</th>
+                <th>Etape</th>
+                <th>Cursus</th>
+                <th>CM</th>
+                <th>CMTD</th>
+                <th>CMTD7</th>
+                <th>TD</th>
+                <th>TP</th>
+                <th>TP7</th>
+                <th>MD</th>
+                <th>REF</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for V in noPersonne %}
+            <tr>
+                <td>{{ V.ose }}</td>
+                <td>{{ V.personne }}</td>
+                <td>{{ V.ecue }}</td>
+                <td>{{ V.intitule }}</td>
+                <td>{{ V.semestre }}</td>
+                <td>{{ V.etape }}</td>
+                <td>{{ V.cursus }}</td>
+                <td>{{ V.CM|f2 }}</td>
+                <td>{{ V.CMTD|f2 }}</td>
+                <td>{{ V.CMTD7|f2 }}</td>
+                <td>{{ V.TD|f2 }}</td>
+                <td>{{ V.TP|f2 }}</td>
+                <td>{{ V.TP7|f2 }}</td>
+                <td>{{ V.MD|f2 }}</td>
+                <td>{{ V.Référentiel|f2 }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</details>
+
+{#
+            'noEnseignement' => $noEnseignement,   // pour indiquer les trucs où le code ECUE de l'enseignement n'est pas présent dans DB
+#}
+<details>
+    <summary>L'enseignement n'est pas présent dans la base de données</summary>
+    <table class='standardList w3-table-all'>
+        <thead>
+            <tr>
+                <th>OSE</th>
+                <th>Personne</th>
+                <th>ECUE</th>
+                <th>Intitulé</th>
+                <th>Semestre</th>
+                <th>Etape</th>
+                <th>Cursus</th>
+                <th>CM</th>
+                <th>CMTD</th>
+                <th>CMTD7</th>
+                <th>TD</th>
+                <th>TP</th>
+                <th>TP7</th>
+                <th>MD</th>
+                <th>REF</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for V in noEnseignement %}
+            <tr>
+                <td>{{ V.ose }}</td>
+                <td>{{ V.personne }}</td>
+                <td>{{ V.ecue }}</td>
+                <td>{{ V.intitule }}</td>
+                <td>{{ V.semestre }}</td>
+                <td>{{ V.etape }}</td>
+                <td>{{ V.cursus }}</td>
+                <td>{{ V.CM|f2 }}</td>
+                <td>{{ V.CMTD|f2 }}</td>
+                <td>{{ V.CMTD7|f2 }}</td>
+                <td>{{ V.TD|f2 }}</td>
+                <td>{{ V.TP|f2 }}</td>
+                <td>{{ V.TP7|f2 }}</td>
+                <td>{{ V.MD|f2 }}</td>
+                <td>{{ V.Référentiel|f2 }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</details>
+
+{#
+            'noVoeu' => $noVoeu,         // pour indiquer les trucs pour lesquels il n'y a de voeu
+#}
+<details>
+    <summary>Il n'y a pas de voeu correspondant dans la base de données</summary>
+    <table class='standardList w3-table-all'>
+        <thead>
+            <tr>
+                <th>OSE</th>
+                <th>Personne</th>
+                <th>ECUE</th>
+                <th>Intitulé</th>
+                <th>Semestre</th>
+                <th>Etape</th>
+                <th>Cursus</th>
+                <th>CM</th>
+                <th>CMTD</th>
+                <th>CMTD7</th>
+                <th>TD</th>
+                <th>TP</th>
+                <th>TP7</th>
+                <th>MD</th>
+                <th>REF</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for V in noVoeu %}
+            <tr>
+                <td>{{ V.ose }}</td>
+                <td>{{ V.personne }}</td>
+                <td>{{ V.ecue }}</td>
+                <td>{{ V.intitule }}</td>
+                <td>{{ V.semestre }}</td>
+                <td>{{ V.etape }}</td>
+                <td>{{ V.cursus }}</td>
+                <td>{{ V.CM|f2 }}</td>
+                <td>{{ V.CMTD|f2 }}</td>
+                <td>{{ V.CMTD7|f2 }}</td>
+                <td>{{ V.TD|f2 }}</td>
+                <td>{{ V.TP|f2 }}</td>
+                <td>{{ V.TP7|f2 }}</td>
+                <td>{{ V.MD|f2 }}</td>
+                <td>{{ V.Référentiel|f2 }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</details>
+
+
+{#
+            'badFullVolume' => $badFullVolume,      // pour indiquer les trucs pour lesquels le volume global du voeu ne correspond pas
+#}
+<details>
+    <summary>Les hETD totales du voeu ne correspond pas à ce qui figure dans la base de données</summary>
+    <table class='standardList w3-table-all'>
+        <thead>
+            <tr>
+                <th>OSE</th>
+                <th>Personne</th>
+                <th>ECUE</th>
+                <th>Intitulé</th>
+                <th>Semestre</th>
+                <th>Etape</th>
+                <th>Cursus</th>
+                <th>CM</th>
+                <th>CMTD</th>
+                <th>CMTD7</th>
+                <th>TD</th>
+                <th>TP</th>
+                <th>TP7</th>
+                <th>MD</th>
+                <th>REF</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for BV in badFullVolume %}                
+            {% set V = BV.fromOSE %}
+            <tr>
+                <td>{{ V.ose }}</td>
+                <td>{{ V.personne }}</td>
+                <td>{{ V.ecue }}</td>
+                <td>{{ V.intitule }}</td>
+                <td>{{ V.semestre }}</td>
+                <td>{{ V.etape }}</td>
+                <td>{{ V.cursus }}</td>
+                <td>{{ V.CM|f2 }}</td>
+                <td>{{ V.CMTD|f2 }}</td>
+                <td>{{ V.CMTD7|f2 }}</td>
+                <td>{{ V.TD|f2 }}</td>
+                <td>{{ V.TP|f2 }}</td>
+                <td>{{ V.TP7|f2 }}</td>
+                <td>{{ V.MD|f2 }}</td>
+                <td>{{ V.Référentiel|f2 }}</td>
+            </tr>
+            {% set V = BV.voeu %}
+            <tr>
+                <td>{{ V.personne.ose }}</td>
+                <td>{{ V.personne.getGenericWithLink()|raw }}</td>
+                <td>{{ V.enseignement.ecue }}</td>
+                <td>{{ V.enseignement.getGenericWithLink()|raw }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ V.voeu_detail_heures.cm|f2 }}</td>
+                <td>{{ V.voeu_detail_heures.ctd|f2 }}</td>
+                <td></td>
+                <td>{{ V.voeu_detail_heures.td|f2 }}</td>
+                <td>{{ V.voeu_detail_heures.tp|f2 }}</td>
+                <td></td>
+                <td>{{ V.voeu_detail_heures.extra|f2 }}</td>
+                <td>{{ V.voeu_detail_heures.bonus|f2 }}</td>
+            </tr>    
+        {% endfor %}
+        </tbody>
+    </table>
+</details>
+
+{#
+            'badVolume' => $badVolume,      // pour indiquer les trucs pour lesquels les volumes dans les voeux ne sont pas les mêmes que les volumes dans DB
+#}
+<details>
+    <summary>Les volumes du voeu ne correspond pas à ce qui figure dans la base de données</summary>
+    <table class='standardList w3-table-all'>
+        <thead>
+            <tr>
+                <th>OSE</th>
+                <th>Personne</th>
+                <th>ECUE</th>
+                <th>Intitulé</th>
+                <th>Semestre</th>
+                <th>Etape</th>
+                <th>Cursus</th>
+                <th>CM</th>
+                <th>CMTD</th>
+                <th>CMTD7</th>
+                <th>TD</th>
+                <th>TP</th>
+                <th>TP7</th>
+                <th>MD</th>
+                <th>REF</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for BV in badVolume %}                
+            {% set V = BV.fromOSE %}
+            <tr>
+                <td>{{ V.ose }}</td>
+                <td>{{ V.personne }}</td>
+                <td>{{ V.ecue }}</td>
+                <td>{{ V.intitule }}</td>
+                <td>{{ V.semestre }}</td>
+                <td>{{ V.etape }}</td>
+                <td>{{ V.cursus }}</td>
+                <td>{{ V.CM|f2 }}</td>
+                <td>{{ V.CMTD|f2 }}</td>
+                <td>{{ V.CMTD7|f2 }}</td>
+                <td>{{ V.TD|f2 }}</td>
+                <td>{{ V.TP|f2 }}</td>
+                <td>{{ V.TP7|f2 }}</td>
+                <td>{{ V.MD|f2 }}</td>
+                <td>{{ V.Référentiel|f2 }}</td>
+            </tr>
+            {% set V = BV.voeu %}
+            <tr>
+                <td>{{ V.personne.ose }}</td>
+                <td>{{ V.personne.getGenericWithLink()|raw }}</td>
+                <td>{{ V.enseignement.ecue }}</td>
+                <td>{{ V.enseignement.getGenericWithLink()|raw }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ V.voeu_detail_heures.cm|f2 }}</td>
+                <td>{{ V.voeu_detail_heures.ctd|f2 }}</td>
+                <td></td>
+                <td>{{ V.voeu_detail_heures.td|f2 }}</td>
+                <td>{{ V.voeu_detail_heures.tp|f2 }}</td>
+                <td></td>
+                <td>{{ V.voeu_detail_heures.extra|f2 }}</td>
+                <td>{{ V.voeu_detail_heures.bonus|f2 }}</td>
+            </tr>    
+        {% endfor %}
+        </tbody>
+    </table>
+</details>
+{#
+            $moreVoeu = [];        // pour indiquer qu'il y a plus d'un voeu associé
+#}
+
+
+<details>
+    <summary>Il y a plusieurs voeux correspondant dans la base de données</summary>
+    <table class='standardList w3-table-all'>
+        <thead>
+            <tr>
+                <th>OSE</th>
+                <th>Personne</th>
+                <th>ECUE</th>
+                <th>Intitulé</th>
+                <th>Semestre</th>
+                <th>Etape</th>
+                <th>Cursus</th>
+                <th>CM</th>
+                <th>CMTD</th>
+                <th>CMTD7</th>
+                <th>TD</th>
+                <th>TP</th>
+                <th>TP7</th>
+                <th>MD</th>
+                <th>REF</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for MV in moreVoeu %}                
+            {% set V = MV.fromOSE %}
+            <tr>
+                <td>{{ V.ose }}</td>
+                <td>{{ V.personne }}</td>
+                <td>{{ V.ecue }}</td>
+                <td>{{ V.intitule }}</td>
+                <td>{{ V.semestre }}</td>
+                <td>{{ V.etape }}</td>
+                <td>{{ V.cursus }}</td>
+                <td>{{ V.CM|f2 }}</td>
+                <td>{{ V.CMTD|f2 }}</td>
+                <td>{{ V.CMTD7|f2 }}</td>
+                <td>{{ V.TD|f2 }}</td>
+                <td>{{ V.TP|f2 }}</td>
+                <td>{{ V.TP7|f2 }}</td>
+                <td>{{ V.MD|f2 }}</td>
+                <td>{{ V.Référentiel|f2 }}</td>
+            </tr>
+            {% for V in MV.voeuList %}
+            <tr>
+                <td>{{ V.personne.ose }}</td>
+                <td>{{ V.personne.getGenericWithLink()|raw }}</td>
+                <td>{{ V.enseignement.ecue }}</td>
+                <td>{{ V.enseignement.getGenericWithLink()|raw }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ V.voeu_detail_heures.cm|f2 }}</td>
+                <td>{{ V.voeu_detail_heures.ctd|f2 }}</td>
+                <td></td>
+                <td>{{ V.voeu_detail_heures.td|f2 }}</td>
+                <td>{{ V.voeu_detail_heures.tp|f2 }}</td>
+                <td></td>
+                <td>{{ V.voeu_detail_heures.extra|f2 }}</td>
+                <td>{{ V.voeu_detail_heures.bonus|f2 }}</td>
+            </tr>    
+            {% endfor %}
+        {% endfor %}
+
+        </tbody>
+    </table>
+</details>
+
+
+<script>
+    $(document).ready(function () {
+        $('.standardList').DataTable({
+            order: [],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock %}

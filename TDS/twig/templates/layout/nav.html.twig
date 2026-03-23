@@ -1,0 +1,11 @@
+  <nav class="w3-bar w3-light-grey">
+    <div class="w3-top">
+      <div class="w3-bar w3-theme-d2 w3-left-align w3-small">
+        {% include 'layout/menu.html.twig' %}
+        {% include 'layout/topbar.html.twig' %}
+
+        <a target='_help' href='/{{ App.appName }}/texte/help' class="w3-bar-item w3-button"><i class='fas fa-question-circle' style='font-size:20px;color:yellow'></i></a>
+        <a id='connect_button' href="/{{ App.appName }}/auth/log{{ App.auth.isAuth ? 'out' : 'in' }}"  class="w3-bar-item w3-button w3-right w3-{{App.auth.inBase?'light-green':'red'}}"><i class="fas fa-sign-{{ App.auth.isAuth?'out':'in' }}-alt"></i> {{ App.auth.isAuth ? 'Déc':'C' }}onnexion...</a>
+      </div>
+    </div>
+  </nav>  
