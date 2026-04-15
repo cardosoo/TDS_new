@@ -139,7 +139,9 @@ class Personne extends \base\Model\Personne implements \Model\_Personne_interfac
         }
 
         $serviceEnseignement = 0;
+        var_dump("avant");
         $serviceReferentiel = $this->__get('personne_referentiel_heures')->heures; 
+        var_dump($serviceReferentiel);
         $serviceInDomaine = 0;
         $serviceHorsDomaine = 0;
         $serviceParDomaine = []; // Il faut voir ici ce que cela veut dire... faut-il moduler suivant la quotité des enseignements ?
