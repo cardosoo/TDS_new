@@ -73,6 +73,11 @@ class TestController extends \base\Controllers\TestController {
     }
 
     public static function test1(){
+        $data = file_get_contents('php://input');
+
+        var_dump($data);
+        var_dump($GLOBALS);
+
         var_dump('désactivation de /tssdv/test/test1'); exit();
         $app = \TDS\App::get();
 

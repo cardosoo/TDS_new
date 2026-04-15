@@ -606,14 +606,14 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
 
     // withOSE()
     public function withOSE(){
-        return false;
+        //return false;
 
         $app = \TDS\App::get();
         return $app::$auth->isAdmin || $app::$auth->isSuperAdmin;
     }
 
     public function canEditOSE(){
-        return false;
+        //return false;
 
         $app = \TDS\App::get();
         return $app::$auth->isAdmin || $app::$auth->isSuperAdmin;

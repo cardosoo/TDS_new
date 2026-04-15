@@ -58,7 +58,7 @@ class Personne extends \base\Model\Personne implements \Model\_Personne_interfac
     }
 
     public function withOSE(){
-        return false;
+        //return false;
 
         $app = \TDS\App::get();
         $parent = parent::withOSE();
@@ -67,7 +67,7 @@ class Personne extends \base\Model\Personne implements \Model\_Personne_interfac
     }
 
     public function canEditOSE(){
-        return false;
+        //return false;
         
         $app = \TDS\App::get();
         $parent = parent::canEditOSE();

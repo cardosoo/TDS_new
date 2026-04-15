@@ -22,7 +22,7 @@ interface _personne_referentiel_heures_interface_ {
 
         'heures' => [
             'dbName' => 'heures',
-            'type' => Field::INT,
+            'type' => Field::FLOAT,
             'size' => 100,
             'default' => 0,
             'nullable' => TRUE,

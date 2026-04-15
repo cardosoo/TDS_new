@@ -6,7 +6,7 @@ use \TDS\Model\Field;
 /*
 * This file is auto-generated and should not be changed by hand.
 * filename : _personne_referentiel_heures_.php
-* created : Wed, 30 Jul 2025 18:30:52 +0200 UTC
+* created : Mon, 06 Apr 2026 10:58:56 +0200 UTC
 */ 
 
 interface _personne_referentiel_heures_interface_ {
@@ -22,7 +22,7 @@ interface _personne_referentiel_heures_interface_ {
 
         'heures' => [
             'dbName' => 'heures',
-            'type' => Field::INT,
+            'type' => Field::FLOAT,
             'size' => 100,
             'default' => 0,
             'nullable' => TRUE,
@@ -35,7 +35,7 @@ interface _personne_referentiel_heures_interface_ {
 
 trait _personne_referentiel_heures_ {
     protected int $id;            
-    protected int $heures = 0;
+    protected float $heures = 0;
 
     protected int $__status__ = Entity::NEW; 
     protected array $__org__ = [];

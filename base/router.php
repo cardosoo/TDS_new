@@ -9,15 +9,12 @@ $app = \TDS\App::get();
 
 $app::$router->setNamespace('\\'.__NAMESPACE__.'\\Controllers\\');
 
-
 $app::$router->routeList['restrict']['Admin']['test1']= new Route('GET','/test/test1', 'TestController::test1', 'test_1');
 $app::$router->routeList['restrict']['Admin']['test2']= new Route('GET','/test/test2', 'TestController::test2', 'test_2');
 $app::$router->routeList['restrict']['Admin']['test3']= new Route('GET','/test/test3', 'TestController::test3', 'test_3');
-
 $app::$router->routeList['restrict']['Admin']['info']= new Route('GET','/test/info', 'TestController::phpinfo', 'test_phpinfo');
 
 $app::$router->routeList['public']['api']['candidatureME_docUpload']= new Route('POST','/candidatureME/DocUpload/[*:uid]', 'CandidatureController::docUpload', 'candidatureME_docUpload');
-
 $app::$router->routeList['public']['api']['candidatureME_docDownload']= new Route('GET','/candidatureME/getDoc/[*:uid]/[*:filename]', 'CandidatureController::getDoc', 'candidatureME_getDoc');
 $app::$router->routeList['public']['api']['candidatureME_liste']= new Route('GET','/candidatureME/liste', 'CandidatureController::liste', 'candidatureME_liste');
 
@@ -35,6 +32,7 @@ $app::$router->routeList['public']['api']['allEcueOSE']= new Route('GET','/api/a
 $app::$router->routeList['public']['api']['activeUserList']= new Route('GET','/api/activeUserList/[i:year]', 'APIController::activeUserList', 'api_activeUserList');
 $app::$router->routeList['public']['api']['activeTeachingList']= new Route('GET','/api/activeTeachingList/[i:year]', 'APIController::activeTeachingList', 'api_activeTeachingList');
 $app::$router->routeList['public']['api']['activeFoncRef']= new Route('GET','/api/activeFoncRef/[i:year]', 'APIController::activeFoncRef', 'api_activeFoncRef');
+$app::$router->routeList['public']['api']['listingUserFoncRef']= new Route('GET','/api/listingUserFoncRef/[i:year]', 'APIController::listingUserFoncRef', 'api_listingUserFoncRef');
 $app::$router->routeList['public']['api']['activeSituationList']= new Route('GET','/api/activeSituationList/[i:year]', 'APIController::activeSituationList', 'api_activeSituationList');
 $app::$router->routeList['public']['api']['getEmail']= new Route('GET','/api/getEmail/[i:id]', 'APIController::getEmail', 'api_getEmail');
 $app::$router->routeList['public']['api']['isUIDInBase']= new Route('GET','/api/isUIDInBase/[a:uid]', 'APIController::isUIDInBase', 'api_isUIDInBase');
@@ -43,6 +41,8 @@ $app::$router->routeList['public']['api']['isUIDInBase']= new Route('GET','/api/
 $app::$router->routeList['public']['api']['structOSEEtape']= new Route('GET','/api/structOSEEtape/[*:code]', 'APIController::structOSEEtape', 'api_structOSEEtape');
 $app::$router->routeList['public']['api']['structOSEEcue']= new Route('GET','/api/structOSEEcue/[*:code]', 'APIController::structOSEEcue', 'api_structOSEEcue');
 
+$app::$router->routeList['private']['Admin'][]= new Route('POST|GET','/api/test1', 'APIController::test1', 'api_test1');
+$app::$router->routeList['public']['api'][]= new Route('POST|GET','/api/getCurrentYear', 'APIController::getCurrentYear', 'api_getCurrentYear');
 
 
 

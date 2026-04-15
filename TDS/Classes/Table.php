@@ -87,6 +87,18 @@ abstract class Table {
                 //if (isset($obj->$dbName) || is_null($obj->$dbName)) {
                 if (property_exists($obj, $dbName) ){ 
                     $value =  $obj->$dbName ?? $entityDef['default'];
+                    /*
+                    if ($entityDef['dbName'] == 'heures'){
+                        var_dump([
+                            'entityDef' => $entityDef,
+                            'entityName' => $entityName,
+                            'name' => $name,
+                            'dbName' => $dbName,
+                            'value' => $value,
+                            'this' => $this,
+                        ]);
+                    }
+                    */
                     $this->$name = $entityDef['type']=== Field::BOOL ? ($value === 't'? true :  false) : $value;
                     $this->__org__[$name] = $this->$name;
                     $this->__status__ = Entity::SYNCH;

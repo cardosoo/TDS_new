@@ -94,7 +94,7 @@ class AdminController extends \zeroUP\Controllers\AdminController {
             LEFT JOIN statut as S on S.id = P.statut
             WHERE P.id> 0 AND P.actif
             AND S.obligation>0
-            AND VPB.heures <>0
+            /* AND VPB.heures <>0 */
         ");
         
         $besoinList = $app::$db->fetchAll("

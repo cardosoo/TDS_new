@@ -6,7 +6,7 @@ use \TDS\Model\Field;
 /*
 * This file is auto-generated and should not be changed by hand.
 * filename : _Diplome_.php
-* created : Wed, 30 Jul 2025 18:30:52 +0200 UTC
+* created : Mon, 06 Apr 2026 10:58:56 +0200 UTC
 */ 
 
 interface _Diplome_interface_ {

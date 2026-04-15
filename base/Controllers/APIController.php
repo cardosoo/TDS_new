@@ -30,7 +30,6 @@ class APIController extends \TDS\Controller {
         echo $app::$viewer->render('api/listingService.csv.twig', ['serviceList' => $serviceList]);
    }
 
-
     public static function listingServicesOSE(){
         $app = \TDS\App::get();
 
@@ -97,6 +96,48 @@ class APIController extends \TDS\Controller {
 
     }
 
+    public static function listingUserFoncRef($year){
+        $app = \TDS\App::get();
+
+        $baseName = $app::$appName."{$year}";
+        $db = new \TDS\Database($baseName, $app::$baseUser, $app::$basePwd, 'localhost' );
+        pg_set_client_encoding($db->conn, "UNICODE");
+
+        $list = $db-> getAll('
+            SELECT DISTINCT
+                P.id as "personneId",
+                P.nom,
+                P.prenom,
+                P.ose,
+
+                FR.id as "foncRefId",
+                FR.intitule as "intitule",
+                R.code,
+
+                PFR.id as "personneFoncRefId",
+                PFR.commentaire as "commentaire",
+                PFR.volume as "volume"
+
+
+            FROM Personne_foncRef as PFR
+            LEFT JOIN Personne as P on PFR.personne = P.id
+            LEFT JOIN FoncRef as FR on PFR.foncRef = FR.id
+            LEFT JOIN Referentiel as R on FR.referentiel = R.id
+
+            WHERE P.actif AND P.id>0
+            AND FR.id != 4  -- on exclut les stages
+            ORDER BY nom, prenom
+        ');
+
+        echo date("'d/m/Y\t'H:i:s")."\n";
+        echo "personneId\tprenom\tnom\tose\tfoncRefId\tintitule\tcode\tpersonneFoncRefId\tcommentaire\tvolume\n";
+        foreach($list as $elm){
+            echo "{$elm->personneId}\t{$elm->prenom}\t{$elm->nom}\t{$elm->ose}\t{$elm->foncRefId}\t{$elm->intitule}\t{$elm->code}\t{$elm->personneFoncRefId}\t{$elm->commentaire}\t{$elm->volume}\n";
+        }
+
+    }
+
+
     public static function activeTeachingList($year){
         $app = \TDS\App::get();
 
@@ -127,6 +168,7 @@ class APIController extends \TDS\Controller {
 
     }
 
+    /* version d'avant le 5 avril 2025, je ne sais pas à quoi elle est utilisée ?
     public static function activeFoncRef($year){
         $app = \TDS\App::get();
 
@@ -151,6 +193,34 @@ class APIController extends \TDS\Controller {
             echo "{$FR->id}\t{$FR->intitule}\t{$FR->code}\n";
         }
     }
+    */
+
+    public static function activeFoncRef($year){
+        $app = \TDS\App::get();
+
+        $baseName = $app::$appName."{$year}";
+        $db = new \TDS\Database($baseName, $app::$baseUser, $app::$basePwd, 'localhost' );
+        pg_set_client_encoding($db->conn, "UNICODE");
+
+        $foncRefList = $db-> getAll("
+            SELECT DISTINCT
+                FR.id,
+                FR.intitule,
+                R.code
+            FROM FoncRef as FR
+            LEFT JOIN Referentiel as R on FR.referentiel = R.id
+            WHERE FR.actif AND FR.id>0
+            ORDER BY FR.intitule
+        ");
+
+        echo date("\t'd/m/Y\t'H:i:s")."\n";
+        echo "id_foncref\tintitule\tcode\n";
+        foreach($foncRefList as $FR){
+            $intitule = ($FR->intitule === '-')? $FR->code : $FR->intitule;
+            echo "{$FR->id}\t{$intitule}\t{$FR->code}\n";
+        }
+    }
+
 
     public static function activeSituationList($year){
         $app = \TDS\App::get();
@@ -245,4 +315,13 @@ class APIController extends \TDS\Controller {
     }
 
 
+    public static function getCurrentYear(){
+        $app = \TDS\App::get();
+        echo $app::$currentYear;
+    }
+    
+
+    public static function test1(){
+        var_dump($_POST);
+    }
 }

@@ -484,7 +484,11 @@ class {$this->name} extends {$extends} implements \\Model\\{$modelName}interface
 
     public function buildForModelTwig(){
         $app = \TDS\App::get();
-        $modelName = $this->getModelName(false); // O.C. modification du 14/03/2021
+        
+        //$modelName = $this->getModelName(false); // O.C. modification du 14/03/2021
+        $modelName = $this->getModelName(true); // O.C. modification du 26/03/2026
+        
+
         $appName = $app::$appName;
 
         return "{% extends \"CRUD/{$modelName}.html.twig\" %}

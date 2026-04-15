@@ -6,7 +6,7 @@ use \TDS\Model\Field;
 /*
 * This file is auto-generated and should not be changed by hand.
 * filename : _Role_.php
-* created : Fri, 02 May 2025 23:33:41 +0200 UTC
+* created : Mon, 06 Apr 2026 11:00:33 +0200 UTC
 */ 
 
 interface _Role_interface_ {

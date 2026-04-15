@@ -34,7 +34,7 @@ $officialYear = filter_input(INPUT_GET, 'year', FILTER_VALIDATE_INT)??$officialY
 
 $historyFirstYear = 2008;
 $firstYear = 2019;
-$lastYear = 2025; #$officialYear; # 2024; 
+$lastYear = 2026; #$officialYear; # 2024; 
 
 $app::$historyYearList = [];
 for($year = $officialYear-1 ;  $year >= $historyFirstYear; $year--){
@@ -197,6 +197,36 @@ if ($year == '2025'){
 }
 
 
+if ($year == '2026'){
+    App::$texte = [
+        'chargeReference' => 192,
+        'chargeReferenceNm' => 192,
+        'debutPanier' => 'lundi 11/05/2026',
+        'debutVoeux' => 'vendredi 22/05/2026',
+        'limiteVoeux' => 'dimanche 31/05/2026',
+        'debutDiagonalisation' => 'lundi 1/06/2026',
+        'finDiagonalisation' => 'lundi 8/06/2026',
+        'dateFoire' => 'mardi 9 juin 2026',
+        'lieuFoire' => 'dans le Hall du bâtiment Condorcet',
+        'exempleServiceNm' => 180,
+        'exempleService' => 205,
+        'correspondants' => 'correspondants',
+    ];
+
+
+    $debutPanier = DateTime::createFromFormat('Y-m-d H:i:s', '2026-05-11 08:00:00'); 
+    $finPanier = DateTime::createFromFormat('Y-m-d H:i:s', '2026-05-22 07:59:59');
+    
+    $debutVoeux = clone $finPanier;
+    $debutVoeux->add(new DateInterval('PT1S'));
+    $finVoeux = DateTime::createFromFormat('Y-m-d H:i:s', '2026-05-31 23:59:59');
+    
+    $debutDiagonalisation = clone $finVoeux;
+    $debutDiagonalisation->add(new DateInterval('PT1S'));
+    $finDiagonalisation = DateTime::createFromFormat('Y-m-d H:i:s', '2026-06-09 08:00:00');
+    
+}
+
 
 
 App::$phaseList = [
@@ -211,7 +241,7 @@ App::$phaseList = [
         'withStages' => TRUE,
         'withEditStages' => TRUE,
     ],
-        'avant' => (object)[
+    'avant' => (object)[
         'voeuxPersonneLabel' => "Reports pour l'année {$year}-{$nextYear}",
         'voeuxEnseignantLabel' => "Reports pour l'année {$year}-{$nextYear}",
         'withAjouterVoeux' => false,

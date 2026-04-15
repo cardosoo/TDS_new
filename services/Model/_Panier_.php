@@ -6,7 +6,7 @@ use \TDS\Model\Field;
 /*
 * This file is auto-generated and should not be changed by hand.
 * filename : _Panier_.php
-* created : Sun, 22 Mar 2026 23:12:16 +0100 UTC
+* created : Thu, 26 Mar 2026 16:11:45 +0100 UTC
 */ 
 
 interface _Panier_interface_ {

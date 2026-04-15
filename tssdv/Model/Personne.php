@@ -128,7 +128,7 @@ class Personne extends \base\Model\Personne implements \Model\_Personne_interfac
         
         $bilan = $VBL->heures;
         $obligation = $statut->obligation;
-//        var_dump($this->__get('personne_situation_reduction'));
+        // var_dump($this->__get('personne_situation_reduction'));
         $reduction =  $this->__get('personne_situation_reduction')->reduction + ($situation->reduction??0); //
 
         $charge = $obligation - $reduction;
@@ -139,9 +139,7 @@ class Personne extends \base\Model\Personne implements \Model\_Personne_interfac
         }
 
         $serviceEnseignement = 0;
-        var_dump("avant");
         $serviceReferentiel = $this->__get('personne_referentiel_heures')->heures; 
-        var_dump($serviceReferentiel);
         $serviceInDomaine = 0;
         $serviceHorsDomaine = 0;
         $serviceParDomaine = []; // Il faut voir ici ce que cela veut dire... faut-il moduler suivant la quotité des enseignements ?

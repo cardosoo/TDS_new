@@ -76,7 +76,15 @@
                     <td>{{ charge.statut.nom }}</td>
                     <td>{{ charge.personne_charge.charge|f2}}</td>
                     <td>{{ charge.voeu_personne_bilan.heures|f2}}</td>
-                    <td>{{ (100*charge.voeu_personne_bilan.heures/charge.personne_charge.charge)|f2}}%</td>
+                    <td>
+                        {% if charge.personne_charge.charge == 0 %}
+                            --- 
+                        {% else %}
+                            {{ (100*charge.voeu_personne_bilan.heures/charge.personne_charge.charge)|f2}}%
+                        {% endif %}
+                        
+                        
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
