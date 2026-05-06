@@ -28,12 +28,13 @@
         </div>
         <div id="Cursus" class="w3-show w3-container">
             {% set structEtapeList = E.getStructEtapeList() %}
+
             {% for codeECUE in structEtapeList|keys %}
                 {% set ecue = ecueList[codeECUE] %}
-                {# <p class="w3-center">{{ codeECUE }} {{ ecue.nom }} {{ ecue.periode }}</p> #}
                 {% set etapeList = ecue.getEtapes() %}
                 {{ etapeList|length >0 ? "": "<p>Hors maquettes</p>" }}
                 {% for etape in etapeList %}
+                {#% for etape in structEtapeList %#}
                 <details>
                     <summary>
                         {{ etape.nom }}

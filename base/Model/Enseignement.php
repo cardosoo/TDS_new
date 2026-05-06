@@ -368,18 +368,21 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
                 $etapeList =  [];
             } else {
                 $codeList = explode("|", $this->variante);
+//var_dump($codeList);
                 if (count($codeList) == 1){
                     $etapeList = $ecue->getEtapes();
                 } else {
                     $etapeList = [];
-                    foreach($codeList as $code){
-                        $code=trim($code);
-                        $etapeList[] = $struct->getEtapeByCode($code);
+                    foreach($codeList as $code1){
+                        $code1=trim($code1);
+                        $etapeList[] = $struct->getEtapeByCode($code1);
                     }
                 }
             }
             $this->structEtapeList[$code] = $etapeList;
         }
+
+//var_dump($this->structEtapeList);        
         return $this->structEtapeList;
     }
 

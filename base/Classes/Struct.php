@@ -2,7 +2,7 @@
 
 namespace base;
 
-use Monolog\Logger;
+use Monolog\Logger as Logger;
 use Monolog\Level;
 use Monolog\Handler\StreamHandler;
 
@@ -14,9 +14,11 @@ use ECUE;
 use ECUEQuery;
 use ecue_etape;
 use ecue_etapeQuery;
-use Google\Service\Firestore\StructuredQuery;
+//use Google\Service\Firestore\StructuredQuery;
 use \Propel\Runtime\ActiveQuery\Criteria;
 use stdClass;
+
+
 
 function toInt($val){
     if (empty($val)){
@@ -27,11 +29,11 @@ function toInt($val){
 
 class Struct  {
     public String $structurePath;
-    private static $defaultLogger = null;
+    private static  Logger|null $defaultLogger = null;
     public String $configFile; 
     public String $year;
     
-    private $codeList =  null;
+    private Array|null $codeList =  null;
     public $explain = false;
 
     public Array $structureList = [];
@@ -363,6 +365,7 @@ class Struct  {
         ->filterByCode($codeEtape)
         ->findOne();
 
+// #OC_structure-ajout -> Il faut ajouter ici de quoi l'interrogation de la table ajout... 
         return $etape;
     }
 
@@ -371,6 +374,7 @@ class Struct  {
         ->filterByCode($codeECUE)
         ->findOne();
 
+    // #OC_structure-ajout -> Il faut ajouter ici de quoi l'interrogation de la table ajout... 
         return $ecue;
     }
 
@@ -455,7 +459,7 @@ class Struct  {
         if (! empty($what)){
             $where[] = "((EC.search LIKE '%{$what}%') OR (EC.code LIKE '%{$what}%'))";
         }
-/************************************************************************************************* */
+
         if (count($structure)>0){
             $structureList = [];
             foreach($structure as $s){
@@ -586,6 +590,8 @@ class Struct  {
             $codeListJoin = join("', '", $codeList);
             $this->codeList = "('{$codeListJoin}')";    
         }
+
+    // #OC_structure-ajout -> Il faut ajouter ici de quoi l'interrogation de la table ajout... 
         return $this->codeList;
     }
     
@@ -611,8 +617,7 @@ class Struct  {
         foreach($where as $W){
             $sql .=" AND {$W}\n";
         }
-//var_dump($sql);
-        if (count($ordre) > 0){
+       if (count($ordre) > 0){
             $ordre = join(', ', $ordre);
             $sql .= "ORDER BY {$ordre}";
         }
@@ -728,7 +733,7 @@ if ($this->explain) {
     public function filter(Array $filter, Array $codeVarianteList): Array  {
         $con = \Propel\Runtime\Propel::getReadConnection(\Map\ecue_etapeTableMap::DATABASE_NAME);
 
-//var_dump($codeVarianteList);
+        // #OC_structure-ajout -> Il faut ajouter ici de quoi l'interrogation de la table ajout... 
 
         $where = $this->parseFilter_new($filter);
         if (count($where) == 0){
@@ -798,7 +803,6 @@ if ($this->explain) {
                 $filterList[$cv['id']]=$cv;
             }
         };
-// /Var_dump($filterList);        
         return $filterList;
     }
 
@@ -811,6 +815,7 @@ if ($this->explain) {
      * 
      */
     public function search($what){
+        // #OC_structure-ajout -> Il faut ajouter ici de quoi l'interrogation de la table ajout... 
         $app = App::get();
         $structureList = StructureQuery::create()
         ->filterByNom("%{$what}%", Criteria::LIKE)
@@ -1095,7 +1100,7 @@ if ($this->explain) {
         if (!$app::$auth->isAuth) return false; // si pas d'authentification alors non
         if (!$app::$auth->user->actif)  return false; // si pas actif alors non
         // Par défaut seuls les administrateurs peuvent ajouter un enseignement
-//        return $app::$auth->isAdmin;
+        //        return $app::$auth->isAdmin;
         return $app::$auth->hasRole('Admin');
 
     }
@@ -1136,13 +1141,13 @@ if ($this->explain) {
         $ecue = $this->getEcue($arr, $inMem);
         $etape = $this->getEtape($arr, $inMem);
         $EE = $this->getEcueEtape($ecue, $etape);
-var_dump([
-    "ecue" => $ecue,
-    'etape' =>$etape,
-    'EE' => $EE,
-]);
+        var_dump([
+            "ecue" => $ecue,
+            'etape' =>$etape,
+            'EE' => $EE,
+        ]);
         if (!is_null($EE)){
-var_dump(["suppression" => $EE]);            
+            var_dump(["suppression" => $EE]);            
             $EE->delete();
         }
         if ($ecue->getEtapeId() == $etape->getId()){ // si l'étape était l'étape principale alors il faut changer l'étape principale
@@ -1270,7 +1275,7 @@ var_dump(["suppression" => $EE]);
             if( count($row) < $len ) {
                 continue;
             };
-//var_dump($row);
+            //var_dump($row);
             $this->importMutualisationLine($row, false, false, 'Mutualisation');   
         }
     }
@@ -1278,7 +1283,7 @@ var_dump(["suppression" => $EE]);
     public function importAjout(){
         // Importation du fichier ajoutNNNN.csv 
         // construit quasiment sur le même modèle que mutualisation2025.csv
-var_dump("Import Ajout");
+        var_dump("Import Ajout");
         $this->explain = true;
 
         $app = \TDS\App::get();
@@ -1305,7 +1310,7 @@ var_dump("Import Ajout");
     }
 
     public function correctionEtape(){
-var_dump("correction des étapes");
+        var_dump("correction des étapes");
         $this->explain = true;
 
         $app = \TDS\App::get();
@@ -1315,11 +1320,11 @@ var_dump("correction des étapes");
         $file = new \SplFileObject("{$this->structurePath}/correctionEtape.csv");
         $file->setFlags(\SplFileObject::READ_CSV);
         $file->setCsvControl(';');
-var_dump($file);
+        var_dump($file);
         $first = true;
         $len = 0;
         foreach ($file as $row) {
-var_dump($row);
+            var_dump($row);
             if ($first){
                 $len = count($row);
                 $first = false;
@@ -1357,17 +1362,12 @@ var_dump($row);
             }
         }
 
-//var_dump($cursusId, $cursus);
 
         $filter = is_null($cursus)?[]:['cursus' => $cursus->filter];
         $filter['inDB'] = false;
         $filter['outDB'] = false;
-//var_dump($filter);
 
         $where = $this->parseFilter($filter);
-
-//var_dump($where);
-
 
         $sql = "
         SELECT DISTINCT
@@ -1382,7 +1382,6 @@ var_dump($row);
         }
         $sql .="ORDER BY nom";
 
-//var_dump($sql);
 
         $stmt = $con->prepare($sql);
         $stmt->execute();
@@ -1398,6 +1397,8 @@ var_dump($row);
     }
 
     public function getEcueList($structureId, $cursusId, $semestreId, $etapeId){
+        // #OC_structure-ajout -> Il faut ajouter ici de quoi l'interrogation de la table ajout... 
+
         $con = \Propel\Runtime\Propel::getReadConnection(\Map\ecue_etapeTableMap::DATABASE_NAME);
         $cursusList = $this->getCursusList();
         foreach($cursusList as $cursus){
@@ -1412,16 +1413,6 @@ var_dump($row);
                 break;
             }
         }
-/*
-var_dump([
-    'structureId' => $structureId, 
-    'cursusId' => $cursusId,
-    'cursus' => $cursus, 
-    'semestreId' => $semestreId,
-    'semestre' => $semestre, 
-    'etapeId' => $etapeId
-]);
-*/
         $filter = [];
         $filter['inDB'] = false;
         $filter['outDB'] = false;
@@ -1429,10 +1420,8 @@ var_dump([
             self::convertIdToFilter($filter, 'Cursus', [$cursusId]);
             // $filter['cursus'] = $cursus->filter;
         }
-//var_dump($filter, $semestreId);        
         if (is_int($semestreId)){
             self::convertIdToFilter($filter, 'Semestre',[$semestreId]);
-//var_dump($filter);        
             //$filter['periode'] = $semestre->filter;
         }
 
@@ -1460,7 +1449,6 @@ var_dump([
         }
         $sql .="ORDER BY EC.code";
 
-//var_dump($sql);
 
         $stmt = $con->prepare($sql);
         $stmt->execute();
@@ -1470,10 +1458,8 @@ var_dump([
             //var_dump($ecue);
             $ecueList[] = $ecue['0'];
         };
-//var_dump($ecueList);
         $tmp = new ECUEQuery();
         $ecueList = $tmp->findPks($ecueList);
-//var_dump($ecueList);
         return $ecueList;
 
     }
@@ -1560,6 +1546,8 @@ var_dump([
      */
     public function getInBaseEnseignementFromEcueList(array $ecueList): array {
         $app = \TDS\App::get();
+
+        // #OC_structure-ajout -> Il faut ajouter ici de quoi l'interrogation de la table ajout... 
 
         $codeList = [];
         foreach($ecueList as $ecue){

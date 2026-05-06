@@ -13,12 +13,29 @@ use ecue_etape;
 use ecue_etapeQuery;
 use \Propel\Runtime\ActiveQuery\Criteria;
 
+/**
+ * Travail préparatoire pour remplacer la partie Ajout à la structure des enseignements commune à l'établissement
+ * par une partie ajout qui elle est définie au niveau de la base de données.
+ * L'idée est de faire une table qui permet de concrétiser cet ajout au niveau de la base de données
+ * et de permettre une procédure utilisable par l'administrateur de l'appli d'ajouter une entrée qui permet d'associer un e
+ * nseignement donnés à une étape particulière.
+ * la table en question fait simplement la jonction entre une étape et un code ecue (cette partie là est simple).
+ * Cela suppose que toutes les étapes sont déjà définies défines dans la structure des enseignements.
+ * 
+ * 
+ * Le challenge, c'est de faire en sorte que les différentes fonctions qui permettent d'interroger la structure des enseignements
+ *  puissent également utiliser cette table de liaison.
+ * 
+ * le tag de marquage à utiliser pour les fonctions qui font partie de ce travail préparatoire est // #OC_structure-ajout  
+ * (pour pouvoir faire le tri facilement dans le code et faire le ménage une fois que tout est en place).
+ */
+
 
 class StructureController extends \TDS\Controller {
 
     public static function home(){
-        $app = \TDS\App::get();
-        $struct = new \base\Struct();
+        $app = \TDS\App::get();   
+        $struct = new \base\Struct(); 
 
         $structureList = $struct->getStructureList();
 
