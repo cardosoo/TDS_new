@@ -88,7 +88,6 @@ class Router extends \AltoRouter {
         $this->addRoute(new Route('GET', '/photos/[i:id]', 'Router::routePhotos','route_photos'));
         $this->addRoute(new Route('GET', '/Docs/[h:hex]', 'Router::routeDocs','route_documents'));
         $this->addRoute(new Route('POST', '/DocUpload/[a:entity]/[i:id]', 'Router::routeDocUpload','route_document_upload'));
-        //$this->addRoute(new Route('POST', '/DocUpload/[a:entity]/[i:id]', 'Router::routeDocUpload','route_document_upload'));
         $this->addRoute(new Route('POST', '/renameDoc/[h:hex]', 'Router::routeRenameDoc','route_renameDoc'));
         $this->addRoute(new Route('POST', '/deleteDoc/[h:hex]', 'Router::routeDeleteDoc','route_deleteDoc'));
 
@@ -115,7 +114,8 @@ class Router extends \AltoRouter {
         if (is_array($match)) {
 
             $r = explode('::',$match['target'],);
-            if (! in_array($r[1], ['routeAsset','routePhotos', 'routeDocs','routeDocUpload', 'routeRenameDoc', 'deleteDoc'] )){
+            if (! in_array($r[1], ['routeAsset','routePhotos', 'routeDocs','routeDocUpload', 'routeRenameDoc', 'deleteDoc', 'setCurrentYear'] )){
+                $app::setPermission(); // on vérifie que l'utilisateur est bien autorisé à accéder au site.
                 $app::doLog( $match['target'] );
             }
 

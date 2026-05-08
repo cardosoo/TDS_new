@@ -33,7 +33,7 @@ class Struct  {
     public String $configFile; 
     public String $year;
     
-    private Array|null $codeList =  null;
+    private String|null $codeList =  null;
     public $explain = false;
 
     public Array $structureList = [];

@@ -28,6 +28,7 @@ if (!$keepDevForMe){
 $today = new DateTime();
 
 $basculeFoire = DateTime::createFromFormat('Y-m-d H:i:s', '2026-05-10 12:00:00'); 
+//$basculeFoire = DateTime::createFromFormat('Y-m-d H:i:s', '2026-05-08 12:00:00'); 
 // 2025 est officiel
 $officialYear = $today>$basculeFoire?2026:2025;
 $officialYear = filter_input(INPUT_GET, 'year', FILTER_VALIDATE_INT)??$officialYear;

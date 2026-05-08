@@ -52,15 +52,13 @@ require_once $app::$basePath.'/../vendor/autoload.php';
 
 include($app::$pathList['base']."/config.php");
 
-
-$app::setPermission();
 $app::initViewer();
-
 require_once("../TDS/Classes/AltoRouter.php"); // on a besoin de cela ou alors il faut faire une entrée spéciale dans l'autoload... à voir ce qui est préférable
 $app::initRouter();
 
 
 include($app::$pathList['base']."/router.php");
 $app::$router->buildRoutes();
+//$app::setPermission();
 $app::$router->doMatch();
 

@@ -29,11 +29,9 @@
         <div id="Cursus" class="w3-show w3-container">
             {% set structEtapeList = E.getStructEtapeList() %}
 
-{#{ dump(structEtapeList) }#}
-
             {% for codeECUE in structEtapeList|keys %}
                 {% set ecue = ecueList[codeECUE] %}
-                {% set etapeList = structEtapeList[codeECUE] %}
+                {% set etapeList = ecue.getEtapes() %}
                 {{ etapeList|length >0 ? "": "<p>Hors maquettes</p>" }}
                 {% for etape in etapeList %}
                 {#% for etape in structEtapeList %#}
