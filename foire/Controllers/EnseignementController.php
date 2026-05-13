@@ -65,12 +65,14 @@ class EnseignementController extends \base\Controllers\EnseignementController {
 
     protected static function verificationUsage(int $id, $error='404'){
         $app = \TDS\App::get();
+        // Cette fonction à l'air d'être spécifique aux paniers 
+        // donc normalement elle ne doit plus se soucier que l'enseignement soit attribuable ou pas.
 
         // vérifications d'usage
         if (!$app::$auth->isInBase()) Utils::error($error);
         if (!$app::$phaseList[$app::$phase]->withPanier)  Utils::error($error);
         $enseignement = $app::load('Enseignement', $id);
-        if (! $enseignement->attribuable) Utils::error($error);
+        //if (! $enseignement->attribuable) Utils::error($error);
         if (! $enseignement->actif) Utils::error($error);
     }
 
