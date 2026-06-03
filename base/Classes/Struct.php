@@ -743,12 +743,24 @@ if ($this->explain) {
         $varianteList =  [];
         $codeList = [];
         foreach($codeVarianteList as $codeVariante){
-            $code = $codeVariante['code'];
-            $variante = $codeVariante['variante'];
-            if ($code == $variante){
-                $codeList[] = $code;
+            if (isset($codeVariante['id'])){
+                $code = $codeVariante['code'];
+                $variante = $codeVariante['variante'];
+                if ($code == $variante){
+                    $codeList[] = $code;
+                } else {
+                    $varianteList[] = str_replace("'", "", $variante); // oui c'est moche mais si on ne supprime pas les apostrophe cela ne fonctionne pas.
+                }
             } else {
-                $varianteList[] = str_replace("'", "", $variante); // oui c'est moche mais si on ne supprime pas les apostrophe cela ne fonctionne pas.
+                foreach($codeVariante as $codeVariante2){
+                     $code = $codeVariante2['code'];
+                    $variante = $codeVariante2['variante'];
+                    if ($code == $variante){
+                        $codeList[] = $code;
+                    } else {
+                        $varianteList[] = str_replace("'", "", $variante); // oui c'est moche mais si on ne supprime pas les apostrophe cela ne fonctionne pas.
+                    }
+                }
             }
         }
         $codeSQL = "true";
@@ -796,11 +808,23 @@ if ($this->explain) {
 
             if (isset($codeVarianteList[$filter['variante']])){
                 $cv = $codeVarianteList[$filter['variante']];
-                $filterList[$cv['id']]=$cv;
+                if (isset($cv['id'])){
+                    $filterList[$cv['id']]=$cv;
+                } else {
+                    foreach($cv as $cv2){
+                        $filterList[$cv2['id']]=$cv2;
+                    }
+                }
             }
             if (isset($codeVarianteList[$filter['code']])){
                 $cv = $codeVarianteList[$filter['code']];
-                $filterList[$cv['id']]=$cv;
+                if (isset($cv['id'])){
+                    $filterList[$cv['id']]=$cv;
+                } else {
+                    foreach($cv as $cv2){
+                        $filterList[$cv2['id']]=$cv2;
+                    }
+                }
             }
         };
         return $filterList;

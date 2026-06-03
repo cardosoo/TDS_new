@@ -170,6 +170,7 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
     public static function getIdCodeVarianteList($searchString, $modalite, $with){
         $app = \TDS\App::get();
 
+        $struct = new \base\Struct();
         $where = [];
         if (! empty($searchString)){
             $where[] = "AND unaccent(ENS.intitule || ENS.nom || ENS.nuac || ENS.code) ILIKE unaccent('%{$searchString}%')";
@@ -210,17 +211,74 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
             if (empty($r->variante)){
                 $r->variante = "";
             }
-            foreach(explode('|', $r->variante) as $variante){
-                foreach(explode('|', $r->code) as $code){ // cette boucle là est pour traiter l'éventualité d'un enseignement qui aurait plusieurs code ecue (normalement cela ne devrait pas arrivé !)
-                    $idCodeVarianteList[$code.$variante]=[
+
+            /*
+                On traite les variantes de la manière suivante : 
+                - si la variante est vide alors il n'y a pas de problème
+                - si la variante contient des | alors il s'agit de codes d'étape séparés par des | (exemple : "ETAPE1|ETAPE2|ETAPE3") et dans ce cas on considère que l'enseignement est rattaché à chacune de ces étapes
+                - si il n'y a pas de | alors il s'agit vraiment d'une variante et il faut faire un tableau avec les différentes vrariantes.
+            */
+
+            foreach(explode('|', $r->code) as $code){ // cette boucle là est pour traiter l'éventualité d'un enseignement qui aurait plusieurs code ecue (normalement cela ne devrait pas arrivé !)
+                if ($r->variante == ""){ // pas de variante, on traite l'enseignement normalement
+                    $idCodeVarianteList[$code]=[
                         'id' => $r->id,
                         'code' => $r->code,
                         'nuac' => $r->nuac,
                         'intitule' => $r->intitule,
-                        'variante' => $code.$variante,
+                        'variante' => "",
                     ];    
-                }    
+                } else { // il y a des variantes, on traite l'enseignement pour chacune des variantes
+                    $varianteList = explode('|', $r->variante);
+                    if (count($varianteList) == 1){ // il n'y a qu'une seule variante, on traite comme une vraie variante (plusieurs enseignements avec le mode code ECUE)
+                        $idCodeVarianteList[$code.$r->variante]=[
+                            'id' => $r->id,
+                            'code' => $r->code,
+                            'nuac' => $r->nuac,
+                            'intitule' => $r->intitule,
+                            'variante' => $r->variante,
+                        ];    
+                    } else { // il y a plusieurs variantes, on traite comme des codes d'étape (plusieurs enseignements avec le mode code ECUE + code étape)
+                        foreach(explode('|', $r->variante) as $variante){
+                            $variante=trim($variante);
+                            if ( ($variante !== "") && ($struct->getEtapeByCode($variante) != null) ) { // on ne traite que les variantes qui sont des codes d'étape valides ou les variantes vides
+                                if (! isset($idCodeVarianteList[$code.$variante])){
+                                    $idCodeVarianteList[$code.$variante] = [];
+                                }
+                                $idCodeVarianteList[$code.$variante][]=[
+                                    'id' => $r->id,
+                                    'code' => $r->code,
+                                    'nuac' => $r->nuac,
+                                    'intitule' => $r->intitule,
+                                    'variante' => $variante,
+                                ];    
+                            }
+                        }
+                    }
+                }
+            } 
+            /*
+            foreach(explode('|', $r->variante) as $variante){
+            
+                    if ( ($variante == "") || ($struct->getEtapeByCode($variante) != null) ) { // on ne traite que les variantes qui sont des codes d'étape valides ou les variantes vides
+                                    
+                
+                    foreach(explode('|', $r->code) as $code){ // cette boucle là est pour traiter l'éventualité d'un enseignement qui aurait plusieurs code ecue (normalement cela ne devrait pas arrivé !)
+                        $comp='';
+                        if (isset($idCodeVarianteList[$code.$variante])){
+                            $comp = \uniqid();
+                        }
+                        $idCodeVarianteList[$code.$variante]=[
+                            'id' => $r->id,
+                            'code' => $r->code,
+                            'nuac' => $r->nuac,
+                            'intitule' => $r->intitule,
+                            'variante' => $code.$variante,
+                        ];    
+                    }
+                }
             }
+            */
         }
         return $idCodeVarianteList;
     }
@@ -312,11 +370,19 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
         $idCodeVarianteList = $struct->filterIdCodeList($filter, $idCodeVarianteList);
 
         $retList = [];
-        foreach($idCodeVarianteList as $idCodeVariante){            
-            $idCodeVariante['enseignement'] = ($app::NS('Enseignement'))::load($idCodeVariante['id']);
-
-            $idCodeVariante['ecue'] = $struct->getECUEByCode( explode('|', $idCodeVariante['code'])[0]); // on ne prend que l'ECUE du premier code de la  liste
-            $retList[] = $idCodeVariante;
+        foreach($idCodeVarianteList as $idCodeVariante){
+            if (isset($idCodeVariante['id'])){
+                $idCodeVariante['enseignement'] = ($app::NS('Enseignement'))::load($idCodeVariante['id']);
+                $idCodeVariante['ecue'] = $struct->getECUEByCode( explode('|', $idCodeVariante['code'])[0]); // on ne prend que l'ECUE du premier code de la  liste
+                $retList[] = $idCodeVariante;
+            } else {
+                //var_dump($idCodeVariante);
+                foreach($idCodeVariante as $idCodeVariante2){
+                    $idCodeVariante2['enseignement'] = ($app::NS('Enseignement'))::load($idCodeVariante2['id']);
+                    $idCodeVariante2['ecue'] = $struct->getECUEByCode( explode('|', $idCodeVariante2['code'])[0]); // on ne prend que l'ECUE du premier code de la  liste
+                    $retList[] = $idCodeVariante2;
+                }
+            }
         }
         return $retList;
     }

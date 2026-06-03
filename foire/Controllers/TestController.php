@@ -218,25 +218,40 @@ var_dump("Ni l'un ni l'autre");
     }
 
     public static function test4(){
-        var_dump('désactivation de /foire/test/test4'); exit();
+        // var_dump('désactivation de /foire/test/test4'); exit();
+
         $app = \TDS\App::get();
-        $options = [
-            'app' => new $app(),
-        ];
 
-        $personne = $app::$auth->user;
-        $code = "PH45E015";
+        $enseignementList = $app::NS('Enseignement')::loadWhere('actif and id>0');
+        $L = [];
+        foreach ($enseignementList as $E) {            
+            $code = $E->code;
+            $etapeL = $E->getStructEtapeList();
+            $mainEtape = null;
+            $etapeList = [];
+            if (!isset($etapeL[$code])){
+                continue;
+            }
+            $etapeL = $E->getStructEtapeList()[$code];
+            foreach($etapeL as $e){
+                if (!is_null($e)){
+                    if (is_null($mainEtape)){
+                        $mainEtape = $e;
+                    } else {
+                        $etapeList[] = $e;
+                    }
+                }
+            }
+            $L[] = ['E' => $E, 'ET' => $mainEtape, 'ETL' => $etapeList];
+        }            
 
-        $struct = new Struct();
-        $ecue = $struct->getECUEByCode($code);  
-        var_dump($ecue->canCreateEnseignementInDatabase());
-      
-        $EList = $app::NS('Enseignement')::loadWhere(" code LIKE '%{$code}%'");
-        var_dump($ecue);
-        var_dump(count($EList));
-        
+    
+        //var_dump($L);
+        //exit();
+        $app::$cmpl["withJQuery"] = true;
+        $app::$cmpl["withDataTables"] = true;
 
-        //echo $app::$viewer->render("test/test4.html.twig", $options);
+        echo $app::$viewer->render('gestionnaire/repartitionParNiveau.html.twig', ['L' => $L]);
     }
 
 }

@@ -26,6 +26,7 @@ class APIController extends \TDS\Controller {
         LEFT JOIN enseignement_structure as ES on ES.id = E.id
         LEFT JOIN voeu_detail_heures as VDH on VDH.id = V.id
         ORDER BY P.nom, P.prenom
+        
         ");
         echo $app::$viewer->render('api/listingService.csv.twig', ['serviceList' => $serviceList]);
    }
@@ -39,7 +40,7 @@ class APIController extends \TDS\Controller {
         echo file_get_contents($ose->servicePath);
         
     }
-    public static function allEcuesOSE($year){
+    public static function allEcuesOSE(string $year){
         $app = \TDS\App::get();
 
         $baseName = $app::$appName."{$year}";
@@ -68,7 +69,7 @@ class APIController extends \TDS\Controller {
     }
 
     
-    public static function activeUserList($year){
+    public static function activeUserList(string $year){
         $app = \TDS\App::get();
 
         $baseName = $app::$appName."{$year}";
@@ -96,7 +97,61 @@ class APIController extends \TDS\Controller {
 
     }
 
-    public static function listingUserFoncRef($year){
+    public static function listingUserFoncRef(string $year, $withStages = false){
+        $app = \TDS\App::get();
+
+        $baseName = $app::$appName."{$year}";
+        $db = new \TDS\Database($baseName, $app::$baseUser, $app::$basePwd, 'localhost' );
+        pg_set_client_encoding($db->conn, "UNICODE");
+
+        if ($withStages){
+            $stageCondition = "";
+        } else {
+            $stageCondition = "AND FR.id != 4"; // on exclut les stages
+        }
+
+        $list = $db-> getAll('
+            SELECT DISTINCT
+                P.id as "personneId",
+                P.nom,
+                P.prenom,
+                P.ose,
+
+                FR.id as "foncRefId",
+                FR.intitule as "intitule",
+                
+                R.code,
+
+                PFR.id as "personneFoncRefId",
+                PFR.volume as "volume",
+                PFR.commentaire as "commentaire"
+
+            FROM Personne_foncRef as PFR
+            LEFT JOIN Personne as P on PFR.personne = P.id
+            LEFT JOIN FoncRef as FR on PFR.foncRef = FR.id
+            LEFT JOIN Referentiel as R on FR.referentiel = R.id
+
+            WHERE P.actif AND P.id>0
+            AND FR.actif and FR.id > 0
+            AND PFR.actif and PFR.id > 0
+            '.$stageCondition.'
+            ORDER BY nom, prenom
+        ');
+
+        echo date("'d/m/Y\t'H:i:s")."\n";
+        echo "personneId\tprenom\tnom\tose\tfoncRefId\tintitule\tcode\tpersonneFoncRefId\tcommentaire\tvolume\n";
+        foreach($list as $elm){
+            $commentaire = str_replace(["\t", "\n", "\r"], " ", $elm->commentaire);
+            echo "{$elm->personneId}\t{$elm->prenom}\t{$elm->nom}\t{$elm->ose}\t{$elm->foncRefId}\t{$elm->intitule}\t{$elm->code}\t{$elm->personneFoncRefId}\t{$commentaire}\t{$elm->volume}\n";
+        }
+
+    }
+
+    public static function listingUserFoncRefWithStages(string $year){
+        return self::listingUserFoncRef($year, true);
+    }
+
+    public static function listingUserSituation(string $year){
         $app = \TDS\App::get();
 
         $baseName = $app::$appName."{$year}";
@@ -110,35 +165,72 @@ class APIController extends \TDS\Controller {
                 P.prenom,
                 P.ose,
 
-                FR.id as "foncRefId",
-                FR.intitule as "intitule",
-                R.code,
+                S.id as "situationId",
+                S.nom as "situationNom",
+                S.ose as "situationCode",
 
-                PFR.id as "personneFoncRefId",
-                PFR.commentaire as "commentaire",
-                PFR.volume as "volume"
+                PS.reduction as "reduction",
+                PS.commentaire as "commentaire",
+                PS.id as "personneSituationId"
 
+            FROM Personne_situation as PS
+            LEFT JOIN Personne as P on PS.personne = P.id
+            LEFT JOIN Situation as S on PS.situation = S.id
 
-            FROM Personne_foncRef as PFR
-            LEFT JOIN Personne as P on PFR.personne = P.id
-            LEFT JOIN FoncRef as FR on PFR.foncRef = FR.id
-            LEFT JOIN Referentiel as R on FR.referentiel = R.id
-
-            WHERE P.actif AND P.id>0
-            AND FR.id != 4  -- on exclut les stages
+            WHERE P.actif AND P.id > 0
+            AND S.actif and S.id > 0
+            AND PS.actif and PS.id > 0
             ORDER BY nom, prenom
         ');
 
         echo date("'d/m/Y\t'H:i:s")."\n";
-        echo "personneId\tprenom\tnom\tose\tfoncRefId\tintitule\tcode\tpersonneFoncRefId\tcommentaire\tvolume\n";
+        echo "personneId\tprenom\tnom\tose\tsituationId\tsituationNom\tsituationCode\treduction\tcommentaire\tpersonneSituationId\n";
         foreach($list as $elm){
-            echo "{$elm->personneId}\t{$elm->prenom}\t{$elm->nom}\t{$elm->ose}\t{$elm->foncRefId}\t{$elm->intitule}\t{$elm->code}\t{$elm->personneFoncRefId}\t{$elm->commentaire}\t{$elm->volume}\n";
+            $commentaire = str_replace(["\t", "\n", "\r"], " ", $elm->commentaire);
+            echo "{$elm->personneId}\t{$elm->prenom}\t{$elm->nom}\t{$elm->ose}\t{$elm->situationId}\t{$elm->situationNom}\t{$elm->situationCode}\t{$elm->reduction}\t{$commentaire}\t{$elm->personneSituationId}\n";
+        }
+
+    }
+
+    public static function listingUserEnseignement(string $year, string $code){
+        $app = \TDS\App::get();
+
+        $baseName = $app::$appName."{$year}";
+        $db = new \TDS\Database($baseName, $app::$baseUser, $app::$basePwd, 'localhost' );
+        pg_set_client_encoding($db->conn, "UNICODE");
+
+        $list = $db->getAll("
+        SELECT
+            V.id,
+            E.code,
+            VDH.cm,
+            VDH.ctd,
+            VDH.td,
+            VDH.tp,
+            VDH.extra,
+            VDH.bonus
+        FROM voeu as V
+        LEFT JOIN enseignement as E on E.id = V.enseignement
+        LEFT JOIN personne as P on P.id = V.personne
+        LEFT JOIN voeu_detail_heures as VDH on VDH.id = V.id
+        WHERE V.actif
+        AND P.actif
+        AND E.actif
+        AND P.ose = '{$code}' 
+        ORDER BY P.nom, P.prenom
+        ");
+
+
+        echo date("'d/m/Y\t'H:i:s")."\n";
+        echo "voeuId\tcodeECUE\tCM\tCMTD\tTD\tTP\tEXTRA\tBONUS\n";
+        foreach($list as $elm){
+            echo "{$elm->id}\t{$elm->code}\t{$elm->cm}\t{$elm->ctd}\t{$elm->td}\t{$elm->tp}\t{$elm->extra}\t{$elm->bonus}\n";
         }
 
     }
 
 
-    public static function activeTeachingList($year){
+    public static function activeTeachingList(string $year){
         $app = \TDS\App::get();
 
         $baseName = $app::$appName."{$year}";
@@ -194,6 +286,7 @@ class APIController extends \TDS\Controller {
         }
     }
     */
+
 
     public static function activeFoncRef($year){
         $app = \TDS\App::get();

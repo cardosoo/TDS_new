@@ -27,13 +27,21 @@ $app::$router->routeList['public']['api']['candidatureME_deleteDoc']= new Route(
 
 $app::$router->routeList['public']['api']['planning']= new Route('GET','/planning/detailsAPI/[*:cursus]/[*:composante]/[i:perdiode]/[i:serie]', 'PlanningController::detailsAPI', 'api_planning_detailsAPI');
 $app::$router->routeList['public']['api']['listingServices']= new Route('GET','/api/listingServices', 'APIController::listingServices', 'api_listingServices');
+$app::$router->routeList['public']['api']['listingUserEnseignement']= new Route('GET','/api/listingUserEnseignement/[i:year]/[a:code]', 'APIController::listingUserEnseignement', 'api_listingUserEnseignement');
+
 $app::$router->routeList['public']['api']['listingServicesOSE']= new Route('GET','/api/listingServicesOSE', 'APIController::listingServicesOSE', 'api_listingServicesOSE');
 $app::$router->routeList['public']['api']['allEcueOSE']= new Route('GET','/api/allEcuesOSE/[i:year]', 'APIController::allEcuesOSE', 'api_allEcuesOSE');
+
 $app::$router->routeList['public']['api']['activeUserList']= new Route('GET','/api/activeUserList/[i:year]', 'APIController::activeUserList', 'api_activeUserList');
 $app::$router->routeList['public']['api']['activeTeachingList']= new Route('GET','/api/activeTeachingList/[i:year]', 'APIController::activeTeachingList', 'api_activeTeachingList');
+
 $app::$router->routeList['public']['api']['activeFoncRef']= new Route('GET','/api/activeFoncRef/[i:year]', 'APIController::activeFoncRef', 'api_activeFoncRef');
 $app::$router->routeList['public']['api']['listingUserFoncRef']= new Route('GET','/api/listingUserFoncRef/[i:year]', 'APIController::listingUserFoncRef', 'api_listingUserFoncRef');
+$app::$router->routeList['public']['api']['listingUserFoncRefWithStages']= new Route('GET','/api/listingUserFoncRefWithStages/[i:year]', 'APIController::listingUserFoncRefWithStages', 'api_listingUserFoncRefWithstages');
+
 $app::$router->routeList['public']['api']['activeSituationList']= new Route('GET','/api/activeSituationList/[i:year]', 'APIController::activeSituationList', 'api_activeSituationList');
+$app::$router->routeList['public']['api']['listingUserSituation']= new Route('GET','/api/listingUserSituation/[i:year]', 'APIController::listingUserSituation', 'api_listingUserSituation');
+
 $app::$router->routeList['public']['api']['getEmail']= new Route('GET','/api/getEmail/[i:id]', 'APIController::getEmail', 'api_getEmail');
 $app::$router->routeList['public']['api']['isUIDInBase']= new Route('GET','/api/isUIDInBase/[a:uid]', 'APIController::isUIDInBase', 'api_isUIDInBase');
 
@@ -148,7 +156,7 @@ $app::$router->routeList['restrict']['SuperAdmin'][] = new Route('GET', '/admin/
 
 // Gestionnaire
 $app::$router->routeList['restrict']['Gestionnaire'][] =   new Route('GET', '/gestionnaire', 'GestionnaireController::home', 'gestionnaire_home');
-$app::$router->routeList['restrict']['Gestionnaire'][] =   new Route('GET', '/gestionnaire/utilisationServices', 'GestionnaireController::utilisationServices', 'gestionnaire_utilisationServices');
+$app::$router->routeList['restrict']['Gestionnaire'][] =   new Route('GET', '/gestionnaire/repartitionBesoinsParEtape', 'GestionnaireController::repartitionBesoinsparEtape', 'gestionnaire_repartitionBesoinsparEtape');
 $app::$router->routeList['restrict']['Gestionnaire'][] =   new Route('GET', '/gestionnaire/comparaisonOSE', 'GestionnaireController::comparaisonOSE', 'gestionnaire_comparaisonOSE');
 $app::$router->routeList['restrict']['Gestionnaire'][] =   new Route('GET', '/gestionnaire/listeSituations', 'GestionnaireController::listeSituations', 'gestionnaire_listeSituations');
 $app::$router->routeList['restrict']['Gestionnaire'][] =   new Route('GET', '/gestionnaire/listeReferentiel', 'GestionnaireController::listeReferentiel', 'gestionnaire_listeReferentiel');

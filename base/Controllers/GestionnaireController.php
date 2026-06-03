@@ -132,70 +132,61 @@ class GestionnaireController extends \TDS\Controller {
         echo $app::$viewer->render('gestionnaire/index.html.twig');
     }
 
-    public static function utilisationServices() {
+    public static function repartitionParNiveau() {
         $app = \TDS\App::get();
 
+        $enseignementList = $app::NS('Enseignement')::loadWhere('actif');
+        $list = [];
+        foreach ($enseignementList as $E) {
+            
+            $code = $b->code;
+            $etape = $E->getStructEtapeList();
+            
+            $niveau = substr($code, 0, 3);
+            if (! isset($list[$niveau])) {
+                $list[$niveau] = 0;
+            }
+            $list[$niveau] += $b->besoins;  
+        }    
 
-        // 
-        $services = $app::$db->getAll('
-            SELECT 
-                MAX(S.nom) statut,
-                COUNT(*) as Nb,
-                SUM(S.obligation) as volume,
-                SUM(
-                    CASE 
-                        WHEN S.obligation = 183 THEN 192
-                        ELSE S.obligation
-                    END
-                ) as volumeLegal,
-                SUM(SI.reduction) as reduction,
-                SUM(S.obligation - SI.reduction) as volumeReduit,
-                sum(VPH.heures) as realise
-            FROM personne as P
-            LEFT JOIN statut as S on S.id = P.statut
-            LEFT JOIN situation as SI on SI.id = P.situation
-            LEFT JOIN voeu_personne_heures as VPH on VPH.id = P.id
-            WHERE P.id >0
-            AND P.actif
-            GROUP BY P.statut
-            ORDER BY statut
-        ');
-
-        $besoins = $app::$db->getAll('
-            SELECT
-                min(TUE.nom) as typeue,
-                ES.composante,
-                ES.cursus,
-                sum(EB.besoins) as besions
-            FROM enseignement as E
-            LEFT JOIN enseignement_besoins_detail as EBD on EBD.id = E.id
-            LEFT JOIN enseignement_besoins as EB on EB.id = E.id
-            LEFT JOIN enseignement_structure as ES on ES.id = E.id
-            LEFT JOIN typeue as TUE on E.typeue = TUE.id
-            WHERE E.id >0
-            AND E.actif
-            GROUP BY ES.cursus, ES.composante, tue.id
-            ORDER BY TUE.id, ES.composante, ES.cursus
-        ');
-
-
-
-        /*********************
-         * - Il faut ajouter les besoins en les enseignements
-         * - Il faut faire distinguer les PCC
-         * - Il faut aussi distingure les PCA
-         * - on pourrait distinguer via les Bonus
-         * - Il faudrait aussi faire les services attribués
-         * *******************/
 
         $app::$cmpl["withJQuery"] = true;
         $app::$cmpl["withDataTables"] = true;
 
+        echo $app::$viewer->render('gestionnaire/repartitionParNiveau.html.twig', ['besoins' => $besoins]);
+    }
 
-        echo $app::$viewer->render('gestionnaire/utilisationServices.html.twig', [
-            'services' => $services,
-            'besoins' => $besoins,
-        ]);
+
+    public static function repartitionBesoinsparEtape() {
+        $app = \TDS\App::get();
+
+        $enseignementList = $app::NS('Enseignement')::loadWhere('actif and id>0');
+        $L = [];
+        foreach ($enseignementList as $E) {            
+            $code = $E->code;
+            $etapeL = $E->getStructEtapeList();
+            $mainEtape = null;
+            $etapeList = [];
+            if (!isset($etapeL[$code])){
+                continue;
+            }
+            $etapeL = $E->getStructEtapeList()[$code];
+            foreach($etapeL as $e){
+                if (!is_null($e)){
+                    if (is_null($mainEtape)){
+                        $mainEtape = $e;
+                    } else {
+                        $etapeList[] = $e;
+                    }
+                }
+            }
+            $L[] = ['E' => $E, 'ET' => $mainEtape, 'ETL' => $etapeList];
+        }            
+    
+        $app::$cmpl["withJQuery"] = true;
+        $app::$cmpl["withDataTables"] = true;
+
+        echo $app::$viewer->render('gestionnaire/repartitionParEtape.html.twig', ['L' => $L]);
     }
 
     private static function filterPersonne($voeuList, $ose) {

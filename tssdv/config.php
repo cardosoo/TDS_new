@@ -135,7 +135,7 @@ if ($year == '2024'){
 if ($year == '2025'){
     //$today = new DateTime();
     $debutSaisie = $date2025;
-    $finSaisie = DateTime::createFromFormat('Y-m-d H:i:s', '2026-06-09 23:59:59');
+    $finSaisie = DateTime::createFromFormat('Y-m-d H:i:s', '2026-06-01 00:00:01');
     $debutValidation = clone $debutSaisie;
     $debutValidation->add(new DateInterval('PT1S'));
     $finValidation = DateTime::createFromFormat('Y-m-d H:i:s', '2026-06-15 23:59:59');
@@ -181,7 +181,7 @@ App::$phaseList = [
     'validation' => (object)[
         'voeuxPersonneLabel' => "Temps de service en cours de validation  pour l'année {$year}-{$nextYear}",
         'voeuxEnseignantLabel' => "Temps de service en cours de validation  pour l'année  {$year}-{$nextYear}",
-        'withAjouterVoeux' => true,
+        'withAjouterVoeux' => false,
         'ajouterVoeu' => 'Ajouter cet enseignement',
         'modifierVoeu' => 'Modifier cet enseignement',
         'supprimerVoeu' => 'Supprimer cet enseignement',
@@ -238,5 +238,5 @@ if (App::$currentYear > App::$officialYear){
 //App::$phase = 'passée';
 //App::$phase = 'future';
 
-//var_dump(App::$phaseList[App::$phase], App::$phase);
+//var_dump([App::$phaseList[App::$phase], App::$phase]);
 //exit();

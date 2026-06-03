@@ -1,0 +1,66 @@
+{% extends "layout.html.twig" %}
+
+{% block section %}
+<div class="w3-cell-row">
+
+    <h3>Répartition des besoins par étape</h3>
+    {#{ dump(L) }#}
+
+    <table class="standardList" class="w3-table-all w3-centered">
+        <thead>
+                <th>code</th>
+                <th>nom</th>
+                <th>besoins</th>
+                <th>domaine</th>
+                <th>niveau</th>
+                <th>periode</th>
+                <th>etape-code</th>
+                <th>etape</th>
+                <th>Autres Etapes</th>
+
+        </thead>
+        <tbody>
+            {% for elm in L %}
+            <tr>
+                <td>{{ elm.E.code }}</td>
+                <td>{{ elm.E.nom }}</td>
+                <td>{{ elm.E.enseignement_besoins.besoins }}</td>
+                <td>{{ elm.ET.getDomaine() }}</td>
+                <td>{{ elm.ET.niveau }}</td>
+                <td>{{ elm.E.structEcueList[elm.E.code].periode }}</td>
+                <td>{{ elm.ET.code }}</td>
+                <td>{{ elm.ET.nom }}</td>
+                <td>
+                    <ul>
+                        {% for etape in elm.ETL %}
+                            <li>{{etape.getDomaine()}} - {{ etape.nom }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+             </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+ 
+
+</div> 
+<script>
+    $(document).ready(function () {
+        $('.standardList').DataTable({
+            order: [[0, "asc"], [1, "asc"]],
+            dom: 'Bfrtip',
+            paging: false,
+            buttons: [
+                'copy',
+                'excel',
+                'csv',
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape'
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock %}
