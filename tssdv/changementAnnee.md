@@ -1,3 +1,68 @@
+Les 4 étapes proposées pour SDV en 2025 :
+
+
+### Étape 1 : Remise à zéro des voeux
+
+Cette opération doit-être un fois après avoir copié la base de données depuis l'année précédente vers cette nouvelle année. Opération réalisées :
+
+- remise à 0 des charges de CM, TD, TP pour les enseignements qui sont attribuables
+- remise de l'état de validation à « en latence »
+
+### Étape 2 : Calcul des reports
+
+Cette opération doit-être un fois après avoir copié la base de données depuis l'année précédente vers cette nouvelle année. Elle ne doit-être réalisée qu'à ce moment là.
+
+Opérations réalisées :
+- suppression des reports avec une valeur > 0,
+- conversion des reports ayant une valeur < 0 en report avec une valeur > 0
+
+### Étape 3 : Migration des situations individuelles
+
+Cette opération doit-être un fois après avoir copié la base de données depuis l'année précédente vers cette nouvelle année. Elle pré-suppose que les Situations particulières de l'année précédente sont présentes.
+Attention, cette opération doit être effectué après avoir fait le transfert des reports
+
+Opération réalisées :
+
+- suppression des situations particulières qui sont cochées dans la liste ci-dessous,
+par défaut, les situations particulières cochées sont celles pour lesquelles les dates de validaté encadre la date du 12 décembre de l'année de l'année courante,
+- les situations particulières sont classées par type de situation,
+- le button de validation du formulaire se situe tout en bas de cette page.
+
+### Étape 4 : Migration des fonctions du référentiel
+
+Cette opération doit-être un fois après avoir copié la base de données depuis l'année précédente vers cette nouvelle année. Elle pré-suppose que les fonctions du référentiel de l'année précédente sont présentes. Opération réalisées :
+
+- suppression des stages depuis les fonctions du référentiel
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### suppression des enseignements sans voeux et sans responsable
 
 - il est nécessaire de supprimer aussi le rattachement aux domaines

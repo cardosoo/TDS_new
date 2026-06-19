@@ -19,5 +19,13 @@ class GenController extends \TDS\Controller {
     }
 
 
+    public static function setCurrentYear(string $year){
+ 
+        $app = \TDS\App::get();
+        unset($_SESSION['TDS_auth_'.$app::$appName]);
+        $_SESSION['currentYear']=$year;
+        $app::$auth->forceAuth();
+        $app::$router->redirect('/');
+    }
 
 }

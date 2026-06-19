@@ -35,6 +35,9 @@ $router->updateRoute('personne_fiche', 'PersonneController::fiche');
 $router->routeList['withAuth']['personne'][] =   new Route('GET', '/personne/validerTousLesVoeux', 'PersonneController::validerTousLesVoeux', 'personne_validerTousLesVoeux');
 
 
+$app::$router->updateRoute('gen_setCurrentYear', 'GenController::setCurrentYear');
+
+
 $router->routeList['restrict']['respUE'][] =   new Route('GET', '/respUE', 'respUEController::home', 'respUE_home');
 $router->routeList['restrict']['respUE'][] =   new Route('GET', '/respUE/liste1', 'respUEController::liste1', 'respUE_liste1');
 $router->routeList['restrict']['respUE'][] =   new Route('GET', '/respUE/doReloadVoeuxListe1/[i:id]', 'respUEController::doReloadVoeuxListe1', 'respUE_doReloadVoeuxListe1');

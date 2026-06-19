@@ -16,6 +16,8 @@ class App extends \base\App {
             return;
         }
 
+        return; // pour l'instant, on ne bloque pas les vacataires et anciens vacataires, mais on garde le code au cas où
+
         if ($app::$auth->isAuth() && !is_null($app::$auth->user)){
             if(in_array(substr($app::$auth->user->statut->nom, 0, 6), ["Vacata", "Ancien"])){
                 $app::$auth->forceLogout(); // je ne suis pas certain que cela serve à quelque chose...

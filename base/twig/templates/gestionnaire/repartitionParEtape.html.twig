@@ -22,7 +22,7 @@
         <tbody>
             {% for elm in L %}
             <tr>
-                <td>{{ elm.E.code }}</td>
+                <td><a href='/{{App.appName}}/enseignement/{{elm.E.id}}'>{{ elm.E.code }}</a></td>
                 <td>{{ elm.E.nom }}</td>
                 <td>{{ elm.E.enseignement_besoins.besoins }}</td>
                 <td>{{ elm.ET.getDomaine() }}</td>

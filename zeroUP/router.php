@@ -16,7 +16,6 @@ $app::$router->routeList = [
         new Route('GET','/texte/documents/[*:document]', 'GenController::texte_documents'),
         new Route('GET','/texte/[*:t]', 'GenController::texte', 'texte'),
         new Route('GET', '/setCurrentYear/[i:year]', 'GenController::setCurrentYear', 'gen_setCurrentYear'),
-        new Route('GET', '/setCurrentYear/[i:year]', 'GenController::setCurrentYear', 'gen_setCurrentYear'),
     ],
       'auth' => [
         new Route('GET','/directLink/[*:hex]', 'AuthController::directLink', 'directLink'),

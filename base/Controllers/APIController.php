@@ -192,9 +192,21 @@ class APIController extends \TDS\Controller {
 
     }
 
+
+    /**
+     * Renvoie la liste des enseignements pour une personne.
+     * La sortie est un fichier texte (csv) destiné à être utilisé par les scripts python d'importation dans OSE.
+     * Un pré-traitement est nécessaire pour prendre en compte les 2 situations suivantes :
+     * - enseignement avec 2 codes ECUE (il faut en choisir un seul - tourjous le même. Le premier ?)
+     * - participation à plusieurs enseignements différents qui partagent le même code ECUE. Il faut faire une somme dessus 
+     *
+     * @param string $year l'année à prendre en compte
+     * @param string $code le code SIHAM de la personne
+     * @return void 
+     */
     public static function listingUserEnseignement(string $year, string $code){
         $app = \TDS\App::get();
-
+        
         $baseName = $app::$appName."{$year}";
         $db = new \TDS\Database($baseName, $app::$baseUser, $app::$basePwd, 'localhost' );
         pg_set_client_encoding($db->conn, "UNICODE");
@@ -220,10 +232,27 @@ class APIController extends \TDS\Controller {
         ORDER BY P.nom, P.prenom
         ");
 
+        $list2 = [];
+        foreach($list as $elm){
+            $elm->code = explode('|', $elm->code)[0]; // pré-traitement de : enseignement avec 2 codes ECUE 
+            
+            if (! isset($list2[$elm->code])){
+                $list2[$elm->code] = $elm;
+            } else{
+                $list2[$elm->code]->id .= "|".$elm->id;
+                $list2[$elm->code]->cm += $elm->cm;
+                $list2[$elm->code]->ctd += $elm->ctd;
+                $list2[$elm->code]->td += $elm->td;
+                $list2[$elm->code]->tp += $elm->tp;
+                $list2[$elm->code]->extra += $elm->extra;
+                $list2[$elm->code]->bonus += $elm->bonus;
+            }
+        }
+
 
         echo date("'d/m/Y\t'H:i:s")."\n";
         echo "voeuId\tcodeECUE\tCM\tCMTD\tTD\tTP\tEXTRA\tBONUS\n";
-        foreach($list as $elm){
+        foreach($list2 as $elm){
             echo "{$elm->id}\t{$elm->code}\t{$elm->cm}\t{$elm->ctd}\t{$elm->td}\t{$elm->tp}\t{$elm->extra}\t{$elm->bonus}\n";
         }
 

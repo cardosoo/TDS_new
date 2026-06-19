@@ -9,6 +9,7 @@ $app = \TDS\App::get();
 
 $app::$router->setNamespace('\\'.__NAMESPACE__.'\\Controllers\\');
 
+
 $app::$router->routeList['restrict']['Admin']['test1']= new Route('GET','/test/test1', 'TestController::test1', 'test_1');
 $app::$router->routeList['restrict']['Admin']['test2']= new Route('GET','/test/test2', 'TestController::test2', 'test_2');
 $app::$router->routeList['restrict']['Admin']['test3']= new Route('GET','/test/test3', 'TestController::test3', 'test_3');

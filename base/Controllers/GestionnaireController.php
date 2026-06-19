@@ -78,7 +78,13 @@ CMTP  	CMTP 	1,16	1,16 	Permanente 		Visible - Visible en saisie extérieure
         }
         // normalement là on sort avec le $candidat et son ordre;
         // ...
-        $code = $candidat->getCode();
+        if (is_null($candidat)){
+            $code = '????';
+            $coeff = 1;
+        } else{
+            $code = $candidat->getCode() ;
+        }
+            
         $Pid = $this->P->id;
         $heq = $this->VDH->$type * $app::$hETD[$type] / $coeff;
 
@@ -163,11 +169,13 @@ class GestionnaireController extends \TDS\Controller {
         $enseignementList = $app::NS('Enseignement')::loadWhere('actif and id>0');
         $L = [];
         foreach ($enseignementList as $E) {            
-            $code = $E->code;
+            $codeL = explode('|',$E->code);
+            $code = trim($codeL[0]);
             $etapeL = $E->getStructEtapeList();
             $mainEtape = null;
             $etapeList = [];
             if (!isset($etapeL[$code])){
+                $L[] = ['E' => $E, 'ET' => null, 'ETL' => []];
                 continue;
             }
             $etapeL = $E->getStructEtapeList()[$code];

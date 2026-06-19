@@ -388,7 +388,8 @@ class GestionnaireController extends \base\Controllers\GestionnaireController {
                         'E' => $E,
                         'M' => "Pas d'ECUE trouvée dans la structure des enseignements",
                     ];
-                    continue;
+                    //continue;
+                    $ecueList = [];
                 }
 
                 if (! $vOSE->add($P, $ecueList, $VDH)){

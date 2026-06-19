@@ -13,9 +13,7 @@ if (PHP_SAPI !== 'cli'){
 
 // include  App::$basePath."/base/maintenance.php"; exit();
 
-$historyFirstYear = 2020;
-$firstYear = 2020;
-$lastYear = 2025;
+ 
 
 $formatter = new \IntlDateFormatter(
     'fr_FR',
@@ -30,10 +28,15 @@ $today = new DateTime();
 $date2023 = DateTime::createFromFormat('Y-m-d H:i:s', '2023-11-01 05:00:00');
 $date2024 = DateTime::createFromFormat('Y-m-d H:i:s', '2024-10-24 05:00:00');
 $date2025 = DateTime::createFromFormat('Y-m-d H:i:s', '2025-10-22 05:00:00');
+$date2026 = DateTime::createFromFormat('Y-m-d H:i:s', '2026-06-30 05:00:00');
 
 
-$officialYear = $today<=$date2025?2024:2025;
-$officialYear = 2025;
+$historyFirstYear = 2020;
+$firstYear = 2020;
+$preDate2026 = DateTime::createFromFormat('Y-m-d H:i:s', '2026-06-30 05:00:00');
+
+$lastYear = $today <= $preDate2026 ? 2025 : 2026;
+$officialYear = $today <= $date2026 ? 2025 : 2026;
 
 App::$historyYearList = [];
 for($year = $lastYear-1 ;  $year >= $historyFirstYear; $year--){
@@ -63,6 +66,7 @@ App::$etatTS = [
 ];
 
 
+// var_dump("test2022");
 
 if ($year <= '2022'){
     //$today = new DateTime();
@@ -87,6 +91,8 @@ if ($year <= '2022'){
 
 }
 
+// var_dump("test2023");
+
 if ($year == '2023'){
     //$today = new DateTime();
     $debutSaisie = $date2023; //DateTime::createFromFormat('Y-m-d H:i:s', '2023-11-01 08:00:00');
@@ -109,6 +115,7 @@ if ($year == '2023'){
     
 }
 
+// var_dump("test2024");
 
 if ($year == '2024'){
     //$today = new DateTime();
@@ -132,6 +139,8 @@ if ($year == '2024'){
     
 }
 
+// var_dump("test2025");
+
 if ($year == '2025'){
     //$today = new DateTime();
     $debutSaisie = $date2025;
@@ -154,6 +163,34 @@ if ($year == '2025'){
     
 }
 
+// var_dump("test2026");
+
+if ($year == '2026'){
+    //$today = new DateTime();
+    $debutSaisie = $date2026;
+    $finSaisie = DateTime::createFromFormat('Y-m-d H:i:s', '2027-06-01 00:00:01');
+    $debutValidation = clone $debutSaisie;
+    $debutValidation->add(new DateInterval('PT1S'));
+    $finValidation = DateTime::createFromFormat('Y-m-d H:i:s', '2027-06-15 23:59:59');
+
+    App::$texte = [
+        'debutSaisie' => $formatter->format($debutSaisie), 
+        'finSaisie' => $formatter->format($finSaisie),
+        'debutValidation' => $formatter->format($debutValidation),
+        'finValidation' => $formatter->format($finValidation),
+        'correspondants' => 'responsables',
+        'mailSDV' => App::$mail,
+        'mailRHE' => 'rhe.sdv@u-paris.fr',
+        'sendMailOnModif' => false,
+        //'sendMailOnModif' => $serverProd?'rhe.sdv@u-paris.fr':'olivier.cardoso@gmail.com',
+        ];
+    
+}
+
+// var_dump([
+//     'year' => $year,
+//     'debutSaisie' => $debutSaisie,
+// ]);
 
 $nextYear = $year+1;
 App::$phaseList = [
