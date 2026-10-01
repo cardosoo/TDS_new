@@ -344,12 +344,15 @@ class Router extends \AltoRouter {
         return $this->getRouteFromArray($routeName, $this->routeList);
     }
 
-    public  function updateRoute($routeName, $target){
+    public  function updateRoute($routeName, $target, $debug=false){
         $route = $this->getRoute($routeName);
         if ($route ===  false){
             die("La route « {$routeName} » n'existe pas et ne peut pas être modifiée");
         }
-        $route->setTarget($target);
+        if ($debug){
+            var_dump(['routeName' => $routeName, 'target' => $target, 'route' => $route]);
+        }
+        $route->setTarget($target, $debug);
     }
 
     public static function callFunc($callback, $args){

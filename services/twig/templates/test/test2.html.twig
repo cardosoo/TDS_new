@@ -1,0 +1,23 @@
+{% extends "layout.html.twig" %}
+
+
+{% block section %}
+
+<table>
+    <tr>
+        <td>Structure</td>
+        <td>Menstion</td>
+        <td>Structure</td>
+        <td>Mention</td>
+    </tr>
+    {% for R in RL %}
+    <tr>
+        <td><pre>{{ R.structure }}</pre></td>
+        <td><pre>{{ R.mention }}</pre></td>
+        <td>{{ R.nb_structure }}</td>
+        <td>{{ R.nb_mention }}</td>
+    </tr>
+    {% endfor %}
+
+{% endblock %}
+

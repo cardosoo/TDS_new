@@ -19,6 +19,7 @@ class EnseignementController extends \base\Controllers\EnseignementController {
     public static function fiche(int $id, $isVoeu = false){
         $app = \TDS\App::get();
 
+        //var_dump([$app::$phaseList[$app::$phase], $app::$phase]);
         $options = self::getOptions($id);
         self::setCmpl($id, $isVoeu);
 

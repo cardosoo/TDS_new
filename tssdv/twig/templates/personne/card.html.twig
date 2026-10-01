@@ -80,6 +80,7 @@
     {% endfor %}
 
     <div class="w3-card w3-round">
+        {% if App.currentYear < 2026 %}         {# affichage des domaines associés - désactivé à partir de 2026 #}        
         <div class="w3-white">
             <i class="fa fa fa-arrow-circle-right fa-fw w3-margin-right"></i>Domaines associés :
             <ul>
@@ -92,6 +93,9 @@
             {% endfor %}
             </ul>
         </div>
+        {% endif %}    {# affichage des domaines associés - désactivé à partir de 2026 #}
+
+
         {% if canSeeDetails %}
         
         <div class="w3-pale-red">
@@ -120,6 +124,7 @@
                         <td>-</td>
                         <td>{{ CR.serviceReferentiel|f2 }}</td>
                     </tr>
+                    {% if App.currentYear < 2026 %}         {# affichage des domaines associés - désactivé à partir de 2026 #}        
                     {% for DP in personne.domaine_personneList %}
                     <tr>
                         <th>{{ DP.domaine.acronyme }}</th>
@@ -132,7 +137,7 @@
                         <td></td>
                         <td>{{ CR.serviceHorsDomaine|f2 }}</td>
                     </tr>
-                
+                    {% endif %}
                 </tbody>
             </table>
         </div>

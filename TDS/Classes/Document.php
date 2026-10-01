@@ -2,6 +2,8 @@
 
 namespace TDS;
 
+use stdClass;
+
 class Document {
 
     public String $className; 
@@ -13,7 +15,7 @@ class Document {
     protected String $fName;
 
     // liste des types mimes autorisés depuis https://developer.mozilla.org/fr/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
-    public static $mimeType = [
+    public static array $mimeType = [
     'aac' => 'audio/aac',
     'abw' => 'application/x-abiword',
     'arc' => 'application/octet-stream',
@@ -105,7 +107,7 @@ class Document {
         return $this::getDocumentPath($this->className);
     }
 
-    public function rename($newTitle){
+    public function rename(string $newTitle){
         $app = App::get();
         $dir = $this->documentPath();
         $filename = "{$newTitle}.{$this->ext}";
@@ -123,7 +125,8 @@ class Document {
     public function getDocDownloadURL(){
         $app = App::get();
         $key = str_pad('', SODIUM_CRYPTO_SECRETBOX_KEYBYTES ,"{$app::$auth->user->id}");
-        $hex = $app::simpleEncrypt($this, $key);
+        // $hex = $app::simpleEncrypt($this, $key);  O.C. 25/06/2026 problème avec la mise en place des types dans les fonctions
+        $hex = $app::simpleEncrypt($this);
         return  "/{$app::$appName}/Docs/{$hex}" ;
     }
 
@@ -159,7 +162,7 @@ class Document {
     }
 
 
-    public static function downloadStatic($filename){
+    public static function downloadStatic(string $filename){
         $path_parts = pathinfo($filename);
         $title = $path_parts['filename'];
         $ext = strtolower($path_parts['extension']);

@@ -42,6 +42,7 @@ $app::$router->routeList['public']['api']['listingUserFoncRefWithStages']= new R
 
 $app::$router->routeList['public']['api']['activeSituationList']= new Route('GET','/api/activeSituationList/[i:year]', 'APIController::activeSituationList', 'api_activeSituationList');
 $app::$router->routeList['public']['api']['listingUserSituation']= new Route('GET','/api/listingUserSituation/[i:year]', 'APIController::listingUserSituation', 'api_listingUserSituation');
+$app::$router->routeList['public']['api']['activePersonneBilanList']= new Route('GET','/api/activePersonneBilanList/[i:year]', 'APIController::activePersonneBilanList', 'api_activePersonneBilanList');
 
 $app::$router->routeList['public']['api']['getEmail']= new Route('GET','/api/getEmail/[i:id]', 'APIController::getEmail', 'api_getEmail');
 $app::$router->routeList['public']['api']['isUIDInBase']= new Route('GET','/api/isUIDInBase/[a:uid]', 'APIController::isUIDInBase', 'api_isUIDInBase');

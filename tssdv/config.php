@@ -28,12 +28,12 @@ $today = new DateTime();
 $date2023 = DateTime::createFromFormat('Y-m-d H:i:s', '2023-11-01 05:00:00');
 $date2024 = DateTime::createFromFormat('Y-m-d H:i:s', '2024-10-24 05:00:00');
 $date2025 = DateTime::createFromFormat('Y-m-d H:i:s', '2025-10-22 05:00:00');
-$date2026 = DateTime::createFromFormat('Y-m-d H:i:s', '2026-06-30 05:00:00');
+$date2026 = DateTime::createFromFormat('Y-m-d H:i:s', '2026-06-27 05:00:00');
 
 
 $historyFirstYear = 2020;
 $firstYear = 2020;
-$preDate2026 = DateTime::createFromFormat('Y-m-d H:i:s', '2026-06-30 05:00:00');
+$preDate2026 = DateTime::createFromFormat('Y-m-d H:i:s', '2026-06-27 05:00:00');
 
 $lastYear = $today <= $preDate2026 ? 2025 : 2026;
 $officialYear = $today <= $date2026 ? 2025 : 2026;
@@ -218,7 +218,7 @@ App::$phaseList = [
     'validation' => (object)[
         'voeuxPersonneLabel' => "Temps de service en cours de validation  pour l'année {$year}-{$nextYear}",
         'voeuxEnseignantLabel' => "Temps de service en cours de validation  pour l'année  {$year}-{$nextYear}",
-        'withAjouterVoeux' => false,
+        'withAjouterVoeux' => true,
         'ajouterVoeu' => 'Ajouter cet enseignement',
         'modifierVoeu' => 'Modifier cet enseignement',
         'supprimerVoeu' => 'Supprimer cet enseignement',
@@ -275,5 +275,5 @@ if (App::$currentYear > App::$officialYear){
 //App::$phase = 'passée';
 //App::$phase = 'future';
 
-//var_dump([App::$phaseList[App::$phase], App::$phase]);
+// var_dump([App::$phaseList[App::$phase], App::$phase]);
 //exit();

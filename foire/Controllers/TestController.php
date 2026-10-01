@@ -85,17 +85,20 @@ class TestController extends \base\Controllers\TestController {
         //var_dump('désactivation de /foire/test/test1'); exit();
 
         $app = \TDS\App::get();
+        
+        /*
         $ecue = "PFFAE025";
         $vacationList = \base\Vacation::getVacationFromEcueCode($ecue);
         var_dump($vacationList);
         exit();
-
+        */
 
 
         $cursusName = 'L2';
         $structureName = 'UFR de Physique';
 
         $cursusList = Struct::getCursusList();
+        var_dump($cursusList);
         $cursusID = 0;
         foreach($cursusList as $cursus){
             if ($cursus->nom == $cursusName){

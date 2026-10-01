@@ -25,7 +25,7 @@ class Entity {
     protected array $oneToOneList = [];   // la liste des liens oneToOne vers cette entité
 
     protected int $fragmentNum = 0;
-
+    protected bool $withActif;
 
     // Définition des constantes pour les options de champs
     const dbName = 'dbName' ;
@@ -306,7 +306,7 @@ trait {$modelName} {
     }
 
 
-    public function buildForModel($namespace){
+    public function buildForModel(string $namespace){
 var_dump([
     'namespace' => $namespace,
     'parentApp' => Model::$parentApp,
@@ -420,7 +420,7 @@ class {$this->name} extends {$extends} implements \\Model\\{$modelName}interface
         return $a;
     }
 
-    protected function buildForModelInlineTwig($parentEntityName){
+    protected function buildForModelInlineTwig(string $parentEntityName){
         $a = "
     <table class='w3-table-all w3-hoverable w3-small'>
         <thead>

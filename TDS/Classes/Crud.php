@@ -31,7 +31,7 @@ class Crud {
         echo $app::$viewer->render( "CRUD/home.html.twig", ['entityList' => $entityList]);
 }
 
-    public static function createManyToMany($entityName, $from, $fromId){
+    public static function createManyToMany(string $entityName, string $from, int $fromId){
         $app = \TDS\App::get();
 
         $fullEntityName = $app::NS($entityName);
@@ -41,7 +41,7 @@ class Crud {
         self::create($entityName, $elm);
     }
 
-    public static function createEntity($entityName){
+    public static function createEntity(string $entityName){
         $app = \TDS\App::get();
 
         $fullEntityName = $app::NS($entityName);
@@ -49,7 +49,7 @@ class Crud {
         self::create($entityName, $elm);
     }
     
-    private static function create($entityName, $elm){
+    private static function create(string $entityName, \TDS\Table $elm){
         $app = \TDS\App::get();
 
         $elm->CRUD_beforeCreate(); // permet d'initialiser des champs qui auraient besoin d'une initialisation particulière
@@ -73,7 +73,7 @@ class Crud {
      *  Lecture d'une entité
      *  Lorque l'entité n'existe pas alors on propose sa création 
      */
-    public static function read($entityName, $id){
+    public static function read(string $entityName, int $id){
         $app = \TDS\App::get();
 
         $fullEntityName = $app::NS($entityName);
@@ -99,7 +99,7 @@ class Crud {
     } 
 
 
-    public static function updateManyToMany($entityName, $from, $fromId){
+    public static function updateManyToMany(string $entityName, string $from, int $fromId){
         $app = \TDS\App::get();
         // si on arrive ici c'est forcement que c'est une création
         $fullEntityName = $app::NS($entityName);
@@ -111,7 +111,7 @@ class Crud {
     }
 
 
-    public static function doCreateEntity($entityName){
+    public static function doCreateEntity(string $entityName){
         $app = \TDS\App::get();
 
         $fullEntityName = $app::NS($entityName);
@@ -119,7 +119,7 @@ class Crud {
         self::update($entityName, $elm, 0);
     } 
 
-    public static function updateEntity($entityName, $id){
+    public static function updateEntity(string $entityName, int $id){
         $app = \TDS\App::get();
         $fullEntityName = $app::NS($entityName);
         $elm = $fullEntityName::load($id);
@@ -131,7 +131,7 @@ class Crud {
      * si il s'agit d'une création pour une association manyToMany, il faut mettre post à -1
      * dans les autres cas il ne faut pas mettre de post ou passé ""
      */
-    private static function update($entityName, $elm, $post=""){
+    private static function update(string $entityName, \TDS\Table $elm, string $post=""){
         global $_PATCH;
 
         $app = \TDS\App::get();
@@ -175,14 +175,14 @@ class Crud {
 
     }
 
-    public static function deleteOneToOne($def, $id){
+    public static function deleteOneToOne(array $def, int$id){
         $fullEntityName = $def['targetEntity'];
         if (! is_subclass_of($fullEntityName, "\TDS\View" )) {
             self::deleteEntity($fullEntityName, $id);
         }
     }
 
-    public static function deleteEntity($fullEntityName, $id) {
+    public static function deleteEntity(string $fullEntityName, int $id) {
         $app = \TDS\App::get();
         $elm = $fullEntityName::load($id);
         $gen = $elm->getGeneric(true);
@@ -232,7 +232,7 @@ class Crud {
         $elm->delete();
     }
 
-    public static function delete($entityName, $id){
+    public static function delete(string $entityName, int $id){
         $app = \TDS\App::get();
 
         $_DELETE = [];
@@ -260,10 +260,10 @@ class Crud {
      * Pour récupérer la liste des entités qui contienne le terme $_GET['term']
      * Cela est utilisé pour les associtions oneToMany
      *
-     * @param [type] $entityName
+     * @param string  $entityName
      * @return void
      */
-    public static function listAllJSON($entityName){
+    public static function listAllJSON(string $entityName){
         $app = \TDS\App::get();
         $search = \pg_escape_string($app::$db->conn, \filter_input( INPUT_GET, 'term', FILTER_SANITIZE_SPECIAL_CHARS));
 //        $entity = "\\".$app::$appName."\\Model\\{$entityName}";
@@ -330,10 +330,10 @@ class Crud {
      * Pour récupérer la liste des entités qui contienne le terme $_GET['term']
      * Cela est utilisé pour les associtions oneToMany
      *
-     * @param [type] $entityName
+     * @param string $entityName
      * @return void
      */
-    public static function listAll($entityName){
+    public static function listAll(string $entityName){
         $app = \TDS\App::get();
         $entityNS = $app::NS($entityName);
         $list = $entityNS::loadWhere('id >0');

@@ -23,8 +23,8 @@ abstract class App {
     static public string        $baseUser;
     static public string        $basePwd;
     static public Database      $db;                      // la connexion vers la base de données (à changer)
-    static public               $router;                  // le routeur de l'application           
-    static public               $viewer;
+    static public \TDS\Router   $router;                  // le routeur de l'application           
+    static public \TDS\Viewer   $viewer;
     static public Authenticate  $auth;
     static public Permission    $perm;                    // pour gérer les permissions sur les différentes fonctions du logiciel
     static public array         $cmpl = []; 
@@ -41,8 +41,8 @@ abstract class App {
  
     static private $session_string = ""; 
     static private $originalLocales =[];
-    abstract public static function loadFromUid($uid);
-    abstract public static function getRoleList($user);
+    abstract public static function loadFromUid(string $uid);
+    abstract public static function getRoleList(string $user);
     
     static function init(string $dir, $close = false, $session=true, $appName = null){
         // pour mettre les différents messages sur les pages avec les différents niveaux d'utilisation
@@ -83,11 +83,11 @@ abstract class App {
         return self::NSC('App');
     }
 
-    public static function setLongName($longName){
+    public static function setLongName(string $longName){
         self::$longAppName = $longName;
     }
 
-    public static function setWebmaster($webmaster){
+    public static function setWebmaster(string $webmaster){
         self::$webmaster = $webmaster;
     }
 
@@ -156,7 +156,7 @@ abstract class App {
      * @param string $officialYear l'année officielle fixée pour l'utilisation
      * du logicile
      * 
-     * @param array syearList la liste des années qui peuvent être utilisées.
+     * @param string[] $yearList la liste des années qui peuvent être utilisées.
      * 
      * @return string renvoie l'année qui a été sélectionnée (en via la
      * variable de session) ou sinon l'année officielle 
@@ -238,7 +238,7 @@ abstract class App {
     /**
      * Permet de fixer les chemins par défaut
      */
-    private static function setDefaultPath($dir){
+    private static function setDefaultPath(string $dir){
         self::$pathList = ['route' => parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH)]; // le chemin pour le routage !
         self::setBaseDir($dir);
         $plusPath = realpath("{$dir}/../../TDS_plus/");
@@ -250,35 +250,35 @@ abstract class App {
         self::setSecretPath($secretPath);
     }
 
-    public static function setBaseDir($path){
+    public static function setBaseDir(string $path){
         self::$pathList['base']= realpath($path);
     }
 
-    public static function setPlusPath($path){
+    public static function setPlusPath(string $path){
         self::$pathList['plus']= realpath($path);
     }
 
-    public static function setSecretPath($path){
+    public static function setSecretPath(string $path){
         self::$pathList['secret']= realpath($path);
     }
     /**
      * pour mettre le path de BD2 mais il faudrait ne pas avoir à l'utiliser
      */
-    public static function setBD2Path($path){
+    public static function setBD2Path(string $path){
         self::$pathList['BD2']= realpath($path);
     }
 
     /**
      * Pour mettre le path des photos
      */
-    public static function setPhotosPath($path){
+    public static function setPhotosPath(string $path){
         self::$pathList['photos'] = realpath($path);
     }
 
     /**
      * Pour mettre le path du log
      */
-    public static function setLogPath($path){
+    public static function setLogPath(string $path){
         self::$pathList['log'] = realpath($path);
     }
 
@@ -364,7 +364,7 @@ abstract class App {
         }
     }
 
-    public static function errorHandler($errno, $errstr, $errfile, $errline ){
+    public static function errorHandler(int $errno, string  $errstr, string $errfile, int $errline ){
         if (self::$prod){
             return false;
         }
@@ -450,7 +450,7 @@ abstract class App {
         self::setProdMode(!$mode);
     }
 
-    public static function setSecretkey($key){
+    public static function setSecretkey(string $key){
         if (strlen($key)>=SODIUM_CRYPTO_SECRETBOX_KEYBYTES){
             self::$secretkey = substr($key,0,SODIUM_CRYPTO_SECRETBOX_KEYBYTES);
         } else {
@@ -478,7 +478,7 @@ abstract class App {
         return $obj;
     }
 
-    public static function doLog($what){
+    public static function doLog(string $what){
         $app = \TDS\App::get();
 
         $who = self::$auth->isAuth?self::$auth->uid:'noAuth';
@@ -495,7 +495,7 @@ abstract class App {
     }
 
 
-    public static function doLogSQL($sql){
+    public static function doLogSQL(string $sql){
         $app = \TDS\App::get();
 
         $who = self::$auth->isAuth?self::$auth->user->uid:'noAuth';
@@ -514,7 +514,7 @@ abstract class App {
 
 
 
-    public static function simpleEncrypt($message){
+    public static function simpleEncrypt(object $message){
         $app = \TDS\App::get();
 
         $block_size = 16;
@@ -529,7 +529,7 @@ abstract class App {
     }
     
     
-    public static function simpleDecrypt($hex){
+    public static function simpleDecrypt(string $hex){
         $app = \TDS\App::get();
 
         $block_size = 16;
@@ -549,7 +549,7 @@ abstract class App {
         return $message;
     }
 
-    public static function isActive($obj){
+    public static function isActive(object $obj){
         return $obj->actif;
     }
 
@@ -563,7 +563,7 @@ abstract class App {
         return strtolower(iconv('utf8', 'ascii//TRANSLIT', $st));
     }
 
-    public static function setLocale($locale){
+    public static function setLocale(string $locale){
 
         self::$originalLocales = explode(";", setlocale(LC_ALL, 0));
         setlocale(LC_ALL, $locale);

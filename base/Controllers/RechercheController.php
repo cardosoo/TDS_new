@@ -14,7 +14,7 @@ use Knp\Snappy\Pdf;
 
 class RechercheController extends Controller{
 
-    public static function convertForJS($list){
+    public static function convertForJS(array $list){
         $n = [];
         foreach($list as $key => $val){
             $n[] = (object)[ 'id' => $key, 'nom' => $val];
@@ -22,7 +22,7 @@ class RechercheController extends Controller{
         return $n;
     }
 
-    protected static function buildWhat($what, $year){
+    protected static function buildWhat(string $what, string|null $year = null){
          $app = \TDS\App::get();
     
         $what = isset($what)?htmlspecialchars(pg_escape_string($app::$db->conn, trim(urldecode($what)))):null;
@@ -62,7 +62,7 @@ class RechercheController extends Controller{
         echo $app::$viewer->render('recherche/enseignement/index.html.twig', ['what' => $what, 'f' => $f]);       
     }
 
-    public static function search($what=null){
+public static function search(string|null $what = null){
         $app = \TDS\App::get();
 //var_dump($app::class);
         $what = isset($what)?htmlspecialchars(pg_escape_string($app::$db->conn, trim(urldecode($what)))):null;
@@ -90,7 +90,7 @@ class RechercheController extends Controller{
         echo $app::$viewer->render('recherche/generique/index.html.twig', ['what' => $what, 'nbFound' => $nbFound,'list'=> $list, 'structList' => $structList]);
     }
 
-    public static function crudSearch($what=null){
+    public static function crudSearch(string|null $what = null){
         $app = \TDS\App::get();
 
         $what = isset($what)?htmlspecialchars(pg_escape_string($app::$db->conn, trim(urldecode($what)))):null;
@@ -116,7 +116,7 @@ class RechercheController extends Controller{
         echo $app::$viewer->render('CRUD/search.html.twig', ['what' => $what, 'nbFound' => $nbFound,'list'=> $list]);
     }
 
-    protected static function serie($arr){
+    protected static function serie(array $arr){
         $tmp = json_encode($arr);
         return '('.substr($tmp, 1,-1).')';
     }

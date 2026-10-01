@@ -83,7 +83,7 @@ $app::$phaseList = [
 
 //$app::$phase = 'maintenance';
 //$app::$phase = 'avant';
-$app::$phase = 'pre';
+//$app::$phase = 'pre';
 //$app::$phase = 'post';
 //$app::$phase = 'après';
 

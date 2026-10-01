@@ -2,7 +2,7 @@
 
 namespace base;
 
-use Monolog\Logger as Logger;
+use Monolog\Logger;
 use Monolog\Level;
 use Monolog\Handler\StreamHandler;
 
@@ -20,7 +20,7 @@ use stdClass;
 
 
 
-function toInt($val){
+function toInt(string $val){
     if (empty($val)){
         return 0;
     }
@@ -28,19 +28,19 @@ function toInt($val){
 }
 
 class Struct  {
-    public String $structurePath;
-    private static  Logger|null $defaultLogger = null;
-    public String $configFile; 
-    public String $year;
+    public string $structurePath;
+    private static  \Monolog\Logger|null $defaultLogger = null;
+    public string $configFile; 
+    public string $year;
     
-    private String|null $codeList =  null;
+    private string|null $codeList =  null;
     public $explain = false;
 
-    public Array $structureList = [];
-    public Array $etapeList = [];
-    public Array $ecueList = [];
+    public array $structureList = [];
+    public array $etapeList = [];
+    public array $ecueList = [];
 
-    public Array $coeffType = [
+    public array $coeffType = [
         "CM" => 1.50,
         "TD" => 1.00,
         "TP" => 1.00,
@@ -55,7 +55,7 @@ class Struct  {
         "" => 1.0, 
     ];
 
-    public Array  $importExtractionColumns = [
+    public array  $importExtractionColumns = [
         "COD_ANU" => 'year',
         "COD_CMP" => 'codeComposante',
         "LIB_CMP" => 'libelleComposante',
@@ -75,7 +75,7 @@ class Struct  {
         "NBR_MIN_ETU_GRP_SUPP" => 'maxEtuGrp',
     ];
 
-    public Array $importMutualisationColumns = [
+    public array $importMutualisationColumns = [
         "Année universitaire" => "year",
         "Version d'étape (code)" => "versionEtape",
         "ELP - Version étape porteuse (code)" => "versionEtapePorteuse",
@@ -95,7 +95,7 @@ class Struct  {
         "Version d'étape - Composante (lib)" => "libelleComposante",
     ];
 
-    public Array $importAjoutColumns = [
+    public array $importAjoutColumns = [
         "COD_ANU" => 'year',
         "LIB_CMP" => 'libelleComposante',
         "COD_ETP" => 'codeEtape',
@@ -106,7 +106,7 @@ class Struct  {
         "LIB_ELP" => 'libelleElm',
     ];
 
-    public Array $typeDiplomes = [
+    public array $typeDiplomes = [
         'AG' => 'AGREGATION',
         'BT' => 'BATCHELOR UNIVERSITAIRE DE TECHNOLOGIE',
         'CA' => 'CAPES',
@@ -147,7 +147,7 @@ class Struct  {
         'EZ' => 'ERASMUS',
     ];
     
-    public Array $populationVET = [
+    public array $populationVET = [
         "LG" => [
             "AA" => "Anglais/Langues asiatiques",
             "AS" => "Arts du spectacle",
@@ -294,7 +294,7 @@ class Struct  {
     
     ];
     
-    public Array $semestreList = [
+    public array $semestreList = [
         "0" => 1,  // pour le AIPC
         "1" => 1,
         "2" => 2,
@@ -309,7 +309,7 @@ class Struct  {
         "G" => 0,
         "H" => 0,
         "I" => 0,
-        "0" => 0,
+        "O" => 0,
         "7" => 0,
         "E" => 0,
         "F" => 0,
@@ -317,7 +317,9 @@ class Struct  {
     ];
 
     public function __construct($year = null, $variant = ""){
-        $app = App::get();
+        
+       /** @var \base\App $app */
+        $app = \base\App::get();
 
         $this->year = $year ?? $app::$currentYear;
 
@@ -338,13 +340,19 @@ class Struct  {
         require_once $this->configFile;  
         
         if (is_null(self::$defaultLogger)){
-            self::$defaultLogger = new Logger('defaultLogger');
-            self::$defaultLogger->pushHandler(new StreamHandler("{$log}/propel.log", Level::Debug ));
+            self::$defaultLogger = new \Monolog\Logger('defaultLogger');
+            self::$defaultLogger->pushHandler(new \Monolog\Handler\StreamHandler("{$log}/propel.log", \Monolog\Level::Debug ));
             $serviceContainer->setLogger('defaultLogger', self::$defaultLogger);    
         }
     }
     
-    public function getStructureList(){
+
+    /**
+     * Renvoie la liste des structures (composantes) présentent dans la structure des enseignements
+     *
+     * @return Structure[]
+     */
+    public function getStructureList() {
         $structureList = StructureQuery::create()
         ->orderBy('nom')
         ->find();
@@ -352,7 +360,14 @@ class Struct  {
         return $structureList;
     }
 
-    public function getStructureByNom($nom){
+    /**
+     * Cherche et renvoie une structure par nom
+     * Si le nom n'existe pas cela renvoie null
+     *
+     * @param  string $nom
+     * @return Structure
+     */
+    public function getStructureByNom(string $nom){
         $structure = StructureQuery::create()
         ->filterByNom($nom)
         ->findOne();
@@ -360,7 +375,7 @@ class Struct  {
         return $structure;
     }
 
-    public function getEtapeByCode($codeEtape){
+    public function getEtapeByCode(string $codeEtape){
         $etape = EtapeQuery::create()
         ->filterByCode($codeEtape)
         ->findOne();
@@ -369,7 +384,7 @@ class Struct  {
         return $etape;
     }
 
-    public function getECUEByCode($codeECUE){
+    public function getECUEByCode(string $codeECUE){
         $ecue = ECUEQuery::create()
         ->filterByCode($codeECUE)
         ->findOne();
@@ -395,7 +410,7 @@ class Struct  {
         ];
     }
 
-    public static function getCursusFromfilter($niveau, $type){
+    public static function getCursusFromfilter(string $niveau, string $type){
         $cursusList = self::getCursusList();
         $cursus = $type.$niveau;
         foreach($cursusList as $curs){
@@ -428,7 +443,7 @@ class Struct  {
         ];        
     }
 
-    public function parseFilter(Array $filter): Array{
+    public function parseFilter(array $filter): array{
         $app = \TDS\App::get();
         $where = [];
         $inDB = $filter['inDB'] ?? true;
@@ -496,7 +511,7 @@ class Struct  {
         return $where;
     }
 
-    public function convertStrucureToFilter(Array &$filter, Array $cList, ?Array $idList){
+    public function convertStrucureToFilter(array &$filter, array $cList, ?array $idList){
         if (is_null($idList)) return [];
 
         if (!isset($filter['structure'])){
@@ -509,7 +524,7 @@ class Struct  {
         }
     }
 
-    public function convertEtapeToFilter(Array &$filter, Array $cList, ?Array $idList){
+    public function convertEtapeToFilter(array &$filter, array $cList, ?array $idList){
         if (is_null($idList)) return [];
 
         if (!isset($filter['etape'])){
@@ -521,7 +536,7 @@ class Struct  {
     }
 
 
-    public function convertIdToFilter(Array &$filter, String $what, ?Array $idList){
+    public function convertIdToFilter(array &$filter, string $what, ?array $idList){
         if (is_null($idList)) return [];
 
         $fn = "get{$what}List";
@@ -543,7 +558,7 @@ class Struct  {
     /**
      * permet de construire le tableau des filtres à partir des sélecteurs du formulaire de recherche
      */
-    public function buildFilterFromSelectors(Array $selectors): Array {
+    public function buildFilterFromSelectors(array $selectors): array {
         $filter = [
             'actif' => $selectors['actif'],
         ];
@@ -596,7 +611,7 @@ class Struct  {
     }
     
 
-    public function getUsefulFilter(String $what, Array $filter, ?String $withId =  null): Array  {
+    public function getUsefulFilter(string $what, array $filter, ?string $withId =  null): array  {
         $con = \Propel\Runtime\Propel::getReadConnection(\Map\ecue_etapeTableMap::DATABASE_NAME);
 
         $where = $this->parseFilter($filter);
@@ -636,42 +651,43 @@ if ($this->explain) {
         $stmt = $con->prepare($sql);
         $stmt->execute();
         $filterList = [];
-        foreach($stmt->fetchAll() as $filter){
+        foreach($stmt->fetchAll() as $fil){
             if ($withId){
-                $filterList[intval($filter['0'])] = $filter['1'];
+                $filterList[intval($fil['0'])] = $fil['1'];
             } else {
-                $filterList[] = $filter['0'];
+                $filterList[] = $fil['0'];
             }
         };
         return $filterList;
     }
 
-    public function getUsefulTypeList(Array $filter): Array {
+    public function getUsefulTypeList(array $filter): array {
         $filter['ordre'] = ['ET.type'];
         return $this->getUsefulFilter('ET.type', $filter);
     }
 
-    public function getUsefulNiveauList(Array $filter): Array {
+    public function getUsefulNiveauList(array $filter): array {
         $filter['ordre'] = ['ET.niveau'];
         return $this->getUsefulFilter('ET.niveau', $filter);
     }
 
-    public function getUsefulStructureList(Array $filter): Array {
+    public function getUsefulStructureList(array $filter): array {
         $filter['ordre'] = ['ST.nom'];
         return $this->getUsefulFilter('ST.nom', $filter, 'ST.id');
     }
 
-    public function getUsefulPeriodeList(Array $filter): Array {
+    public function getUsefulPeriodeList(array $filter): array {
         $filter['ordre'] = ['EC.periode'];
         return $this->getUsefulFilter('EC.periode', $filter);
     }
 
-    public function getUsefulEtapeList(Array $filter): Array {
+    public function getUsefulEtapeList(array $filter): array {
         $filter['ordre'] = ['ET.nom'];
         return $this->getUsefulFilter('ET.nom', $filter, 'ET.id');
     }
 
-    public function getECUEByFilter(Array $filter){
+    /** @return ECUE[] */
+    public function getECUEByFilter(array $filter) : array {
         $con = \Propel\Runtime\Propel::getReadConnection(\Map\ecue_etapeTableMap::DATABASE_NAME);
         $filter['ordre'] = ['EC.nom'];
         $idList = $this->getUsefulFilter('EC.id', $filter);
@@ -679,7 +695,7 @@ if ($this->explain) {
         return $ecueList;
     }
 
-    public function parseFilter_new(Array $filter): Array{
+    public function parseFilter_new(array $filter): array{
         $app = \TDS\App::get();
         $where = [];
         $structure = $filter['structure'] ?? [];
@@ -730,7 +746,7 @@ if ($this->explain) {
 
 
     // On essaye ici de faire le filtrage en prenant en compte 
-    public function filter(Array $filter, Array $codeVarianteList): Array  {
+    public function filter(array $filter, array $codeVarianteList): array  {
         $con = \Propel\Runtime\Propel::getReadConnection(\Map\ecue_etapeTableMap::DATABASE_NAME);
 
         // #OC_structure-ajout -> Il faut ajouter ici de quoi l'interrogation de la table ajout... 
@@ -804,10 +820,10 @@ if ($this->explain) {
 
 
         $filterList = [];
-        foreach($stmt->fetchAll() as $filter){
+        foreach($stmt->fetchAll() as $fil){
 
-            if (isset($codeVarianteList[$filter['variante']])){
-                $cv = $codeVarianteList[$filter['variante']];
+            if (isset($codeVarianteList[$fil['variante']])){
+                $cv = $codeVarianteList[$fil['variante']];
                 if (isset($cv['id'])){
                     $filterList[$cv['id']]=$cv;
                 } else {
@@ -816,8 +832,8 @@ if ($this->explain) {
                     }
                 }
             }
-            if (isset($codeVarianteList[$filter['code']])){
-                $cv = $codeVarianteList[$filter['code']];
+            if (isset($codeVarianteList[$fil['code']])){
+                $cv = $codeVarianteList[$fil['code']];
                 if (isset($cv['id'])){
                     $filterList[$cv['id']]=$cv;
                 } else {
@@ -838,7 +854,7 @@ if ($this->explain) {
      * - les ecues
      * 
      */
-    public function search($what){
+    public function search(string $what){
         // #OC_structure-ajout -> Il faut ajouter ici de quoi l'interrogation de la table ajout... 
         $app = App::get();
         $structureList = StructureQuery::create()
@@ -911,9 +927,11 @@ if ($this->explain) {
      * Il serait bien de pourvoir faire la distinction pour les étapes en prenant en compte 
      * la variante d'étape pour l'enseignement, mais pour cela il faut réfléchir
      * 
-     */ 
-    
-    public function filterIdCodeList($filter, $idCodeVarianteList){
+     * @param array<string, string> $filter
+     * @param  int[] $idCodeVarianteList
+     * @return void
+     */
+    public function filterIdCodeList(array $filter, array $idCodeVarianteList){
         /*
         $codeList = [];
         foreach($idCodeVarianteList as $idCode){
@@ -944,7 +962,7 @@ if ($this->explain) {
      * 
      * 
      */
-    public function decodeCodes($codeEtape, $codeECUE){
+    public function decodeCodes(string $codeEtape, string $codeECUE){
     
         $type = substr($codeEtape,0,2);
         $niveau = intval(substr($codeEtape, 5,1));
@@ -1129,7 +1147,7 @@ if ($this->explain) {
 
     }
 
-    public function importExtractionLine(Array $row, bool $inMem){
+    public function importExtractionLine(array $row, bool $inMem){
         
         $importArray = (object)array_combine($this->importExtractionColumns, $row);
         
@@ -1188,7 +1206,7 @@ if ($this->explain) {
         }
     }
 
-    public function importMutualisationLine(Array $row, bool $inMem, bool $force=false, string $source='Indéfini'){
+    public function importMutualisationLine(array $row, bool $inMem, bool $force=false, string $source='Indéfini'){
         $app = \TDS\App::get();
         $importArray = (object)array_combine($this->importMutualisationColumns, $row);
 
@@ -1205,7 +1223,7 @@ if ($this->explain) {
     }
 
 
-    public function importAjoutLine(Array $row, bool $inMem, bool $force=false, string $source='Indéfini'){
+    public function importAjoutLine(array $row, bool $inMem, bool $force=false, string $source='Indéfini'){
         $app = \TDS\App::get();
         /*
         $importArray = (object)array_combine($this->importExtractionColumns, $row);
@@ -1375,10 +1393,10 @@ if ($this->explain) {
 
     }
 
-    public function getEtapeList($structureId, $cursusId){
+    public function getEtapeList(int $structureId, int $cursusId){
         $con = \Propel\Runtime\Propel::getReadConnection(\Map\ecue_etapeTableMap::DATABASE_NAME);
        
-
+        $cursus = null;
         $cursusList = $this->getCursusList();
         foreach($cursusList as $cursus){
             if ($cursus->id == $cursusId){
@@ -1420,7 +1438,7 @@ if ($this->explain) {
 
     }
 
-    public function getEcueList($structureId, $cursusId, $semestreId, $etapeId){
+    public function getEcueList(int $structureId, int  $cursusId, int $semestreId, int $etapeId){
         // #OC_structure-ajout -> Il faut ajouter ici de quoi l'interrogation de la table ajout... 
 
         $con = \Propel\Runtime\Propel::getReadConnection(\Map\ecue_etapeTableMap::DATABASE_NAME);
@@ -1488,7 +1506,7 @@ if ($this->explain) {
 
     }
 
-    public static function cmpECUE($a, $b){
+    public static function cmpECUE(array $a, array $b): int{
         if ($a['c'] == $b['c']) {
             return 0;
         }
@@ -1496,7 +1514,14 @@ if ($this->explain) {
     }
 
 
-    public function getInOutFromEcueList($ecueList, $inBase){
+    /**
+     * Undocumented function
+     *
+     * @param  ECUE[] $ecueList
+     * @param  array<string, \base\Model\Enseignement[]> $inBase
+     * @return array{0: list<array{ecue: ECUE, enseignement: \base\Model\Enseignement, besoins: mixed}>, 1: list<array{c: int, ecue: ECUE, vacIn: int, vacOut: int}>}
+     */
+    public function getInOutFromEcueList(array $ecueList, array $inBase){
         $in = [];
         $out = [];
         foreach($ecueList as $ecue){
@@ -1565,8 +1590,8 @@ if ($this->explain) {
     /**
      * Undocumented function
      *
-     * @param [string] $codeList
-     * @return [\foire\Enseignement]
+     * @param ECUE[] $ecueList
+     * @return array<string, \base\Model\Enseignement[]>
      */
     public function getInBaseEnseignementFromEcueList(array $ecueList): array {
         $app = \TDS\App::get();

@@ -235,7 +235,7 @@ WHERE {$idName} = {$this->id};
     }
 
     // renvoie l'objet caché ou place l'objet en cache
-    public static function cachedObject($entityName, $obj){
+    public static function cachedObject(string $entityName, stdClass $obj){
         $entityId = $entityName::idName;
         $id = $obj->$entityId;
         if ( ! self::isLoaded($entityName, $id)){
@@ -247,7 +247,7 @@ WHERE {$idName} = {$this->id};
         return self::$loadedEntity[$entityName][$id];
     }
 
-    public static function cachedObjectList($entityName, $objList){
+    public static function cachedObjectList(string $entityName, array $objList){
         $entityList = [];
         foreach($objList as $obj){
             $entityList[] =self::cachedObject($entityName, $obj);
@@ -278,7 +278,7 @@ WHERE {$idName} = {$this->id};
      * enregistrements liés
      * 
      * @param int $id   => l'identifiant de l'enregistrement à charger
-     * @return \className => l'enregistrement chargé
+     * @return Entity => l'enregistrement chargé
      * 
      * O.C. 14/01/2021 - version initiale ok
      */
@@ -330,7 +330,7 @@ WHERE {$idName} = {$this->id};
     }
 
 
-    public function getCrudEditLink($linkText){
+    public function getCrudEditLink(string $linkText){
         $app = \TDS\App::get();
         $entityName = self::getEntityName();
         $tmp = \explode('\\',$entityName);
@@ -339,7 +339,7 @@ WHERE {$idName} = {$this->id};
         return "<a href='/{$appName}/CRUD/{$eName}/{$this->id}'>{$linkText}</a>";
     }
 
-    public function getCrudCreateLink($linkText){
+    public function getCrudCreateLink(string $linkText){
         $app = \TDS\App::get();
         $entityName = self::getEntityName();
         $tmp = \explode('\\',$entityName);
@@ -451,7 +451,7 @@ WHERE {$idName} = {$this->id};
     /**
      * getter pour TDS\Table
      *
-     * @param string $nom
+     * @param string $name
      * @return mixed
      * 
      * O.C. 14/01/2021 - ok
@@ -543,7 +543,7 @@ WHERE {$idName} = {$this->id};
     /**
      * recherche les éléments en utilisant les champs de recherche définis dans le modèle
      */
-    public static function searchByModel($what){
+    public static function searchByModel(string $what){
 
         $entityName = get_called_class();
 
@@ -567,7 +567,7 @@ WHERE {$idName} = {$this->id};
     /**
      * recherche les éléments en utilisant tous les champs du modèle
      */
-    public static function searchByFullModel($what){
+    public static function searchByFullModel(string $what){
 
         $entityName = get_called_class();
 
@@ -599,7 +599,6 @@ WHERE {$idName} = {$this->id};
      * l'index du tableau est le timestamp de la dernière modification
      * 
      *
-     * @param  int $id
      * @return \TDS\Document[] 
      */
     public function getDocumentList(){

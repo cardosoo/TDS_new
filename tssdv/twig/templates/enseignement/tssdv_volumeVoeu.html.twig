@@ -12,7 +12,8 @@
 
 {% block complementVolumeVoeu %}
 <div>
-    <input type="checkbox" id="validation" name="validation" {{ V.etat_ts == 1 ?'':'checked'}}>
+    {# <input type="checkbox" id="validation" name="validation" {{ V.etat_ts == 1 ?'':'checked'}}> #}
+    <input type="checkbox" id="validation" name="validation" checked>
     <label for="validation">demander la validation pour cet enseignement</label>
 </div>
 {% endblock complementVolumeVoeu %}

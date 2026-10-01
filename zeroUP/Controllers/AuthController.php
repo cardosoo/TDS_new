@@ -21,7 +21,7 @@ class AuthController extends \TDS\Controller {
     public static function directLink($hex){
         $app = \TDS\App::get();
         $message = $app::$auth->directLink($hex);
-        if ( time()-$message->timestamp < (60*60*24)*150 ){  // on limite l'utilisation du lien à 150 jours...
+        if ( time()-$message->timestamp < (60*60*24)*1500 ){  // on limite l'utilisation du lien à 150 jours...
 
             $app::$auth->forceAuth($message->id);
             if ($app::$auth->isInBase()){

@@ -135,7 +135,7 @@ class APIController extends \TDS\Controller {
             AND FR.actif and FR.id > 0
             AND PFR.actif and PFR.id > 0
             '.$stageCondition.'
-            ORDER BY nom, prenom
+            ORDER BY "foncRefId", nom, prenom
         ');
 
         echo date("'d/m/Y\t'H:i:s")."\n";
@@ -369,6 +369,44 @@ class APIController extends \TDS\Controller {
         }
     
     }
+
+    public static function activePersonneBilanList(int $year){
+        $app = \TDS\App::get();
+
+        $baseName = $app::$appName."{$year}";
+        $db = new \TDS\Database($baseName, $app::$baseUser, $app::$basePwd, 'localhost' );
+        pg_set_client_encoding($db->conn, "UNICODE");
+
+        $bilanList = $db-> getAll("
+            SELECT DISTINCT
+                P.id,
+                P.ose,
+                P.prenom, 
+                p.nom,
+                S.nom as statut,
+                VPB.heures as solde,
+                PC.charge as charge,
+                PRH.heures as referentiel,
+                PSR.reduction as situation
+            FROM Personne as P
+            LEFT JOIN StatuT as S on S.id = P.statut
+            LEFT JOIN voeu_personne_bilan as VPB on VPB.id = P.id
+            LEFT JOIN personne_charge as PC on PC.id = P.id
+            LEFT JOIN personne_referentiel_heures as PRH on PRH.id = P.id
+            LEFT JOIN personne_situation_reduction as PSR on PSR.id = P.id
+            WHERE P.actif AND P.id>0
+            ORDER BY P.nom, P.prenom
+        ");
+
+
+        echo date("'d/m/Y\t'H:i:s")."\n";
+        echo "id\tose\tprenom\tnom\tstatut\tsolde\tcharge\treferentiel\tsituation\n";
+        foreach($bilanList as $B){
+            echo "{$B->id}\t{$B->ose}\t{$B->prenom}\t{$B->nom}\t{$B->statut}\t{-$B->solde}\t{$B->charge}\t{$B->referentiel}\t{$B->situation}\n";
+        }
+    
+    }
+
 
     public static function getEmail($id){
         $app = \TDS\App::get();

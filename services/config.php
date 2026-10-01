@@ -27,15 +27,15 @@ if (!$keepDevForMe){
 
 $today = new DateTime();
 
-$basculeFoire = DateTime::createFromFormat('Y-m-d H:i:s', '2025-05-12 08:00:00'); 
+$basculeFoire = DateTime::createFromFormat('Y-m-d H:i:s', '2022-05-12 08:00:00'); 
 
-// 2025 est officiel
-$officialYear = 2025; //$today>$basculeFoire?2025:2024;
+// 2022 est officiel
+$officialYear = 2022; //$today>$basculeFoire?2025:2024;
 $officialYear = filter_input(INPUT_GET, 'year', FILTER_VALIDATE_INT)??$officialYear;
 
-$historyFirstYear = 2025;
-$firstYear = 2025;
-$lastYear = 2025; #$officialYear; # 2024; 
+$historyFirstYear = 2022;
+$firstYear = 2022;
+$lastYear = 2022; #$officialYear; # 2024; 
 
 $app::$historyYearList = [];
 for($year = $officialYear-1 ;  $year >= $historyFirstYear; $year--){
@@ -60,7 +60,7 @@ App::$hETD['tp']= 1;
 App::$hETD['extra']= 1;
 $app::$hETD['bonus']= 1;
 
-if ($year == '2025'){
+if ($year == '2022'){
     App::$texte = [
         'chargeReference' => 192,
         'chargeReferenceNm' => 192,
@@ -81,11 +81,11 @@ if ($year == '2025'){
     
     $debutVoeux = clone $finPanier;
     $debutVoeux->add(new DateInterval('PT1S'));
-    $finVoeux = DateTime::createFromFormat('Y-m-d H:i:s', '2026-06-01 23:59:59');
+    $finVoeux = DateTime::createFromFormat('Y-m-d H:i:s', '2026-12-01 23:59:59');
     
     $debutDiagonalisation = clone $finVoeux;
     $debutDiagonalisation->add(new DateInterval('PT1S'));
-    $finDiagonalisation = DateTime::createFromFormat('Y-m-d H:i:s', '2026-06-09 17:59:59');    
+    $finDiagonalisation = DateTime::createFromFormat('Y-m-d H:i:s', '2026-12-30 17:59:59');    
 }
 
 

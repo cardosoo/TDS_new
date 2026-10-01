@@ -10,11 +10,12 @@
 'w3-pale-green', 'w3-pale-blue'
 ] %}
 
-    <br>
+    <br> 
     <footer class="w3-bar w3-theme-d2 w3-left-align w3-small w3-bottom">
     {% set target = _self starts with 'CRUD/'?'':'target=\'_blank\'' %}
     {# pour faire le CRUD #}
     {% if roleList['CRUD'] %}
+        &lt;0.0&gt;
         {% if App.toCRUD is not empty %}
             <a  href ='{{ App.toCRUD }}' {{target}} class="w3-button w3-black">CRUD</a>
         {% else %}

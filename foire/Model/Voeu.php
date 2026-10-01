@@ -10,7 +10,7 @@ class Voeu extends \base\Model\Voeu implements \Model\_Voeu_interface_ {
 
 
     public function CRUD_beforeUpdate(){
-        global $_PATCH;        
+        global $_PATCH;
         $app = \TDS\App::get();
 
         if (isset($_PATCH['field']['anciennete'])){

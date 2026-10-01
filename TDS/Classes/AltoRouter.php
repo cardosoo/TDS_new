@@ -139,7 +139,7 @@ class AltoRouter
      * Generate the URL for a named route. Replace regexes with supplied parameters
      *
      * @param string $routeName The name of the route.
-     * @param array @params Associative array of parameters to replace placeholders with.
+     * @param array $params Associative array of parameters to replace placeholders with.
      * @return string The URL of the route with named parameters in place.
      * @throws Exception
      */
@@ -266,10 +266,10 @@ class AltoRouter
 
     /**
      * Compile the regex for a given route (EXPENSIVE)
-     * @param $route
+     * @param string $route
      * @return string
      */
-    protected function compileRoute($route)
+    protected function compileRoute(string $route)
     {
         if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route, $matches, PREG_SET_ORDER)) {
             $matchTypes = $this->matchTypes;
