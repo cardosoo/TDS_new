@@ -19,18 +19,16 @@ class Importer{
         $this->tableName = "repartition_{$this->year}_{$year_plus_un}";
 
         $BASE_DIR = $this->app::$basePath;
-        $filename = $BASE_DIR . "/../Docs/structure.sq3";
+        $filename = $BASE_DIR . "/../Docs/structure.sqlite";
 
         $this->pdo = new \PDO("sqlite:{$filename}");
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-
-
 
     }
 
 
     public function attachNewDB(){
-        $newFilename = "/home/olivier/pourGIT/TDS2024/src/TDS_plus/structure/structure_saclay2025.sq3";
+        $newFilename = "/home/olivier/pourGIT/TDS2024/src/TDS_plus/structure/structure_saclay2022.sq3";
         $this->pdo->exec("ATTACH DATABASE '{$newFilename}' AS newdb");
     }
 
@@ -124,8 +122,8 @@ SELECT
     ROW_NUMBER() OVER (ORDER BY UE."UE Code" ASC) AS id,
     UE."UE Libellé" as nom,
     UE."UE Code" as code,
-    UE."Semestre Calendaire" as periode,
-     COALESCE((SELECT E2.id FROM s_etape E2 WHERE E2.code = TRIM(SUBSTR(UE."UE Mutualisée" || CHAR(10), 1, INSTR(UE."UE Mutualisée" || CHAR(10), CHAR(10)) - 1)) LIMIT 1), 0) as etape_id,
+    CASE WHEN UE."Semestre Calendaire" = 'Semestre 1' THEN 1 WHEN UE."Semestre Calendaire" = 'Semestre 2' THEN 2 ELSE 0 END as periode,
+    COALESCE((SELECT E2.id FROM s_etape E2 WHERE E2.code = TRIM(SUBSTR(UE."UE Mutualisée" || CHAR(10), 1, INSTR(UE."UE Mutualisée" || CHAR(10), CHAR(10)) - 1)) LIMIT 1), 0) as etape_id,
     UE."UE Libellé" as ose_nom,
     0 as effectif,
     json_object(
@@ -137,7 +135,7 @@ SELECT
         'Projet', COALESCE(UE."Projet", 0)
     ) as besoins
 FROM UE as UE
-WHERE UE."UE dispensée" = "OUI";
+/* WHERE UE."UE dispensée" = "OUI" */;
     
 SQL );
 
@@ -272,6 +270,17 @@ SQL);
 
     public function createEnseignement(){
     // on récupère les enseignements à créer
+
+        $this->app::$db->h_query(
+<<< SQL
+DELETE  FROM voeu WHERE id>0;
+DELETE  FROM panier WHERE id>0;
+DELETE FROM  enseignement WHERE id>0; 
+SQL         );
+
+
+
+
         $stmt = $this->pdo->query(
 <<< SQL
 SELECT DISTINCT
@@ -334,9 +343,9 @@ SYLLABUS;
             $E = new $enseignementNS();
             $E->nuac = $enseignement->sigle??"";
             $E->code = $enseignement->code_ecue??$enseignement->sigle;
-            $E->variante = $enseignement->sigle??"";  
+            $E->variante = ""; //$enseignement->sigle??"";  
             $E->nom = $enseignement->libelle??"";
-            $E->intitule = $enseignement->initule??"";
+            $E->intitule = $enseignement->intitule??"";
             $E->attribuable = TRUE;
             $E->syllabus = $syllabus;
 
@@ -345,7 +354,36 @@ SYLLABUS;
     }
 
 
-    public function createVoeux(){
+    public function createVoeuxAndPanier(){
+        $this->app::$db->h_query(
+<<< SQL
+DELETE  FROM voeu WHERE id>0;
+DELETE  FROM panier WHERE id>0;
+UPDATE enseignement SET 
+    cm=0,
+    ctd=0,
+    td=0,
+    tp=0,
+    s_cm=0,
+    s_ctd=0,
+    s_td=0,
+    s_tp=0,
+    i_cm=0,
+    i_ctd=0,
+    i_td=0,
+    i_tp=0,
+    d_cm=0,
+    d_ctd=0,
+    d_td=0,
+    d_tp=0,
+    n_cm=0,
+    n_ctd=0,
+    n_td=0,
+    n_tp=0;
+
+SQL         );
+
+
          $stmt = $this->pdo->query(
 <<< SQL
 SELECT DISTINCT
@@ -365,9 +403,11 @@ FROM {$this->tableName}
 WHERE type_cours in ('Cours', 'Cours-TD', 'TD', 'TP');
 SQL);
 
+        $voeuNS = $this->app::NS('Voeu');
+        $panierNS = $this->app::NS('Panier');
+
         $voeuList = $stmt->fetchAll(\PDO::FETCH_CLASS);
         foreach($voeuList as $voeu){
-            $voeuNS = $this->app::NS('Voeu');
             if (is_null($voeu->code_ecue)){
                 $voeu->code_ecue = $voeu->sigle;
                 var_dump($voeu->code_ecue);
@@ -379,45 +419,58 @@ SQL);
             }
 
             $personne = $this->app::NS('Personne')::loadOneWhere("actif and id>0 and uid='{$voeu->uid}'");
-            $enseignement= $this->app::NS('Enseignement')::loadOneWhere("actif and id>0 and code='{$voeu->code_ecue}'");
+            $enseignement= $this->app::NS('Enseignement')::loadOneWhere("actif and id>0 and nuac='{$voeu->sigle}'");
+
             $V = $this->app::NS('Voeu')::loadOneWhere("actif and id > 0 and personne = {$personne->id} and enseignement = {$enseignement->id}");
+            $P = $this->app::NS('Panier')::loadOneWhere("actif and id > 0 and personne = {$personne->id} and enseignement = {$enseignement->id}");
+
             if (is_null($V)){
                 $V = new $voeuNS();
                 $V->personne = $personne->id;
                 $V->enseignement = $enseignement->id;
             }
+            if (is_null($P)){
+                $P = new $panierNS();
+                $P->personne = $personne->id;
+                $P->enseignement = $enseignement->id;
+            }
             switch ($voeu->type_cours){
                 case 'Cours': 
-                    $V->cm = $voeu->hCM;
-                    $enseignement->cm=1;
+                    $V->cm += $voeu->hCM;
+                    $enseignement->cm += $voeu->hCM;
                     $enseignement->s_cm=1;
                     $enseignement->i_cm=1;
                     $enseignement->d_cm=1;
                     $enseignement->n_cm=1;
+                    $P->cm = true;
                     break;
-                case 'Cours-TD': $V->ctd = $voeu->hCMTD;
-                    $enseignement->td=1;
+                case 'Cours-TD': $V->ctd += $voeu->hCMTD;
+                    $enseignement->ctd += $voeu->hCMTD;
                     $enseignement->s_ctd=1;
                     $enseignement->i_ctd=1;
                     $enseignement->d_ctd=1;
                     $enseignement->n_ctd=1;
+                    $P->ctd = true;
                     break;
-                case 'TD': $V->td = $voeu->hTD;
-                    $enseignement->td=1;
+                case 'TD': $V->td += $voeu->hTD;
+                    $enseignement->td += $voeu->hTD;
                     $enseignement->s_td=1;
                     $enseignement->i_td=1;
                     $enseignement->d_td=1;
                     $enseignement->n_td=1;
+                    $P->td = true;
                     break;
-                case 'TP': $V->tp = $voeu->hTP;
-                    $enseignement->tp=1;
+                case 'TP': $V->tp += $voeu->hTP;
+                    $enseignement->tp += $voeu->hTP;
                     $enseignement->s_tp=1;
                     $enseignement->i_tp=1;
                     $enseignement->d_tp=1;
                     $enseignement->n_tp=1;
+                    $P->tp = true;
                     break;
             }
             $V->save();
+            $P->save();
             $enseignement->save();
         }
        

@@ -19,7 +19,7 @@ interface _Enseignement_interface_ {
   3 => 'code',
 );
     const GENERIC = array (
-  0 => 'code',
+  0 => 'nuac',
   1 => 'nom',
 );
     const ORDER = NULL;

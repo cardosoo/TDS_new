@@ -22,7 +22,7 @@ class RechercheController extends Controller{
         return $n;
     }
 
-    protected static function buildWhat(string $what, string|null $year = null){
+    protected static function buildWhat(string|null $what, string|null $year = null){
          $app = \TDS\App::get();
     
         $what = isset($what)?htmlspecialchars(pg_escape_string($app::$db->conn, trim(urldecode($what)))):null;
@@ -30,7 +30,8 @@ class RechercheController extends Controller{
             $year = $app::$currentYear;
         }
 
-        $struct = new \base\Struct($year);
+        $structNSC = $app::NSC('Struct');
+        $struct = new $structNSC($year);
         //$typeList = $struct->getUsefulTypeList([]);        
         //$niveauList = $struct->getUsefulNiveauList([]);
         $structureList = self::convertForJS($struct->getUsefulStructureList(['inDB' => true]));        
@@ -39,13 +40,14 @@ class RechercheController extends Controller{
 
 
         $f['searchValue'] = $what;
-        $f['cursusList'] =  \Base\Struct::getCursusList();
-        $f['semestreList'] = \Base\Struct::getSemestreList();
-        $f['modaliteList'] = \Base\Struct::getModaliteList();
+        $f['cursusList'] =  $structNSC::getCursusList();
+        $f['semestreList'] = $structNSC::getSemestreList();
+        $f['modaliteList'] = $structNSC::getModaliteList();
         
         $f['structureList'] = $structureList;
         $f['maquetteList'] = $etapeList; 
         
+        //var_dump(['structNSC' => $structNSC, 'cursusList' => $f['cursusList'] ] );
 
         $app::$cmpl['TITLE'] =  "Recherche d'un enseignement";
         $app::$cmpl['withJQuery'] = true;
@@ -85,7 +87,8 @@ public static function search(string|null $what = null){
             }
         }
         // puis on fait la recherche dans les données de structure
-        $struct = new \base\Struct();
+        $structNSC = $app::NSC('Struct');
+        $struct = new $structNSC();
         $structList = $struct->search($what);
         echo $app::$viewer->render('recherche/generique/index.html.twig', ['what' => $what, 'nbFound' => $nbFound,'list'=> $list, 'structList' => $structList]);
     }
@@ -123,7 +126,8 @@ public static function search(string|null $what = null){
 
     public static function selectEtapeJSON() {
         $app = \TDS\App::get();
-        $struct = new \base\Struct();
+        $structNSC = $app::NSC('Struct');
+        $struct = new $structNSC();
 
         $selectors = [
             'cursus'    => filter_input(INPUT_POST,'cursus'   , FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY),
@@ -145,6 +149,7 @@ public static function search(string|null $what = null){
         
         $filter = $struct->buildFilterFromSelectors($selectors);
         //$struct->explain = true;
+        //var_dump(['selectors' => $selectors, 'filter' => $filter]);
         $etapeList =  $struct->getUsefulEtapeList($filter);
         echo json_encode(self::convertForJS($etapeList));
     }
@@ -209,11 +214,14 @@ public static function search(string|null $what = null){
 
         // Dans cette fonction de recherche il serait bien de chercher aussi dans les maquettes et en particulier sur les code UE/ECUE et intitulé
         // Il y a un truc à changer ici pour que cela fonctionne avec la nouvelle façon de faire la recherche....        
-        $struct = new \base\Struct();
-        $filter = $struct->buildFilterFromSelectors($selectors);
-//var_dump($app::NS('Enseignement'));
+        
+       // $structNSC = $app::NSC('Struct');
+        // $struct = new $structNSC();
+
+        //$filter = $struct->buildFilterFromSelectors($selectors);
         $enseignementList = $app::NS('Enseignement')::search($searchValue, $selectors , $modalite, $with);
     
+// var_dump(['searchValue' => $searchValue, 'selectors' => $selectors, 'modalite' => $modalite, 'with' => $with, 'enseignementList' => $enseignementList]);
         // Je ne comprends pas très bien pourquoi il y a ces lignes ici... 
         $app::$cmpl['what'] = $what;
         $app::$cmpl['withSousEffectif'] = $with->withSousEffectif;

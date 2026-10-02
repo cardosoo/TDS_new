@@ -228,15 +228,20 @@ SQL);
 
 
     public static function test2(){
+        set_time_limit(100);
         $importer = new \services\Importer();
         $importer->attachNewDB();
-        
+        var_dump('nouvelle base attachée');
         $importer->createStructure();
+        var_dump('structure créée');
         $importer->createEtape();
+        var_dump('etape créée');
         $importer->createEcue();
+        var_dump('ecue créée');
         $importer->createEcueEtape();
-
+        var_dump('ecue_etape créée');
         $importer->detachNewDB();
+        var_dump('détachement de la nouvelle base'); exit();
     }
 
     public static function test3(){
@@ -250,7 +255,7 @@ SQL);
         // $importer->createStatuts();
         // $importer->createPersonnes();
         $importer->createEnseignement();
-        $importer->createVoeux();
+        $importer->createVoeuxAndPanier();
 
     }
 

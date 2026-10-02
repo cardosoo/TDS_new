@@ -44,8 +44,12 @@
                         <td style='text-align: center;'>{{ besoin.voeu_enseignement_bilan.correspondant|f2 }}</td>
                         <td style='text-align: center;'>{{ besoin.voeu_enseignement_bilan.bonus|f2 }}</td>
                         <td style='text-align: center;'>{{ besoin.voeu_enseignement_bilan.heures|f2 }}</td>
+                        <td style='text-align: center;'>{{ besoin.structure.periode }}</td>
+                        <td style='text-align: center;'>{{ besoin.structure.cursus }}</td>
+                        {# 
                         <td style='text-align: center;'>{{ besoin.enseignement_structure.periode }}</td>
                         <td style='text-align: center;'>{{ besoin.enseignement_structure.cursus }}</td>
+                         #}
                     </tr>
                     {% endfor %}
                 </tbody>

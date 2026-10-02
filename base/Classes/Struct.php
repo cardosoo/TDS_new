@@ -388,7 +388,6 @@ class Struct  {
         $ecue = ECUEQuery::create()
         ->filterByCode($codeECUE)
         ->findOne();
-
     // #OC_structure-ajout -> Il faut ajouter ici de quoi l'interrogation de la table ajout... 
         return $ecue;
     }
@@ -411,7 +410,10 @@ class Struct  {
     }
 
     public static function getCursusFromfilter(string $niveau, string $type){
-        $cursusList = self::getCursusList();
+        
+        $structNSC = \TDS\App::get()::NSC('Struct');
+
+        $cursusList = $structNSC::getCursusList();
         $cursus = $type.$niveau;
         foreach($cursusList as $curs){
             $find = true;
@@ -427,16 +429,16 @@ class Struct  {
 
     public static function getSemestreList(){
         return [
-            (object)['id'=> 1, 'nom'=> 'semestre 1', 'filter' =>['periode' => '1']],
-            (object)['id'=> 2, 'nom'=> 'semestre 2', 'filter' =>['periode' => '2']],
-            (object)['id'=> 3, 'nom'=> 'annulalisé', 'filter' =>['periode' => '0']],
+            (object)['id'=> 1, 'nom'=> 'Semestre 1', 'filter' =>['periode' => '1']],
+            (object)['id'=> 2, 'nom'=> 'Semestre 2', 'filter' =>['periode' => '2']],
+            (object)['id'=> 3, 'nom'=> 'Annulalisé', 'filter' =>['periode' => '0']],
         ];        
     }
 
     public static function getModaliteList(){
         return [
             (object)['id'=> 1, 'nom'=> 'CM'],
-            (object)['id'=> 2, 'nom'=> 'CMTD'],
+            (object)['id'=> 2, 'nom'=> 'CTD'],
             (object)['id'=> 3, 'nom'=> 'TD'],
             (object)['id'=> 4, 'nom'=> 'TP'],
             (object)['id'=> 5, 'nom'=> 'Extra'],
@@ -537,10 +539,13 @@ class Struct  {
 
 
     public function convertIdToFilter(array &$filter, string $what, ?array $idList){
+        $app = \TDS\App::get();
+        $structNSC = $app::NSC('Struct');
+        
         if (is_null($idList)) return [];
 
         $fn = "get{$what}List";
-        $cList = self::$fn();
+        $cList = $structNSC::$fn();
         foreach($idList as $id){
             foreach($cList as $c){
                 if ($c->id == $id){
@@ -559,15 +564,30 @@ class Struct  {
      * permet de construire le tableau des filtres à partir des sélecteurs du formulaire de recherche
      */
     public function buildFilterFromSelectors(array $selectors): array {
+        $app = \TDS\App::get();
+        $structNSC = $app::NSC('Struct');
+
         $filter = [
             'actif' => $selectors['actif'],
         ];
-        self::convertIdToFilter($filter, 'Cursus', $selectors['cursus']);
-        self::convertIdToFilter($filter, 'Semestre', $selectors['semestre']);
+
+        /*
+        $structNSC::convertIdToFilter($filter, 'Cursus', $selectors['cursus']);
+        $structNSC::convertIdToFilter($filter, 'Semestre', $selectors['semestre']);
         $structureList = $this->getUsefulStructureList($filter);
-        self::convertStrucureToFilter($filter, $structureList, $selectors['structure']);
+        $structNSC::convertStrucureToFilter($filter, $structureList, $selectors['structure']);
         $etapeList = $this->getUsefulEtapeList($filter);
-        self::convertEtapeToFilter($filter, $etapeList, $selectors['etape']);
+        $structNSC::convertEtapeToFilter($filter, $etapeList, $selectors['etape']);
+        */
+
+        $this->convertIdToFilter($filter, 'Cursus', $selectors['cursus']);
+        $this->convertIdToFilter($filter, 'Semestre', $selectors['semestre']);
+        $structureList = $this->getUsefulStructureList($filter);
+        $this->convertStrucureToFilter($filter, $structureList, $selectors['structure']);
+        $etapeList = $this->getUsefulEtapeList($filter);
+        $this->convertEtapeToFilter($filter, $etapeList, $selectors['etape']);
+
+        
         return $filter;
     }
 
@@ -779,6 +799,8 @@ if ($this->explain) {
                 }
             }
         }
+//var_dump(['$codeList' => $codeList, '$varianteList' => $varianteList]);
+
         $codeSQL = "true";
         if (count($codeList) > 0 ){
             $joinCode = join( "', '", $codeList);
@@ -814,14 +836,14 @@ if ($this->explain) {
             ], false);
             echo "</pre>";
         }
-
+// var_dump($sql);
         $stmt = $con->prepare($sql);
         $stmt->execute();
 
 
         $filterList = [];
         foreach($stmt->fetchAll() as $fil){
-
+//var_dump($fil);            
             if (isset($codeVarianteList[$fil['variante']])){
                 $cv = $codeVarianteList[$fil['variante']];
                 if (isset($cv['id'])){
@@ -843,6 +865,7 @@ if ($this->explain) {
                 }
             }
         };
+//var_dump($filterList);       
         return $filterList;
     }
 
@@ -856,6 +879,7 @@ if ($this->explain) {
      */
     public function search(string $what){
         // #OC_structure-ajout -> Il faut ajouter ici de quoi l'interrogation de la table ajout... 
+       
         $app = App::get();
         $structureList = StructureQuery::create()
         ->filterByNom("%{$what}%", Criteria::LIKE)
@@ -1440,7 +1464,9 @@ if ($this->explain) {
 
     public function getEcueList(int $structureId, int  $cursusId, int $semestreId, int $etapeId){
         // #OC_structure-ajout -> Il faut ajouter ici de quoi l'interrogation de la table ajout... 
-
+        
+        $structNSC = \TDS\App::get()::NSC('Struct');
+        
         $con = \Propel\Runtime\Propel::getReadConnection(\Map\ecue_etapeTableMap::DATABASE_NAME);
         $cursusList = $this->getCursusList();
         foreach($cursusList as $cursus){
@@ -1459,11 +1485,11 @@ if ($this->explain) {
         $filter['inDB'] = false;
         $filter['outDB'] = false;
         if (is_int($cursusId)){
-            self::convertIdToFilter($filter, 'Cursus', [$cursusId]);
+            $structNSC::convertIdToFilter($filter, 'Cursus', [$cursusId]);
             // $filter['cursus'] = $cursus->filter;
         }
         if (is_int($semestreId)){
-            self::convertIdToFilter($filter, 'Semestre',[$semestreId]);
+            $structNSC::convertIdToFilter($filter, 'Semestre',[$semestreId]);
             //$filter['periode'] = $semestre->filter;
         }
 

@@ -317,7 +317,7 @@ class APIController extends \TDS\Controller {
     */
 
 
-    public static function activeFoncRef($year){
+    public static function activeFoncRef(string $year){
         $app = \TDS\App::get();
 
         $baseName = $app::$appName."{$year}";
@@ -344,7 +344,7 @@ class APIController extends \TDS\Controller {
     }
 
 
-    public static function activeSituationList($year){
+    public static function activeSituationList(string $year){
         $app = \TDS\App::get();
 
         $baseName = $app::$appName."{$year}";
@@ -370,7 +370,7 @@ class APIController extends \TDS\Controller {
     
     }
 
-    public static function activePersonneBilanList(int $year){
+    public static function activePersonneBilanList(string $year){
         $app = \TDS\App::get();
 
         $baseName = $app::$appName."{$year}";
@@ -408,23 +408,22 @@ class APIController extends \TDS\Controller {
     }
 
 
-    public static function getEmail($id){
+    public static function getEmail(int $id){
         $app = \TDS\App::get();
         $P = $app::NS('Personne')::load($id);
         echo $P->email;
     }
 
-    public static function isUIDInBase($uid){
+    public static function isUIDInBase(string $uid){
         $app = \TDS\App::get();
 
         $PL = $app::NS('Personne')::loadWhere("uid='{$uid}'");
         echo 1==count($PL)?"y":"n";
     }
 
-    public static function structOSEEtape($code){
+    public static function structOSEEtape(string $code){
         $app = \TDS\App::get();
 
-        $structOSE = new \base\Struct(2024, "OSE");
         $etapeList = \EtapeQuery::create()
         ->filterByCode($code.'%', \Propel\Runtime\ActiveQuery\Criteria::LIKE)
         ->find();
@@ -444,10 +443,9 @@ class APIController extends \TDS\Controller {
         echo json_encode($res);
     }
 
-    public static function structOSEEcue($code){
+    public static function structOSEEcue(string $code){
         $app = \TDS\App::get();
 
-        $structOSE = new \base\Struct(2024, "OSE");
         $ecueList = \ECUEQuery::create()
         ->filterByCode($code.'%', \Propel\Runtime\ActiveQuery\Criteria::LIKE)
         ->find();

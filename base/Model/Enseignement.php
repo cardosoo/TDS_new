@@ -170,7 +170,9 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
     public static function getIdCodeVarianteList($searchString, $modalite, $with){
         $app = \TDS\App::get();
 
-        $struct = new \base\Struct();
+        $structNSC = $app::NSC('Struct');
+        $struct = new $structNSC();
+
         $where = [];
         if (! empty($searchString)){
             $where[] = "AND unaccent(ENS.intitule || ENS.nom || ENS.nuac || ENS.code) ILIKE unaccent('%{$searchString}%')";
@@ -187,7 +189,7 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
         
 // var_dump(self::class);
         $joinList = static::getJoinList(); 
-//var_dump($joinList);
+// var_dump($joinList);
         $app = \TDS\App::get();
         $q = new \TDS\Query($app::NS('Enseignement'), 'ENS');
         //$q->join('ENS.voeu_enseignement_bilan', 'VEB');
@@ -200,10 +202,11 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
         foreach($where as $W){
             $q->addSQL("{$W}\n");
         }
-//var_dump($q->getSQL());
+// var_dump($q->getSQL());
         $rep = $q->exec();
         $idCodeVarianteList = [];
         foreach($rep as $re){
+// var_dump($re['ens']->code);
             $r = $re['ens'];
             if (is_null($r->code)){
                 $r->code="XXXXXXXXXXXXXX";
@@ -234,6 +237,7 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
                         $idCodeVarianteList[$code.$r->variante]=[
                             'id' => $r->id,
                             'code' => $r->code,
+
                             'nuac' => $r->nuac,
                             'intitule' => $r->intitule,
                             'variante' => $r->variante,
@@ -257,28 +261,6 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
                     }
                 }
             } 
-            /*
-            foreach(explode('|', $r->variante) as $variante){
-            
-                    if ( ($variante == "") || ($struct->getEtapeByCode($variante) != null) ) { // on ne traite que les variantes qui sont des codes d'étape valides ou les variantes vides
-                                    
-                
-                    foreach(explode('|', $r->code) as $code){ // cette boucle là est pour traiter l'éventualité d'un enseignement qui aurait plusieurs code ecue (normalement cela ne devrait pas arrivé !)
-                        $comp='';
-                        if (isset($idCodeVarianteList[$code.$variante])){
-                            $comp = \uniqid();
-                        }
-                        $idCodeVarianteList[$code.$variante]=[
-                            'id' => $r->id,
-                            'code' => $r->code,
-                            'nuac' => $r->nuac,
-                            'intitule' => $r->intitule,
-                            'variante' => $code.$variante,
-                        ];    
-                    }
-                }
-            }
-            */
         }
         return $idCodeVarianteList;
     }
@@ -353,22 +335,27 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
      * ou un tableau d'entier, il s'agit alors de la liste des num de la table liée à filtrer
      * 
      * @param string $searchString
-     * @param array $filter
-     * @param object $with 
-     * @param array $manque
+     * @param array $selectors
+     * @param array $modalite
+     * @param array $with 
      * @return array
      *
      * Version qui permet de faire la recherche directement sur la base de données 
      * puis filtre en utilisant les données issues de Moodle !
     */
-    public static function search($searchString, $selectors, $modalite, $with){ 
+    public static function search(string $searchString, $selectors, $modalite,  $with){ 
         $app = \TDS\App::get();
-        $struct = new \base\Struct();
-        
-        $idCodeVarianteList = static::getIdCodeVarianteList($searchString, $modalite, $with);
-        $filter = $struct->buildFilterFromSelectors($selectors);
-        $idCodeVarianteList = $struct->filterIdCodeList($filter, $idCodeVarianteList);
 
+        $structNSC = $app::NSC('Struct');
+        $struct = new $structNSC();
+
+        $idCodeVarianteList = static::getIdCodeVarianteList($searchString, $modalite, $with);
+//var_dump(['searchString' => $searchString, 'modalite' => $modalite, 'with' => $with, 'idCodeVarianteList' => $idCodeVarianteList]);
+
+        $filter = $struct->buildFilterFromSelectors($selectors);
+// var_dump(['selectors' => $selectors, 'filter' => $filter]);        
+        $idCodeVarianteList = $struct->filterIdCodeList($filter, $idCodeVarianteList);
+//var_dump(['filter' => $filter, 'idCodeVarianteList' => $idCodeVarianteList]);
         $retList = [];
         foreach($idCodeVarianteList as $idCodeVariante){
             if (isset($idCodeVariante['id'])){
@@ -383,7 +370,9 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
                     $retList[] = $idCodeVariante2;
                 }
             }
+        
         }
+// var_dump(['selectors' => $selectors, 'filter' => $filter, 'idCodeVarianteList' => $idCodeVarianteList, 'retList' => $retList]);
         return $retList;
     }
 
@@ -401,13 +390,17 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
         }
 
         $app = \TDS\App::get();
-        $struct = new \base\Struct();
+        $structNSC = $app::NSC('Struct');
+        $struct = new $structNSC();
 
         $codeList = explode('|', $this->code);
         $this->structEcueList = [];
         foreach($codeList as $code){
             $code = trim($code);
-            $this->structEcueList[$code] = $struct->getECUEByCode($code);
+            $ecue = $struct->getECUEByCode($code);
+            if (!is_null($ecue)){
+                $this->structEcueList[$code] = $ecue;
+            }
         }
         return $this->structEcueList;
     }
@@ -425,7 +418,8 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
         }
 
         $app = \TDS\App::get();
-        $struct = new \base\Struct();
+        $structNSC = $app::NSC('Struct');
+        $struct = new $structNSC();
 
         $this->structEtapeList = [];
 

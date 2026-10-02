@@ -97,6 +97,7 @@ class AdminController extends \zeroUP\Controllers\AdminController {
             /* AND VPB.heures <>0 */
         ");
         
+        /*
         $besoinList = $app::$db->fetchAll("
         SELECT
             E.*,
@@ -108,7 +109,37 @@ class AdminController extends \zeroUP\Controllers\AdminController {
         WHERE E.id >0 AND E.actif
         AND (VEB.cm <> 0 OR VEB.ctd <>0 OR VEB.td <>0 OR VEB.tp<>0 OR VEB.extra<>0 OR VEB.bonus<>0) 
         ");
+        */
+
+        $besoinList = $app::$db->fetchAll("
+        SELECT
+            E.*,
+            VEB.*
+        FROM enseignement as E
+        LEFT JOIN voeu_enseignement_bilan as VEB on E.id = VEB.id
+        WHERE E.id >0 AND E.actif
+        AND (VEB.cm <> 0 OR VEB.ctd <>0 OR VEB.td <>0 OR VEB.tp<>0 OR VEB.extra<>0 OR VEB.bonus<>0) 
+        ");
         
+        foreach($besoinList as $besoin){
+            $E = $app::NS('Enseignement')::load($besoin->enseignement->id);
+
+            $ecueList = $E->getStructEcueList();
+            $periode = 'Inconnue';
+            $cursus = 'Inconnu';
+            foreach($ecueList as $ecue){
+                $periode = $ecue->getPeriodeName();
+                $cursus = $ecue->getCursusName();
+            }
+            
+            $besoin->structure = (object)[
+                'periode' => $periode,
+                'cursus' => $cursus,
+            ];
+
+            var_dump(['besoin' => $besoin->structure]);
+        }
+
         $app::$cmpl["withJQuery"]=true;
         $app::$cmpl["withDataTables"]=true;
         
