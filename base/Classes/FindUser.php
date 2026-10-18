@@ -4,7 +4,7 @@ namespace base;
 
 use stdClass;
 
-function normaliser($str) {
+function normaliser(string $str) {
     $str = mb_strtolower($str, 'UTF-8');
     $str = iconv('UTF-8', 'ASCII//TRANSLIT', $str);
     $str = preg_replace('/[^a-z0-9 ]/', '', $str);
@@ -13,7 +13,7 @@ function normaliser($str) {
 }
 
 
-function distance($P, $st){
+function distance(object $P, string $st){
     $st = normaliser($st);
     $cList = [$P->pn, $P->np, $P->n];
     $s = 0;
@@ -28,7 +28,7 @@ function distance($P, $st){
 }
 
 
-function soundex_fr($sIn) { 
+function soundex_fr(string $sIn) { 
     static $convVIn, $convVOut, $convGuIn, $convGuOut, $accents; 
     if (!isset($convGuIn)) { 
         $accents = array('É' => 'E', 'È' => 'E', 'Ë' => 'E', 'Ê' => 'E', 
@@ -36,7 +36,7 @@ function soundex_fr($sIn) {
                     'Ï' => 'I', 'Î' => 'I', 'Ì' => 'I', 'Í' => 'I', 
                     'Ô' => 'O', 'Ö' => 'O', 'Ò' => 'O', 'Ó' => 'O', 'Õ' => 'O', 'Ø' => 'O', 
                     'Ú' => 'U', 'Ù' => 'U', 'Û' => 'U', 'Ü' => 'U', 
-                    'Ç' => 'C', 'Ñ' => 'N', 'Ç' => 'S', '¿' => 'E', 
+                    'Ç' => 'C', 'Ñ' => 'N', '¿' => 'E', 
                     'é' => 'e', 'è' => 'e', 'ë' => 'e', 'ê' => 'e', 
                     'á' => 'a', 'à' => 'a', 'ä' => 'a', 'â' => 'a', 'å' => 'a', 'ã' => 'a', 
                     'ï' => 'i', 'î' => 'i', 'ì' => 'i', 'í' => 'i', 
@@ -104,7 +104,7 @@ class FindUser{
         }
     }
 
-    public function bestPersonneID($st){
+    public function bestPersonneID(string $st){
         $smax = 0;
         $bestId = 0;
 

@@ -50,7 +50,7 @@ class APIController extends \base\Controllers\APIController {
             mkdir($dirName);
         }
 
-        $html = `curl 'http://nflp.livetour.fr/classement.php' --compressed -X POST -H 'User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' -H 'Accept-Language: fr-FR,en-US;q=0.7,en;q=0.3' -H 'Accept-Encoding: gzip, deflate' -H 'Referer: http://nflp.livetour.fr/classement.php' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Origin: http://nflp.livetour.fr' -H 'DNT: 1' -H 'Sec-GPC: 1' -H 'Connection: keep-alive' -H 'Cookie: langue_affich=_fr; showMenu=' -H 'Upgrade-Insecure-Requests: 1' -H 'Priority: u=0, i' -H 'Pragma: no-cache' -H 'Cache-Control: no-cache' --data-raw 'mode=&epreuve=24h&sex='`;
+        $html = shell_exec("curl 'http://nflp.livetour.fr/classement.php' --compressed -X POST -H 'User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' -H 'Accept-Language: fr-FR,en-US;q=0.7,en;q=0.3' -H 'Accept-Encoding: gzip, deflate' -H 'Referer: http://nflp.livetour.fr/classement.php' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Origin: http://nflp.livetour.fr' -H 'DNT: 1' -H 'Sec-GPC: 1' -H 'Connection: keep-alive' -H 'Cookie: langue_affich=_fr; showMenu=' -H 'Upgrade-Insecure-Requests: 1' -H 'Priority: u=0, i' -H 'Pragma: no-cache' -H 'Cache-Control: no-cache' --data-raw 'mode=&epreuve=24h&sex='");
         $dom = HtmlDomParser::str_get_html($html);
         foreach($dom->find('tr') as $tr){
             $tdList = $tr->find('td');

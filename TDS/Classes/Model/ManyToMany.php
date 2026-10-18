@@ -4,6 +4,11 @@ namespace TDS\Model;
 
 class ManyToMany extends Entity {
 
+    protected Entity $e1;
+    protected Entity $e2;
+    protected OneToMany $link1;
+    protected OneToMany $link2;
+
     /**
      * Undocumented function
      *

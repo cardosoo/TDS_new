@@ -37,7 +37,7 @@ Bonjour {{ P.getGeneric }},
         echo $app::$viewer->render('mailer/index.html.twig', ['cmpl' => $cmpl, 'personneList' => $personneList, 'statutList' => $statutList, 'message' => $message]);
     }
 
-    public static function mail($id){
+    public static function mail(int $id){
         $app = \TDS\App::get();
 
         $message = filter_input(INPUT_POST,'message', FILTER_UNSAFE_RAW); // ce n'est pas forcément très bien de faire comme cela pour le filtrage...
@@ -51,7 +51,7 @@ Bonjour {{ P.getGeneric }},
 
 
     // Cela permet d'envoyer un message de façon "manuelle"
-    public static function  sendOneMail($email, $surname ='', $id = null, $message='', $sujet='', $ccFoire='', $reply=''){
+    public static function  sendOneMail(string $email, string $surname ='', ?int $id = null, string $message='', string $sujet='', string $ccFoire='', $reply=''){
         $app = \TDS\App::get();
 
         if (!is_null($id)){
@@ -100,7 +100,7 @@ Bonjour {{ P.getGeneric }},
     }
 
     // C'est cela qui permet d'envoyer un message depuis le mailer automatique
-    public static function sendmail($id){
+    public static function sendmail(int $id){
         $app = \TDS\App::get();
 
         $message = filter_input(INPUT_POST,'message', FILTER_UNSAFE_RAW); // ce n'est pas forcément très bien de faire comme cela pour le filtrage...
@@ -118,7 +118,7 @@ Bonjour {{ P.getGeneric }},
     }
 
     public static function sendReport(){
-        $app = \TDS\App::get();
+        $app = \base\App::get();
         
         $filters = array (
             "sujet" =>  FILTER_UNSAFE_RAW,

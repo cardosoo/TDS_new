@@ -9,7 +9,7 @@ class Router extends \zeroUP\Router {
     // nom de l'appli peut-être mais on va perdre la cascade alors.
     // ou alors si cela se trouve cela fonctionne tel quel ?
     // à voir plus tard.
-    protected static function routeAsset($asset){
+    protected static function routeAsset(mixed $asset){
         $app = \TDS\App::get();
         if ($app::$router->doRouteAsset($asset, __DIR__. "/../assets" )){
             return true;

@@ -2,11 +2,16 @@
 
 namespace base\Controllers;
 
+use base\Model\Diplome;
+use base\Model\Etape;
+use base\Model\Maquette;
+use base\Model\Semestre;
+use base\Model\UE;
 use stdClass;
 
 class MaquetteController extends \TDS\Controller {
 
-    public static function getOptions($id){
+    public static function getOptions(int $id){
         $app = \TDS\App::get();
 
         $M = $app::load('Maquette', $id);
@@ -43,7 +48,7 @@ class MaquetteController extends \TDS\Controller {
 
 
 
-    public static function fiche($id){
+    public static function fiche(int $id){
         $app = \TDS\App::get();
 
         $options = self::getOptions($id);
@@ -132,14 +137,14 @@ class MaquetteController extends \TDS\Controller {
         }        
     }
 
-    public static function getECUEList($ue){
+    public static function getECUEList(UE $ue){
         $eL = [];
         foreach($ue->ecueList as $ecue){
             $eL[] =  $ecue->__org__;
         }
         return $eL;
     }
-    public static function getUEList($semestre){
+    public static function getUEList(Semestre $semestre){
         $uL = [];
         foreach($semestre->ueList as $ue){
             $u =  $ue->__org__;
@@ -149,7 +154,7 @@ class MaquetteController extends \TDS\Controller {
         return $uL;
     }
 
-    public static function getSemestreList($etape){
+    public static function getSemestreList(Etape $etape){
         $sL = [];
         foreach($etape->semestreList as $semestre){
             $s =  $semestre->__org__;
@@ -159,7 +164,7 @@ class MaquetteController extends \TDS\Controller {
         return $sL;
     }
 
-    public static function getEtapeList($diplome){
+    public static function getEtapeList(Diplome $diplome){
         $eL = [];
         foreach($diplome->etapeList as $etape){
             $e =  $etape->__org__;
@@ -169,7 +174,7 @@ class MaquetteController extends \TDS\Controller {
         return $eL;
     }
 
-    public static function getDiplomeList($maquette){
+    public static function getDiplomeList(Maquette $maquette){
         $dL = [];
         foreach($maquette->diplomeList as $diplome){
             $d =  $diplome->__org__;
@@ -179,7 +184,7 @@ class MaquetteController extends \TDS\Controller {
         return $dL;
     }
 
-    public static function edit($id){
+    public static function edit(int $id){
         $app = \TDS\App::get();
 
         $maquette = $app::load('Maquette', $id);
@@ -240,7 +245,7 @@ class MaquetteController extends \TDS\Controller {
     }
 
 
-    public static function update(&$elm, $e){
+    public static function update(object &$elm, array $e){
         foreach($e as $key => $item){
             if (  ($key=='id') || (substr($key,-2) == '__') || ( substr($key, -4) == 'List')  ){
                 // doNothing
@@ -252,7 +257,7 @@ class MaquetteController extends \TDS\Controller {
         }
     }
 
-    public static function save($id){
+    public static function save(int $id){
         $app = \TDS\App::get();
         $maquette = $app::load('Maquette', $id);
 

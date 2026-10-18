@@ -8,7 +8,7 @@ use TDS\Utils;
 
 class EnseignementController extends \TDS\Controller {
 
-    public static function getOptions($id){
+    public static function getOptions(int $id){
         $app = \TDS\App::get();
 
         $E = $app::load('Enseignement', $id);
@@ -62,7 +62,7 @@ class EnseignementController extends \TDS\Controller {
         ];
     }
 
-    public static function setCmpl($id, $isVoeu){
+    public static function setCmpl(int $id, bool $isVoeu){
         $app = \TDS\App::get();
         $app::$cmpl["withJQuery"]=true;
         if ($isVoeu){
@@ -73,7 +73,7 @@ class EnseignementController extends \TDS\Controller {
         $app::$toCRUD="/{$appName}/CRUD/Enseignement/$id";
     }
 
-    public static function fiche(int $id, $isVoeu = false){
+    public static function fiche(int $id, bool $isVoeu = false){
         $app = \TDS\App::get();
 
         var_dump([$app::$phaseList[$app::$phase], $app::$phase]);
@@ -85,7 +85,7 @@ class EnseignementController extends \TDS\Controller {
         echo $app::$viewer->render("enseignement/fiche{$voeu}.html.twig", $options);
     }
 
-    protected static function verificationUsage(int $id, $error='404'){
+    protected static function verificationUsage(int $id, string $error='404'){
         $app = \TDS\App::get();
         // vérifications d'usage
         
@@ -160,7 +160,7 @@ class EnseignementController extends \TDS\Controller {
     }
 
 
-    public static function historique($N, $Y){
+    public static function historique(int $N, string $Y){
         $app = \TDS\App::get();
         $baseName = $app::$appName."{$Y}";
         $db = new Database($baseName, $app::$baseUser, $app::$basePwd, 'localhost' );
@@ -183,7 +183,7 @@ class EnseignementController extends \TDS\Controller {
     }
 
 
-    public static function saveSyllabus($id){
+    public static function saveSyllabus(int $id){
         $app = \TDS\App::get();
 
         $E = $app::load('Enseignement', $id);
@@ -197,7 +197,7 @@ class EnseignementController extends \TDS\Controller {
         echo "success";
     }
 
-    public static function editBesoins($id){
+    public static function editBesoins(int $id){
         $app = \TDS\App::get();
 
         $E = $app::load('Enseignement', $id);
@@ -209,7 +209,7 @@ class EnseignementController extends \TDS\Controller {
         echo $app::$viewer->render('enseignement/edit_besoins.html.twig', ['E' => $E]);
     }
 
-    public static function saveEditBesoins($id){
+    public static function saveEditBesoins(int $id){
         $app = \TDS\App::get();
 
         $E = $app::load('Enseignement', $id);

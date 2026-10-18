@@ -13,7 +13,7 @@ function dos2unix($s) {
 }
 
 
-function csvstring_to_array($string, $separatorChar = ';', $enclosureChar = '"', $newlineChar = PHP_EOL) {
+function csvstring_to_array(string $string, $separatorChar = ';', $enclosureChar = '"', $newlineChar = PHP_EOL) {
     // @author: Klemen Nagode
     $string = dos2unix($string);
     $array = array();
@@ -184,11 +184,11 @@ class OSE  {
      */
     public function findECUE(String $ecue):array|null{
 //        var_dump("grep {$ecue} {$this->codePath}");
-        $rep = `grep {$ecue} {$this->codePath}`;
+        $rep = shell_exec("grep {$ecue} {$this->codePath}");
 //var_dump($rep);        
         if (is_null($rep)){ $rep=""; }        
         // var_dump(['codePath' => $this->codePath, 'ecue' => $ecue, 'rep' => $rep]);
-        $csv = str_getcsv($rep, ";", "\"");
+        $csv = str_getcsv($rep, ";", "\"", "\\");
         
         $rep = null;
         if (count($csv)>10){
@@ -221,7 +221,7 @@ class OSE  {
      * @return array
      */
     public function getEquipe(string $ecue):array{
-        $rep = `grep {$ecue} {$this->servicePath}`;
+        $rep = shell_exec("grep {$ecue} {$this->servicePath}");
         if (is_null($rep)){ $rep=""; }
         $lineList = explode("\n", $rep);
         $equipe = [];
@@ -246,7 +246,7 @@ class OSE  {
      */
     public function getService(String $codeOSE):array{
 
-        $rep = `grep {$codeOSE} {$this->servicePath}`;
+        $rep = shell_exec("grep {$codeOSE} {$this->servicePath}");
         if (is_null($rep)){ $rep=""; }
         $lineList = explode("\n", $rep);
         $service = [];
@@ -271,7 +271,7 @@ class OSE  {
      * @return array|null
      */
     public function getDetails(string $ecue):array|null{
-        $rep = `grep {$ecue} {$this->detailsPath}`;
+        $rep = shell_exec("grep {$ecue} {$this->detailsPath}");
 
         if (is_null($rep)){
             return null;
@@ -299,7 +299,7 @@ class OSE  {
      */
     public function getVoeu(string $codeOSE, string $ecue):array{
         
-        $rep =  `grep {$codeOSE} {$this->servicePath} | grep {$ecue}`;
+        $rep =  shell_exec("grep {$codeOSE} {$this->servicePath} | grep {$ecue}");
         if (is_null($rep)){return []; }
 
         $lineList = explode("\n", $rep);

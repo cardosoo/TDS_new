@@ -4,6 +4,7 @@ namespace TDS;
 // use AltoRouter;
 
 abstract class App {
+    static public array        $list = [];
     static public string        $service = '';
     static public string        $mail = 'olivier.cardoso@u-paris.fr';
     static public string        $webmestre = 'olivier.cardoso@u-paris.fr';
@@ -41,8 +42,9 @@ abstract class App {
  
     static private $session_string = ""; 
     static private $originalLocales =[];
+
     abstract public static function loadFromUid(string $uid);
-    abstract public static function getRoleList(string $user);
+    abstract public static function getRoleList(\base\Model\Personne $user);
     
     static function init(string $dir, $close = false, $session=true, $appName = null){
         // pour mettre les différents messages sur les pages avec les différents niveaux d'utilisation
@@ -79,7 +81,10 @@ abstract class App {
     static function setPermission(){
     }
 
-    public static function get():String|App{
+    /**
+     * @return class-string<\foire\App>|class-string<\tssdv\App>|class-string<\service\App>|class-string<\services\App>
+     */
+    public static function get():string{
         return self::NSC('App');
     }
 
@@ -175,7 +180,7 @@ abstract class App {
     /**
      * @param string $baseName le nom de la base de données de l'annéeCourante
      */
-    public static function setBaseName(string $baseName = null){
+    public static function setBaseName(?string $baseName = null){
         if (is_null($baseName)){
             $baseName = self::buildBaseName();
         }
@@ -424,7 +429,6 @@ abstract class App {
      */
     public static function setProdMode($mode=true){
         self::$prod = $mode;
-
         if (self::$prod){
             error_reporting(0);
         } else {
@@ -438,6 +442,7 @@ abstract class App {
 //            ini_set('xdebug.collect_includes','1'); //     ; Noms de fichiers
 //            ini_set('xdebug.collect_params','2'); //       ; Paramètres de fonctions / méthodes
             ini_set('xdebug.show_exception_trace','0');        
+            //var_dump('Oui');
         }
     }
 

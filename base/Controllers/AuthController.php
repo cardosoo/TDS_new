@@ -17,7 +17,7 @@ class AuthController extends \TDS\Controller {
         $app::$auth->deconnexion();
     }
 
-    public static function directLink($hex){
+    public static function directLink(string $hex){
         $app = \TDS\App::get();
 
         var_dump('DirectLink');

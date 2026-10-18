@@ -6,7 +6,7 @@ use \TDS\Model\Field;
 /*
 * This file is auto-generated and should not be changed by hand.
 * filename : _enseignement_periode_.php
-* created : Thu, 26 Mar 2026 16:11:45 +0100 UTC
+* created : Sun, 18 Oct 2026 15:51:01 +0000 UTC
 */ 
 
 interface _enseignement_periode_interface_ {

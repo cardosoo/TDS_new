@@ -137,7 +137,7 @@ class AdminController extends \zeroUP\Controllers\AdminController {
                 'cursus' => $cursus,
             ];
 
-            var_dump(['besoin' => $besoin->structure]);
+            //var_dump(['besoin' => $besoin->structure]);
         }
 
         $app::$cmpl["withJQuery"]=true;
@@ -332,9 +332,12 @@ class AdminController extends \zeroUP\Controllers\AdminController {
     }
 
 
-    public static function listComments($entity){
+    public static function listComments(string $entity){
         $app=\TDS\App::get();
         $className = $app::NS($entity);
+
+        $cl = '';
+        $cd = '';
 
         switch($entity){
             case 'Personne':
@@ -363,10 +366,12 @@ class AdminController extends \zeroUP\Controllers\AdminController {
         echo $app::$viewer->render('admin/listComments.html.twig', ['CL' => $commentList, 'E' => $entity]);
     }
 
-    public static function saveComment($entity, $id){
+    public static function saveComment(string $entity, int $id){
         $app=\TDS\App::get();
         $className = $app::NS($entity);
 
+        $cl = '';
+        $cd = '';
         switch($entity){
             case 'Personne':
                 $cl = 'commentaire_personne';
@@ -401,9 +406,12 @@ class AdminController extends \zeroUP\Controllers\AdminController {
         echo "Done";
     }
 
-    public static function addComment($entity, $id){
+    public static function addComment(string $entity, int $id){
         $app=\TDS\App::get();
         $className = $app::NS($entity);
+
+        $cl = '';
+        $cd = '';
 
         switch($entity){
         case 'Personne':
@@ -441,9 +449,12 @@ class AdminController extends \zeroUP\Controllers\AdminController {
     }
 
 
-    public static function maskComment($entity, $id){
+    public static function maskComment(string $entity, int $id){
         $app=\TDS\App::get();
         $className = $app::NS($entity);
+
+        $cl = '';
+        $cd = '';
 
         switch($entity){
         case 'Personne':
@@ -477,10 +488,12 @@ class AdminController extends \zeroUP\Controllers\AdminController {
         echo "Done";
     }
 
-    public static function delComment(string $entity, string$id){
+    public static function delComment(string $entity, int $id){
         $app=\TDS\App::get();
         $className = $app::NS($entity);
+
         $cl = '';
+        $cd = '';
 
         switch($entity){
             case 'Personne':
@@ -517,7 +530,7 @@ class AdminController extends \zeroUP\Controllers\AdminController {
         echo "Done";
     }
 
-    private static function getDetail($t){
+    private static function getDetail(mixed $t){
         if (count($t) == 0){ return 0;}
         return floatval($t[0]);
     }
@@ -526,132 +539,11 @@ class AdminController extends \zeroUP\Controllers\AdminController {
      *   Version basée sur le nouveau modèle de données, avec la structure des enseignements externe.
      *   Vérifie que les ECUE renseignés dans les enseignements sont cohérents avec les données de l'OSE (existance de l'ECUE, détails de l'ECUE, période de l'enseignement)
      *
+     *   Je crois que c'est obsolète
      * @return void
      */
     public static function verifECUE(){
-        $app=\TDS\App::get();
-
-        $struct = new \base\Struct();
-
-
-        $okList = [];
-        $horsOSE = [];
-        $horsDetailsOSE = [];
-        $badDetails = [];
-        $badPeriod = [];
-        $multipleECUE = [];
-
-        $test=True;
-        if ($test){
-            $enseignementList = array_slice($app::NS('Enseignement')::loadWhere('actif'), 0, 15);
-        } else {
-            $enseignementList = $app::NS('Enseignement')::loadWhere('actif');
-        }
-
-        foreach($enseignementList as $enseignement){
-            
-            $struct->getECUEByCode($enseignement->code);
-            
-            $detailsFoire = $enseignement->enseignement_etudiant_details;
-            $structure = $enseignement->enseignement_structure;
-            $periode = $semestreList[substr($enseignement->enseignement_periode->periode, 1, -1)];
-
-            $ecueList = explode('|', $structure->ecue);
-            $rep = [];
-
-            $pasOk = false;
-            $ok = false;
-            $p = false;
-
-            foreach($ecueList as $codeECUE){
-                $ecue = $ose->findECUE($codeECUE);
-                $pasOSE = is_null($ecue);
-                if ($pasOSE){
-                    $horsOSE[$enseignement->id] = $enseignement;
-                    $pasOk = true;
-                } else {
-                    $detailsOSE = $ose->getDetails($codeECUE);
-                    if (is_null($detailsOSE)){
-                        $horsDetailsOSE[$enseignement->id] = [
-                            'enseignement' => $enseignement,
-                            'ecue' => $ecue,
-                        ];
-                        $pasOk = true;    
-                    } else {
-                        $dOSE = [
-                            'cm' => self::getDetail($detailsOSE['CM']),
-                            'td' => (self::getDetail($detailsOSE['TD']) + self::getDetail($detailsOSE['TD2'])),
-                            'tp' => (self::getDetail($detailsOSE['TP']) + self::getDetail($detailsOSE['TP7'])),
-                            'ctd' => (self::getDetail($detailsOSE['CMTD']) + self::getDetail($detailsOSE['CMTD7'])),
-                            'extra' => (self::getDetail($detailsOSE['PROJET']) + self::getDetail($detailsOSE['MD'])),
-                            'bonus' => (self::getDetail($detailsOSE['FORFAI'])),
-                        ];
-                        
-                        $rep[$codeECUE] = [
-                            'ecue' => $ecue,
-                            'dOSE' => $dOSE,
-                            'detailOSE' => $detailsOSE,
-                        ];
-
-    
-                        $CMok = $dOSE['cm'] == $detailsFoire->cm;
-                        $TDok = $dOSE['td'] == $detailsFoire->td;
-                        $TPok = $dOSE['tp'] == $detailsFoire->tp;
-                        $CTDok = $dOSE['ctd'] == $detailsFoire->ctd;
-                        $EXTRAok = $dOSE['extra'] == $detailsFoire->extra;
-                        $BONUSok = $dOSE['bonus'] == $detailsFoire->bonus;
-                        
-                        $ok |= ( $CMok && $TDok && $TPok && $CTDok && $EXTRAok && $BONUSok );
-                        $p |= $periode == $ecue['semestre'];
-    
-                    }
-    
-                }
-            }
-            if ( ! $pasOSE ){
-                if (count($ecueList) > 1){
-                    $multipleECUE[$enseignement->id] = [
-                        'enseignement' => $enseignement,
-                        'detailsFoire' => $detailsFoire,
-                        'rep' => $rep,
-                    ];
-                    $pasOk = true;
-                }
-                if (!$ok){
-                    $badDetails[$enseignement->id] = [
-                        'enseignement' => $enseignement,
-                        'detailsFoire' => $detailsFoire,
-                        'rep' => $rep,
-                    ];
-                    $pasOk = true;
-                } 
-                if (!$p){
-                    $badPeriod[$enseignement->id] = [
-                        'ecue' => $ecueList[0],
-                        'intitule' => $enseignement->intitule,
-                        'rep' => $rep,
-                    ];
-                    $pasOk = true;
-                }
-                if (!$pasOk){
-                    $okList[] = [
-                        'ecue' => $ecueList[0],
-                        'intitule' => $enseignement->intitule,
-                        'rep' => $rep,
-                    ];
-                }    
-            }
-        }    
-        $app::$cmpl["withJQuery"]=true;
-        $app::$cmpl["withDataTables"]=true;
-
-        echo $app::$viewer->render('admin/verifECUE.html.twig', [
-            'OKL' => $okList, 
-            'HOL' => $horsOSE,
-            'BDL' => $badDetails,
-            'BPL' => $badPeriod,
-            'MEL' => $multipleECUE,
-        ]);
+        throw new \Exception('verif ECUE() est obsolète');
     }
 
     /*
@@ -660,130 +552,8 @@ class AdminController extends \zeroUP\Controllers\AdminController {
     
     */
     public static function verifECUE_old(){
-        $app=\TDS\App::get();
-
-        $ose = new \base\OSE();
-
-        $semestreList = [
-            '1' => 'Semestre 1',
-            '2' => 'Semestre 2', 
-            '3' => 'Annuel',
-            'NULL' => 'NULL',
-        ];
-
-        $okList = [];
-        $horsOSE = [];
-        $horsDetailsOSE = [];
-        $badDetails = [];
-        $badPeriod = [];
-        $multipleECUE = [];
-
-        $enseignementList = array_slice($app::NS('Enseignement')::loadWhere('actif'), 0, 1500);
-
-        foreach($enseignementList as $enseignement){
-            $detailsFoire = $enseignement->enseignement_etudiant_details;
-            $structure = $enseignement->enseignement_structure;
-            $periode = $semestreList[substr($enseignement->enseignement_periode->periode, 1, -1)];
-
-            $ecueList = explode('|', $structure->ecue);
-            $rep = [];
-
-            $pasOk = false;
-            $ok = false;
-            $p = false;
-
-            foreach($ecueList as $codeECUE){
-                $ecue = $ose->findECUE($codeECUE);
-                $pasOSE = is_null($ecue);
-                if ($pasOSE){
-                    $horsOSE[$enseignement->id] = $enseignement;
-                    $pasOk = true;
-                } else {
-                    $detailsOSE = $ose->getDetails($codeECUE);
-                    if (is_null($detailsOSE)){
-                        $horsDetailsOSE[$enseignement->id] = [
-                            'enseignement' => $enseignement,
-                            'ecue' => $ecue,
-                        ];
-                        $pasOk = true;    
-                    } else {
-                        $dOSE = [
-                            'cm' => self::getDetail($detailsOSE['CM']),
-                            'td' => (self::getDetail($detailsOSE['TD']) + self::getDetail($detailsOSE['TD2'])),
-                            'tp' => (self::getDetail($detailsOSE['TP']) + self::getDetail($detailsOSE['TP7'])),
-                            'ctd' => (self::getDetail($detailsOSE['CMTD']) + self::getDetail($detailsOSE['CMTD7'])),
-                            'extra' => (self::getDetail($detailsOSE['PROJET']) + self::getDetail($detailsOSE['MD'])),
-                            'bonus' => (self::getDetail($detailsOSE['FORFAI'])),
-                        ];
-                        
-                        $rep[$codeECUE] = [
-                            'ecue' => $ecue,
-                            'dOSE' => $dOSE,
-                            'detailOSE' => $detailsOSE,
-                        ];
-
-    
-                        $CMok = $dOSE['cm'] == $detailsFoire->cm;
-                        $TDok = $dOSE['td'] == $detailsFoire->td;
-                        $TPok = $dOSE['tp'] == $detailsFoire->tp;
-                        $CTDok = $dOSE['ctd'] == $detailsFoire->ctd;
-                        $EXTRAok = $dOSE['extra'] == $detailsFoire->extra;
-                        $BONUSok = $dOSE['bonus'] == $detailsFoire->bonus;
-                        
-                        $ok |= ( $CMok && $TDok && $TPok && $CTDok && $EXTRAok && $BONUSok );
-                        $p |= $periode == $ecue['semestre'];
-    
-                    }
-    
-                }
-            }
-            if ( ! $pasOSE ){
-                if (count($ecueList) > 1){
-                    $multipleECUE[$enseignement->id] = [
-                        'enseignement' => $enseignement,
-                        'detailsFoire' => $detailsFoire,
-                        'rep' => $rep,
-                    ];
-                    $pasOk = true;
-                }
-                if (!$ok){
-                    $badDetails[$enseignement->id] = [
-                        'enseignement' => $enseignement,
-                        'detailsFoire' => $detailsFoire,
-                        'rep' => $rep,
-                    ];
-                    $pasOk = true;
-                } 
-                if (!$p){
-                    $badPeriod[$enseignement->id] = [
-                        'ecue' => $ecueList[0],
-                        'intitule' => $enseignement->intitule,
-                        'rep' => $rep,
-                    ];
-                    $pasOk = true;
-                }
-                if (!$pasOk){
-                    $okList[] = [
-                        'ecue' => $ecueList[0],
-                        'intitule' => $enseignement->intitule,
-                        'rep' => $rep,
-                    ];
-                }    
-            }
-        }    
-        $app::$cmpl["withJQuery"]=true;
-        $app::$cmpl["withDataTables"]=true;
-
-        echo $app::$viewer->render('admin/verifECUE.html.twig', [
-            'OKL' => $okList, 
-            'HOL' => $horsOSE,
-            'BDL' => $badDetails,
-            'BPL' => $badPeriod,
-            'MEL' => $multipleECUE,
-        ]);
+        throw new \Exception('verif ECUE_old() est obsolète');
     }
-
-
 
 
     public static function vacatairesSansVoeu(){

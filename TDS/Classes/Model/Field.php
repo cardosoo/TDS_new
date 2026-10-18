@@ -68,6 +68,8 @@ class Field {
     protected string $twigName;
     protected bool   $nullable;
     protected string $comment;
+    protected string|int|float|bool $default;
+    protected string $mode;
 
 
     const size = 'size';
@@ -135,7 +137,7 @@ class Field {
         $nullable = $this->nullable ? 'TRUE': 'FALSE';
         $default = in_array($this->type, self::STRING_TYPES)?"'".\addslashes($this->default)."'":"{$this->default}";        
         $type = 'Field::'.self::type[$this->type];
-        $a = "    protected {$this->modelType} \${$this->name} = $default;".( ("" === $this->comment)?"":" // {$this->comment}")."\n";
+        $a = "    protected {$this->modelType} \$" . $this->name . " = $default;".( ("" === $this->comment)?"":" // {$this->comment}")."\n";
         $b = "
         '{$this->name}' => [
             'dbName' => '{$this->dbName}',

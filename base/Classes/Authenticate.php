@@ -5,7 +5,9 @@ use \base\Model\Personne;
 
 class Authenticate extends \base\App {
 
-    protected function forceMoi($id){
+    public object $data; 
+
+    protected function forceMoi(int $id){
         $app = \TDS\App::get();
                 
         $this->data = new \stdClass();

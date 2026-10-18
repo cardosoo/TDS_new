@@ -6,7 +6,7 @@ use stdClass;
 
 class ComposanteController extends \TDS\Controller {
 
-    public static function getOptions($id){
+    public static function getOptions(int $id){
         $app = \TDS\App::get();
 
         $C = $app::load('Composante', $id);
@@ -43,7 +43,7 @@ class ComposanteController extends \TDS\Controller {
 
 
 
-    public static function fiche($id){
+    public static function fiche(int $id){
         $app = \TDS\App::get();
 
         $options = self::getOptions($id);

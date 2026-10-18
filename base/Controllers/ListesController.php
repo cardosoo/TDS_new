@@ -3,7 +3,7 @@ namespace base\Controllers;
 
 class ListesController extends \TDS\Controller {
 
-    public static function foncRef($id){
+    public static function foncRef(int $id){
         $app = \TDS\App::get();
 
         

@@ -1,6 +1,10 @@
 <?php
 namespace base\Controllers;
 
+use base\Model\Enseignement;
+use base\Model\Payeur;
+use base\Model\structure_enseignement;
+use base\Model\TypeUE;
 use Monolog\Logger;
 use Monolog\Level;
 use Monolog\Handler\StreamHandler;
@@ -15,7 +19,7 @@ use ecue_etape;
 use ecue_etapeQuery;
 
 use \Propel\Runtime\ActiveQuery\Criteria;
-
+use zeroU\Model\Personne;
 
 class SuperAdminController extends \TDS\Controller {
 
@@ -96,7 +100,7 @@ class SuperAdminController extends \TDS\Controller {
         echo $app::$viewer->render('admin/searchLDAP.html.twig', ['ldapList' => $rep, 'search' => ['uid' => $uid, 'name' => $name ] ]);
     }
 
-    public static function addFromLDAP($uid){
+    public static function addFromLDAP(string $uid){
         $app = \TDS\App::get();
 
         $ldap = new \TDS\LDAPExtern();
@@ -134,7 +138,7 @@ class SuperAdminController extends \TDS\Controller {
     }
 
 
-    private static function updateOSEFromLDAP($personne){
+    private static function updateOSEFromLDAP(Personne $personne){
         $ldap = new \TDS\LDAPExtern();
         
         $uid = $personne->uid;
@@ -186,17 +190,20 @@ class SuperAdminController extends \TDS\Controller {
     }
 
 
-    public static function getColList($handle, $isUTF8 = true){
+    /**
+     * @param resource $handle Handle de fichier ouvert (ex: fopen)
+     */
+    public static function getColList($handle, bool $isUTF8 = true){
         $tmp = fgetcsv($handle, 0, ";");
         $colList=[];
 
         foreach($tmp as $col){
-            $colList[] = $isUTF8?$col:utf8_encode($col);            
+            $colList[] = $isUTF8?$col:mb_convert_encoding($col, 'UTF-8', 'ISO-8859-1');            
         }
         return $colList;
     }
 
-    public static function float($st){
+    public static function float(string $st){
         return floatval(str_replace(',','.', $st));
     }
 
@@ -419,13 +426,13 @@ class SuperAdminController extends \TDS\Controller {
     }
 
 
-    private static function getSEFromECUECode($ecueCode){
+    private static function getSEFromECUECode(string $ecueCode): ?structure_enseignement{
         $app= \TDS\App::get();
         $structureEnseignementNS = $app::NS("structure_enseignement");
         return $structureEnseignementNS::loadOneWhere("code_ecue = '{$ecueCode}'");
     }
 
-    private static function getEnseignementFromECUECode($ecueCode){
+    private static function getEnseignementFromECUECode(string $ecueCode): ?Enseignement{
         $app= \TDS\App::get();
         $enseignementNS = $app::NS("Enseignement");
         $se = self::getSEFromECUECode($ecueCode);
@@ -434,13 +441,13 @@ class SuperAdminController extends \TDS\Controller {
         return  $enseignementNS::load($se->id);
     }
 
-    private static function getEnseignementFromNUAC($nuac){
+    private static function getEnseignementFromNUAC(string $nuac): ?Enseignement{
         $app= \TDS\App::get();
         $enseignementNS = $app::NS("Enseignement");
         return $enseignementNS::loadOneWhere("nuac = '{$nuac}'");
     }
 
-    private static function getOrCreateTypeUE($typeUE){
+    private static function getOrCreateTypeUE(string $typeUE): ?TypeUE{
         $app= \TDS\App::get();
         $typeUENS = $app::NS("TypeUE");
 //        var_dump($typeUE);
@@ -459,14 +466,14 @@ class SuperAdminController extends \TDS\Controller {
             $tUE->actif = true;
             $tUE->nom = $typeUE;
             $tUE->save();
-//            var_dump($tUE);
+//            var_dump($tUE);$voeuList
             self::$typeUEList[] = $tUE;
             $rep = $tUE;
         }
         return $rep;
     }
 
-    private static function getOrCreatePayeur($payeur){
+    private static function getOrCreatePayeur(string $payeur): Payeur{
         $app= \TDS\App::get();
         $payeurNS = $app::NS("Payeur");
         
@@ -488,7 +495,8 @@ class SuperAdminController extends \TDS\Controller {
         return $rep;
     }
 
-    private static function chooseOneInList($voeuList, $who){
+
+    private static function chooseOneInList(array $voeuList, string $who){
         if (empty($who)) return null;
 
         $words = preg_split("/[\s.-]+/", $who); // permet de séparer en mots  (en coupant sur les séparateurs classiques, mais aussi les . et les -)
@@ -510,7 +518,7 @@ class SuperAdminController extends \TDS\Controller {
         return null;
     }
 
-    private static function getResponsableUEList($enseignement, $responsableUEList){
+    private static function getResponsableUEList(Enseignement $enseignement, array $responsableUEList){
         $rep = [];
         foreach($responsableUEList as $responsableUE){
             $tmp = self::chooseOneInList($enseignement->voeuList, $responsableUE);
@@ -583,25 +591,17 @@ class SuperAdminController extends \TDS\Controller {
                 }
 
                 $typeUE = self::getOrCreateTypeUE($typeUE);
-/*
-                var_dump([
-                    'codeECUE' => $codeECUE,
-                    'enseignement' => $enseignement,
-                    'typeue' => $typeUE,
-                ]);
-*/
+
                 if (!is_null($typeUE)){
-                    $enseignement->typeue = $typeUE->id;
+                    $enseignement->__typeue = $typeUE->id;
                 }
                 
                 $payeur = self::getOrCreatePayeur($payeur);
                 if (!is_null($payeur)){
-                    $enseignement->payeur = $payeur->id;
+                    $enseignement->__payeur = $payeur->id;
                 }
                 $enseignement->save();
-//                var_dump($enseignement->intitule);
                 $responsableUEList = self::getResponsableUEList($enseignement, $responsableUEList);
-//                var_dump($responsableUEList);                
                 foreach($responsableUEList as $voeu){
                     $voeu->correspondant = true;
                     $voeu->save();

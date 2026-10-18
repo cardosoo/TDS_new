@@ -4,7 +4,7 @@ namespace zeroUP\Controllers;
 
 class ExternController extends \TDS\Controller {
 
-    public static function caslogin($service, $uri){
+    public static function caslogin(string $service, string $uri){
         $app = \TDS\App::get();
         $appName = $app::$appName;
 
@@ -37,7 +37,7 @@ class ExternController extends \TDS\Controller {
         exit();
     }
 
-    public static function caslogout($service){
+    public static function caslogout(string $service){
         \phpCAS::setLogger();
         \phpCAS::client(CAS_VERSION_2_0, 'auth.u-paris.fr', 443, '/idp/profile/cas/', 'https://foire.physique.u-paris.fr');
         \phpCAS::setNoCasServerValidation();
@@ -47,19 +47,10 @@ class ExternController extends \TDS\Controller {
     }
 
 
-    public static function ldapsearch($search){
+    public static function ldapsearch(string $search){        
+        $app = \TDS\App::get();
 
-        define ("LDAP_HOST","ldaps://ldap75.u-paris.fr");                  // serveur ldap utilisé par l'application
-        define ("LDAP_PORT","636");                                        // port ldap utilisé par l'application
-        define ("BASE_DN","dc=u-paris,dc=fr");                             // suffixe commun (dn de base)
-        define ("DATASPATH","ou=people,".BASE_DN);                         // chemin d'acces aux données
-        define ("SELECTPATH",DATASPATH);                                   // chemin d'accès utilisé par MultiSelect
-        define ("PASS_ADMIN","cn=jupy-physique,ou=apps,dc=u-paris,dc=fr"); // dn administrateur des passwords
-        define ("PASS_PASS","rovolae9Xa");                                 // mot de passe administrateur des passwords
-        
-        
-        // var_dump($search);
-        $ldap = ldap_connect("".LDAP_HOST.":". LDAP_PORT);
+        $ldap = ldap_connect("".$app::$list["LDAP_HOST"].":". $app::$list["LDAP_PORT"]);
         if (!$ldap) {
             if (session_id() != "") {
                 session_destroy();
@@ -69,7 +60,7 @@ class ExternController extends \TDS\Controller {
         }
         
         ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
-        $r = ldap_bind($ldap, PASS_ADMIN, PASS_PASS);
+        $r = ldap_bind($ldap, $app::$list["PASS_ADMIN"], $app::$list["PASS_PASS"]);
         if (!$r) {
             die(ldap_error($ldap) . " while binding");
             if (session_id() != "") {
@@ -82,11 +73,11 @@ class ExternController extends \TDS\Controller {
         $search = json_decode(hex2bin($search), true);
 
         if (is_array($search)){
-            @$sr = ldap_list($ldap, DATASPATH, $search['filter'], $search['attributes'], 0, $search['limit']);
+            @$sr = ldap_list($ldap, $app::$list["DATASPATH"], $search['filter'], $search['attributes'], 0, $search['limit']);
             $info = ldap_get_entries($ldap, $sr);
             echo(json_encode($info));
         } else {
-            $sr = ldap_search($ldap, DATASPATH, $search);
+            $sr = ldap_search($ldap, $app::$list["DATASPATH"], $search);
             $info = ldap_get_entries($ldap, $sr);
             echo(json_encode($info));
         }

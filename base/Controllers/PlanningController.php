@@ -4,7 +4,7 @@ namespace base\Controllers;
 use base\Struct;
 use stdClass;
 
-function p($num){
+function p(string $num){
     return str_replace(".",",",$num);
 }
 
@@ -87,7 +87,7 @@ class PlanningController extends \TDS\Controller {
     */
 
 
-    public static function echoDetails($g, $s, $d, $n){
+    public static function echoDetails(string $g, string $s, string $d, string $n){
         echo ('"'.str_replace('.', ',', $g).'", ');
         echo ('"'.str_replace('.', ',', $s).'", ');
         echo ('"'.str_replace('.', ',', $d).'", ');
@@ -173,7 +173,10 @@ class PlanningController extends \TDS\Controller {
         }
     }
 */
-    private static function extractEtapeList($enseignementList){
+    /**
+     * @param array<string, mixed>[] $enseignementList
+     */
+    private static function extractEtapeList(array $enseignementList){
         $app = \TDS\App::get();
 
 
@@ -187,7 +190,7 @@ class PlanningController extends \TDS\Controller {
         return $etapeList;
     }
 
-    private static function getNbEtuECUE($code){
+    private static function getNbEtuECUE(string $code){
         $app = \TDS\App::get();
         $ldap = new \TDS\LDAPExtern();
 
@@ -195,7 +198,7 @@ class PlanningController extends \TDS\Controller {
         return $liste->count;
     }
 
-    private static function getNbEtuEtape($code){
+    private static function getNbEtuEtape(string $code){
         $app = \TDS\App::get();
         $ldap = new \TDS\LDAPExtern();
 
@@ -203,7 +206,7 @@ class PlanningController extends \TDS\Controller {
         return $liste->count;
     }
 
-    private static function getNbEtuEtapeECUE($codeEtape, $codeECUE){
+    private static function getNbEtuEtapeECUE(string $codeEtape, string $codeECUE){
         $app = \TDS\App::get();
         $ldap = new \TDS\LDAPExtern();
 
@@ -212,7 +215,11 @@ class PlanningController extends \TDS\Controller {
         return $liste->count;
     }
 
-    private static function prepareDetailsList($enseignementList, $etapeList){
+    /**
+     * @param array<string, mixed>[] $enseignementList
+     * @param array $etapeList_inutile
+    */
+    private static function prepareDetailsList(array $enseignementList, array $etapeList_inutile){
         $app = \TDS\App::get();
         
         $ldap = new \TDS\LDAPExtern();
@@ -272,7 +279,7 @@ class PlanningController extends \TDS\Controller {
         return $detailsList;
     }
 
-    private static function getEnseignementListForDetails($cursusName, $structureName, $periode){
+    private static function getEnseignementListForDetails(string $cursusName, string $structureName, string $periode){
         $app = \TDS\App::get();
 
 
@@ -316,7 +323,7 @@ class PlanningController extends \TDS\Controller {
         return $enseignementList;
     }
  
-    public static function detailsAPI($cursus, $composante, $periode, $serie=0){
+    public static function detailsAPI(string $cursus, string $composante, string $periode, int $serie=0){
         $app = \TDS\App::get();
         /*
         var_dump([

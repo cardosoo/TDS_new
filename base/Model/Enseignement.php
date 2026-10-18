@@ -17,7 +17,7 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
     public $structEtapeList = null;
 
 
-    protected static function getFilterString($key, $value){
+    protected static function getFilterString(string $key, mixed $value): string {
         if (is_array($value)) {
             return self::getFilterStringFromArray($key, $value);
         } else {
@@ -25,7 +25,7 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
         }
     }
     
-    protected static function getFilterStringFromString($key, $value){
+    protected static function getFilterStringFromString(string $key, string $value): string {
         $v = (int)$value;
         if ($v>0){
             return "AND SE.{$key} = {$value}";
@@ -34,7 +34,7 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
         } 
     }
     
-    protected static function getFilterStringFromArray($key, $value){
+    protected static function getFilterStringFromArray(string $key, array $value):string {
         $filterArray = "";
         foreach($value as $val){
             $v = (int)$val;
@@ -50,11 +50,12 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
             }
             return $filterArray;
         }
+        return "";
     }
 
 
     //protected static function getModaliteSelector($modalite, $withSousEffectif, $nonPrioritaire){
-     protected static function getModaliteSelector($modalite, $with){
+     protected static function getModaliteSelector(?array $modalite, object $with): string {
          if (is_null($modalite)){
             $modalite=[0];
         }
@@ -101,21 +102,6 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
         return $selector;
     }
 
-/*
-    protected static function complement1Search(){
-        return "
-        round(ENS.cm*100)/100 as mCM,
-        round(ENS.ctd*100)/100 as mCTD,
-        round(ENS.td*100)/100 as mTD,
-        round(ENS.tp*100)/100 as mTP,
-        round(ENS.bonus)/100 as mBonus
-        ";
-    }
-    protected static function complement2Search(){
-        return "
-        ";
-    }
-*/    
     public function canEdit(){
         $app = \TDS\App::get();
 
@@ -124,13 +110,12 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
     }
 
 // c'est la version qui allait bien avec searchMoodle
-    public static function getIdList($codeList, $modalite, $with){
+    public static function getIdList(array $codeList, array $modalite, object $with){
         $app = \TDS\App::get();
 
         $codeJoin = join("|", $codeList);
 
         $where = "string_to_array(code,'|')::text[] && string_to_array('{$codeJoin}','|')::text[]";
-        //$selectorModalite = self::getModaliteSelector($modalite, $with->withSousEffectif, $with->nonPrioritaire);        
         $selectorModalite = self::getModaliteSelector($modalite, $with);        
 
 
@@ -167,7 +152,7 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
      * - modalités CM/CMTD/TD/TP
      * - actif (il faut que le actif soit dans $with)
      */
-    public static function getIdCodeVarianteList($searchString, $modalite, $with){
+    public static function getIdCodeVarianteList(string $searchString, ?array $modalite, object $with){
         $app = \TDS\App::get();
 
         $structNSC = $app::NSC('Struct');
@@ -337,25 +322,22 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
      * @param string $searchString
      * @param array $selectors
      * @param array $modalite
-     * @param array $with 
+     * @param object $with 
      * @return array
      *
      * Version qui permet de faire la recherche directement sur la base de données 
      * puis filtre en utilisant les données issues de Moodle !
     */
-    public static function search(string $searchString, $selectors, $modalite,  $with){ 
+    public static function search(string $searchString, array $selectors, ?array $modalite,  object $with): array{ 
         $app = \TDS\App::get();
 
         $structNSC = $app::NSC('Struct');
         $struct = new $structNSC();
 
         $idCodeVarianteList = static::getIdCodeVarianteList($searchString, $modalite, $with);
-//var_dump(['searchString' => $searchString, 'modalite' => $modalite, 'with' => $with, 'idCodeVarianteList' => $idCodeVarianteList]);
 
         $filter = $struct->buildFilterFromSelectors($selectors);
-// var_dump(['selectors' => $selectors, 'filter' => $filter]);        
         $idCodeVarianteList = $struct->filterIdCodeList($filter, $idCodeVarianteList);
-//var_dump(['filter' => $filter, 'idCodeVarianteList' => $idCodeVarianteList]);
         $retList = [];
         foreach($idCodeVarianteList as $idCodeVariante){
             if (isset($idCodeVariante['id'])){

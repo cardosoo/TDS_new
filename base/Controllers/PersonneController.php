@@ -24,7 +24,7 @@ class PersonneController extends \TDS\Controller {
     ];
 
 
-    public static function getOptions($id){
+    public static function getOptions(int $id){
         $app = \TDS\App::get();
         $P = $app::load('Personne', $id);
         $P->voeuList;
@@ -151,7 +151,7 @@ class PersonneController extends \TDS\Controller {
     }
 
 
-    public static function fiche($id){
+    public static function fiche(int $id){
         $app = \TDS\App::get();
 
         $options = self::getOptions($id);
@@ -166,7 +166,7 @@ class PersonneController extends \TDS\Controller {
         echo $app::$viewer->render("personne/fiche.html.twig", $options);
     }
 
-    public static function historique($id, $year){
+    public static function historique(int $id, string $year){
         $app = \TDS\App::get();
 
        $baseName = $app::$appName."{$year}";
@@ -192,7 +192,7 @@ class PersonneController extends \TDS\Controller {
     }
 
 
-    private static function getHistoryBefore2019($id, $year){
+    private static function getHistoryBefore2019(int $id, string $year){
         $app = \TDS\App::get();
 
         $baseName = $app::$appName."{$year}";
@@ -329,7 +329,7 @@ class PersonneController extends \TDS\Controller {
     // renvoi les éventuels éléments du référentiel
     // renvoi le statut avec les obligations
     // cette version est en cours de modification pour prendre en compte la nouvelle structure des enseignements
-    private static function getActualHistory($id, $year){
+    private static function getActualHistory(int $id, string $year){
         $app = \TDS\App::get();
 
         $baseName = $app::$appName."{$year}";
@@ -457,7 +457,7 @@ class PersonneController extends \TDS\Controller {
         ];
     } 
 
-    public static function historiqueComplet($id){
+    public static function historiqueComplet(int $id){
         $app = \TDS\App::get();
 
         $P = $app::NS('Personne')::load($id);   
@@ -483,7 +483,7 @@ class PersonneController extends \TDS\Controller {
        echo $app::$viewer->render('personne/historiqueComplet.html.twig', ['P' => $P, 'HL' => $history ]);
     }
 
-    public static function edit($id){
+    public static function edit(int $id){
         $app = \TDS\App::get();
 
         $personne = $app::NS('Personne')::load($id);   
@@ -518,7 +518,7 @@ class PersonneController extends \TDS\Controller {
         echo "success";
     }
 
-    public static function saveDetails($id){
+    public static function saveDetails(int $id){
         $app = \TDS\App::get();
 
         $P = $app::NS('Personne')::load($id);   
@@ -686,7 +686,7 @@ class PersonneController extends \TDS\Controller {
     }
 
 
-    public static function saveStages($id){
+    public static function saveStages(int $id){
         $app = \TDS\App::get();
         $SL = $app::NS('personne_foncRef')::loadWhere("actif and foncref = 4 and personne = {$id}");
 

@@ -199,7 +199,8 @@ class APIController extends \TDS\Controller {
      * Un pré-traitement est nécessaire pour prendre en compte les 2 situations suivantes :
      * - enseignement avec 2 codes ECUE (il faut en choisir un seul - tourjous le même. Le premier ?)
      * - participation à plusieurs enseignements différents qui partagent le même code ECUE. Il faut faire une somme dessus 
-     *
+     * - on ajoute dans las sortie l'intitulé et le niveau de l'enseignement afin de pouvoir le renseigner dans OSE.
+     * 
      * @param string $year l'année à prendre en compte
      * @param string $code le code SIHAM de la personne
      * @return void 
@@ -210,6 +211,10 @@ class APIController extends \TDS\Controller {
         $baseName = $app::$appName."{$year}";
         $db = new \TDS\Database($baseName, $app::$baseUser, $app::$basePwd, 'localhost' );
         pg_set_client_encoding($db->conn, "UNICODE");
+
+        $structNSC = $app::NSC('Struct');
+        $struct = new $structNSC($year);
+        
 
         $list = $db->getAll("
         SELECT
@@ -231,13 +236,25 @@ class APIController extends \TDS\Controller {
         AND P.ose = '{$code}' 
         ORDER BY P.nom, P.prenom
         ");
-
+        
         $list2 = [];
         foreach($list as $elm){
             $elm->code = explode('|', $elm->code)[0]; // pré-traitement de : enseignement avec 2 codes ECUE 
-            
+                        
             if (! isset($list2[$elm->code])){
                 $list2[$elm->code] = $elm;
+
+                $ecue = $struct->getECUEByCode($elm->code);
+                if (is_null($ecue)){
+                    $list2[$elm->code]->etape = "";
+                    $list2[$elm->code]->nomEtape = "";
+                    $list2[$elm->code]->niveau = "";
+                } else {
+                    $etape = $ecue->getEtape();
+                    $list2[$elm->code]->etape = $etape->getCode();
+                    $list2[$elm->code]->nomEtape = $etape->getNom();
+                    $list2[$elm->code]->niveau = $ecue->getCursusName();
+                }
             } else{
                 $list2[$elm->code]->id .= "|".$elm->id;
                 $list2[$elm->code]->cm += $elm->cm;
@@ -251,11 +268,32 @@ class APIController extends \TDS\Controller {
 
 
         echo date("'d/m/Y\t'H:i:s")."\n";
-        echo "voeuId\tcodeECUE\tCM\tCMTD\tTD\tTP\tEXTRA\tBONUS\n";
+        echo "voeuId\tcodeECUE\tCM\tCMTD\tTD\tTP\tEXTRA\tBONUS\tniveau\tetape\tnomEtape\n";
         foreach($list2 as $elm){
-            echo "{$elm->id}\t{$elm->code}\t{$elm->cm}\t{$elm->ctd}\t{$elm->td}\t{$elm->tp}\t{$elm->extra}\t{$elm->bonus}\n";
+            echo "{$elm->id}\t{$elm->code}\t{$elm->cm}\t{$elm->ctd}\t{$elm->td}\t{$elm->tp}\t{$elm->extra}\t{$elm->bonus}\t{$elm->niveau}\t{$elm->etape}\t{$elm->nomEtape}\n";
         }
 
+    }
+
+    public static function getEcueInfo(string $year, string $code){
+        $app = \TDS\App::get();
+
+        $structNSC = $app::NSC('Struct');
+        $struct = new $structNSC($year);
+
+
+        $ecue = $struct->getECUEByCode($code);
+        $etape = $ecue->getEtape();
+        $periode = $ecue->getPeriodeName();
+        $cursus = $ecue->getCursusName();
+
+
+        echo json_encode([
+            'code' => $code,
+            'nom' => $ecue->getNom(),
+            'etape' => $etape->getCode(),
+            'niveau' => $cursus,     
+        ]);
     }
 
 
@@ -288,34 +326,6 @@ class APIController extends \TDS\Controller {
         }
 
     }
-
-    /* version d'avant le 5 avril 2025, je ne sais pas à quoi elle est utilisée ?
-    public static function activeFoncRef($year){
-        $app = \TDS\App::get();
-
-        $baseName = $app::$appName."{$year}";
-        $db = new \TDS\Database($baseName, $app::$baseUser, $app::$basePwd, 'localhost' );
-        pg_set_client_encoding($db->conn, "UNICODE");
-
-        $foncRefList = $db-> getAll("
-            SELECT DISTINCT
-                FR.id,
-                FR.intitule,
-                R.code
-            FROM FoncRef as FR
-            LEFT JOIN Referentiel as R on FR.referentiel = R.id
-            WHERE FR.actif AND FR.id>0
-            ORDER BY R.code, FR.intitule
-        ");
-
-        echo date("'d/m/Y\t'H:i:s")."\n";
-        echo "id_foncref\tintitule\tcode\n";
-        foreach($foncRefList as $FR){
-            echo "{$FR->id}\t{$FR->intitule}\t{$FR->code}\n";
-        }
-    }
-    */
-
 
     public static function activeFoncRef(string $year){
         $app = \TDS\App::get();

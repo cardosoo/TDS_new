@@ -17,7 +17,8 @@ use \Twig\RuntimeLoader\RuntimeLoaderInterface;
 
 class Viewer {
 
-    public $load;
+    // public $load;
+    public FilesystemLoader $loader;
     public Environment $twig;
     private bool $output = true;
 
@@ -45,7 +46,7 @@ class Viewer {
         
         $this->twig->getExtension(CoreExtension::class)->setNumberFormat(2, ',', '');
         
-        $this->twig->addFilter(new TwigFilter('u8', 'utf8_encode'));
+        $this->twig->addFilter(new TwigFilter('u8', fn($s) => mb_convert_encoding($s, 'UTF-8', 'ISO-8859-1')));
         $this->twig->addFilter(new TwigFilter('f2', '\TDS\Utils::fNombre'));
         $this->twig->addFilter(new TwigFilter('e2', '\TDS\Utils::eNombre'));
         $this->twig->addFilter(new TwigFilter('json_decode', '\TDS\Utils::json_decode'));

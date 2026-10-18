@@ -126,6 +126,7 @@ SELECT
     COALESCE((SELECT E2.id FROM s_etape E2 WHERE E2.code = TRIM(SUBSTR(UE."UE Mutualisée" || CHAR(10), 1, INSTR(UE."UE Mutualisée" || CHAR(10), CHAR(10)) - 1)) LIMIT 1), 0) as etape_id,
     UE."UE Libellé" as ose_nom,
     0 as effectif,
+    /*
     json_object(
         'CM', COALESCE(UE."CM", 0),
         'TD', COALESCE(UE."TD", 0),
@@ -133,10 +134,18 @@ SELECT
         'PT', COALESCE(UE."PT", 0),
         'AA', COALESCE(UE."AA", 0),
         'Projet', COALESCE(UE."Projet", 0)
-    ) as besoins
+    ) as besoins */
+    json_object(
+
+        'CM', json_object('coeffTypeHeure', 1.5, 'heures', COALESCE(UE."CM", 0), 'nbEtudiant', 0),
+        'TD', json_object('coeffTypeHeure', 1, 'heures', COALESCE(UE."TD", 0), 'nbEtudiant', 0),
+        'TP', json_object('coeffTypeHeure', 1, 'heures', COALESCE(UE."TP", 0), 'nbEtudiant', 0),
+        'PT', json_object('coeffTypeHeure', 1, 'heures', COALESCE(UE."PT", 0), 'nbEtudiant', 0),
+        'AA', json_object('coeffTypeHeure', 1, 'heures', COALESCE(UE."AA", 0), 'nbEtudiant', 0),
+        'Projet', json_object('coeffTypeHeure', 1, 'heures', COALESCE(UE."Projet", 0), 'nbEtudiant', 0)
+    ) as besoins    
 FROM UE as UE
-/* WHERE UE."UE dispensée" = "OUI" */;
-    
+/* WHERE UE."UE dispensée" = "OUI" */;    
 SQL );
 
         $this->pdo->exec("ALTER TABLE s_ecue ADD COLUMN search TEXT");
@@ -144,7 +153,6 @@ SQL );
         $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $update = $this->pdo->prepare("UPDATE s_ecue SET search = ? WHERE id = ?");
         foreach ($rows as $row) {
-            // Concaténer les colonnes (adaptez selon vos besoins)
             $concatenated = $row['code'] . $row['nom'] . $row['nom'];
             $searchValue = $this->app::normalizeText($concatenated);
             $update->execute([$searchValue, $row['id']]);

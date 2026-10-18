@@ -6,7 +6,7 @@ use \TDS\Model\Field;
 /*
 * This file is auto-generated and should not be changed by hand.
 * filename : _FoncRef_.php
-* created : Mon, 06 Apr 2026 11:00:33 +0200 UTC
+* created : Sun, 18 Oct 2026 15:51:00 +0000 UTC
 */ 
 
 interface _FoncRef_interface_ {

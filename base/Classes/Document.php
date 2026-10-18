@@ -35,7 +35,7 @@ class Document extends \TDS\Document {
         return $this->fName;
     }
 
-    public function rename($newTitle){
+    public function rename(string $newTitle){
         $app = App::get();
         $dir = $this->documentPath();
         $filename = "{$newTitle}.{$this->ext}";

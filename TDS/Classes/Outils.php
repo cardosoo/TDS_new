@@ -90,7 +90,7 @@ class Outils {
     
     static public function toUTF8($elm){
         if (is_string($elm)){
-            return utf8_encode ($elm);;
+            return mb_convert_encoding($elm, 'UTF-8', 'ISO-8859-1');
         }
         if (is_array($elm)){
             return self::toUTF8Array($elm);
@@ -120,7 +120,7 @@ class Outils {
     
     static public function fromUTF8($elm){
         if (is_string($elm)){
-            return utf8_decode ($elm);;
+            return mb_convert_encoding($elm, 'ISO-8859-1', 'UTF-8');
         }
         if (is_array($elm)){
             return self::fromUTF8Array($elm);

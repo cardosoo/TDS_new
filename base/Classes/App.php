@@ -16,8 +16,7 @@ class App extends \zeroUP\App {
     static string $mailerPassword = "";
     static string $vacationYear = "";
     
-    
-    public static function loadFromUid($uid){
+    public static function loadFromUid(string $uid){
         $app = \TDS\App::get();
         return $app::call('Personne', 'loadOneWhere',["uid = '{$uid}'"]);
     }
@@ -26,33 +25,33 @@ class App extends \zeroUP\App {
         parent::setPermission();
     }
 
-    public static function getPersonne($id){
+    public static function getPersonne(int $id){
         $app = \TDS\App::get();
 
         return $app::NS('Personne')::load($id);
     }
-
-    public static function getEnseignement($id){
+    
+    public static function getEnseignement(int $id){
         $app = \TDS\App::get();
 
         return $app::NS('Enseignement')::load($id);
     }
 
-    public static function getEnseignementList($code){
+    public static function getEnseignementList(string $code){
         $app = \TDS\App::get();
 
         return $app::NS('Enseignement')::loadWhere("actif and code LIKE '%{$code}%'");
     }
     
 
-    public static function getVoeu($id){
+    public static function getVoeu(int $id){
         $app = \TDS\App::get();
 
         return $app::NS('Voeu')::load($id);
     }
 
 
-    public static function getRoleList($personne){
+    public static function getRoleList(\base\Model\Personne $personne){
         $app = \TDS\App::get();
 
         $roleList = [];
@@ -67,7 +66,7 @@ class App extends \zeroUP\App {
         return $roleList;
     }
 
-    public  static function rrmdir($src): bool {
+    public  static function rrmdir(string $src): bool {
         $dir = opendir($src);
         $return = true;
         while(false !== ( $file = readdir($dir)) ) {

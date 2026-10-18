@@ -73,7 +73,7 @@ Bien à vous,<br>
     }
 
 
-    private static function input($var, $filter = FILTER_SANITIZE_FULL_SPECIAL_CHARS){
+    private static function input(string $var, int $filter = FILTER_SANITIZE_FULL_SPECIAL_CHARS){
         $tmp = filter_input(INPUT_POST, $var, $filter);
         return str_replace("&#039;", "'", html_entity_decode($tmp));
     } 
@@ -149,7 +149,7 @@ Bien à vous,<br>
     }
 
 
-    public static function getDocumentList($uid){
+    public static function getDocumentList(string $uid){
 
         $dir = self::getDir($uid)."/Docs/*";
         $glob = glob($dir);
@@ -173,7 +173,7 @@ Bien à vous,<br>
     }
 
 
-    public static function docUpload($uid){
+    public static function docUpload(string $uid){
         $app = \TDS\App::get();
 
         if (! isset($_FILES['file'])){
@@ -228,7 +228,7 @@ Bien à vous,<br>
     }
 
     //public static function getDoc($uid, $filename){
-    public static function getDoc($hex){
+    public static function getDoc(string $hex){
         $app = \TDS\App::get();
 
         $doc = $app::simpleDecrypt($hex);
@@ -236,7 +236,7 @@ Bien à vous,<br>
         $document->download();
     }
 
-    public static function renameDoc($hex){
+    public static function renameDoc(string $hex){
         $app = \TDS\App::get();
 
         $doc = $app::simpleDecrypt($hex);
@@ -246,7 +246,7 @@ Bien à vous,<br>
         echo $document->getDocDownloadURL();
     }
 
-    public static function deleteDoc($hex){
+    public static function deleteDoc(string $hex){
         $app = \TDS\App::get();
 
         $doc = $app::simpleDecrypt($hex);

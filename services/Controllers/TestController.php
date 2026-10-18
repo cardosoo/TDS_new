@@ -254,7 +254,7 @@ SQL);
 
         // $importer->createStatuts();
         // $importer->createPersonnes();
-        $importer->createEnseignement();
+        // $importer->createEnseignement();
         $importer->createVoeuxAndPanier();
 
     }

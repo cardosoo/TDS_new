@@ -6,7 +6,7 @@ use \TDS\Model\Field;
 /*
 * This file is auto-generated and should not be changed by hand.
 * filename : _voeu_personne_bilan_.php
-* created : Mon, 06 Apr 2026 10:58:56 +0200 UTC
+* created : Sun, 18 Oct 2026 15:51:00 +0000 UTC
 */ 
 
 interface _voeu_personne_bilan_interface_ {

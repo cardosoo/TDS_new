@@ -5,8 +5,11 @@
 {% set besoins = ecue.getBesoins()|json_decode(true) %}
 {% set charge = [] %}
 
+
 {% for type in besoins|keys|sort %}
-    {% set charge = charge|merge([besoins[type].heures ~ 'h ' ~ type] ) %} 
+    {% if besoins[type].heures != 0 %}
+    {% set charge = charge|merge([besoins[type].heures ~ 'h ' ~ type] ) %}
+    {% endif %} 
 {% endfor %}
 
 {% set charge = charge|join(", ", " et ")%}

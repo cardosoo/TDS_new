@@ -34,8 +34,9 @@ use \Propel\Runtime\ActiveQuery\Criteria;
 class StructureController extends \TDS\Controller {
 
     public static function home(){
-        $app = \TDS\App::get();   
-        $struct = new \base\Struct(); 
+        $app = \TDS\App::get();
+        $structNSC = $app::NSC('Struct');
+        $struct = new $structNSC();
 
         $structureList = $struct->getStructureList();
 
@@ -43,9 +44,10 @@ class StructureController extends \TDS\Controller {
         echo $app::$viewer->render('structure/home.html.twig', ['structureList' => $structureList]);
     }
 
-    public static function structure($nom){
+    public static function structure(string $nom){
         $app = \TDS\App::get();
-        $struct = new \base\Struct();
+        $structNSC = $app::NSC('Struct');
+        $struct = new $structNSC();
 
         $nom = urldecode($nom); 
         $structure = $struct->getStructureByNom($nom);
@@ -56,7 +58,8 @@ class StructureController extends \TDS\Controller {
 
     public static function etape(string $code){
         $app = \TDS\App::get();
-        $struct = new \base\Struct();
+        $structNSC = $app::NSC('Struct');
+        $struct = new $structNSC();
 
         $etape = $struct->getEtapeByCode($code);
         $ecueList = $etape->getEcueList();
@@ -73,7 +76,8 @@ class StructureController extends \TDS\Controller {
 
     public static function ecue(string $code){
         $app = \TDS\App::get();
-        $struct = new \base\Struct();
+        $structNSC = $app::NSC('Struct');
+        $struct = new $structNSC();
 
         $ecue = $struct->getECUEByCode($code);
         
@@ -81,17 +85,18 @@ class StructureController extends \TDS\Controller {
         echo $app::$viewer->render('structure/ecue.html.twig', ['ecue' => $ecue]);
     }
 
+
     public static function addEnseignement(string $code){
         $app = \TDS\App::get();
-        $struct = new \base\Struct();
+        $structNSC = $app::NSC('Struct');
+        $struct = new $structNSC();
 
 
-
-        if (strlen($code)!=8){
-            $app::$pub->warning[] = "Cela ne ressemble pas à un code ECUE";
+        if ($struct->checkCodeFormat($code)){
             $app::$router->redirect("/{$app::$appName}/structure/ecue/{$code}");
             exit();
         }
+
         $ecue = $struct->getECUEByCode($code);
         if (is_null($ecue)){
             $app::$pub->warning[] = "Ce code ECUE ne fait pas partie de la structure des enseignements répertoriées";
@@ -140,7 +145,8 @@ class StructureController extends \TDS\Controller {
     public static function importExtraction(){
         $app = \TDS\App::get();
 
-        $struct = new \base\Struct($app::$currentYear);
+        $structNSC = $app::NSC('Struct');
+        $struct = new $structNSC($app::$currentYear);
         $struct->importExtraction();
 
         var_dump("L'importation de l'extraction {$app::$currentYear} est terminée.");
@@ -149,7 +155,8 @@ class StructureController extends \TDS\Controller {
     public static function importMutualisation(){
         $app = \TDS\App::get();
 
-        $struct = new \base\Struct($app::$currentYear);
+        $structNSC = $app::NSC('Struct');
+        $struct = new $structNSC($app::$currentYear);
         $struct->importMutualisation();
 
         var_dump("L'importation de la mutualisation {$app::$currentYear} est terminée.");
@@ -158,7 +165,8 @@ class StructureController extends \TDS\Controller {
     public static function importAjout(){
         $app = \TDS\App::get();
 
-        $struct = new \base\Struct($app::$currentYear);
+        $structNSC = $app::NSC('Struct');
+        $struct = new $structNSC($app::$currentYear);
         $struct->importAjout();
 
         var_dump("L'importation de l'ajout {$app::$currentYear} est terminée.");
@@ -167,7 +175,8 @@ class StructureController extends \TDS\Controller {
     public static function correctionEtape(){
         $app = \TDS\App::get();
 
-        $struct = new \base\Struct($app::$currentYear);
+        $structNSC = $app::NSC('Struct');
+        $struct = new $structNSC($app::$currentYear);
         $struct->correctionEtape();
 
         var_dump("La correction des étapes  {$app::$currentYear} est terminée.");

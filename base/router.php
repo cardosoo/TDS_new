@@ -36,6 +36,8 @@ $app::$router->routeList['public']['api']['allEcueOSE']= new Route('GET','/api/a
 $app::$router->routeList['public']['api']['activeUserList']= new Route('GET','/api/activeUserList/[i:year]', 'APIController::activeUserList', 'api_activeUserList');
 $app::$router->routeList['public']['api']['activeTeachingList']= new Route('GET','/api/activeTeachingList/[i:year]', 'APIController::activeTeachingList', 'api_activeTeachingList');
 
+$app::$router->routeList['public']['api']['getEcueInfo']= new Route('GET','/api/getEcueInfo/[i:year]/[a:code]', 'APIController::getEcueInfo', 'api_getEcueInfo');
+
 $app::$router->routeList['public']['api']['activeFoncRef']= new Route('GET','/api/activeFoncRef/[i:year]', 'APIController::activeFoncRef', 'api_activeFoncRef');
 $app::$router->routeList['public']['api']['listingUserFoncRef']= new Route('GET','/api/listingUserFoncRef/[i:year]', 'APIController::listingUserFoncRef', 'api_listingUserFoncRef');
 $app::$router->routeList['public']['api']['listingUserFoncRefWithStages']= new Route('GET','/api/listingUserFoncRefWithStages/[i:year]', 'APIController::listingUserFoncRefWithStages', 'api_listingUserFoncRefWithstages');
@@ -53,7 +55,6 @@ $app::$router->routeList['public']['api']['structOSEEcue']= new Route('GET','/ap
 
 $app::$router->routeList['private']['Admin'][]= new Route('POST|GET','/api/test1', 'APIController::test1', 'api_test1');
 $app::$router->routeList['public']['api'][]= new Route('POST|GET','/api/getCurrentYear', 'APIController::getCurrentYear', 'api_getCurrentYear');
-
 
 
 $app::$router->routeList['private']['personne'] = [

@@ -6,7 +6,7 @@ use \TDS\Model\Field;
 /*
 * This file is auto-generated and should not be changed by hand.
 * filename : _Enseignement_.php
-* created : Thu, 26 Mar 2026 16:11:45 +0100 UTC
+* created : Sun, 18 Oct 2026 15:51:01 +0000 UTC
 */ 
 
 interface _Enseignement_interface_ {
@@ -19,7 +19,7 @@ interface _Enseignement_interface_ {
   3 => 'code',
 );
     const GENERIC = array (
-  0 => 'nuac',
+  0 => 'code',
   1 => 'nom',
 );
     const ORDER = NULL;

@@ -2,6 +2,7 @@
 
 namespace base\Controllers;
 
+use Exception;
 use stdClass;
 use TDS\Historique;
 
@@ -139,6 +140,8 @@ class GestionnaireController extends \TDS\Controller {
     }
 
     public static function repartitionParNiveau() {
+        throw new \Exception('repartitionParNiveau() est obsolète');
+
         $app = \TDS\App::get();
 
         $enseignementList = $app::NS('Enseignement')::loadWhere('actif');
@@ -354,7 +357,7 @@ class GestionnaireController extends \TDS\Controller {
             foreach ($codeList as $code) {
                 $co = explode('_', $code);
                 $cmd = "grep {$co[1]} {$pl}/codeOSE.csv";
-                $rep = `{$cmd}`;
+                $rep = shell_exec("{$cmd}");
 
                 $csv = is_null($rep) ? [] : str_getcsv($rep, ";",  "\"");
                 if (count($csv) > 10) {

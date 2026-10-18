@@ -19,7 +19,8 @@ class Vacation {
     }
 
     public  function buildDir(){
-        $baseDir = self::getBaseDir($this->id);
+        //$baseDir = self::getBaseDir($this->id);
+        $baseDir = self::getBaseDir();
         $date = date("Y-m-d-H-i-s");
         $dir = "{$baseDir}/{$this->data->uid}_{$this->data->codeECUE}_{$this->data->etat}_{$date}_{$this->id}";
         return $dir;
@@ -111,7 +112,7 @@ class Vacation {
         return \base\App::rrmdir ($this->dir);
     }
 
-    public static function getVacationFromEcueCode($code){
+    public static function getVacationFromEcueCode(string $code){
         $baseDir = self::getBaseDir();
         $dirList = glob("{$baseDir}/*_{$code}_*", GLOB_ONLYDIR);
         $res = [];

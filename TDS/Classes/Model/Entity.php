@@ -241,7 +241,7 @@ trait {$modelName} {
             $targetEntity = $target[0];
             $targetId = $target[1]; 
             $targetClass = '\\'.Model::$appName.'\\Model\\'.$targetEntity->getName();
-            $tb = "    protected ?{$targetClass} \${$fieldName};\n";
+            $tb = "    protected ?{$targetClass} \$" . $fieldName . ";\n";
             $ta = "
         '{$fieldName}' => [
             'type' => Field::ONETOONE, 

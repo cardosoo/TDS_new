@@ -61,9 +61,8 @@ class OneToMany extends Field {
     function buildForModel(){
         $targetClass = '\\'.Model::$appName.'\\Model\\'.$this->targetEntity->getName();
         $oneToMany = 'Field::ONETOMANY';
-        $a = "    protected ?{$targetClass} \${$this->mappedBy};".( ("" === $this->comment)?"":" // {$this->comment}")."
-    protected int \$__{$this->mappedBy};
-";
+        $a = "    protected ?{$targetClass} \$" . $this->mappedBy . ";".( ("" === $this->comment)?"":" // {$this->comment}")."
+    protected int \$__" . $this->mappedBy . ";\n";
         $b = "
         '{$this->mappedBy}' => [
             'type' => {$oneToMany}, 
@@ -79,7 +78,7 @@ class OneToMany extends Field {
 
     function buildForTargetModel(){
         $sourceClass =  '\\'.Model::$appName.'\\Model\\'.$this->sourceEntity->getName();
-        $a =  "    protected array \${$this->inversedBy};\n";
+        $a =  "    protected array \$" . $this->inversedBy . ";\n";
 
         if (! is_null($this->forManyToManyFirst)){
             $this->manyToMany = $this->sourceEntity;

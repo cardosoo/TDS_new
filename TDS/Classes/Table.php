@@ -44,7 +44,7 @@ abstract class Table {
      *
      * O.C. 14/01/2021 - version initiale ok
      */
-    public function __construct(\stdClass $obj = null) {
+    public function __construct(?\stdClass $obj = null) {
         $entityName = get_called_class();
         if (is_null($obj) ){
             $obj = new stdClass();

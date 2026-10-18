@@ -31,7 +31,9 @@ class Struct extends \foire\Struct {
         return false;
     }
 
-
+    public function checkCodeFormat(string $code): bool{
+        return (strlen($code) == 10) && (substr($code, 0, 2) == "EN");
+    }
 
     public static function getCursusList(){
         return [

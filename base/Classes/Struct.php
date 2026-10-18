@@ -347,6 +347,11 @@ class Struct  {
     }
     
 
+    public function checkCodeFormat(string $code): bool{
+        return strlen($code) == 8;
+    }
+
+
     /**
      * Renvoie la liste des structures (composantes) présentent dans la structure des enseignements
      *
@@ -1591,7 +1596,7 @@ if ($this->explain) {
         return [$in, $out];
     }
 
-    public function addVacation( & $tab){
+    public function addVacation(array & $tab){
         foreach($tab as $key => $elm){
             $app = \TDS\App::get();            
             $code = $elm['ecue']->getCode();

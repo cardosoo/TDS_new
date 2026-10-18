@@ -7,10 +7,10 @@ use base\Controllers\VacationController;
 
 class FicheECUEDocument extends \TDS\Document {
     public $id = null;
-    public $name = null;
+    public ?string $name = null;
 
 
-    public function __construct( String $id, String $filename, int $timestamp){
+    public function __construct( string $id, string $filename, int $timestamp){
         $this->filename = $filename;
         $this->timestamp = $timestamp;
         $this->id = $id;
@@ -25,7 +25,7 @@ class FicheECUEDocument extends \TDS\Document {
         return $app::$pathList['plus']."/{$app::$appName}/vacation/{$app::$currentYear}/{$this->id}/Docs/";
     }
 
-    public function rename($newTitle){
+    public function rename(string $newTitle){
         $app = App::get();
         $dir = $this->documentPath();
         $filename = "{$newTitle}.{$this->ext}";

@@ -83,7 +83,7 @@ class PersonneController extends \base\Controllers\PersonneController {
             $find = explode("[", $find)[0];
 //echo $find."\n";
             $cmd = "grep -e {$find} {$filepath}";
-            $lignes = `{$cmd}`;
+            $lignes = shell_exec("{$cmd}");
             $lignes = $str=preg_replace("@\n@","",$lignes);;
             $etapeList[$k]->lignes = $lignes;
 //var_dump(['find' =>$find, 'lignes'=> $lignes]);                
