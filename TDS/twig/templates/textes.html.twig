@@ -12,9 +12,7 @@
         <div class="inner_cell">
             <div class="text_cell_render border-box-sizing rendered_html">
                 <style>a{color: #0d6efd;}</style>
-                
-                {{ include(md)|markdown_to_html }}
-
+                {{ include(md)|prepare_md|markdown_to_html }}
             </div>
         </div>
     </div>

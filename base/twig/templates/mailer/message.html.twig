@@ -8,6 +8,6 @@
 </head>
 <body> 
     <div class="border-box-sizing rendered_html">       
-    {{ include(template_from_string(message))|markdown_to_html }}
+    {{ include(template_from_string(message))|prepare_md|markdown_to_html }}
     </div>
 </body>

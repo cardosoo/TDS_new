@@ -193,7 +193,7 @@ var_dump("Ni l'un ni l'autre");
     }
 
     public static function test3(){
-        // phpinfo();
+        phpinfo();
         
         var_dump('désactivation de /foire/test/test3'); exit();
         // pour créer un pdf à partir du html (en ajouatnt des images...

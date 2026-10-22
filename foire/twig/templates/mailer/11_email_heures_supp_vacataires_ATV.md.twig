@@ -22,7 +22,7 @@ D'après les informations de la base de données {{App.baseName}}, **vos vœux c
 
 Un enseignement écrit en rouge est en sur-effectif.
 
-{{ include("/mailer/voeux.md.twig")|markdown_to_html }}
+{{ include("/mailer/voeux.md.twig")|prepare_md|markdown_to_html }}
 
 
 

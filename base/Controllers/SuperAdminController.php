@@ -208,6 +208,9 @@ class SuperAdminController extends \TDS\Controller {
     }
 
     public static function importReferentielOSE(){
+        var_dump('Je préfère ne rien proposer pour le moment');
+        exit();
+
         $app= \TDS\App::get();
         if (($handle = fopen("{$app::$pathList['plus']}/{$app::$appName}/OSE/listingServices.csv", "r")) !== FALSE) {
             $colList = self::getColList($handle);
@@ -287,6 +290,8 @@ class SuperAdminController extends \TDS\Controller {
      * 
      */
     public static function importServicesOSE(){
+        var_dump('Je préfère ne rien proposer pour le moment');
+        exit();
 
         $app= \TDS\App::get();
         $voeuList = $app::NS('Voeu')::loadWhere('actif');

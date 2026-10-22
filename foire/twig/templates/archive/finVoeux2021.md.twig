@@ -28,7 +28,7 @@ d'enseignement et **vos vœux correspondent à une charge de {{(P.getCharge() - 
 
 Un enseignement écrit en rouge est en sur-effectif.
 
-{{ include("/mailer/voeux.md.twig")|markdown_to_html }}
+{{ include("/mailer/voeux.md.twig")|prepare_md|markdown_to_html }}
 
 
 **Panier de {{P.getGeneric}}**
@@ -37,7 +37,7 @@ Un enseignement écrit en rouge est en sur-effectif.
 
 Un enseignement écrit en vert est en sous-effectif.
 
-{{ include("/mailer/panier.md.twig")|markdown_to_html }}
+{{ include("/mailer/panier.md.twig")|prepare_md|markdown_to_html }}
 
 
 Bien à vous,

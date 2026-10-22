@@ -2,7 +2,7 @@
     {% if App.auth.inBase %}
         <div class='w3-card w3-round w3-white w3-xlarge w3-center'>Bienvenue dans la foire {{ App.auth.user.prenom }} {{ App.auth.user.nom }}  !</div>
     {% else %}
-        <div class='w3-card  w3-round w3-red  w3-xlarge w3-center'>Vous êtes êtes identifié avec l'identifant {{ App.auth.uid }}. 
+        <div class='w3-card  w3-round w3-red  w3-xlarge w3-center'>Vous êtes êtes identifié avec l'identifant {{ App.auth.uid }}.
         Il n'y a pas de lien entre cet identifiant et un compte de la foire
         Votre accès est limité.
         </div>
@@ -10,6 +10,8 @@
 {% else %}
     <div class='w3-card  w3-round w3-red  w3-xlarge w3-center'>Vous êtes ici sans identification - votre accès est limité</div>
 {% endif %}
+
+
 
 # Répartition des enseignements {{ App.currentYear }} - {{ App.currentYear + 1 }}
 

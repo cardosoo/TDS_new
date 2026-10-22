@@ -495,6 +495,7 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
     }
 
     function getEquipeFromOSE(){
+        return []; // O.C.22.10.2026 obsolete
         $app = \TDS\App::get();
 
         $oseNS = "{$app::$appName}\OSE";
@@ -558,17 +559,17 @@ class Enseignement extends Table implements \Model\_Enseignement_interface_ {
 
     function comparaisonOSE(){
 
-        $oseNS = (\TDS\App::$appName)."\OSE";
-        $ose = new $oseNS;
+        //  O.C.22.10.2026 $oseNS = (\TDS\App::$appName)."\OSE";
+        //  O.C.22.10.2026 $ose = new $oseNS;
 
         $enseignement_structure = $this->__get('enseignement_structure');
         $ecue = $enseignement_structure->ecue;
         $ecueList =  explode('|', $ecue);
         $ecue = $ecueList[0]; // Attention, si il y a plusieurs ECUE on ne garde que le premier ! 
 
-        $details = $ose->getDetails($ecue); 
+        $details = []; // O.C.22.10.2026 $ose->getDetails($ecue); 
         $EList = $this->getEnseignementWithSameEcue();
-        $fromOSEList = $this->getEquipeFromOSE();
+        $fromOSEList = []; // O.C.22.10.2026 $this->getEquipeFromOSE();
 
         $match = [];
         $inOSE = [];

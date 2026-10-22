@@ -14,6 +14,9 @@ class OSEController extends \TDS\Controller {
      * 
      */
     public static function comparaison(){
+        var_dump('Je préfère ne rien proposer pour le moment');
+        exit();
+
         $app = \TDS\App::get();
         echo $app::$viewer->render('OSE/comparaison.html.twig');
     }

@@ -168,7 +168,8 @@ class GestionnaireController extends \base\Controllers\GestionnaireController {
     public static function getNameListOne($tab){
         $nameList = []; // on commence par mettre les noms
         foreach($tab as $data){
-            $name = reset($data);
+            $properties = get_object_vars($data);
+            $name = reset($properties);
             if (! in_array($name, $nameList)){
                 $nameList[]=$name;
             }
@@ -189,7 +190,8 @@ class GestionnaireController extends \base\Controllers\GestionnaireController {
         $nameList = []; // on commence par mettre les noms
         foreach($tab as $dataYear){
             foreach($dataYear as $data){
-                $name = reset($data);
+                $properties = get_object_vars($data);
+                $name = reset($properties);
                 if (! in_array($name, $nameList)){
                     $nameList[]=$name;
                 }
@@ -204,7 +206,8 @@ class GestionnaireController extends \base\Controllers\GestionnaireController {
             $obj->$name = null;
         }
         foreach($tab as $data){
-            $obj->{reset($data)} = next($data);
+            $values = array_values(get_object_vars($data));
+            $obj->{$values[0]} = $values[1];
         }
         return $obj;
     }
@@ -237,6 +240,9 @@ class GestionnaireController extends \base\Controllers\GestionnaireController {
 
 
     public static function effectifsGlobaux(){
+        var_dump('Je préfère ne rien proposer pour le moment');
+        exit();
+
         $app = \TDS\App::get();
 
         $yearList = [2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015];
@@ -257,6 +263,9 @@ class GestionnaireController extends \base\Controllers\GestionnaireController {
     }
 
     public static function ratioHF(){
+        var_dump('Je préfère ne rien proposer pour le moment');
+        exit();
+
         $app = \TDS\App::get();
 
         $yearList = [2020, 2019, 2018, 2017, 2016, 2015];
@@ -277,6 +286,9 @@ class GestionnaireController extends \base\Controllers\GestionnaireController {
 
 
     public static function repartitionNiveau(){
+        var_dump('Je préfère ne rien proposer pour le moment');
+        exit();
+
         $app = \TDS\App::get();
 
 //        $yearList = [2020, 2019, 2018, 2017, 2016, 2015];
@@ -315,6 +327,9 @@ class GestionnaireController extends \base\Controllers\GestionnaireController {
     }
 
     public static function repartitionNiveauStatut(){
+        var_dump('Je préfère ne rien proposer pour le moment');
+        exit();
+
         $app = \TDS\App::get();
 
 //        $yearList = [2020, 2019, 2018, 2017, 2016, 2015];
@@ -497,6 +512,10 @@ class GestionnaireController extends \base\Controllers\GestionnaireController {
     }
 
     public static function listingServices(){
+        var_dump('Je préfère ne rien proposer pour le moment');
+        exit();
+
+
         $app= \TDS\App::get();
         $voeuList = self::getDetailledVoeux2020();
         $emptyList = [];

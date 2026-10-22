@@ -51,6 +51,7 @@ class Viewer {
         $this->twig->addFilter(new TwigFilter('e2', '\TDS\Utils::eNombre'));
         $this->twig->addFilter(new TwigFilter('json_decode', '\TDS\Utils::json_decode'));
         $this->twig->addFilter(new TwigFilter('cm', '\TDS\Utils::clearMarkdown'));
+        $this->twig->addFilter(new TwigFilter('prepare_md', fn($s) => preg_replace('/^(\s+)(<[a-zA-Z][^>]*>)/m', '$2', $s)));
         
         $this->output = true;
 

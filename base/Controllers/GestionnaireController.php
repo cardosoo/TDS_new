@@ -44,8 +44,8 @@ CMTP  	CMTP 	1,16	1,16 	Permanente 		Visible - Visible en saisie extérieure
 
         $candidat = null;
         $ordre = 100;
-        $typeOSE1 = null;
-        $typeOSE2 = null;
+        $typeOSE1 = "";  // O.C.22.10.2026  null;
+        $typeOSE2 = ""; // O.C.22.10.2026 null;
 
         foreach ($this->ecueList as $ecue) {
             if (is_null($ecue)) {
@@ -97,6 +97,11 @@ CMTP  	CMTP 	1,16	1,16 	Permanente 		Visible - Visible en saisie extérieure
                 $this->vList[$Pid][$code]['charge'][$typeOSE2] = $heq;
             }
         } else { // il faut créer de toute pièce
+            // var_dump([
+            //     'Pid' => $Pid,
+            //     'code' => $code,
+            //     'typeOSE2' => $typeOSE2,
+            // ]);
             $this->vList[$Pid][$code]['charge'][$typeOSE2] = $heq;
         }
         $this->vList[$Pid][$code]['voeuList'][$this->VDH->id] = [$this->lastModification, $this->lastOrigin];

@@ -112,12 +112,12 @@ class PersonneController extends \TDS\Controller {
 
         if ($P->withOSE()){
 
-            $oseNS = "{$app::$appName}\OSE";
-            $ose = new $oseNS;
+            // O.C.22.10.2026 $oseNS = "{$app::$appName}\OSE";
+            // O.C.22.10.2026 $ose = new $oseNS;
 
             // O.C. Ici je ne comprends pas... en fait on ne fait rien de cette données présente dans OSE.
             // Cela pourrait permettre une comparaison immédiate ! par le côté enseignant !
-            $fromOSEList = $ose->getService($P->ose);
+            // O.C.22.10.2026 $fromOSEList = $ose->getService($P->ose);
             //var_dump($fromOSEList);
             $fromOSEList = [];
             foreach($P->voeuList as $V){
@@ -126,9 +126,9 @@ class PersonneController extends \TDS\Controller {
                 foreach($codeList as $code){
                     $co = explode('_', $code);
                     $ecue = $co[1];
-                    $tmp[$ecue] = $ose->findECUE($ecue);
+                    // O.C.22.10.2026  $tmp[$ecue] = $ose->findECUE($ecue);
                 }
-                $fromOSEList[$V->id] = $tmp; 
+                // O.C.22.10.2026  $fromOSEList[$V->id] = $tmp; 
             }
 
 
