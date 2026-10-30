@@ -12,7 +12,7 @@ class GenController extends \TDS\Controller {
         $app::$router->redirect("/{$appName}/texte/introduction" );
     }
 
-    public static function texte($texte){
+    public static function texte(string $texte){
         $app = \TDS\App::get();
         
         $texte = filter_var($texte, FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH | FILTER_FLAG_STRIP_BACKTICK);
@@ -24,14 +24,14 @@ class GenController extends \TDS\Controller {
         echo $app::$viewer->render('textes.html.twig', [ 'md' => "textes/{$texte}.md.twig" ]);
     }
 
-    public static function texte_documents($document){
+    public static function texte_documents(string $document){
         $app = \TDS\App::get();
 
         $texte = filter_var($document, FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH | FILTER_FLAG_STRIP_BACKTICK);
         $app::$cmpl['withMathjax'] = true;
         $app::$cmpl['withMarkdown'] = true;
-        var_dump($app::$pathList);
-        var_dump(getcwd());
+        //var_dump($app::$pathList);
+        //var_dump(getcwd());
         \TDS\Document::downloadStatic($app::$pathList['base']."/twig/templates/textes/documents/".$document);
         exit();
     }

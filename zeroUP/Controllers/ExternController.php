@@ -49,8 +49,9 @@ class ExternController extends \TDS\Controller {
 
     public static function ldapsearch(string $search){        
         $app = \TDS\App::get();
-
-        $ldap = ldap_connect("".$app::$list["LDAP_HOST"].":". $app::$list["LDAP_PORT"]);
+        $uri = "".$app::$list["LDAP_HOST"].":". $app::$list["LDAP_PORT"];
+        //var_dump($uri);        
+        $ldap = ldap_connect($uri);
         if (!$ldap) {
             if (session_id() != "") {
                 session_destroy();

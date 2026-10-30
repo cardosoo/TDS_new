@@ -38,7 +38,11 @@ class LDAPExtern {
         ]);
 
         $param = bin2hex(json_encode(['filter'=> $filter, 'attributes' => $attributes, 'limit' => $limit]));
-        $rep = file_get_contents(self::$domaine."ldap/".$param, false, $context);
+        $url = self::$domaine."ldap/".$param;
+        //var_dump([]);
+        //var_dump($url);
+        $rep = file_get_contents($url, false, $context);
+        //var_dump($rep);
         return  json_decode($rep);
     }
 

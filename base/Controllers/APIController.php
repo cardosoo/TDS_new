@@ -412,7 +412,7 @@ class APIController extends \TDS\Controller {
         echo date("'d/m/Y\t'H:i:s")."\n";
         echo "id\tose\tprenom\tnom\tstatut\tsolde\tcharge\treferentiel\tsituation\n";
         foreach($bilanList as $B){
-            echo "{$B->id}\t{$B->ose}\t{$B->prenom}\t{$B->nom}\t{$B->statut}\t{-$B->solde}\t{$B->charge}\t{$B->referentiel}\t{$B->situation}\n";
+            echo "{$B->id}\t{$B->ose}\t{$B->prenom}\t{$B->nom}\t{$B->statut}\t{$B->solde}\t{$B->charge}\t{$B->referentiel}\t{$B->situation}\n";
         }
     
     }

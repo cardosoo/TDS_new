@@ -1296,7 +1296,7 @@ if ($this->explain) {
         
         $file = new \SplFileObject("{$this->structurePath}/extraction{$app::$currentYear}.csv");
         $file->setFlags(\SplFileObject::READ_CSV);
-        $file->setCsvControl(';');
+        $file->setCsvControl(';', "\"", "\\");
 
 
         $this->structureList = [];
@@ -1333,7 +1333,7 @@ if ($this->explain) {
         
         $file = new \SplFileObject("{$this->structurePath}/mutualisation{$app::$currentYear}.csv");
         $file->setFlags(\SplFileObject::READ_CSV);
-        $file->setCsvControl(';');
+        $file->setCsvControl(';', "\"", "\\");
 
         $first = true;
         $len = 0;
@@ -1390,7 +1390,7 @@ if ($this->explain) {
         
         $file = new \SplFileObject("{$this->structurePath}/correctionEtape.csv");
         $file->setFlags(\SplFileObject::READ_CSV);
-        $file->setCsvControl(';');
+        $file->setCsvControl(';', "\"", "\\");
         var_dump($file);
         $first = true;
         $len = 0;
