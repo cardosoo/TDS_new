@@ -87,14 +87,16 @@ class StructureController extends \TDS\Controller {
 
 
     public static function addEnseignement(string $code){
+        
         $app = \TDS\App::get();
         $structNSC = $app::NSC('Struct');
         $struct = new $structNSC();
 
 
-        if ($struct->checkCodeFormat($code)){
+        if (! $struct->checkCodeFormat($code)){
+            $app::$pub->warning[] = "Le code ECUE n'est pas au bon format";            
             $app::$router->redirect("/{$app::$appName}/structure/ecue/{$code}");
-            exit();
+            exit(); 
         }
 
         $ecue = $struct->getECUEByCode($code);
@@ -126,7 +128,7 @@ class StructureController extends \TDS\Controller {
         $V->enseignement = $E->id;
         $V->correspondant = true;
         $V->save();
-
+        $app::$pub->warning[] = "Enseignement créé avec succès";
         $app::$cmpl["withJQuery"]=true;
         $app::$router->redirect("/{$app::$appName}/enseignement/{$E->id}");
         // echo $app::$viewer->render('structure/addEnseignement.html.twig', ['ecue' => $ecue]);
